@@ -20,7 +20,7 @@ public class EditorForm extends JFrame {
     private JPanel rootPanel;
     private JTabbedPane tabPane;
     private JPanel locationsPane;
-    private JList locationsList;
+    private JList<Location> locationsList;
     private JTabbedPane locTabs;
     private JPanel locExits;
     private JPanel locCommon;
@@ -29,16 +29,28 @@ public class EditorForm extends JFrame {
     private JTextField locName;
     private JTextField locID;
     private JTextArea locDescription;
-    private JComboBox locNorth;
-    private JComboBox locSouth;
-    private JComboBox locEast;
-    private JComboBox locWest;
+    private JComboBox<Location> locNorth;
+    private JComboBox<Location> locSouth;
+    private JComboBox<Location> locEast;
+    private JComboBox<Location> locWest;
     private JButton addLocButton;
     private JButton deleteLocButton;
-    private JButton сохранитьButton;
+    private JButton saveButton;
+    private JPanel playerTab;
+    private JTextField playerName;
+    private JRadioButton female;
+    private JRadioButton male;
+    private JComboBox<Location> playerLocation;
+    private JRadioButton sexless;
+    private JButton savePlayer;
+    private DefaultComboBoxModel<Location> playerLocationModel;
+
+    Player player;
 
     public EditorForm() {
         super("Редактор");
+
+        player = new Player("Nameless");
 
         locationsListModel = new DefaultListModel<Location>();
         locationsList.setModel(locationsListModel);
@@ -47,16 +59,33 @@ public class EditorForm extends JFrame {
         southModel = new DefaultComboBoxModel<Location>();
         eastModel = new DefaultComboBoxModel<Location>();
         westhModel = new DefaultComboBoxModel<Location>();
+        playerLocationModel = new DefaultComboBoxModel<Location>();
 
         northModel.addElement(null);
         southModel.addElement(null);
         eastModel.addElement(null);
         westhModel.addElement(null);
+        playerLocationModel.addElement(null);
 
         locNorth.setModel(northModel);
         locSouth.setModel(southModel);
         locEast.setModel(eastModel);
         locWest.setModel(westhModel);
+        playerLocation.setModel(playerLocationModel);
+
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menuFile = new JMenu("Файл");
+        JMenuItem newGame = new JMenuItem("Новая");
+        JMenuItem openGame = new JMenuItem("Открыть");
+        JMenuItem saveGame = new JMenuItem("Сохранить");
+        menuFile.add(newGame);
+        menuFile.add(openGame);
+        menuFile.add(saveGame);
+        menuBar.add(menuFile);
+
+        setJMenuBar(menuBar);
+
+        getRootPane().setDefaultButton(saveButton);
 
         setContentPane(rootPanel);
         pack();
@@ -86,12 +115,55 @@ public class EditorForm extends JFrame {
 
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); //TODO: создать метод закрытия окна
-        сохранитьButton.addActionListener(new ActionListener() {
+        saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 saveSelectedLocation();
             }
         });
+        deleteLocButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteSelectedLocation();
+            }
+        });
+        savePlayer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                savePlayer();
+            }
+        });
+    }
+
+    private void savePlayer() {
+        player.setName(playerName.getText());
+        if (female.isSelected())
+            player.setSex(1);
+        if (male.isSelected())
+            player.setSex(2);
+        Location pLocation = (Location) playerLocation.getSelectedItem();
+        player.setLocation(pLocation);
+    }
+
+    private void deleteSelectedLocation() {
+        int index = locationsList.getSelectedIndex();
+        Location selected = locationsListModel.getElementAt(index);
+
+        //remove location from exits in every location
+        for (int i = 0; i < locationsListModel.getSize(); i++) {
+            if (i != index) {
+                Location removeFrom = locationsListModel.getElementAt(i);
+                removeFrom.removeFromExits(selected);
+            }
+        }
+
+        locationsListModel.removeElementAt(index);
+        //select next other location TODO: hmmmm.....
+        locationsList.setSelectedIndex((index > 0) ? index - 1 : index);
+        northModel.removeElement(selected);
+        southModel.removeElement(selected);
+        eastModel.removeElement(selected);
+        westhModel.removeElement(selected);
     }
 
     private void saveSelectedLocation() {
@@ -136,11 +208,11 @@ public class EditorForm extends JFrame {
         southModel.addElement(newLocation);
         eastModel.addElement(newLocation);
         westhModel.addElement(newLocation);
-
+        playerLocationModel.addElement(newLocation);
     }
 
     private void setFormElementsEnabled() { //TODO: rethink: Disable all component when no Location on the list, enable when first location added?
-        if(locationsList.getSelectedIndex()>=0) {
+        if (locationsList.getSelectedIndex() >= 0) {
             deleteLocButton.setEnabled(true);
             locName.setEnabled(true);
             locDescription.setEnabled(true);
@@ -148,8 +220,8 @@ public class EditorForm extends JFrame {
             locSouth.setEnabled(true);
             locEast.setEnabled(true);
             locWest.setEnabled(true);
-        }
-        else{
+            saveButton.setEnabled(true);
+        } else {
             deleteLocButton.setEnabled(false);
             locName.setEnabled(false);
             locDescription.setEnabled(false);
@@ -157,6 +229,7 @@ public class EditorForm extends JFrame {
             locSouth.setEnabled(false);
             locEast.setEnabled(false);
             locWest.setEnabled(false);
+            saveButton.setEnabled(false);
         }
     }
 }

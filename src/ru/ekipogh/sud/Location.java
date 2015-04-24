@@ -13,15 +13,15 @@ public class Location {
         return id;
     }
 
-    public Location(String name){
+    public Location(String name) {
         this.name = name;
         this.id = Sequencer.getNewLocationID();
-        this.description="";
+        this.description = "";
         this.exits = new Location[4];
 
     }
 
-    public void setDescription(String description){
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -37,53 +37,67 @@ public class Location {
         this.name = name;
     }
 
-    public void setNorth(Location north){
+    public void setNorth(Location north) {
         exits[0] = north;
     }
 
-    public void setSouth(Location south){
+    public void setSouth(Location south) {
         exits[1] = south;
     }
 
-    public void setEast(Location east)
-    {
+    public void setEast(Location east) {
         exits[2] = east;
     }
 
-    public  void setWest(Location west){
+    public void setWest(Location west) {
         exits[3] = west;
     }
 
-    public Location getNorth(){
+    public Location getNorth() {
         return exits[0];
     }
 
-    public Location getSouth(){
+    public Location getSouth() {
         return exits[1];
     }
 
-    public Location getEast(){
+    public Location getEast() {
         return exits[2];
     }
 
-    public Location getWest(){
+    public Location getWest() {
         return exits[3];
+    }
+
+    public void removeFromExits(Location toRemove) {
+        if (toRemove != null) {
+            for (int i = 0; i < exits.length; i++) {
+                if (toRemove.equals(exits[i]))
+                    exits[i] = null;
+            }
+        }
     }
 
     private static class Sequencer {
         private static int id = 0;
-        public static  int getNewLocationID(){
+
+        public static int getNewLocationID() {
             return id++;
         }
-        public static void setID(int id){
-            if(Sequencer.id == 0)
+
+        public static void setID(int id) throws Exception {
+            if (Sequencer.id == 0)
                 Sequencer.id = id;
             else
-                new Exception("Sequencer id has been set already");
+                throw new Exception("Sequencer id has been set already");
         }
     }
 
-    public String toString(){
+    public String toString() {
         return name;
+    }
+
+    public boolean equals(Location location) {
+        return location != null && this.id == location.id;
     }
 }
