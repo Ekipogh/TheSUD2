@@ -1,9 +1,11 @@
 package ru.ekipogh.sud;
 
+import java.io.Serializable;
+
 /**
  * Created by dedov_d on 23.04.2015.
  */
-public class Location {
+public class Location implements Serializable {
     private String name; //required location Name
     private int id;  //required location ID
     private String description;  //optional location Description

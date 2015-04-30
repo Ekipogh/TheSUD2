@@ -1,9 +1,11 @@
 package ru.ekipogh.sud;
 
+import java.io.Serializable;
+
 /**
  * Created by dedov_d on 24.04.2015.
  */
-public class Player {
+public class Player implements Serializable {
     private String name;
     private short sex;
     private Location location;

@@ -7,15 +7,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 /**
  * Created by dedov_d on 23.04.2015.
  */
-public class EditorForm extends JFrame {
+public class EditorFrame extends JFrame {
     private final DefaultComboBoxModel<Location> northModel;
     private final DefaultComboBoxModel<Location> southModel;
     private final DefaultComboBoxModel<Location> eastModel;
-    private final DefaultComboBoxModel<Location> westhModel;
+    private final DefaultComboBoxModel<Location> westModel;
+    private final JMenuItem saveGameMenu;
+    private final JMenuItem newGameMenu;
+    private final JMenuItem openGameMenu;
     private DefaultListModel<Location> locationsListModel;
     private JPanel rootPanel;
     private JTabbedPane tabPane;
@@ -47,10 +51,16 @@ public class EditorForm extends JFrame {
 
     Player player;
 
-    public EditorForm() {
+    public EditorFrame() {
         super("Редактор");
-
         player = new Player("Nameless");
+
+        setContentPane(rootPanel);
+        pack();
+        setLocationRelativeTo(null);
+
+        setVisible(true);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); //TODO: создать метод закрытия окна
 
         locationsListModel = new DefaultListModel<Location>();
         locationsList.setModel(locationsListModel);
@@ -58,37 +68,46 @@ public class EditorForm extends JFrame {
         northModel = new DefaultComboBoxModel<Location>();
         southModel = new DefaultComboBoxModel<Location>();
         eastModel = new DefaultComboBoxModel<Location>();
-        westhModel = new DefaultComboBoxModel<Location>();
+        westModel = new DefaultComboBoxModel<Location>();
         playerLocationModel = new DefaultComboBoxModel<Location>();
 
         northModel.addElement(null);
         southModel.addElement(null);
         eastModel.addElement(null);
-        westhModel.addElement(null);
+        westModel.addElement(null);
         playerLocationModel.addElement(null);
 
         locNorth.setModel(northModel);
         locSouth.setModel(southModel);
         locEast.setModel(eastModel);
-        locWest.setModel(westhModel);
+        locWest.setModel(westModel);
         playerLocation.setModel(playerLocationModel);
 
         JMenuBar menuBar = new JMenuBar();
         JMenu menuFile = new JMenu("Файл");
-        JMenuItem newGame = new JMenuItem("Новая");
-        JMenuItem openGame = new JMenuItem("Открыть");
-        JMenuItem saveGame = new JMenuItem("Сохранить");
-        menuFile.add(newGame);
-        menuFile.add(openGame);
-        menuFile.add(saveGame);
+        newGameMenu = new JMenuItem("Новая");
+        openGameMenu = new JMenuItem("Открыть");
+        saveGameMenu = new JMenuItem("Сохранить");
+        menuFile.add(newGameMenu);
+        menuFile.add(openGameMenu);
+        menuFile.add(saveGameMenu);
         menuBar.add(menuFile);
 
         setJMenuBar(menuBar);
 
-        getRootPane().setDefaultButton(saveButton);
+        saveGameMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveGame();
+            }
+        });
 
-        setContentPane(rootPanel);
-        pack();
+        openGameMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openGame();
+            }
+        });
 
         addLocButton.addActionListener(new ActionListener() {
             @Override
@@ -113,8 +132,6 @@ public class EditorForm extends JFrame {
             }
         });
 
-        setVisible(true);
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); //TODO: создать метод закрытия окна
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -135,12 +152,59 @@ public class EditorForm extends JFrame {
         });
     }
 
+    private void openGame() {
+        JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
+        int response = fc.showOpenDialog(openGameMenu);
+        if (response == JFileChooser.APPROVE_OPTION) {
+            System.out.println("Opening file " + fc.getSelectedFile().getPath());
+            SaveFile saveFile = SaveFile.open(fc.getSelectedFile().getPath());
+            player = saveFile.getPlayer();
+            updatePlayerTab();
+            locationsListModel.clear();
+            for (Location l : saveFile.getLocations())
+                locationsListModel.addElement(l);
+        }
+    }
+
+    private void updatePlayerTab() {
+        playerName.setText(player.getName());
+        switch (player.getSex()) {
+            case 0:
+                sexless.setSelected(true);
+                break;
+            case 1:
+                female.setSelected(true);
+                break;
+            case 2:
+                male.setSelected(true);
+                break;
+        }
+    }
+
+    private void saveGame() {
+        JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
+        int response = fc.showSaveDialog(saveGameMenu);
+        if (response == JFileChooser.APPROVE_OPTION) {
+            System.out.print("Saving to " + fc.getSelectedFile().getPath());
+            SaveFile saveFile = new SaveFile();
+            saveFile.setPlayer(player);
+            ArrayList<Location> locations = new ArrayList<Location>();
+            for (int i = 0; i < locationsListModel.size(); i++) {
+                locations.add(locationsListModel.getElementAt(i));
+            }
+            saveFile.setLocations(locations);
+            saveFile.save(fc.getSelectedFile().getPath());
+        }
+    }
+
     private void savePlayer() {
         player.setName(playerName.getText());
         if (female.isSelected())
             player.setSex(1);
         if (male.isSelected())
             player.setSex(2);
+        if (sexless.isSelected())
+            player.setSex(0);
         Location pLocation = (Location) playerLocation.getSelectedItem();
         player.setLocation(pLocation);
     }
@@ -163,7 +227,7 @@ public class EditorForm extends JFrame {
         northModel.removeElement(selected);
         southModel.removeElement(selected);
         eastModel.removeElement(selected);
-        westhModel.removeElement(selected);
+        westModel.removeElement(selected);
     }
 
     private void saveSelectedLocation() {
@@ -179,7 +243,7 @@ public class EditorForm extends JFrame {
         selectedLocation.setNorth(northModel.getElementAt(northIndex));
         selectedLocation.setSouth(southModel.getElementAt(sounthIndex));
         selectedLocation.setEast(eastModel.getElementAt(eastIndex));
-        selectedLocation.setWest(westhModel.getElementAt(westIndex));
+        selectedLocation.setWest(westModel.getElementAt(westIndex));
 
         locationsList.updateUI();
     }
@@ -207,7 +271,7 @@ public class EditorForm extends JFrame {
         northModel.addElement(newLocation);
         southModel.addElement(newLocation);
         eastModel.addElement(newLocation);
-        westhModel.addElement(newLocation);
+        westModel.addElement(newLocation);
         playerLocationModel.addElement(newLocation);
     }
 
