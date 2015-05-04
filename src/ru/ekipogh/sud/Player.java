@@ -9,10 +9,12 @@ public class Player implements Serializable {
     private String name;
     private short sex;
     private Location location;
+    private Inventory inventory;
 
     public Player(String name) {
         this.name = name;
         this.sex = 0;
+        this.inventory = new Inventory();
     }
 
     public void setLocation(Location location) {

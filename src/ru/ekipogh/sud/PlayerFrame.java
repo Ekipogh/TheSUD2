@@ -103,7 +103,7 @@ public class PlayerFrame extends JFrame {
         player = saveFile.getPlayer();
         locations = saveFile.getLocations();
         currentLocation = player.getLocation();
-
+        output.setText(saveFile.getGameName() + "\n" + saveFile.getGameStartMessage());
         playerName.setText(player.getName());
     }
 

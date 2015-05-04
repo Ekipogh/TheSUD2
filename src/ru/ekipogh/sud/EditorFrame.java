@@ -20,9 +20,10 @@ public class EditorFrame extends JFrame {
     private final JMenuItem saveGameMenu;
     private final JMenuItem newGameMenu;
     private final JMenuItem openGameMenu;
+    private final DefaultListModel<Item> itemsListModel;
     private DefaultListModel<Location> locationsListModel;
     private JPanel rootPanel;
-    private JTabbedPane tabPane;
+    private JTabbedPane tabPanel;
     private JPanel locationsPane;
     private JList<Location> locationsList;
     private JTabbedPane locTabs;
@@ -39,7 +40,7 @@ public class EditorFrame extends JFrame {
     private JComboBox<Location> locWest;
     private JButton addLocButton;
     private JButton deleteLocButton;
-    private JButton saveButton;
+    private JButton saveLocButton;
     private JPanel playerTab;
     private JTextField playerName;
     private JRadioButton female;
@@ -47,6 +48,16 @@ public class EditorFrame extends JFrame {
     private JComboBox<Location> playerLocation;
     private JRadioButton sexless;
     private JButton savePlayer;
+    private JTextField gameName;
+    private JTextArea gameStartMessage;
+    private JTabbedPane itemTabs;
+    private JList itemsList;
+    private JButton addItemButton;
+    private JButton deleteItemButton;
+    private JTextField itemName;
+    private JTextArea itemDescription;
+    private JComboBox itemType;
+    private JButton saveItemButton;
     private DefaultComboBoxModel<Location> playerLocationModel;
 
     Player player;
@@ -64,6 +75,9 @@ public class EditorFrame extends JFrame {
 
         locationsListModel = new DefaultListModel<Location>();
         locationsList.setModel(locationsListModel);
+
+        itemsListModel = new DefaultListModel<Item>();
+        itemsList.setModel(itemsListModel);
 
         northModel = new DefaultComboBoxModel<Location>();
         southModel = new DefaultComboBoxModel<Location>();
@@ -119,7 +133,7 @@ public class EditorFrame extends JFrame {
         locationsList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                setFormElementsEnabled();
+                setLocationFormElementsEnabled();
                 selectLocation();
             }
         });
@@ -132,7 +146,7 @@ public class EditorFrame extends JFrame {
             }
         });
 
-        saveButton.addActionListener(new ActionListener() {
+        saveLocButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 saveSelectedLocation();
@@ -150,6 +164,67 @@ public class EditorFrame extends JFrame {
                 savePlayer();
             }
         });
+        addItemButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addNewItem();
+            }
+        });
+        itemsList.addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                setItemFormElementsEnabled();
+                selectItem();
+            }
+        });
+        deleteItemButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteSelectedItem();
+            }
+        });
+    }
+
+    private void selectItem() {
+        int index = itemsList.getSelectedIndex();
+        if (index != -1) {
+            Item selected = itemsListModel.getElementAt(index);
+            itemName.setText(selected.getName());
+            itemDescription.setText(selected.getDescription());
+        }
+    }
+
+    private void deleteSelectedItem() {
+        int index = itemsList.getSelectedIndex();
+        Item selected = itemsListModel.getElementAt(index);
+        itemsListModel.removeElementAt(index);
+        itemsList.setSelectedIndex((index > 0) ? index - 1 : index);
+    }
+
+
+    private void setItemFormElementsEnabled() {
+        if (itemsList.getSelectedIndex() >= 0) {
+            itemName.setEnabled(true);
+            itemDescription.setEnabled(true);
+            saveItemButton.setEnabled(true);
+            deleteItemButton.setEnabled(true);
+            itemType.setEnabled(true);
+        } else {
+            itemName.setEnabled(false);
+            itemDescription.setEnabled(false);
+            saveItemButton.setEnabled(false);
+            deleteItemButton.setEnabled(false);
+            itemType.setEnabled(false);
+        }
+    }
+
+
+    private void addNewItem() {
+        Item newItem = new Item("Введите название");
+        itemsListModel.addElement(newItem);
+        int index = itemsListModel.getSize() - 1;
+        itemsList.setSelectedIndex(index);
     }
 
     private void openGame() {
@@ -193,6 +268,8 @@ public class EditorFrame extends JFrame {
                 locations.add(locationsListModel.getElementAt(i));
             }
             saveFile.setLocations(locations);
+            saveFile.setGameName(gameName.getText());
+            saveFile.setGameStartMessage(gameStartMessage.getText());
             saveFile.save(fc.getSelectedFile().getPath());
         }
     }
@@ -275,7 +352,7 @@ public class EditorFrame extends JFrame {
         playerLocationModel.addElement(newLocation);
     }
 
-    private void setFormElementsEnabled() { //TODO: rethink: Disable all component when no Location on the list, enable when first location added?
+    private void setLocationFormElementsEnabled() { //TODO: rethink: Disable all component when no Location on the list, enable when first location added?
         if (locationsList.getSelectedIndex() >= 0) {
             deleteLocButton.setEnabled(true);
             locName.setEnabled(true);
@@ -284,7 +361,7 @@ public class EditorFrame extends JFrame {
             locSouth.setEnabled(true);
             locEast.setEnabled(true);
             locWest.setEnabled(true);
-            saveButton.setEnabled(true);
+            saveLocButton.setEnabled(true);
         } else {
             deleteLocButton.setEnabled(false);
             locName.setEnabled(false);
@@ -293,7 +370,7 @@ public class EditorFrame extends JFrame {
             locSouth.setEnabled(false);
             locEast.setEnabled(false);
             locWest.setEnabled(false);
-            saveButton.setEnabled(false);
+            saveLocButton.setEnabled(false);
         }
     }
 }

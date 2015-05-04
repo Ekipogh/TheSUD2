@@ -9,6 +9,24 @@ import java.util.List;
 public class SaveFile implements Serializable {
     private Player player;
     private List<Location> locations;
+    private String gameName;
+    private String gameStartMessage;
+
+    public String getGameName() {
+        return gameName;
+    }
+
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
+    }
+
+    public String getGameStartMessage() {
+        return gameStartMessage;
+    }
+
+    public void setGameStartMessage(String gameStartMessage) {
+        this.gameStartMessage = gameStartMessage;
+    }
 
     public Player getPlayer() {
         return player;
