@@ -12,6 +12,16 @@ public class SaveFile implements Serializable {
     private String gameName;
     private String gameStartMessage;
 
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
+    private List<Item> items;
+
     public String getGameName() {
         return gameName;
     }

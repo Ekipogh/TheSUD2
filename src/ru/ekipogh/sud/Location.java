@@ -1,6 +1,8 @@
 package ru.ekipogh.sud;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by dedov_d on 23.04.2015.
@@ -10,6 +12,11 @@ public class Location implements Serializable {
     private int id;  //required location ID
     private String description;  //optional location Description
     private Location[] exits;  //items can be null
+    private List<Item> inventory;
+
+    public List<Item> getInventory() {
+        return inventory;
+    }
 
     public int getId() {
         return id;
@@ -20,7 +27,7 @@ public class Location implements Serializable {
         this.id = Sequencer.getNewLocationID();
         this.description = "";
         this.exits = new Location[4];
-
+        this.inventory = new ArrayList<Item>();
     }
 
     public void setDescription(String description) {
@@ -78,6 +85,14 @@ public class Location implements Serializable {
                     exits[i] = null;
             }
         }
+    }
+
+    public void addItem(Item item) {
+        this.inventory.add(item);
+    }
+
+    public void removeItem(Item item) {
+        inventory.remove(item);
     }
 
     private static class Sequencer {

@@ -1,6 +1,8 @@
 package ru.ekipogh.sud;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -58,6 +60,8 @@ public class LauncherFrame extends JFrame {
 
     private void chooseGameFile() {
         JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
+        FileFilter ff = new FileNameExtensionFilter("TheSUD game", "sud");
+        fc.setFileFilter(ff);
         int response = fc.showOpenDialog(openFileButton);
         if (response == JFileChooser.APPROVE_OPTION) {
             gamePathField.setText(fc.getSelectedFile().getPath());

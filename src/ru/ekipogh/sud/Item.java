@@ -1,9 +1,11 @@
 package ru.ekipogh.sud;
 
+import java.io.Serializable;
+
 /**
  * Created by Дмитрий on 04.05.2015.
  */
-public class Item {
+public class Item implements Serializable {
     private ItemTypes type;
     private String name;
     private String description;

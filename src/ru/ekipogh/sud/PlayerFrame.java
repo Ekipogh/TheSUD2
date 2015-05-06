@@ -3,6 +3,8 @@ package ru.ekipogh.sud;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 /**
@@ -23,14 +25,26 @@ public class PlayerFrame extends JFrame {
     private JButton eastButton;
     private JLabel playerName;
     private JPanel rootPanel;
+    private JList<Item> itemsList;
+    private JList charactersList;
+    private JButton inventoryButton;
+    private DefaultListModel<Item> itemsListModel;
+    private JPopupMenu popupMenu;
 
     private static Location currentLocation;
+    private List<Item> items;
 
     public PlayerFrame() {
         super("The SUD2");
         setContentPane(rootPanel);
         pack();
         setLocationRelativeTo(null);
+
+        itemsListModel = new DefaultListModel<Item>();
+        itemsList.setModel(itemsListModel);
+        //charactersListModel = new DefaultListModel<Character>();
+        //charactersList.setModel(charactersListModel);
+        popupMenu = new JPopupMenu();
 
         northButton.addActionListener(new ActionListener() {
             @Override
@@ -57,8 +71,81 @@ public class PlayerFrame extends JFrame {
             }
         });
 
+
         setVisible(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        itemsList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                System.out.println("Showing poopup");
+                //показываем меню действий для предмета
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    JList list = (JList) e.getSource();
+                    int row = list.locationToIndex(e.getPoint());
+                    list.setSelectedIndex(row);
+                    if (!itemsList.isSelectionEmpty())
+                        showPopup(e);
+                }
+            }
+        });
+        inventoryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showInventoryScreen();
+            }
+        });
+    }
+
+    private void showInventoryScreen() {
+        new InventoryFrame();
+    }
+
+    //показываем менюшку для листов
+    private void showPopup(MouseEvent e) {
+        JMenuItem menuItem;
+        popupMenu.removeAll();
+        int index = itemsList.getSelectedIndex();
+        final Item selected = itemsListModel.getElementAt(index);
+        if (selected != null) {
+            ItemTypes type = selected.getType();
+            //можно положить в инвентарь съедобное и экипируемое
+            if (type == ItemTypes.EQUIPPABLE || type == ItemTypes.CONSUMABLE) {
+                menuItem = new JMenuItem("Взять");
+                menuItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        moveItemToPlayerInventory(selected);
+                    }
+                });
+                popupMenu.add(menuItem);
+            }
+            if (type == ItemTypes.EQUIPPABLE) {
+                menuItem = new JMenuItem("Экипировать");
+                menuItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        equipItem(selected);
+                    }
+                });
+                popupMenu.add(menuItem);
+            }
+            popupMenu.show(itemsList, e.getX(), e.getY());
+        }
+    }
+
+    //надеть предмет
+    private void equipItem(Item item) {
+        currentLocation.removeItem(item);
+        player.equip(item);
+        itemsListModel.removeElement(item);
+    }
+
+    //положить предмет в инвентарь игрока
+    private void moveItemToPlayerInventory(Item item) {
+        itemsListModel.removeElement(item);
+        currentLocation.removeItem(item);
+        player.addToInventory(item);
     }
 
     //передвижение игрока
@@ -99,9 +186,11 @@ public class PlayerFrame extends JFrame {
         proceed();
     }
 
+    //инициализация параметров игры
     private void initialize(SaveFile saveFile) {
         player = saveFile.getPlayer();
         locations = saveFile.getLocations();
+        items = saveFile.getItems();
         currentLocation = player.getLocation();
         output.setText(saveFile.getGameName() + "\n" + saveFile.getGameStartMessage());
         playerName.setText(player.getName());
@@ -109,8 +198,11 @@ public class PlayerFrame extends JFrame {
 
     //выполнение сценариев и игровой логики
     private void proceed() {
-        output.setText(output.getText() + "\n" + currentLocation.getName());
+        output.setText(output.getText() + "\n" + currentLocation.getName() + "\n" + currentLocation.getDescription());
 
+        //Заполняем список предметов в локации
+        itemsListModel.clear();
+        currentLocation.getInventory().forEach(itemsListModel::addElement);
         //Дизаблим не используемые кнопки передвижения
         directionButtonsEnable();
 
@@ -134,5 +226,9 @@ public class PlayerFrame extends JFrame {
             westButton.setEnabled(false);
         else
             westButton.setEnabled(true);
+    }
+
+    public static Player getPlayer() {
+        return player;
     }
 }

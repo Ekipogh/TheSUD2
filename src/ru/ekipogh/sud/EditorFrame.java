@@ -3,10 +3,9 @@ package ru.ekipogh.sud;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 /**
@@ -21,16 +20,11 @@ public class EditorFrame extends JFrame {
     private final JMenuItem newGameMenu;
     private final JMenuItem openGameMenu;
     private final DefaultListModel<Item> itemsListModel;
+    private final DefaultListModel<Item> locationItemsListModel;
     private DefaultListModel<Location> locationsListModel;
     private JPanel rootPanel;
     private JTabbedPane tabPanel;
-    private JPanel locationsPane;
     private JList<Location> locationsList;
-    private JTabbedPane locTabs;
-    private JPanel locExits;
-    private JPanel locCommon;
-    private JPanel locObjects;
-    private JPanel locScript;
     private JTextField locName;
     private JTextField locID;
     private JTextArea locDescription;
@@ -58,6 +52,11 @@ public class EditorFrame extends JFrame {
     private JTextArea itemDescription;
     private JComboBox itemType;
     private JButton saveItemButton;
+    private JList locationTabItemsList;
+    private JList locationItemsList;
+    private JButton addItemToLoc;
+    private JButton deleteiIemFromLoc;
+    private JPanel locationItems;
     private DefaultComboBoxModel<Location> playerLocationModel;
 
     Player player;
@@ -78,6 +77,11 @@ public class EditorFrame extends JFrame {
 
         itemsListModel = new DefaultListModel<Item>();
         itemsList.setModel(itemsListModel);
+        locationTabItemsList.setModel(itemsListModel);
+        locationItemsListModel = new DefaultListModel<Item>();
+        locationItemsList.setModel(locationItemsListModel);
+
+        itemType.setModel(new DefaultComboBoxModel(ItemTypes.values()));
 
         northModel = new DefaultComboBoxModel<Location>();
         southModel = new DefaultComboBoxModel<Location>();
@@ -184,7 +188,80 @@ public class EditorFrame extends JFrame {
                 deleteSelectedItem();
             }
         });
+        addItemToLoc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addItemToLocation();
+            }
+        });
+        saveItemButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveSelectedItem();
+            }
+        });
+
+        deleteiIemFromLoc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteItemFromLocation();
+            }
+        });
+        locationTabItemsList.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                if (((JList) e.getSource()).getSelectedIndex() >= 0) {
+                    deleteiIemFromLoc.setEnabled(false);
+                    addItemToLoc.setEnabled(true);
+                }
+            }
+        });
+        locationItemsList.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                if (((JList) e.getSource()).getSelectedIndex() >= 0) {
+                    deleteiIemFromLoc.setEnabled(true);
+                    addItemToLoc.setEnabled(false);
+                }
+            }
+        });
     }
+
+    private void deleteItemFromLocation() {
+        int indexLoc = locationsList.getSelectedIndex();
+        Location selectedLoc = locationsListModel.getElementAt(indexLoc);
+        int indexItem = locationItemsList.getSelectedIndex();
+        Item selectedItem = locationItemsListModel.getElementAt(indexItem);
+        selectedLoc.getInventory().remove(selectedItem);
+        locationItemsListModel.removeElement(selectedItem);
+        if (indexItem == 0)
+            deleteiIemFromLoc.setEnabled(false);
+        locationItemsList.setSelectedIndex((indexItem > 0) ? indexItem - 1 : indexItem);
+    }
+
+    private void saveSelectedItem() {
+        int index = itemsList.getSelectedIndex();
+        Item selected = itemsListModel.getElementAt(index);
+        selected.setName(itemName.getText());
+        selected.setDescription(itemDescription.getText());
+        ItemTypes type = (ItemTypes) itemType.getSelectedItem();
+        selected.setType(type);
+
+        itemsList.updateUI();
+    }
+
+    private void addItemToLocation() {
+        int indexLoc = locationsList.getSelectedIndex();
+        Location selectedLoc = locationsListModel.getElementAt(indexLoc);
+        int indexItem = locationTabItemsList.getSelectedIndex();
+        Item selectedItem = itemsListModel.getElementAt(indexItem);
+        selectedLoc.addItem(selectedItem);
+        locationItemsListModel.addElement(selectedItem);
+    }
+
 
     private void selectItem() {
         int index = itemsList.getSelectedIndex();
@@ -192,6 +269,7 @@ public class EditorFrame extends JFrame {
             Item selected = itemsListModel.getElementAt(index);
             itemName.setText(selected.getName());
             itemDescription.setText(selected.getDescription());
+            itemType.setSelectedItem(selected.getType());
         }
     }
 
@@ -229,15 +307,24 @@ public class EditorFrame extends JFrame {
 
     private void openGame() {
         JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
+        FileFilter ff = new FileNameExtensionFilter("TheSUD game", "sud");
+        fc.setFileFilter(ff);
         int response = fc.showOpenDialog(openGameMenu);
         if (response == JFileChooser.APPROVE_OPTION) {
             System.out.println("Opening file " + fc.getSelectedFile().getPath());
             SaveFile saveFile = SaveFile.open(fc.getSelectedFile().getPath());
             player = saveFile.getPlayer();
-            updatePlayerTab();
             locationsListModel.clear();
-            for (Location l : saveFile.getLocations())
+            for (Location l : saveFile.getLocations()) {
+                playerLocationModel.addElement(l);
                 locationsListModel.addElement(l);
+            }
+            itemsListModel.clear();
+            for (Item i : saveFile.getItems())
+                itemsListModel.addElement(i);
+            gameName.setText(saveFile.getGameName());
+            gameStartMessage.setText(saveFile.getGameStartMessage());
+            updatePlayerTab();
         }
     }
 
@@ -254,10 +341,13 @@ public class EditorFrame extends JFrame {
                 male.setSelected(true);
                 break;
         }
+        playerLocation.setSelectedItem(player.getLocation());
     }
 
     private void saveGame() {
         JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
+        FileFilter ff = new FileNameExtensionFilter("TheSUD game", "sud");
+        fc.setFileFilter(ff);
         int response = fc.showSaveDialog(saveGameMenu);
         if (response == JFileChooser.APPROVE_OPTION) {
             System.out.print("Saving to " + fc.getSelectedFile().getPath());
@@ -270,6 +360,10 @@ public class EditorFrame extends JFrame {
             saveFile.setLocations(locations);
             saveFile.setGameName(gameName.getText());
             saveFile.setGameStartMessage(gameStartMessage.getText());
+            ArrayList<Item> items = new ArrayList<Item>();
+            for (int i = 0; i < itemsListModel.getSize(); i++)
+                items.add(itemsListModel.getElementAt(i));
+            saveFile.setItems(items);
             saveFile.save(fc.getSelectedFile().getPath());
         }
     }
@@ -336,6 +430,12 @@ public class EditorFrame extends JFrame {
             locSouth.getModel().setSelectedItem(selected.getSouth());
             locEast.getModel().setSelectedItem(selected.getEast());
             locWest.getModel().setSelectedItem(selected.getWest());
+            /*locationItemsList.setEnabled(true);
+            locationTabItemsList.setEnabled(true);*/
+            locationItemsListModel.clear();
+            for (Item i : selected.getInventory()) {
+                locationItemsListModel.addElement(i);
+            }
         }
     }
 
@@ -362,6 +462,8 @@ public class EditorFrame extends JFrame {
             locEast.setEnabled(true);
             locWest.setEnabled(true);
             saveLocButton.setEnabled(true);
+            locationItemsList.setEnabled(true);
+            locationTabItemsList.setEnabled(true);
         } else {
             deleteLocButton.setEnabled(false);
             locName.setEnabled(false);
@@ -371,6 +473,10 @@ public class EditorFrame extends JFrame {
             locEast.setEnabled(false);
             locWest.setEnabled(false);
             saveLocButton.setEnabled(false);
+            locationItemsList.setEnabled(false);
+            locationTabItemsList.setEnabled(false);
+            deleteiIemFromLoc.setEnabled(false);
+            addItemToLoc.setEnabled(false);
         }
     }
 }

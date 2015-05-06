@@ -1,6 +1,8 @@
 package ru.ekipogh.sud;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by dedov_d on 24.04.2015.
@@ -9,12 +11,20 @@ public class Player implements Serializable {
     private String name;
     private short sex;
     private Location location;
-    private Inventory inventory;
+    private List<Item> inventory;
 
     public Player(String name) {
         this.name = name;
         this.sex = 0;
-        this.inventory = new Inventory();
+        this.inventory = new ArrayList<Item>();
+    }
+
+    public List<Item> getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(List<Item> inventory) {
+        this.inventory = inventory;
     }
 
     public void setLocation(Location location) {
@@ -46,5 +56,13 @@ public class Player implements Serializable {
 
     public short getSex() {
         return sex;
+    }
+
+    public void addToInventory(Item item) {
+        inventory.add(item);
+    }
+
+    public void equip(Item item) {
+        //TODO: stub: implement equipment!!!
     }
 }
