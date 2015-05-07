@@ -13,18 +13,25 @@ public class Player implements Serializable {
     private Location location;
     private List<Item> inventory;
 
+    public Equipment getEquipment() {
+        return equipment;
+    }
+
+    public void setEquipment(Equipment equipment) {
+        this.equipment = equipment;
+    }
+
+    private Equipment equipment;
+
     public Player(String name) {
         this.name = name;
         this.sex = 0;
         this.inventory = new ArrayList<Item>();
+        equipment = new Equipment();
     }
 
     public List<Item> getInventory() {
         return inventory;
-    }
-
-    public void setInventory(List<Item> inventory) {
-        this.inventory = inventory;
     }
 
     public void setLocation(Location location) {
@@ -63,6 +70,10 @@ public class Player implements Serializable {
     }
 
     public void equip(Item item) {
-        //TODO: stub: implement equipment!!!
+        equipment.equip(item);
+    }
+
+    public Item getEquipedItem(String slot) {
+        return equipment.getItemAtSlot(slot);
     }
 }

@@ -4,7 +4,7 @@ package ru.ekipogh.sud;
  * Created by Дмитрий on 04.05.2015.
  */
 public enum ItemTypes {
-    GENERIC("Общее"), EQUIPPABLE("Экипируемое"), CONSUMABLE("Употребляемое");
+    GENERIC("Общее"), EQUIPPABLE("Экипируемое"), CONSUMABLE("Употребляемое"), STORABLE("Хранимое");
 
     private final String typeString;
 

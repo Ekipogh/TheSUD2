@@ -9,6 +9,7 @@ public class Item implements Serializable {
     private ItemTypes type;
     private String name;
     private String description;
+    private String equipmentSlot;
 
     public Item(String name) {
         this.name = name;
@@ -42,5 +43,16 @@ public class Item implements Serializable {
     @Override
     public String toString() {
         return name;
+    }
+
+    public String getEquipmentSlot() {
+        return equipmentSlot;
+    }
+
+    public void setEquipmentSlot(String equipmentSlot) {
+        for (String s : Equipment.getSlotNames()) {
+            if (s.equals(equipmentSlot))
+                this.equipmentSlot = equipmentSlot;
+        }
     }
 }

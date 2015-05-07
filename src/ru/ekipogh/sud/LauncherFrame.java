@@ -52,9 +52,8 @@ public class LauncherFrame extends JFrame {
     private void startGame() {
         String pathToGame = gamePathField.getText();
         File gameFile = new File(pathToGame);
-        if (gameFile.exists()) {
-            new PlayerFrame(pathToGame);
-        } else
+        if (gameFile.exists()) new PlayerFrame(pathToGame);
+        else
             JOptionPane.showMessageDialog(this, "Файла с игрой не существует, выберите другой!");
     }
 

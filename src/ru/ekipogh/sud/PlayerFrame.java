@@ -18,7 +18,7 @@ public class PlayerFrame extends JFrame {
 
     private static Player player;
     private static List<Location> locations;
-    private JTextPane output;
+    private MyTextPane output;
     private JButton northButton;
     private JButton southButton;
     private JButton westButton;
@@ -110,7 +110,7 @@ public class PlayerFrame extends JFrame {
         if (selected != null) {
             ItemTypes type = selected.getType();
             //можно положить в инвентарь съедобное и экипируемое
-            if (type == ItemTypes.EQUIPPABLE || type == ItemTypes.CONSUMABLE) {
+            if (type == ItemTypes.EQUIPPABLE || type == ItemTypes.CONSUMABLE || type == ItemTypes.STORABLE) {
                 menuItem = new JMenuItem("Взять");
                 menuItem.addActionListener(new ActionListener() {
                     @Override
@@ -192,13 +192,15 @@ public class PlayerFrame extends JFrame {
         locations = saveFile.getLocations();
         items = saveFile.getItems();
         currentLocation = player.getLocation();
-        output.setText(saveFile.getGameName() + "\n" + saveFile.getGameStartMessage());
+        //output.setText(saveFile.getGameName() + "\n" + saveFile.getGameStartMessage());
+        output.appendText("<b>" + saveFile.getGameName() + "</b> <br>" + saveFile.getGameStartMessage() + "<br>");
         playerName.setText(player.getName());
     }
 
     //выполнение сценариев и игровой логики
     private void proceed() {
-        output.setText(output.getText() + "\n" + currentLocation.getName() + "\n" + currentLocation.getDescription());
+        //output.setText(output.getText() + "\n" + currentLocation.getName() + "\n" + currentLocation.getDescription());
+        output.appendText("<b>" + currentLocation.getName() + "</b><br>" + currentLocation.getDescription() + "<br>");
 
         //Заполняем список предметов в локации
         itemsListModel.clear();

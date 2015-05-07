@@ -57,6 +57,8 @@ public class EditorFrame extends JFrame {
     private JButton addItemToLoc;
     private JButton deleteiIemFromLoc;
     private JPanel locationItems;
+    private JTextField slotName;
+    private JLabel slotLabel;
     private DefaultComboBoxModel<Location> playerLocationModel;
 
     Player player;
@@ -228,6 +230,22 @@ public class EditorFrame extends JFrame {
                 }
             }
         });
+        itemType.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showSlotField();
+            }
+        });
+    }
+
+    private void showSlotField() {
+        if (itemType.getModel().getSelectedItem() == ItemTypes.EQUIPPABLE) {
+            slotLabel.setEnabled(true);
+            slotName.setEnabled(true);
+        } else {
+            slotLabel.setEnabled(false);
+            slotName.setEnabled(false);
+        }
     }
 
     private void deleteItemFromLocation() {
@@ -249,7 +267,8 @@ public class EditorFrame extends JFrame {
         selected.setDescription(itemDescription.getText());
         ItemTypes type = (ItemTypes) itemType.getSelectedItem();
         selected.setType(type);
-
+        if (slotName.isEnabled())
+            selected.setEquipmentSlot(slotName.getText());
         itemsList.updateUI();
     }
 
@@ -270,6 +289,7 @@ public class EditorFrame extends JFrame {
             itemName.setText(selected.getName());
             itemDescription.setText(selected.getDescription());
             itemType.setSelectedItem(selected.getType());
+            slotName.setText(selected.getEquipmentSlot());
         }
     }
 
