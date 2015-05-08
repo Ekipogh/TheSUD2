@@ -130,6 +130,7 @@ public class PlayerFrame extends JFrame {
                 });
                 popupMenu.add(menuItem);
             }
+            //TODO: Сonsume etc
             popupMenu.show(itemsList, e.getX(), e.getY());
         }
     }
