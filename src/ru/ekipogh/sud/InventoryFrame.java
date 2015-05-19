@@ -1,9 +1,7 @@
 package ru.ekipogh.sud;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -14,13 +12,14 @@ import java.awt.event.MouseEvent;
  */
 public class InventoryFrame extends JFrame {
     private final DefaultListModel<Item> itemsListModel;
+    private final PlayerFrame playerFrame;
     private JList<Item> itemsList;
     private JPanel rootPanel;
     private JTable equipmentTable;
     private DefaultTableModel equipmentTableModel;
     private Player player = PlayerFrame.getPlayer();
 
-    public InventoryFrame() {
+    public InventoryFrame(PlayerFrame playerFrame) {
         super("Инвентарь");
         setContentPane(rootPanel);
         pack();
@@ -28,6 +27,8 @@ public class InventoryFrame extends JFrame {
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
+
+        this.playerFrame = playerFrame;
 
         itemsListModel = new DefaultListModel<Item>();
         itemsList.setModel(itemsListModel);
@@ -44,12 +45,8 @@ public class InventoryFrame extends JFrame {
         equipmentTable.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer());
         player.getInventory().forEach(itemsListModel::addElement);
 
-        for (String s : Equipment.getSlotNames()) {
-            Item item = player.getEquipedItem(s);
-            equipmentTableModel.addRow(new Object[]{new ImageIcon(Equipment.getImage(s)), item != null ? item : "Пусто"});
-        }
+        updateEquipmentTable();
 
-        updateRowHeights();
         itemsList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -59,13 +56,67 @@ public class InventoryFrame extends JFrame {
                     int row = list.locationToIndex(e.getPoint());
                     list.setSelectedIndex(row);
                     if (!itemsList.isSelectionEmpty())
-                        showPopup(e);
+                        showInventoryPopup(e);
+                }
+            }
+        });
+        equipmentTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+
+                JTable table = (JTable) e.getSource();
+                int r = table.rowAtPoint(e.getPoint());
+                if (r >= 0 && r < table.getRowCount()) {
+                    table.setRowSelectionInterval(r, r);
+                } else {
+                    table.clearSelection();
+                }
+
+                int rowindex = table.getSelectedRow();
+                if (rowindex < 0)
+                    return;
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    JPopupMenu popup = showEquipmentPopup();
+                    popup.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
         });
     }
 
-    private void showPopup(MouseEvent e) {
+    private JPopupMenu showEquipmentPopup() {
+        JMenuItem menuItem;
+        JPopupMenu popupMenu = new JPopupMenu();
+        int row = equipmentTable.getSelectedRow();
+        int col = equipmentTable.getSelectedColumn();
+        Object selected = equipmentTableModel.getValueAt(row, col);
+        if (selected instanceof Item) {
+            menuItem = new JMenuItem("Снять");
+            menuItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    equipmentTableModel.setValueAt("Пусто", row, col);
+                    player.unequip(((Item) selected));
+                    itemsListModel.addElement((Item) selected);
+                }
+            });
+            popupMenu.add(menuItem);
+        }
+        return popupMenu;
+    }
+
+    private void updateEquipmentTable() {
+        equipmentTableModel.setRowCount(0);
+        for (String s : Equipment.getSlotNames()) {
+            Item item = player.getEquipedItem(s);
+            equipmentTableModel.addRow(new Object[]{new ImageIcon(Equipment.getImage(s)), item != null ? item : "Пусто"});
+        }
+
+        Utils.updateRowHeights(equipmentTable);
+    }
+
+
+    private void showInventoryPopup(MouseEvent e) {
         JMenuItem menuItem;
         JPopupMenu popupMenu = new JPopupMenu();
         int index = itemsList.getSelectedIndex();
@@ -100,37 +151,14 @@ public class InventoryFrame extends JFrame {
         player.getLocation().addItem(item);
         player.getInventory().remove(item);
         itemsListModel.removeElement(item);
+        playerFrame.updateItems();
     }
 
     private void equipItem(Item item) {
         player.equip(item);
         itemsListModel.removeElement(item);
         player.getInventory().remove(item);
-    }
 
-    private void updateRowHeights() {
-        try {
-            for (int row = 0; row < equipmentTable.getRowCount(); row++) {
-                int rowHeight = equipmentTable.getRowHeight();
-
-                for (int column = 0; column < equipmentTable.getColumnCount(); column++) {
-                    Component comp = equipmentTable.prepareRenderer(equipmentTable.getCellRenderer(row, column), row, column);
-                    rowHeight = Math.max(rowHeight, comp.getPreferredSize().height);
-                }
-
-                equipmentTable.setRowHeight(row, rowHeight);
-            }
-        } catch (ClassCastException e) {
-        }
-    }
-
-    class ImageRenderer extends DefaultTableCellRenderer {
-        JLabel lbl = new JLabel();
-
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                       boolean hasFocus, int row, int column) {
-            lbl.setIcon(((ImageIcon) value));
-            return lbl;
-        }
+        updateEquipmentTable();
     }
 }

@@ -11,6 +11,15 @@ import java.util.Map;
  */
 public class Equipment implements Serializable {
     private Map<String, Item> slots;
+
+    public static void setSlotNames(Map<String, String> slotNames) {
+        Equipment.slotNames = slotNames;
+    }
+
+    public Map<String, Item> getSlots() {
+        return slots;
+    }
+
     //private static String[] slotNames = {"голова", "тело", "ноги", "рука"}; //default equipment slots
     private static Map<String, String> slotNames = new HashMap<>();
 
@@ -19,6 +28,10 @@ public class Equipment implements Serializable {
         slotNames.put("торс", "src/data/torso.png");
         slotNames.put("ноги", "src/data/legs.png");
         slotNames.put("рука", "src/data/hand.png");
+    }
+
+    public static Map<String, String> getSlotMap() {
+        return slotNames;
     }
 
     public static Collection<String> getSlotNames() {
@@ -53,5 +66,10 @@ public class Equipment implements Serializable {
 
     public static String getImage(String slot) {
         return slotNames.get(slot);
+    }
+
+    public void uneqip(Item item) {
+        String slot = item.getEquipmentSlot();
+        slots.remove(slot);
     }
 }

@@ -76,4 +76,9 @@ public class Player implements Serializable {
     public Item getEquipedItem(String slot) {
         return equipment.getItemAtSlot(slot);
     }
+
+    public void unequip(Item item) {
+        inventory.add(item);
+        equipment.uneqip(item);
+    }
 }

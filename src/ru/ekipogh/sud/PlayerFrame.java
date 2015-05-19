@@ -98,7 +98,7 @@ public class PlayerFrame extends JFrame {
     }
 
     private void showInventoryScreen() {
-        new InventoryFrame();
+        new InventoryFrame(this);
     }
 
     //показываем менюшку для листов
@@ -204,11 +204,16 @@ public class PlayerFrame extends JFrame {
         output.appendText("<b>" + currentLocation.getName() + "</b><br>" + currentLocation.getDescription() + "<br>");
 
         //Заполняем список предметов в локации
-        itemsListModel.clear();
-        currentLocation.getInventory().forEach(itemsListModel::addElement);
+        updateItems();
+
         //Дизаблим не используемые кнопки передвижения
         directionButtonsEnable();
 
+    }
+
+    public void updateItems() {
+        itemsListModel.clear();
+        currentLocation.getInventory().forEach(itemsListModel::addElement);
     }
 
     //Дизаблим кнопки передвижения соответствующие null выходам

@@ -2,6 +2,7 @@ package ru.ekipogh.sud;
 
 import java.io.*;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by dedov_d on 27.04.2015.
@@ -11,6 +12,7 @@ public class SaveFile implements Serializable {
     private List<Location> locations;
     private String gameName;
     private String gameStartMessage;
+    private Map<String, String> slotNames;
 
     public List<Item> getItems() {
         return items;
@@ -78,5 +80,13 @@ public class SaveFile implements Serializable {
 
     public void setLocations(List<Location> locations) {
         this.locations = locations;
+    }
+
+    public void setSlotNames(Map<String, String> slotNames) {
+        this.slotNames = slotNames;
+    }
+
+    public Map<String, String> getSlotNames() {
+        return slotNames;
     }
 }

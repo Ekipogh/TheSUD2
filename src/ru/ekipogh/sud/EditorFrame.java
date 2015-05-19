@@ -5,8 +5,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by dedov_d on 23.04.2015.
@@ -21,6 +24,7 @@ public class EditorFrame extends JFrame {
     private final JMenuItem openGameMenu;
     private final DefaultListModel<Item> itemsListModel;
     private final DefaultListModel<Item> locationItemsListModel;
+    private final DefaultTableModel equipTableModel;
     private DefaultListModel<Location> locationsListModel;
     private JPanel rootPanel;
     private JTabbedPane tabPanel;
@@ -45,21 +49,27 @@ public class EditorFrame extends JFrame {
     private JTextField gameName;
     private JTextArea gameStartMessage;
     private JTabbedPane itemTabs;
-    private JList itemsList;
+    private JList<Item> itemsList;
     private JButton addItemButton;
     private JButton deleteItemButton;
     private JTextField itemName;
     private JTextArea itemDescription;
-    private JComboBox itemType;
+    private JComboBox<ItemTypes> itemType;
     private JButton saveItemButton;
-    private JList locationTabItemsList;
-    private JList locationItemsList;
+    private JList<Item> locationTabItemsList;
+    private JList<Item> locationItemsList;
     private JButton addItemToLoc;
     private JButton deleteiIemFromLoc;
     private JPanel locationItems;
     private JTextField slotName;
     private JLabel slotLabel;
+    private JComboBox slotCombo;
+    private JTable equipTable;
+    private JButton addSlotButton;
+    private JButton deleteSlotButton;
+    private JButton saveSlotsButton;
     private DefaultComboBoxModel<Location> playerLocationModel;
+    private DefaultComboBoxModel<String> slotNamesModel;
 
     Player player;
 
@@ -77,19 +87,56 @@ public class EditorFrame extends JFrame {
         locationsListModel = new DefaultListModel<Location>();
         locationsList.setModel(locationsListModel);
 
+        equipTableModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return !(column == 1); //вторая колонка с иконками не редактируемая
+            }
+
+            @Override
+            public void setValueAt(Object aValue, int row, int column) {
+                super.setValueAt(aValue, row, column);
+                if (column == 0) {
+                    equipTableModel.setValueAt(new ImageIcon(String.valueOf(aValue)), row, 1);
+                    Utils.updateRowHeights(equipTable);
+                }
+            }
+        };
+
+        equipTable.setModel(equipTableModel);
+        equipTableModel.addColumn("Путь к иконке");
+        equipTableModel.addColumn("Иконка");
+        equipTableModel.addColumn("Название");
+        equipTable.getColumnModel().getColumn(1).setCellRenderer(new ImageRenderer());
+
+        Equipment.getSlotMap().entrySet().forEach((entry) -> {
+            String slotName = entry.getKey();
+            String icon = entry.getValue();
+            equipTableModel.addRow(new Object[]{icon, new ImageIcon(icon), slotName});
+        });
+        Utils.updateRowHeights(equipTable);
+
         itemsListModel = new DefaultListModel<Item>();
         itemsList.setModel(itemsListModel);
         locationTabItemsList.setModel(itemsListModel);
         locationItemsListModel = new DefaultListModel<Item>();
         locationItemsList.setModel(locationItemsListModel);
 
-        itemType.setModel(new DefaultComboBoxModel(ItemTypes.values()));
+        itemType.setModel(new DefaultComboBoxModel<ItemTypes>(ItemTypes.values()));
 
         northModel = new DefaultComboBoxModel<Location>();
         southModel = new DefaultComboBoxModel<Location>();
         eastModel = new DefaultComboBoxModel<Location>();
         westModel = new DefaultComboBoxModel<Location>();
         playerLocationModel = new DefaultComboBoxModel<Location>();
+
+        slotNamesModel = new DefaultComboBoxModel<String>();
+        //default init
+        for (String slot : Equipment.getSlotNames()) {
+            slotNamesModel.addElement(slot);
+        }
+        //default init
+        slotCombo.setModel(slotNamesModel);
 
         northModel.addElement(null);
         southModel.addElement(null);
@@ -236,15 +283,52 @@ public class EditorFrame extends JFrame {
                 showSlotField();
             }
         });
+        addSlotButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addSlot();
+            }
+        });
+        deleteSlotButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int row = equipTable.getSelectedRow();
+                if (row > -1) {
+                    equipTableModel.removeRow(row);
+                }
+            }
+        });
+        saveSlotsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveSlotNames();
+            }
+        });
+    }
+
+    private void saveSlotNames() {
+        Map<String, String> slots = new HashMap<String, String>();
+        for (int i = 0; i < equipTableModel.getRowCount(); i++) {
+            String slotName = String.valueOf(equipTableModel.getValueAt(i, 2));
+            String slotImagePath = String.valueOf(equipTableModel.getValueAt(i, 0));
+            slots.put(slotName, slotImagePath);
+        }
+        Equipment.setSlotNames(slots);
+    }
+
+
+    private void addSlot() {
+        equipTableModel.addRow(new Object[]{"/path/to/file", new ImageIcon(), "название"});
+        Utils.updateRowHeights(equipTable);
     }
 
     private void showSlotField() {
         if (itemType.getModel().getSelectedItem() == ItemTypes.EQUIPPABLE) {
-            slotLabel.setEnabled(true);
-            slotName.setEnabled(true);
+//            slotLabel.setEnabled(true);
+            slotCombo.setEnabled(true);
         } else {
-            slotLabel.setEnabled(false);
-            slotName.setEnabled(false);
+//            slotLabel.setEnabled(false);
+            slotCombo.setEnabled(false);
         }
     }
 
@@ -263,12 +347,16 @@ public class EditorFrame extends JFrame {
     private void saveSelectedItem() {
         int index = itemsList.getSelectedIndex();
         Item selected = itemsListModel.getElementAt(index);
+        /*if (slotCombo.isEnabled() && slotName.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Введите название слота"); //TODO: переделать слотНаме
+            return;
+        }*/
         selected.setName(itemName.getText());
         selected.setDescription(itemDescription.getText());
         ItemTypes type = (ItemTypes) itemType.getSelectedItem();
         selected.setType(type);
-        if (slotName.isEnabled())
-            selected.setEquipmentSlot(slotName.getText());
+        if (slotCombo.isEnabled())
+            selected.setEquipmentSlot(String.valueOf(slotCombo.getSelectedItem()));
         itemsList.updateUI();
     }
 
@@ -289,13 +377,12 @@ public class EditorFrame extends JFrame {
             itemName.setText(selected.getName());
             itemDescription.setText(selected.getDescription());
             itemType.setSelectedItem(selected.getType());
-            slotName.setText(selected.getEquipmentSlot());
+            slotCombo.setSelectedItem(selected.getEquipmentSlot());
         }
     }
 
     private void deleteSelectedItem() {
         int index = itemsList.getSelectedIndex();
-        Item selected = itemsListModel.getElementAt(index);
         itemsListModel.removeElementAt(index);
         itemsList.setSelectedIndex((index > 0) ? index - 1 : index);
     }
@@ -308,12 +395,14 @@ public class EditorFrame extends JFrame {
             saveItemButton.setEnabled(true);
             deleteItemButton.setEnabled(true);
             itemType.setEnabled(true);
+            slotCombo.setEnabled(true);
         } else {
             itemName.setEnabled(false);
             itemDescription.setEnabled(false);
             saveItemButton.setEnabled(false);
             deleteItemButton.setEnabled(false);
             itemType.setEnabled(false);
+            slotCombo.setEnabled(false);
         }
     }
 
@@ -342,6 +431,14 @@ public class EditorFrame extends JFrame {
             itemsListModel.clear();
             for (Item i : saveFile.getItems())
                 itemsListModel.addElement(i);
+            Map<String, String> slotNames = saveFile.getSlotNames();
+            Equipment.setSlotNames(slotNames);
+            equipTableModel.setRowCount(0);
+            for (Map.Entry<String, String> slotsEntry : slotNames.entrySet()) {
+                equipTableModel.addRow(new Object[]{slotsEntry.getValue(), new ImageIcon(slotsEntry.getValue()), slotsEntry.getKey()});
+                slotNamesModel.addElement(slotsEntry.getKey());
+            }
+            Utils.updateRowHeights(equipTable);
             gameName.setText(saveFile.getGameName());
             gameStartMessage.setText(saveFile.getGameStartMessage());
             updatePlayerTab();
@@ -370,21 +467,31 @@ public class EditorFrame extends JFrame {
         fc.setFileFilter(ff);
         int response = fc.showSaveDialog(saveGameMenu);
         if (response == JFileChooser.APPROVE_OPTION) {
-            System.out.print("Saving to " + fc.getSelectedFile().getPath());
-            SaveFile saveFile = new SaveFile();
-            saveFile.setPlayer(player);
-            ArrayList<Location> locations = new ArrayList<Location>();
-            for (int i = 0; i < locationsListModel.size(); i++) {
-                locations.add(locationsListModel.getElementAt(i));
-            }
-            saveFile.setLocations(locations);
-            saveFile.setGameName(gameName.getText());
-            saveFile.setGameStartMessage(gameStartMessage.getText());
-            ArrayList<Item> items = new ArrayList<Item>();
-            for (int i = 0; i < itemsListModel.getSize(); i++)
-                items.add(itemsListModel.getElementAt(i));
-            saveFile.setItems(items);
-            saveFile.save(fc.getSelectedFile().getPath());
+            if (player.getLocation() != null) {
+                System.out.print("Saving to " + fc.getSelectedFile().getPath());
+                SaveFile saveFile = new SaveFile();
+                saveFile.setPlayer(player);
+                ArrayList<Location> locations = new ArrayList<Location>();
+                for (int i = 0; i < locationsListModel.size(); i++) {
+                    locations.add(locationsListModel.getElementAt(i));
+                }
+                saveFile.setLocations(locations);
+                saveFile.setGameName(gameName.getText());
+                saveFile.setGameStartMessage(gameStartMessage.getText());
+                ArrayList<Item> items = new ArrayList<Item>();
+                for (int i = 0; i < itemsListModel.getSize(); i++)
+                    items.add(itemsListModel.getElementAt(i));
+                saveFile.setItems(items);
+                Map<String, String> slotsNames = new HashMap<String, String>();
+                for (int i = 0; i < equipTableModel.getRowCount(); i++) { //TODO: сохраняется в одну сторону, открывается в другую (пока не критично)
+                    String slotName = String.valueOf(equipTableModel.getValueAt(i, 2));
+                    String slotImagePath = String.valueOf(equipTableModel.getValueAt(i, 0));
+                    slotsNames.put(slotName, slotImagePath);
+                }
+                saveFile.setSlotNames(slotsNames);
+                saveFile.save(fc.getSelectedFile().getPath());
+            } else
+                JOptionPane.showMessageDialog(this, "Выберите стартовую локацию игрока!");
         }
     }
 
