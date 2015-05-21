@@ -1,6 +1,6 @@
 package ru.ekipogh.sud;
 
-public class Main {
+class Main {
     public static LauncherFrame launcher;
     public static EditorFrame editor;
 

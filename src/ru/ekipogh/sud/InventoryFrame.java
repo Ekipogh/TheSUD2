@@ -2,15 +2,13 @@ package ru.ekipogh.sud;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
  * Created by dedov_d on 06.05.2015.
  */
-public class InventoryFrame extends JFrame {
+class InventoryFrame extends JFrame {
     private final DefaultListModel<Item> itemsListModel;
     private final PlayerFrame playerFrame;
     private JList<Item> itemsList;
@@ -30,7 +28,7 @@ public class InventoryFrame extends JFrame {
 
         this.playerFrame = playerFrame;
 
-        itemsListModel = new DefaultListModel<Item>();
+        itemsListModel = new DefaultListModel<>();
         itemsList.setModel(itemsListModel);
 
         equipmentTableModel = new DefaultTableModel() {
@@ -92,13 +90,10 @@ public class InventoryFrame extends JFrame {
         Object selected = equipmentTableModel.getValueAt(row, col);
         if (selected instanceof Item) {
             menuItem = new JMenuItem("Снять");
-            menuItem.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    equipmentTableModel.setValueAt("Пусто", row, col);
-                    player.unequip(((Item) selected));
-                    itemsListModel.addElement((Item) selected);
-                }
+            menuItem.addActionListener(e -> {
+                equipmentTableModel.setValueAt("Пусто", row, col);
+                player.unequip(((Item) selected));
+                itemsListModel.addElement((Item) selected);
             });
             popupMenu.add(menuItem);
         }
@@ -126,21 +121,11 @@ public class InventoryFrame extends JFrame {
             //можно положить в инвентарь съедобное и экипируемое
             if (type == ItemTypes.EQUIPPABLE) {
                 menuItem = new JMenuItem("Экипировать");
-                menuItem.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        equipItem(selected);
-                    }
-                });
+                menuItem.addActionListener(e1 -> equipItem(selected));
                 popupMenu.add(menuItem);
             }
             menuItem = new JMenuItem("Бросить");
-            menuItem.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    dropItem(selected);
-                }
-            });
+            menuItem.addActionListener(e1 -> dropItem(selected));
             popupMenu.add(menuItem);
             //TODO: consume, drop
             popupMenu.show(itemsList, e.getX(), e.getY());

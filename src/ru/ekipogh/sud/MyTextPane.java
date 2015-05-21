@@ -12,10 +12,10 @@ public class MyTextPane extends JTextPane {
         this.setText("<html><head></head><body></body></html>");
     }
 
-    public void appendText(String str) {
+    public void println(String str) {
         String temp = this.getText();
         int breakIndex = temp.lastIndexOf("</body>");
-        temp = temp.substring(0, breakIndex) + str + temp.substring(breakIndex);
+        temp = temp.substring(0, breakIndex) + str + "<br>" + temp.substring(breakIndex);
         this.setText(temp);
     }
 }

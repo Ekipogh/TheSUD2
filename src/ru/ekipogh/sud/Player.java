@@ -26,7 +26,7 @@ public class Player implements Serializable {
     public Player(String name) {
         this.name = name;
         this.sex = 0;
-        this.inventory = new ArrayList<Item>();
+        this.inventory = new ArrayList<>();
         equipment = new Equipment();
     }
 
@@ -42,7 +42,7 @@ public class Player implements Serializable {
         return location;
     }
 
-    public void setSex(short sex) {
+    private void setSex(short sex) {
         if (sex >= 0 && sex <= 2)
             this.sex = sex;
     }

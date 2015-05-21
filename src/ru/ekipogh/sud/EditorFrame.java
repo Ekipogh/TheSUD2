@@ -1,12 +1,13 @@
 package ru.ekipogh.sud;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,14 +21,12 @@ public class EditorFrame extends JFrame {
     private final DefaultComboBoxModel<Location> eastModel;
     private final DefaultComboBoxModel<Location> westModel;
     private final JMenuItem saveGameMenu;
-    private final JMenuItem newGameMenu;
     private final JMenuItem openGameMenu;
     private final DefaultListModel<Item> itemsListModel;
     private final DefaultListModel<Item> locationItemsListModel;
     private final DefaultTableModel equipTableModel;
     private DefaultListModel<Location> locationsListModel;
     private JPanel rootPanel;
-    private JTabbedPane tabPanel;
     private JList<Location> locationsList;
     private JTextField locName;
     private JTextField locID;
@@ -39,7 +38,6 @@ public class EditorFrame extends JFrame {
     private JButton addLocButton;
     private JButton deleteLocButton;
     private JButton saveLocButton;
-    private JPanel playerTab;
     private JTextField playerName;
     private JRadioButton female;
     private JRadioButton male;
@@ -48,7 +46,6 @@ public class EditorFrame extends JFrame {
     private JButton savePlayer;
     private JTextField gameName;
     private JTextArea gameStartMessage;
-    private JTabbedPane itemTabs;
     private JList<Item> itemsList;
     private JButton addItemButton;
     private JButton deleteItemButton;
@@ -59,11 +56,8 @@ public class EditorFrame extends JFrame {
     private JList<Item> locationTabItemsList;
     private JList<Item> locationItemsList;
     private JButton addItemToLoc;
-    private JButton deleteiIemFromLoc;
-    private JPanel locationItems;
-    private JTextField slotName;
-    private JLabel slotLabel;
-    private JComboBox slotCombo;
+    private JButton deleteItemFromLoc;
+    private JComboBox<String> slotCombo;
     private JTable equipTable;
     private JButton addSlotButton;
     private JButton deleteSlotButton;
@@ -71,7 +65,7 @@ public class EditorFrame extends JFrame {
     private DefaultComboBoxModel<Location> playerLocationModel;
     private DefaultComboBoxModel<String> slotNamesModel;
 
-    Player player;
+    private Player player;
 
     public EditorFrame() {
         super("Редактор");
@@ -84,7 +78,7 @@ public class EditorFrame extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); //TODO: создать метод закрытия окна
 
-        locationsListModel = new DefaultListModel<Location>();
+        locationsListModel = new DefaultListModel<>();
         locationsList.setModel(locationsListModel);
 
         equipTableModel = new DefaultTableModel() {
@@ -116,25 +110,23 @@ public class EditorFrame extends JFrame {
         });
         Utils.updateRowHeights(equipTable);
 
-        itemsListModel = new DefaultListModel<Item>();
+        itemsListModel = new DefaultListModel<>();
         itemsList.setModel(itemsListModel);
         locationTabItemsList.setModel(itemsListModel);
-        locationItemsListModel = new DefaultListModel<Item>();
+        locationItemsListModel = new DefaultListModel<>();
         locationItemsList.setModel(locationItemsListModel);
 
-        itemType.setModel(new DefaultComboBoxModel<ItemTypes>(ItemTypes.values()));
+        itemType.setModel(new DefaultComboBoxModel<>(ItemTypes.values()));
 
-        northModel = new DefaultComboBoxModel<Location>();
-        southModel = new DefaultComboBoxModel<Location>();
-        eastModel = new DefaultComboBoxModel<Location>();
-        westModel = new DefaultComboBoxModel<Location>();
-        playerLocationModel = new DefaultComboBoxModel<Location>();
+        northModel = new DefaultComboBoxModel<>();
+        southModel = new DefaultComboBoxModel<>();
+        eastModel = new DefaultComboBoxModel<>();
+        westModel = new DefaultComboBoxModel<>();
+        playerLocationModel = new DefaultComboBoxModel<>();
 
-        slotNamesModel = new DefaultComboBoxModel<String>();
+        slotNamesModel = new DefaultComboBoxModel<>();
         //default init
-        for (String slot : Equipment.getSlotNames()) {
-            slotNamesModel.addElement(slot);
-        }
+        Equipment.getSlotNames().forEach(slotNamesModel::addElement);
         //default init
         slotCombo.setModel(slotNamesModel);
 
@@ -152,7 +144,7 @@ public class EditorFrame extends JFrame {
 
         JMenuBar menuBar = new JMenuBar();
         JMenu menuFile = new JMenu("Файл");
-        newGameMenu = new JMenuItem("Новая");
+        JMenuItem newGameMenu = new JMenuItem("Новая");
         openGameMenu = new JMenuItem("Открыть");
         saveGameMenu = new JMenuItem("Сохранить");
         menuFile.add(newGameMenu);
@@ -162,33 +154,15 @@ public class EditorFrame extends JFrame {
 
         setJMenuBar(menuBar);
 
-        saveGameMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                saveGame();
-            }
-        });
+        saveGameMenu.addActionListener(e -> saveGame());
 
-        openGameMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                openGame();
-            }
-        });
+        openGameMenu.addActionListener(e -> openGame());
 
-        addLocButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addNewLocation();
-            }
-        });
+        addLocButton.addActionListener(e -> addNewLocation());
 
-        locationsList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                setLocationFormElementsEnabled();
-                selectLocation();
-            }
+        locationsList.addListSelectionListener(e -> {
+            setLocationFormElementsEnabled();
+            selectLocation();
         });
 
         addWindowListener(new WindowAdapter() {
@@ -199,70 +173,25 @@ public class EditorFrame extends JFrame {
             }
         });
 
-        saveLocButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                saveSelectedLocation();
-            }
+        saveLocButton.addActionListener(e -> saveSelectedLocation());
+        deleteLocButton.addActionListener(e -> deleteSelectedLocation());
+        savePlayer.addActionListener(e -> savePlayer());
+        addItemButton.addActionListener(e -> addNewItem());
+        itemsList.addListSelectionListener(e -> {
+            setItemFormElementsEnabled();
+            selectItem();
         });
-        deleteLocButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                deleteSelectedLocation();
-            }
-        });
-        savePlayer.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                savePlayer();
-            }
-        });
-        addItemButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addNewItem();
-            }
-        });
-        itemsList.addListSelectionListener(new ListSelectionListener() {
+        deleteItemButton.addActionListener(e -> deleteSelectedItem());
+        addItemToLoc.addActionListener(e -> addItemToLocation());
+        saveItemButton.addActionListener(e -> saveSelectedItem());
 
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                setItemFormElementsEnabled();
-                selectItem();
-            }
-        });
-        deleteItemButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                deleteSelectedItem();
-            }
-        });
-        addItemToLoc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addItemToLocation();
-            }
-        });
-        saveItemButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                saveSelectedItem();
-            }
-        });
-
-        deleteiIemFromLoc.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                deleteItemFromLocation();
-            }
-        });
+        deleteItemFromLoc.addActionListener(e -> deleteItemFromLocation());
         locationTabItemsList.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
                 super.focusGained(e);
                 if (((JList) e.getSource()).getSelectedIndex() >= 0) {
-                    deleteiIemFromLoc.setEnabled(false);
+                    deleteItemFromLoc.setEnabled(false);
                     addItemToLoc.setEnabled(true);
                 }
             }
@@ -272,42 +201,24 @@ public class EditorFrame extends JFrame {
             public void focusGained(FocusEvent e) {
                 super.focusGained(e);
                 if (((JList) e.getSource()).getSelectedIndex() >= 0) {
-                    deleteiIemFromLoc.setEnabled(true);
+                    deleteItemFromLoc.setEnabled(true);
                     addItemToLoc.setEnabled(false);
                 }
             }
         });
-        itemType.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showSlotField();
+        itemType.addActionListener(e -> showSlotField());
+        addSlotButton.addActionListener(e -> addSlot());
+        deleteSlotButton.addActionListener(e -> {
+            int row = equipTable.getSelectedRow();
+            if (row > -1) {
+                equipTableModel.removeRow(row);
             }
         });
-        addSlotButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addSlot();
-            }
-        });
-        deleteSlotButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int row = equipTable.getSelectedRow();
-                if (row > -1) {
-                    equipTableModel.removeRow(row);
-                }
-            }
-        });
-        saveSlotsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                saveSlotNames();
-            }
-        });
+        saveSlotsButton.addActionListener(e -> saveSlotNames());
     }
 
     private void saveSlotNames() {
-        Map<String, String> slots = new HashMap<String, String>();
+        Map<String, String> slots = new HashMap<>();
         for (int i = 0; i < equipTableModel.getRowCount(); i++) {
             String slotName = String.valueOf(equipTableModel.getValueAt(i, 2));
             String slotImagePath = String.valueOf(equipTableModel.getValueAt(i, 0));
@@ -340,17 +251,13 @@ public class EditorFrame extends JFrame {
         selectedLoc.getInventory().remove(selectedItem);
         locationItemsListModel.removeElement(selectedItem);
         if (indexItem == 0)
-            deleteiIemFromLoc.setEnabled(false);
+            deleteItemFromLoc.setEnabled(false);
         locationItemsList.setSelectedIndex((indexItem > 0) ? indexItem - 1 : indexItem);
     }
 
     private void saveSelectedItem() {
         int index = itemsList.getSelectedIndex();
         Item selected = itemsListModel.getElementAt(index);
-        /*if (slotCombo.isEnabled() && slotName.getText().equals("")) {
-            JOptionPane.showMessageDialog(this, "Введите название слота"); //TODO: переделать слотНаме
-            return;
-        }*/
         selected.setName(itemName.getText());
         selected.setDescription(itemDescription.getText());
         ItemTypes type = (ItemTypes) itemType.getSelectedItem();
@@ -427,10 +334,13 @@ public class EditorFrame extends JFrame {
             for (Location l : saveFile.getLocations()) {
                 playerLocationModel.addElement(l);
                 locationsListModel.addElement(l);
+                northModel.addElement(l);
+                southModel.addElement(l);
+                eastModel.addElement(l);
+                westModel.addElement(l);
             }
             itemsListModel.clear();
-            for (Item i : saveFile.getItems())
-                itemsListModel.addElement(i);
+            saveFile.getItems().forEach(itemsListModel::addElement);
             Map<String, String> slotNames = saveFile.getSlotNames();
             Equipment.setSlotNames(slotNames);
             equipTableModel.setRowCount(0);
@@ -471,18 +381,18 @@ public class EditorFrame extends JFrame {
                 System.out.print("Saving to " + fc.getSelectedFile().getPath());
                 SaveFile saveFile = new SaveFile();
                 saveFile.setPlayer(player);
-                ArrayList<Location> locations = new ArrayList<Location>();
+                ArrayList<Location> locations = new ArrayList<>();
                 for (int i = 0; i < locationsListModel.size(); i++) {
                     locations.add(locationsListModel.getElementAt(i));
                 }
                 saveFile.setLocations(locations);
                 saveFile.setGameName(gameName.getText());
                 saveFile.setGameStartMessage(gameStartMessage.getText());
-                ArrayList<Item> items = new ArrayList<Item>();
+                ArrayList<Item> items = new ArrayList<>();
                 for (int i = 0; i < itemsListModel.getSize(); i++)
                     items.add(itemsListModel.getElementAt(i));
                 saveFile.setItems(items);
-                Map<String, String> slotsNames = new HashMap<String, String>();
+                Map<String, String> slotsNames = new HashMap<>();
                 for (int i = 0; i < equipTableModel.getRowCount(); i++) { //TODO: сохраняется в одну сторону, открывается в другую (пока не критично)
                     String slotName = String.valueOf(equipTableModel.getValueAt(i, 2));
                     String slotImagePath = String.valueOf(equipTableModel.getValueAt(i, 0));
@@ -531,7 +441,7 @@ public class EditorFrame extends JFrame {
     private void saveSelectedLocation() {
         int index = locationsList.getSelectedIndex();
         int northIndex = locNorth.getSelectedIndex();
-        int sounthIndex = locSouth.getSelectedIndex();
+        int southIndex = locSouth.getSelectedIndex();
         int eastIndex = locEast.getSelectedIndex();
         int westIndex = locWest.getSelectedIndex();
         Location selectedLocation = locationsListModel.getElementAt(index);
@@ -539,7 +449,7 @@ public class EditorFrame extends JFrame {
         selectedLocation.setName(locName.getText());
         selectedLocation.setDescription(locDescription.getText());
         selectedLocation.setNorth(northModel.getElementAt(northIndex));
-        selectedLocation.setSouth(southModel.getElementAt(sounthIndex));
+        selectedLocation.setSouth(southModel.getElementAt(southIndex));
         selectedLocation.setEast(eastModel.getElementAt(eastIndex));
         selectedLocation.setWest(westModel.getElementAt(westIndex));
 
@@ -560,9 +470,7 @@ public class EditorFrame extends JFrame {
             /*locationItemsList.setEnabled(true);
             locationTabItemsList.setEnabled(true);*/
             locationItemsListModel.clear();
-            for (Item i : selected.getInventory()) {
-                locationItemsListModel.addElement(i);
-            }
+            selected.getInventory().forEach(locationItemsListModel::addElement);
         }
     }
 
@@ -579,31 +487,17 @@ public class EditorFrame extends JFrame {
         playerLocationModel.addElement(newLocation);
     }
 
-    private void setLocationFormElementsEnabled() { //TODO: rethink: Disable all component when no Location on the list, enable when first location added?
-        if (locationsList.getSelectedIndex() >= 0) {
-            deleteLocButton.setEnabled(true);
-            locName.setEnabled(true);
-            locDescription.setEnabled(true);
-            locNorth.setEnabled(true);
-            locSouth.setEnabled(true);
-            locEast.setEnabled(true);
-            locWest.setEnabled(true);
-            saveLocButton.setEnabled(true);
-            locationItemsList.setEnabled(true);
-            locationTabItemsList.setEnabled(true);
-        } else {
-            deleteLocButton.setEnabled(false);
-            locName.setEnabled(false);
-            locDescription.setEnabled(false);
-            locNorth.setEnabled(false);
-            locSouth.setEnabled(false);
-            locEast.setEnabled(false);
-            locWest.setEnabled(false);
-            saveLocButton.setEnabled(false);
-            locationItemsList.setEnabled(false);
-            locationTabItemsList.setEnabled(false);
-            deleteiIemFromLoc.setEnabled(false);
-            addItemToLoc.setEnabled(false);
-        }
+    private void setLocationFormElementsEnabled() {
+        boolean enabled = locationsList.getSelectedIndex() >= 0;
+        deleteLocButton.setEnabled(enabled);
+        locName.setEnabled(enabled);
+        locDescription.setEnabled(enabled);
+        locNorth.setEnabled(enabled);
+        locSouth.setEnabled(enabled);
+        locEast.setEnabled(enabled);
+        locWest.setEnabled(enabled);
+        saveLocButton.setEnabled(enabled);
+        locationItemsList.setEnabled(enabled);
+        locationTabItemsList.setEnabled(enabled);
     }
 }

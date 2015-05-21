@@ -27,7 +27,7 @@ public class Location implements Serializable {
         this.id = Sequencer.getNewLocationID();
         this.description = "";
         this.exits = new Location[4];
-        this.inventory = new ArrayList<Item>();
+        this.inventory = new ArrayList<>();
     }
 
     public void setDescription(String description) {

@@ -3,8 +3,6 @@ package ru.ekipogh.sud;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 
 /**
@@ -24,29 +22,16 @@ public class LauncherFrame extends JFrame {
         pack();
         setLocationRelativeTo(null);
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        editorButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                LauncherFrame.this.setVisible(false);
-                Main.editor = new EditorFrame();
-            }
+        editorButton.addActionListener(e -> {
+            LauncherFrame.this.setVisible(false);
+            Main.editor = new EditorFrame();
         });
 
         setVisible(true);
-        openFileButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                chooseGameFile();
-            }
-        });
-        playerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                startGame();
-            }
-        });
+        openFileButton.addActionListener(e -> chooseGameFile());
+        playerButton.addActionListener(e -> startGame());
     }
 
     private void startGame() {

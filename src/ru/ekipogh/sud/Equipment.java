@@ -46,7 +46,7 @@ public class Equipment implements Serializable {
     }
 
     public Equipment() {
-        slots = new HashMap<String, Item>();
+        slots = new HashMap<>();
         for (String slotsName : slotNames.keySet()) {
             slots.put(slotsName, null);
         }

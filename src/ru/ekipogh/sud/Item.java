@@ -50,9 +50,6 @@ public class Item implements Serializable {
     }
 
     public void setEquipmentSlot(String equipmentSlot) {
-        for (String s : Equipment.getSlotNames()) {
-            if (s.equals(equipmentSlot))
-                this.equipmentSlot = equipmentSlot;
-        }
+        Equipment.getSlotNames().stream().filter(s -> s.equals(equipmentSlot)).forEach(s -> this.equipmentSlot = equipmentSlot);
     }
 }

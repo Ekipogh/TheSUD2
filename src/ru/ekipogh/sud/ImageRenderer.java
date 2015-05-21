@@ -7,8 +7,8 @@ import java.awt.*;
 /**
  * Created by dedov_d on 12.05.2015.
  */
-public class ImageRenderer extends DefaultTableCellRenderer {
-    JLabel lbl = new JLabel();
+class ImageRenderer extends DefaultTableCellRenderer {
+    private JLabel lbl = new JLabel();
 
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
                                                    boolean hasFocus, int row, int column) {

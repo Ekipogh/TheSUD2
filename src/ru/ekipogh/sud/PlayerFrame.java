@@ -1,8 +1,10 @@
 package ru.ekipogh.sud;
 
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
+
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.List;
 /**
  * Created by dedov_d on 27.04.2015.
  */
-public class PlayerFrame extends JFrame {
+class PlayerFrame extends JFrame {
     private final int NORTH = 0;
     private final int SOUTH = 1;
     private final int EAST = 2;
@@ -33,43 +35,25 @@ public class PlayerFrame extends JFrame {
 
     private static Location currentLocation;
     private List<Item> items;
+    private Context cx;
+    private Scriptable scope;
 
-    public PlayerFrame() {
+    private PlayerFrame() {
         super("The SUD2");
         setContentPane(rootPanel);
         pack();
         setLocationRelativeTo(null);
 
-        itemsListModel = new DefaultListModel<Item>();
+        itemsListModel = new DefaultListModel<>();
         itemsList.setModel(itemsListModel);
         //charactersListModel = new DefaultListModel<Character>();
         //charactersList.setModel(charactersListModel);
         popupMenu = new JPopupMenu();
 
-        northButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                move(NORTH);
-            }
-        });
-        southButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                move(SOUTH);
-            }
-        });
-        westButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                move(WEST);
-            }
-        });
-        eastButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                move(EAST);
-            }
-        });
+        northButton.addActionListener(e -> move(NORTH));
+        southButton.addActionListener(e -> move(SOUTH));
+        westButton.addActionListener(e -> move(WEST));
+        eastButton.addActionListener(e -> move(EAST));
 
 
         setVisible(true);
@@ -89,12 +73,7 @@ public class PlayerFrame extends JFrame {
                 }
             }
         });
-        inventoryButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showInventoryScreen();
-            }
-        });
+        inventoryButton.addActionListener(e -> showInventoryScreen());
     }
 
     private void showInventoryScreen() {
@@ -112,22 +91,12 @@ public class PlayerFrame extends JFrame {
             //можно положить в инвентарь съедобное и экипируемое
             if (type == ItemTypes.EQUIPPABLE || type == ItemTypes.CONSUMABLE || type == ItemTypes.STORABLE) {
                 menuItem = new JMenuItem("Взять");
-                menuItem.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        moveItemToPlayerInventory(selected);
-                    }
-                });
+                menuItem.addActionListener(e1 -> moveItemToPlayerInventory(selected));
                 popupMenu.add(menuItem);
             }
             if (type == ItemTypes.EQUIPPABLE) {
                 menuItem = new JMenuItem("Экипировать");
-                menuItem.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        equipItem(selected);
-                    }
-                });
+                menuItem.addActionListener(e1 -> equipItem(selected));
                 popupMenu.add(menuItem);
             }
             //TODO: Сonsume etc
@@ -194,14 +163,25 @@ public class PlayerFrame extends JFrame {
         items = saveFile.getItems();
         currentLocation = player.getLocation();
         //output.setText(saveFile.getGameName() + "\n" + saveFile.getGameStartMessage());
-        output.appendText("<b>" + saveFile.getGameName() + "</b> <br>" + saveFile.getGameStartMessage() + "<br>");
+        output.println("<b>" + saveFile.getGameName() + "</b>");
+        output.println(saveFile.getGameStartMessage());
         playerName.setText(player.getName());
+        initJS();
+        cx.evaluateString(scope, "out.println(\"SUP from JS\")", "<cmd>", 1, null);
+    }
+
+    private void initJS() { //TODO: заменить классом?
+        cx = Context.enter();
+        scope = cx.initStandardObjects();
+        Object wrappedOut = Context.javaToJS(output, scope);
+        ScriptableObject.putProperty(scope, "out", wrappedOut);
     }
 
     //выполнение сценариев и игровой логики
     private void proceed() {
         //output.setText(output.getText() + "\n" + currentLocation.getName() + "\n" + currentLocation.getDescription());
-        output.appendText("<b>" + currentLocation.getName() + "</b><br>" + currentLocation.getDescription() + "<br>");
+        output.println("<b>" + currentLocation.getName() + "</b>");
+        output.println(currentLocation.getDescription());
 
         //Заполняем список предметов в локации
         updateItems();
