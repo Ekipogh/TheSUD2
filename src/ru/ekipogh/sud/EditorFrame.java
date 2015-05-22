@@ -219,10 +219,12 @@ public class EditorFrame extends JFrame {
 
     private void saveSlotNames() {
         Map<String, String> slots = new HashMap<>();
+        slotNamesModel.removeAllElements();
         for (int i = 0; i < equipTableModel.getRowCount(); i++) {
             String slotName = String.valueOf(equipTableModel.getValueAt(i, 2));
             String slotImagePath = String.valueOf(equipTableModel.getValueAt(i, 0));
             slots.put(slotName, slotImagePath);
+            slotNamesModel.addElement(slotName);
         }
         Equipment.setSlotNames(slots);
     }
@@ -344,6 +346,7 @@ public class EditorFrame extends JFrame {
             Map<String, String> slotNames = saveFile.getSlotNames();
             Equipment.setSlotNames(slotNames);
             equipTableModel.setRowCount(0);
+            slotNamesModel.removeAllElements();
             for (Map.Entry<String, String> slotsEntry : slotNames.entrySet()) {
                 equipTableModel.addRow(new Object[]{slotsEntry.getValue(), new ImageIcon(slotsEntry.getValue()), slotsEntry.getKey()});
                 slotNamesModel.addElement(slotsEntry.getKey());
@@ -378,7 +381,7 @@ public class EditorFrame extends JFrame {
         int response = fc.showSaveDialog(saveGameMenu);
         if (response == JFileChooser.APPROVE_OPTION) {
             if (player.getLocation() != null) {
-                System.out.print("Saving to " + fc.getSelectedFile().getPath());
+                System.out.println("Saving to " + fc.getSelectedFile().getPath());
                 SaveFile saveFile = new SaveFile();
                 saveFile.setPlayer(player);
                 ArrayList<Location> locations = new ArrayList<>();

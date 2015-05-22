@@ -1,9 +1,5 @@
 package ru.ekipogh.sud;
 
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.ScriptableObject;
-
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -35,8 +31,6 @@ class PlayerFrame extends JFrame {
 
     private static Location currentLocation;
     private List<Item> items;
-    private Context cx;
-    private Scriptable scope;
 
     private PlayerFrame() {
         super("The SUD2");
@@ -167,21 +161,21 @@ class PlayerFrame extends JFrame {
         output.println(saveFile.getGameStartMessage());
         playerName.setText(player.getName());
         initJS();
-        cx.evaluateString(scope, "out.println(\"SUP from JS\")", "<cmd>", 1, null);
+        Script.run("out.println(\"SUP from JS\")");
+//        cx.evaluateString(scope, "out.println(\"SUP from JS\")", "<cmd>", 1, null);
     }
 
     private void initJS() { //TODO: заменить классом?
-        cx = Context.enter();
-        scope = cx.initStandardObjects();
-        Object wrappedOut = Context.javaToJS(output, scope);
-        ScriptableObject.putProperty(scope, "out", wrappedOut);
+        Script.init();
+        Script.setProperty("out", output);
     }
 
     //выполнение сценариев и игровой логики
     private void proceed() {
         //output.setText(output.getText() + "\n" + currentLocation.getName() + "\n" + currentLocation.getDescription());
         output.println("<b>" + currentLocation.getName() + "</b>");
-        output.println(currentLocation.getDescription());
+        if (!currentLocation.getDescription().isEmpty())
+            output.println(currentLocation.getDescription());
 
         //Заполняем список предметов в локации
         updateItems();
