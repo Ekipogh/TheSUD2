@@ -58,8 +58,9 @@ public class Equipment implements Serializable {
 
     public void equip(Item item) {
         String slot = item.getEquipmentSlot();
-        if (slots.get(slot) != null) { //TODO: wat?
+        if (slots.get(slot) != null) {
             JOptionPane.showMessageDialog(null, "Сначала снимите предмет со слота " + slot);
+            return;
         }
         slots.put(slot, item);
     }

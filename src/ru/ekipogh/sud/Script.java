@@ -22,6 +22,7 @@ public class Script {
     }
 
     public static void run(String script) {
-        context.evaluateString(scope, script, "<cmd>", 1, null);
+        if (!script.isEmpty())
+            context.evaluateString(scope, script, "<cmd>", 1, null);
     }
 }

@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * Created by dedov_d on 06.05.2015.
@@ -26,7 +28,16 @@ class InventoryFrame extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
 
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                playerFrame.setEnabled(true);
+            }
+        });
+
         this.playerFrame = playerFrame;
+        playerFrame.setEnabled(false);
 
         itemsListModel = new DefaultListModel<>();
         itemsList.setModel(itemsListModel);

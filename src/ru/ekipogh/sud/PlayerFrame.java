@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by dedov_d on 27.04.2015.
@@ -26,6 +27,7 @@ class PlayerFrame extends JFrame {
     private JList<Item> itemsList;
     private JList charactersList;
     private JButton inventoryButton;
+    private JLabel locationPic;
     private DefaultListModel<Item> itemsListModel;
     private JPopupMenu popupMenu;
 
@@ -68,6 +70,28 @@ class PlayerFrame extends JFrame {
             }
         });
         inventoryButton.addActionListener(e -> showInventoryScreen());
+        locationPic.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                showLocationPopup(e);
+            }
+        });
+    }
+
+    private void showLocationPopup(MouseEvent event) {
+        JMenuItem menuItem;
+        popupMenu.removeAll();
+        for (String scriptName : currentLocation.getScripts().keySet()) {
+            if (!scriptName.equals("onEnter") && !scriptName.equals("onLeave")) {
+                menuItem = new JMenuItem(scriptName);
+                menuItem.addActionListener(e -> {
+                    Script.run(currentLocation.getScript(scriptName));
+                });
+                popupMenu.add(menuItem);
+            }
+        }
+        popupMenu.show(locationPic, event.getX(), event.getY());
     }
 
     private void showInventoryScreen() {
@@ -129,8 +153,10 @@ class PlayerFrame extends JFrame {
                 playerLocation = player.getLocation().getWest(); //Запад
                 break;
         }
+        Script.run(currentLocation.getScript("onLeave"));
         currentLocation = playerLocation != null ? playerLocation : currentLocation;
         player.setLocation(currentLocation);
+        Script.run(currentLocation.getScript("onEnter"));
         proceed(); //продолжить, выполнить сценарии и игровую логику
     }
 
@@ -156,26 +182,31 @@ class PlayerFrame extends JFrame {
         locations = saveFile.getLocations();
         items = saveFile.getItems();
         currentLocation = player.getLocation();
-        //output.setText(saveFile.getGameName() + "\n" + saveFile.getGameStartMessage());
         output.println("<b>" + saveFile.getGameName() + "</b>");
         output.println(saveFile.getGameStartMessage());
         playerName.setText(player.getName());
+        Map<String, String> slotNames = saveFile.getSlotNames();
+        Equipment.setSlotNames(slotNames);
         initJS();
         Script.run("out.println(\"SUP from JS\")");
-//        cx.evaluateString(scope, "out.println(\"SUP from JS\")", "<cmd>", 1, null);
     }
 
     private void initJS() { //TODO: заменить классом?
         Script.init();
         Script.setProperty("out", output);
+        Script.setProperty("items", items);
+        Script.setProperty("player", player);
+        Script.setProperty("locations", locations);
     }
 
     //выполнение сценариев и игровой логики
     private void proceed() {
-        //output.setText(output.getText() + "\n" + currentLocation.getName() + "\n" + currentLocation.getDescription());
         output.println("<b>" + currentLocation.getName() + "</b>");
         if (!currentLocation.getDescription().isEmpty())
             output.println(currentLocation.getDescription());
+
+        //изменяем рисунок локации
+        locationPic.setIcon(new ImageIcon(currentLocation.getPicturePath()));
 
         //Заполняем список предметов в локации
         updateItems();

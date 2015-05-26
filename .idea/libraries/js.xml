@@ -2,8 +2,11 @@
   <library name="js">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/../../rhino/js.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../RSyn/RSyntaxTextArea/build/libs/rsyntaxtextarea-2.6.0-SNAPSHOT.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../rhino/src" />
+    </SOURCES>
   </library>
 </component>

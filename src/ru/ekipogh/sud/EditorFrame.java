@@ -1,5 +1,8 @@
 package ru.ekipogh.sud;
 
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -62,8 +65,16 @@ public class EditorFrame extends JFrame {
     private JButton addSlotButton;
     private JButton deleteSlotButton;
     private JButton saveSlotsButton;
+    private JList scriptsList;
+    private RSyntaxTextArea scriptText;
     private DefaultComboBoxModel<Location> playerLocationModel;
     private DefaultComboBoxModel<String> slotNamesModel;
+    private DefaultListModel<String> scriptListModel;
+    private JButton addScriptLocButton;
+    private JButton deleteScriptLocButton;
+    private JButton saveScriptButton;
+    private JTextField picturePathField;
+    private JButton pictureDialogButton;
 
     private Player player;
 
@@ -80,6 +91,12 @@ public class EditorFrame extends JFrame {
 
         locationsListModel = new DefaultListModel<>();
         locationsList.setModel(locationsListModel);
+
+        scriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+        scriptText.setCodeFoldingEnabled(true);
+
+        scriptListModel = new DefaultListModel<>();
+        scriptsList.setModel(scriptListModel);
 
         equipTableModel = new DefaultTableModel() {
             @Override
@@ -209,12 +226,77 @@ public class EditorFrame extends JFrame {
         itemType.addActionListener(e -> showSlotField());
         addSlotButton.addActionListener(e -> addSlot());
         deleteSlotButton.addActionListener(e -> {
+            Item found = null;
             int row = equipTable.getSelectedRow();
-            if (row > -1) {
-                equipTableModel.removeRow(row);
+            for (int i = 0; i < itemsListModel.getSize(); i++) {
+                Item item = itemsListModel.getElementAt(i);
+                if (item.getType() == ItemTypes.EQUIPPABLE && item.getEquipmentSlot() == equipTableModel.getValueAt(row, 2))
+                    found = item;
             }
+            if (found == null) {
+                if (row > -1) {
+                    equipTableModel.removeRow(row);
+                }
+            } else
+                JOptionPane.showMessageDialog(null, "Удаление невозможно существует предмет (" + found.getName() + ") с таким слотом экипировки");
         });
         saveSlotsButton.addActionListener(e -> saveSlotNames());
+        scriptsList.addListSelectionListener(e -> selectLocationScript());
+        saveScriptButton.addActionListener(e -> saveSelectedScript());
+        deleteScriptLocButton.addActionListener(e -> deleteSelectedLocationScript());
+        addScriptLocButton.addActionListener(e -> addScriptToLocation());
+        pictureDialogButton.addActionListener(e -> showChooseDialog());
+    }
+
+    private void showChooseDialog() {
+        JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
+        FileFilter ff = new FileNameExtensionFilter("Image file", "png", "jpg", "jpeg");
+        fc.setFileFilter(ff);
+        int response = fc.showOpenDialog(pictureDialogButton);
+        if (response == JFileChooser.APPROVE_OPTION) {
+            picturePathField.setText(fc.getSelectedFile().getPath());
+        }
+    }
+
+    private void addScriptToLocation() {
+        int index = locationsList.getSelectedIndex();
+        Location location = locationsListModel.elementAt(index);
+        String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
+        location.addScript(scriptName, "");
+        scriptListModel.addElement(scriptName);
+    }
+
+    private void deleteSelectedLocationScript() {
+        int indexS = scriptsList.getSelectedIndex();
+        int indexL = locationsList.getSelectedIndex();
+        String scriptName = scriptListModel.getElementAt(indexS);
+        if (!scriptName.equals("onEnter") && !scriptName.equals("onExit")) {
+            Location location = locationsListModel.elementAt(indexL);
+            location.removeScript(scriptName);
+            scriptListModel.remove(indexS);
+        }
+    }
+
+    private void saveSelectedScript() {
+        int indexS = scriptsList.getSelectedIndex();
+        String scriptName = scriptListModel.getElementAt(indexS);
+        int indexL = locationsList.getSelectedIndex();
+        Location location = locationsListModel.elementAt(indexL);
+        location.setScript(scriptName, scriptText.getText());
+    }
+
+
+    private void selectLocationScript() {
+        int index = scriptsList.getSelectedIndex();
+        System.out.println(index);
+        if (index >= 0) {
+            String script = scriptListModel.getElementAt(index);
+            int indexL = locationsList.getSelectedIndex();
+            Location location = locationsListModel.elementAt(indexL);
+            scriptText.setEnabled(true);
+            scriptText.setText(location.getScript(script));
+        } else
+            scriptText.setEnabled(false);
     }
 
     private void saveSlotNames() {
@@ -455,6 +537,8 @@ public class EditorFrame extends JFrame {
         selectedLocation.setSouth(southModel.getElementAt(southIndex));
         selectedLocation.setEast(eastModel.getElementAt(eastIndex));
         selectedLocation.setWest(westModel.getElementAt(westIndex));
+        if (picturePathField.getText().isEmpty())
+            selectedLocation.setPicturePath("/data/empty.png"); //TODO: I can't think properly right now and this is not working. You! Yes, you! Fix it!
 
         locationsList.updateUI();
     }
@@ -470,10 +554,13 @@ public class EditorFrame extends JFrame {
             locSouth.getModel().setSelectedItem(selected.getSouth());
             locEast.getModel().setSelectedItem(selected.getEast());
             locWest.getModel().setSelectedItem(selected.getWest());
-            /*locationItemsList.setEnabled(true);
-            locationTabItemsList.setEnabled(true);*/
             locationItemsListModel.clear();
+            scriptListModel.removeAllElements();
+            selected.getScripts().keySet().forEach((key) -> {
+                scriptListModel.addElement(key);
+            });
             selected.getInventory().forEach(locationItemsListModel::addElement);
+            picturePathField.setText(selected.getPicturePath());
         }
     }
 
@@ -502,5 +589,9 @@ public class EditorFrame extends JFrame {
         saveLocButton.setEnabled(enabled);
         locationItemsList.setEnabled(enabled);
         locationTabItemsList.setEnabled(enabled);
+        scriptsList.setEnabled(enabled);
+        saveScriptButton.setEnabled(enabled);
+        pictureDialogButton.setEnabled(enabled);
+        picturePathField.setEnabled(enabled);
     }
 }

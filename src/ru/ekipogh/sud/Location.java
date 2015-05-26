@@ -2,7 +2,9 @@ package ru.ekipogh.sud;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by dedov_d on 23.04.2015.
@@ -13,6 +15,16 @@ public class Location implements Serializable {
     private String description;  //optional location Description
     private Location[] exits;  //items can be null
     private List<Item> inventory;
+    private Map<String, String> scripts;
+    private String picturePath;
+
+    public String getPicturePath() {
+        return picturePath;
+    }
+
+    public void setPicturePath(String picturePath) {
+        this.picturePath = picturePath;
+    }
 
     public List<Item> getInventory() {
         return inventory;
@@ -28,6 +40,9 @@ public class Location implements Serializable {
         this.description = "";
         this.exits = new Location[4];
         this.inventory = new ArrayList<>();
+        this.scripts = new HashMap<>();
+        scripts.put("onEnter", "");
+        scripts.put("onLeave", "");
     }
 
     public void setDescription(String description) {
@@ -93,6 +108,26 @@ public class Location implements Serializable {
 
     public void removeItem(Item item) {
         inventory.remove(item);
+    }
+
+    public Map<String, String> getScripts() {
+        return scripts;
+    }
+
+    public void setScript(String scriptName, String scriptText) {
+        scripts.put(scriptName, scriptText);
+    }
+
+    public String getScript(String scriptName) {
+        return scripts.get(scriptName);
+    }
+
+    public void removeScript(String scriptName) {
+        scripts.remove(scriptName);
+    }
+
+    public void addScript(String scriptName, String scriptText) {
+        scripts.put(scriptName, scriptText);
     }
 
     private static class Sequencer {
