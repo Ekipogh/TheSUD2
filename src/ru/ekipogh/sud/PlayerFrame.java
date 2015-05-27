@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by dedov_d on 27.04.2015.
  */
-class PlayerFrame extends JFrame {
+public class PlayerFrame extends JFrame {
     private final int NORTH = 0;
     private final int SOUTH = 1;
     private final int EAST = 2;
@@ -28,6 +28,7 @@ class PlayerFrame extends JFrame {
     private JList charactersList;
     private JButton inventoryButton;
     private JLabel locationPic;
+    private JPanel locationPicPanel;
     private DefaultListModel<Item> itemsListModel;
     private JPopupMenu popupMenu;
 
@@ -70,7 +71,7 @@ class PlayerFrame extends JFrame {
             }
         });
         inventoryButton.addActionListener(e -> showInventoryScreen());
-        locationPic.addMouseListener(new MouseAdapter() {
+        locationPicPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
@@ -80,18 +81,20 @@ class PlayerFrame extends JFrame {
     }
 
     private void showLocationPopup(MouseEvent event) {
-        JMenuItem menuItem;
-        popupMenu.removeAll();
-        for (String scriptName : currentLocation.getScripts().keySet()) {
-            if (!scriptName.equals("onEnter") && !scriptName.equals("onLeave")) {
-                menuItem = new JMenuItem(scriptName);
-                menuItem.addActionListener(e -> {
-                    Script.run(currentLocation.getScript(scriptName));
-                });
-                popupMenu.add(menuItem);
+        if (SwingUtilities.isRightMouseButton(event)) {
+            JMenuItem menuItem;
+            popupMenu.removeAll();
+            for (String scriptName : currentLocation.getScripts().keySet()) {
+                if (!scriptName.equals("onEnter") && !scriptName.equals("onLeave")) {
+                    menuItem = new JMenuItem(scriptName);
+                    menuItem.addActionListener(e -> {
+                        Script.run(currentLocation.getScript(scriptName));
+                    });
+                    popupMenu.add(menuItem);
+                }
             }
+            popupMenu.show(locationPic, event.getX(), event.getY());
         }
-        popupMenu.show(locationPic, event.getX(), event.getY());
     }
 
     private void showInventoryScreen() {
@@ -191,12 +194,14 @@ class PlayerFrame extends JFrame {
         Script.run("out.println(\"SUP from JS\")");
     }
 
-    private void initJS() { //TODO: заменить классом?
+    private void initJS() {
         Script.init();
         Script.setProperty("out", output);
         Script.setProperty("items", items);
         Script.setProperty("player", player);
         Script.setProperty("locations", locations);
+        Script.setProperty("game", this);
+        Script.initFunctions();
     }
 
     //выполнение сценариев и игровой логики
@@ -206,7 +211,10 @@ class PlayerFrame extends JFrame {
             output.println(currentLocation.getDescription());
 
         //изменяем рисунок локации
-        locationPic.setIcon(new ImageIcon(currentLocation.getPicturePath()));
+        if (currentLocation.getPicturePath() == null || currentLocation.getPicturePath().isEmpty())
+            locationPic.setText(currentLocation.getName());
+        else
+            locationPic.setIcon(new ImageIcon(currentLocation.getPicturePath()));
 
         //Заполняем список предметов в локации
         updateItems();

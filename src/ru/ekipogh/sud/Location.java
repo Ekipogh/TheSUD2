@@ -36,7 +36,7 @@ public class Location implements Serializable {
 
     public Location(String name) {
         this.name = name;
-        this.id = Sequencer.getNewLocationID();
+        this.id = Sequencer.getNewID();
         this.description = "";
         this.exits = new Location[4];
         this.inventory = new ArrayList<>();
@@ -128,21 +128,6 @@ public class Location implements Serializable {
 
     public void addScript(String scriptName, String scriptText) {
         scripts.put(scriptName, scriptText);
-    }
-
-    private static class Sequencer {
-        private static int id = 0;
-
-        public static int getNewLocationID() {
-            return id++;
-        }
-
-        public static void setID(int id) throws Exception {
-            if (Sequencer.id == 0)
-                Sequencer.id = id;
-            else
-                throw new Exception("Sequencer id has been set already");
-        }
     }
 
     public String toString() {

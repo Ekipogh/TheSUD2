@@ -75,6 +75,7 @@ public class EditorFrame extends JFrame {
     private JButton saveScriptButton;
     private JTextField picturePathField;
     private JButton pictureDialogButton;
+    private JTextField itemIdField;
 
     private Player player;
 
@@ -368,6 +369,7 @@ public class EditorFrame extends JFrame {
             itemName.setText(selected.getName());
             itemDescription.setText(selected.getDescription());
             itemType.setSelectedItem(selected.getType());
+            itemIdField.setText(String.valueOf(selected.getId()));
             slotCombo.setSelectedItem(selected.getEquipmentSlot());
         }
     }
@@ -414,6 +416,9 @@ public class EditorFrame extends JFrame {
             System.out.println("Opening file " + fc.getSelectedFile().getPath());
             SaveFile saveFile = SaveFile.open(fc.getSelectedFile().getPath());
             player = saveFile.getPlayer();
+
+            Sequencer.setID(saveFile.getSequencerID());
+
             locationsListModel.clear();
             for (Location l : saveFile.getLocations()) {
                 playerLocationModel.addElement(l);
@@ -466,6 +471,7 @@ public class EditorFrame extends JFrame {
                 System.out.println("Saving to " + fc.getSelectedFile().getPath());
                 SaveFile saveFile = new SaveFile();
                 saveFile.setPlayer(player);
+                saveFile.setSequencerID(Sequencer.getCurrentId());
                 ArrayList<Location> locations = new ArrayList<>();
                 for (int i = 0; i < locationsListModel.size(); i++) {
                     locations.add(locationsListModel.getElementAt(i));
@@ -537,8 +543,9 @@ public class EditorFrame extends JFrame {
         selectedLocation.setSouth(southModel.getElementAt(southIndex));
         selectedLocation.setEast(eastModel.getElementAt(eastIndex));
         selectedLocation.setWest(westModel.getElementAt(westIndex));
-        if (picturePathField.getText().isEmpty())
-            selectedLocation.setPicturePath("/data/empty.png"); //TODO: I can't think properly right now and this is not working. You! Yes, you! Fix it!
+        /*if (picturePathField.getText().isEmpty())
+            selectedLocation.setPicturePath("/data/empty.png"); //TODO: I can't think properly right now and this is not working. You! Yes, you! Fix it!*/
+        selectedLocation.setPicturePath(picturePathField.getText());
 
         locationsList.updateUI();
     }

@@ -13,6 +13,8 @@ public class SaveFile implements Serializable {
     private String gameName;
     private String gameStartMessage;
     private Map<String, String> slotNames;
+    private List<Item> items;
+    private int sequencerID;
 
     public List<Item> getItems() {
         return items;
@@ -21,8 +23,6 @@ public class SaveFile implements Serializable {
     public void setItems(List<Item> items) {
         this.items = items;
     }
-
-    private List<Item> items;
 
     public String getGameName() {
         return gameName;
@@ -86,5 +86,13 @@ public class SaveFile implements Serializable {
 
     public Map<String, String> getSlotNames() {
         return slotNames;
+    }
+
+    public int getSequencerID() {
+        return sequencerID;
+    }
+
+    public void setSequencerID(int sequencerID) {
+        this.sequencerID = sequencerID;
     }
 }

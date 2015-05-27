@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Created by Дмитрий on 04.05.2015.
  */
 public class Item implements Serializable {
+    private int id;
     private ItemTypes type;
     private String name;
     private String description;
@@ -14,6 +15,7 @@ public class Item implements Serializable {
     public Item(String name) {
         this.name = name;
         this.type = ItemTypes.GENERIC;
+        this.id = Sequencer.getNewID();
     }
 
     public ItemTypes getType() {
@@ -51,5 +53,9 @@ public class Item implements Serializable {
 
     public void setEquipmentSlot(String equipmentSlot) {
         Equipment.getSlotNames().stream().filter(s -> s.equals(equipmentSlot)).forEach(s -> this.equipmentSlot = equipmentSlot);
+    }
+
+    public int getId() {
+        return id;
     }
 }
