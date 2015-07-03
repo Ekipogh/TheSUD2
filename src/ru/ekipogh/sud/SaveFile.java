@@ -8,12 +8,13 @@ import java.util.Map;
  * Created by dedov_d on 27.04.2015.
  */
 public class SaveFile implements Serializable {
-    private Player player;
+    private GameCharacter player;
     private List<Location> locations;
     private String gameName;
     private String gameStartMessage;
     private Map<String, String> slotNames;
     private List<Item> items;
+    private List<GameCharacter> characters;
     private int sequencerID;
 
     public List<Item> getItems() {
@@ -40,11 +41,11 @@ public class SaveFile implements Serializable {
         this.gameStartMessage = gameStartMessage;
     }
 
-    public Player getPlayer() {
+    public GameCharacter getPlayer() {
         return player;
     }
 
-    public void setPlayer(Player player) {
+    public void setPlayer(GameCharacter player) {
         this.player = player;
     }
 
@@ -94,5 +95,13 @@ public class SaveFile implements Serializable {
 
     public void setSequencerID(int sequencerID) {
         this.sequencerID = sequencerID;
+    }
+
+    public List<GameCharacter> getCharacters() {
+        return characters;
+    }
+
+    public void setCharacters(List<GameCharacter> characters) {
+        this.characters = characters;
     }
 }

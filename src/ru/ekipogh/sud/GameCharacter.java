@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by dedov_d on 24.04.2015.
+ * Created by dedov_d on 03.07.2015.
  */
-public class Player implements Serializable {
+public class GameCharacter implements Serializable { //TODO: Нужни ли различные классы для игрока и неписей?
     private String name;
     private short sex;
     private Location location;
@@ -23,7 +23,7 @@ public class Player implements Serializable {
 
     private Equipment equipment;
 
-    public Player(String name) {
+    public GameCharacter(String name) {
         this.name = name;
         this.sex = 0;
         this.inventory = new ArrayList<>();
@@ -81,4 +81,5 @@ public class Player implements Serializable {
         inventory.add(item);
         equipment.uneqip(item);
     }
+
 }

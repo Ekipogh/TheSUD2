@@ -17,7 +17,7 @@ class InventoryFrame extends JFrame {
     private JPanel rootPanel;
     private JTable equipmentTable;
     private DefaultTableModel equipmentTableModel;
-    private Player player = PlayerFrame.getPlayer();
+    private GameCharacter player = PlayerFrame.getPlayer();
 
     public InventoryFrame(PlayerFrame playerFrame) {
         super("Инвентарь");

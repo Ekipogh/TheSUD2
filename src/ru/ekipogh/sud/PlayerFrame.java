@@ -15,7 +15,7 @@ public class PlayerFrame extends JFrame {
     private final int EAST = 2;
     private final int WEST = 3;
 
-    private static Player player;
+    private static GameCharacter player;
     private static List<Location> locations;
     private MyTextPane output;
     private JButton northButton;
@@ -66,7 +66,7 @@ public class PlayerFrame extends JFrame {
                     int row = list.locationToIndex(e.getPoint());
                     list.setSelectedIndex(row);
                     if (!itemsList.isSelectionEmpty())
-                        showPopup(e);
+                        showItemsPopup(e);
                 }
             }
         });
@@ -102,7 +102,7 @@ public class PlayerFrame extends JFrame {
     }
 
     //показываем менюшку для листов
-    private void showPopup(MouseEvent e) {
+    private void showItemsPopup(MouseEvent e) {
         JMenuItem menuItem;
         popupMenu.removeAll();
         int index = itemsList.getSelectedIndex();
@@ -224,6 +224,7 @@ public class PlayerFrame extends JFrame {
 
     }
 
+    //Обновляем список предметов в локации
     public void updateItems() {
         itemsListModel.clear();
         currentLocation.getInventory().forEach(itemsListModel::addElement);
@@ -249,7 +250,7 @@ public class PlayerFrame extends JFrame {
             westButton.setEnabled(true);
     }
 
-    public static Player getPlayer() {
+    public static GameCharacter getPlayer() {
         return player;
     }
 }

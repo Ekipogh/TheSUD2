@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="js">
+  <library name="lib">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/../../rhino/js.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../RSyn/RSyntaxTextArea/build/libs/rsyntaxtextarea-2.6.0-SNAPSHOT.jar!/" />

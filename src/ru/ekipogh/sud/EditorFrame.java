@@ -28,6 +28,7 @@ public class EditorFrame extends JFrame {
     private final DefaultListModel<Item> itemsListModel;
     private final DefaultListModel<Item> locationItemsListModel;
     private final DefaultTableModel equipTableModel;
+    private final DefaultListModel<GameCharacter> charactersListModel;
     private DefaultListModel<Location> locationsListModel;
     private JPanel rootPanel;
     private JList<Location> locationsList;
@@ -65,7 +66,7 @@ public class EditorFrame extends JFrame {
     private JButton addSlotButton;
     private JButton deleteSlotButton;
     private JButton saveSlotsButton;
-    private JList scriptsList;
+    private JList<String> scriptsList;
     private RSyntaxTextArea scriptText;
     private DefaultComboBoxModel<Location> playerLocationModel;
     private DefaultComboBoxModel<String> slotNamesModel;
@@ -76,12 +77,13 @@ public class EditorFrame extends JFrame {
     private JTextField picturePathField;
     private JButton pictureDialogButton;
     private JTextField itemIdField;
+    private JList<GameCharacter> charactersList;
 
-    private Player player;
+    private GameCharacter player;
 
     public EditorFrame() {
         super("Редактор");
-        player = new Player("Nameless");
+        player = new GameCharacter("Безымянный");
 
         setContentPane(rootPanel);
         pack();
@@ -92,6 +94,9 @@ public class EditorFrame extends JFrame {
 
         locationsListModel = new DefaultListModel<>();
         locationsList.setModel(locationsListModel);
+
+        charactersListModel = new DefaultListModel<>();
+        charactersList.setModel(charactersListModel);
 
         scriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         scriptText.setCodeFoldingEnabled(true);
@@ -428,8 +433,13 @@ public class EditorFrame extends JFrame {
                 eastModel.addElement(l);
                 westModel.addElement(l);
             }
+
             itemsListModel.clear();
             saveFile.getItems().forEach(itemsListModel::addElement);
+
+            charactersListModel.clear();
+            saveFile.getCharacters().forEach(charactersListModel::addElement);
+
             Map<String, String> slotNames = saveFile.getSlotNames();
             Equipment.setSlotNames(slotNames);
             equipTableModel.setRowCount(0);
@@ -476,6 +486,11 @@ public class EditorFrame extends JFrame {
                 for (int i = 0; i < locationsListModel.size(); i++) {
                     locations.add(locationsListModel.getElementAt(i));
                 }
+                ArrayList<GameCharacter> characters = new ArrayList<>();
+                for (int i = 0; i < charactersListModel.size(); i++) {
+                    characters.add(charactersListModel.getElementAt(i));
+                }
+                saveFile.setCharacters(characters);
                 saveFile.setLocations(locations);
                 saveFile.setGameName(gameName.getText());
                 saveFile.setGameStartMessage(gameStartMessage.getText());
@@ -563,9 +578,7 @@ public class EditorFrame extends JFrame {
             locWest.getModel().setSelectedItem(selected.getWest());
             locationItemsListModel.clear();
             scriptListModel.removeAllElements();
-            selected.getScripts().keySet().forEach((key) -> {
-                scriptListModel.addElement(key);
-            });
+            selected.getScripts().keySet().forEach(scriptListModel::addElement);
             selected.getInventory().forEach(locationItemsListModel::addElement);
             picturePathField.setText(selected.getPicturePath());
         }
