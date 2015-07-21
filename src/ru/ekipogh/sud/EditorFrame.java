@@ -66,11 +66,13 @@ public class EditorFrame extends JFrame {
     private JButton addSlotButton;
     private JButton deleteSlotButton;
     private JButton saveSlotsButton;
-    private JList<String> scriptsList;
-    private RSyntaxTextArea scriptText;
+    private JList<String> locationScriptsList;
+    private RSyntaxTextArea locationScriptText;
     private DefaultComboBoxModel<Location> playerLocationModel;
     private DefaultComboBoxModel<String> slotNamesModel;
+    private DefaultComboBoxModel<Location> charLocationModel;
     private DefaultListModel<String> scriptListModel;
+    private DefaultListModel<String> charScriptListModel;
     private JButton addScriptLocButton;
     private JButton deleteScriptLocButton;
     private JButton saveScriptButton;
@@ -78,6 +80,19 @@ public class EditorFrame extends JFrame {
     private JButton pictureDialogButton;
     private JTextField itemIdField;
     private JList<GameCharacter> charactersList;
+    private JTextField charNameFiled;
+    private JRadioButton femCharButton;
+    private JRadioButton maleCharButton;
+    private JRadioButton sexlessCharButton;
+    private JComboBox charLocCombo;
+    private JButton charSaveButton;
+    private JButton addCharButton;
+    private JButton deleteCharButton;
+    private JList characterScriptList;
+    private RSyntaxTextArea characterScriptText;
+    private JButton saveCharScriptButton;
+    private JButton addCharScriptButton;
+    private JButton deleteCharScriptButton;
 
     private GameCharacter player;
 
@@ -98,11 +113,17 @@ public class EditorFrame extends JFrame {
         charactersListModel = new DefaultListModel<>();
         charactersList.setModel(charactersListModel);
 
-        scriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
-        scriptText.setCodeFoldingEnabled(true);
+        locationScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+        locationScriptText.setCodeFoldingEnabled(true);
+
+        characterScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+        characterScriptText.setCodeFoldingEnabled(true);
 
         scriptListModel = new DefaultListModel<>();
-        scriptsList.setModel(scriptListModel);
+        locationScriptsList.setModel(scriptListModel);
+
+        charScriptListModel = new DefaultListModel<>();
+        characterScriptList.setModel(charScriptListModel);
 
         equipTableModel = new DefaultTableModel() {
             @Override
@@ -146,6 +167,7 @@ public class EditorFrame extends JFrame {
         eastModel = new DefaultComboBoxModel<>();
         westModel = new DefaultComboBoxModel<>();
         playerLocationModel = new DefaultComboBoxModel<>();
+        charLocationModel = new DefaultComboBoxModel<>();
 
         slotNamesModel = new DefaultComboBoxModel<>();
         //default init
@@ -158,12 +180,14 @@ public class EditorFrame extends JFrame {
         eastModel.addElement(null);
         westModel.addElement(null);
         playerLocationModel.addElement(null);
+        charLocationModel.addElement(null);
 
         locNorth.setModel(northModel);
         locSouth.setModel(southModel);
         locEast.setModel(eastModel);
         locWest.setModel(westModel);
         playerLocation.setModel(playerLocationModel);
+        charLocCombo.setModel(charLocationModel);
 
         JMenuBar menuBar = new JMenuBar();
         JMenu menuFile = new JMenu("Файл");
@@ -247,11 +271,123 @@ public class EditorFrame extends JFrame {
                 JOptionPane.showMessageDialog(null, "Удаление невозможно существует предмет (" + found.getName() + ") с таким слотом экипировки");
         });
         saveSlotsButton.addActionListener(e -> saveSlotNames());
-        scriptsList.addListSelectionListener(e -> selectLocationScript());
+        locationScriptsList.addListSelectionListener(e -> selectLocationScript());
         saveScriptButton.addActionListener(e -> saveSelectedScript());
         deleteScriptLocButton.addActionListener(e -> deleteSelectedLocationScript());
         addScriptLocButton.addActionListener(e -> addScriptToLocation());
         pictureDialogButton.addActionListener(e -> showChooseDialog());
+        charactersList.addListSelectionListener(e -> {
+            setCharsFromItemsEnabled();
+            selectChar();
+        });
+        charSaveButton.addActionListener(e -> saveSelectedCharacter());
+        addCharButton.addActionListener(e -> addCharacter());
+        deleteCharButton.addActionListener(e -> deleteSelectedCharacter());
+        addCharScriptButton.addActionListener(e -> addCharScript());
+        deleteCharScriptButton.addActionListener(e -> deleteCharScript());
+        characterScriptList.addListSelectionListener(e -> selectCharScript());
+        saveCharScriptButton.addActionListener(e -> saveCharScript());
+    }
+
+    private void saveCharScript() {
+        int indexS = characterScriptList.getSelectedIndex();
+        int indexC = charactersList.getSelectedIndex();
+        String scriptName = charScriptListModel.getElementAt(indexS);
+        GameCharacter character = charactersListModel.getElementAt(indexC);
+        character.setScript(scriptName, characterScriptText.getText());
+    }
+
+
+    private void selectCharScript() {
+        int index = characterScriptList.getSelectedIndex();
+        if (index >= 0) {
+            String script = charScriptListModel.getElementAt(index);
+            int indexC = charactersList.getSelectedIndex();
+            GameCharacter character = charactersListModel.elementAt(indexC);
+            characterScriptText.setEnabled(true);
+            characterScriptText.setText(character.getScript(script));
+        } else
+            characterScriptText.setEnabled(false);
+    }
+
+    private void deleteCharScript() {
+        int indexS = characterScriptList.getSelectedIndex();
+        int indexC = charactersList.getSelectedIndex();
+        String scriptName = charScriptListModel.getElementAt(indexS);
+        GameCharacter character = charactersListModel.getElementAt(indexC);
+
+        if (!scriptName.equals("onPlayerArrive") && !scriptName.equals("onPlayerLeave")) {
+            charactersListModel.removeElementAt(indexS);
+            character.removeScript(scriptName);
+        }
+    }
+
+
+    private void addCharScript() {
+        int index = charactersList.getSelectedIndex();
+        GameCharacter character = charactersListModel.getElementAt(index);
+        String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
+        character.addScript(scriptName, "");
+        charScriptListModel.addElement(scriptName);
+    }
+
+    private void deleteSelectedCharacter() {
+        int index = charactersList.getSelectedIndex();
+        charactersListModel.removeElementAt(index);
+        charactersList.setSelectedIndex((index > 0) ? index - 1 : index);
+    }
+
+    private void addCharacter() {
+        GameCharacter character = new GameCharacter("Введите имя");
+        charactersListModel.addElement(character);
+    }
+
+
+    private void saveSelectedCharacter() {
+        int index = charactersList.getSelectedIndex();
+        GameCharacter selected = charactersListModel.getElementAt(index);
+        selected.setName(charNameFiled.getText());
+        if (femCharButton.isSelected())
+            selected.setSex(1);
+        if (maleCharButton.isSelected())
+            selected.setSex(2);
+        if (sexlessCharButton.isSelected())
+            selected.setSex(0);
+        selected.setLocation((Location) charLocationModel.getSelectedItem());
+    }
+
+    private void selectChar() {
+        int index = charactersList.getSelectedIndex();
+        if (index != -1) {
+            GameCharacter selected = charactersListModel.getElementAt(index);
+            charNameFiled.setText(selected.getName());
+            switch (selected.getSex()) {
+                case 0:
+                    sexlessCharButton.setSelected(true);
+                    break;
+                case 1:
+                    femCharButton.setSelected(true);
+                    break;
+                case 2:
+                    maleCharButton.setSelected(true);
+                    break;
+            }
+            charLocationModel.setSelectedItem(selected.getLocation());
+            charScriptListModel.removeAllElements();
+            selected.getScripts().keySet().forEach(charScriptListModel::addElement);
+        }
+    }
+
+
+    private void setCharsFromItemsEnabled() {
+        boolean enabled = charactersList.getSelectedIndex() >= 0;
+        charNameFiled.setEnabled(enabled);
+        femCharButton.setEnabled(enabled);
+        maleCharButton.setEnabled(enabled);
+        sexlessCharButton.setEnabled(enabled);
+        charLocCombo.setEnabled(enabled);
+        charSaveButton.setEnabled(enabled);
+        addCharButton.setEnabled(enabled);
     }
 
     private void showChooseDialog() {
@@ -273,7 +409,7 @@ public class EditorFrame extends JFrame {
     }
 
     private void deleteSelectedLocationScript() {
-        int indexS = scriptsList.getSelectedIndex();
+        int indexS = locationScriptsList.getSelectedIndex();
         int indexL = locationsList.getSelectedIndex();
         String scriptName = scriptListModel.getElementAt(indexS);
         if (!scriptName.equals("onEnter") && !scriptName.equals("onExit")) {
@@ -284,25 +420,25 @@ public class EditorFrame extends JFrame {
     }
 
     private void saveSelectedScript() {
-        int indexS = scriptsList.getSelectedIndex();
+        int indexS = locationScriptsList.getSelectedIndex();
         String scriptName = scriptListModel.getElementAt(indexS);
         int indexL = locationsList.getSelectedIndex();
         Location location = locationsListModel.elementAt(indexL);
-        location.setScript(scriptName, scriptText.getText());
+        location.setScript(scriptName, locationScriptText.getText());
     }
 
 
     private void selectLocationScript() {
-        int index = scriptsList.getSelectedIndex();
+        int index = locationScriptsList.getSelectedIndex();
         System.out.println(index);
         if (index >= 0) {
             String script = scriptListModel.getElementAt(index);
             int indexL = locationsList.getSelectedIndex();
             Location location = locationsListModel.elementAt(indexL);
-            scriptText.setEnabled(true);
-            scriptText.setText(location.getScript(script));
+            locationScriptText.setEnabled(true);
+            locationScriptText.setText(location.getScript(script));
         } else
-            scriptText.setEnabled(false);
+            locationScriptText.setEnabled(false);
     }
 
     private void saveSlotNames() {
@@ -387,21 +523,13 @@ public class EditorFrame extends JFrame {
 
 
     private void setItemFormElementsEnabled() {
-        if (itemsList.getSelectedIndex() >= 0) {
-            itemName.setEnabled(true);
-            itemDescription.setEnabled(true);
-            saveItemButton.setEnabled(true);
-            deleteItemButton.setEnabled(true);
-            itemType.setEnabled(true);
-            slotCombo.setEnabled(true);
-        } else {
-            itemName.setEnabled(false);
-            itemDescription.setEnabled(false);
-            saveItemButton.setEnabled(false);
-            deleteItemButton.setEnabled(false);
-            itemType.setEnabled(false);
-            slotCombo.setEnabled(false);
-        }
+        boolean enabled = itemsList.getSelectedIndex() >= 0;
+        itemName.setEnabled(enabled);
+        itemDescription.setEnabled(enabled);
+        saveItemButton.setEnabled(enabled);
+        deleteItemButton.setEnabled(enabled);
+        itemType.setEnabled(enabled);
+        slotCombo.setEnabled(enabled);
     }
 
 
@@ -470,6 +598,7 @@ public class EditorFrame extends JFrame {
         }
         playerLocation.setSelectedItem(player.getLocation());
     }
+
 
     private void saveGame() {
         JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
@@ -542,7 +671,9 @@ public class EditorFrame extends JFrame {
         southModel.removeElement(selected);
         eastModel.removeElement(selected);
         westModel.removeElement(selected);
+        charLocationModel.removeElement(selected);
     }
+
 
     private void saveSelectedLocation() {
         int index = locationsList.getSelectedIndex();
@@ -595,6 +726,7 @@ public class EditorFrame extends JFrame {
         eastModel.addElement(newLocation);
         westModel.addElement(newLocation);
         playerLocationModel.addElement(newLocation);
+        charLocationModel.addElement(newLocation);
     }
 
     private void setLocationFormElementsEnabled() {
@@ -609,7 +741,7 @@ public class EditorFrame extends JFrame {
         saveLocButton.setEnabled(enabled);
         locationItemsList.setEnabled(enabled);
         locationTabItemsList.setEnabled(enabled);
-        scriptsList.setEnabled(enabled);
+        locationScriptsList.setEnabled(enabled);
         saveScriptButton.setEnabled(enabled);
         pictureDialogButton.setEnabled(enabled);
         picturePathField.setEnabled(enabled);

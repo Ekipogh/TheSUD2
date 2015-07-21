@@ -17,6 +17,7 @@ public class PlayerFrame extends JFrame {
 
     private static GameCharacter player;
     private static List<Location> locations;
+    private static List<GameCharacter> characters;
     private MyTextPane output;
     private JButton northButton;
     private JButton southButton;
@@ -25,11 +26,12 @@ public class PlayerFrame extends JFrame {
     private JLabel playerName;
     private JPanel rootPanel;
     private JList<Item> itemsList;
-    private JList charactersList;
+    private JList<GameCharacter> charactersList;
     private JButton inventoryButton;
     private JLabel locationPic;
     private JPanel locationPicPanel;
     private DefaultListModel<Item> itemsListModel;
+    private DefaultListModel<GameCharacter> charactersListModel;
     private JPopupMenu popupMenu;
 
     private static Location currentLocation;
@@ -43,8 +45,8 @@ public class PlayerFrame extends JFrame {
 
         itemsListModel = new DefaultListModel<>();
         itemsList.setModel(itemsListModel);
-        //charactersListModel = new DefaultListModel<Character>();
-        //charactersList.setModel(charactersListModel);
+        charactersListModel = new DefaultListModel<>();
+        charactersList.setModel(charactersListModel);
         popupMenu = new JPopupMenu();
 
         northButton.addActionListener(e -> move(NORTH));
@@ -70,6 +72,14 @@ public class PlayerFrame extends JFrame {
                 }
             }
         });
+        charactersList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                showCharPopup(e);
+
+            }
+        });
         inventoryButton.addActionListener(e -> showInventoryScreen());
         locationPicPanel.addMouseListener(new MouseAdapter() {
             @Override
@@ -78,6 +88,29 @@ public class PlayerFrame extends JFrame {
                 showLocationPopup(e);
             }
         });
+    }
+
+    private void showCharPopup(MouseEvent e) {
+        if (SwingUtilities.isRightMouseButton(e)) {
+            JList list = (JList) e.getSource();
+            int row = list.locationToIndex(e.getPoint());
+            list.setSelectedIndex(row);
+            if (!charactersList.isSelectionEmpty()) {
+                JMenuItem menuItem;
+                GameCharacter character = charactersListModel.getElementAt(row);
+                popupMenu.removeAll();
+                for (String scriptName : character.getScripts().keySet()) {
+                    if (!scriptName.equals("onPlayerArrive") && !scriptName.equals("onPlayerLeave")) {
+                        menuItem = new JMenuItem(scriptName);
+                        menuItem.addActionListener(ev -> {
+                            Script.run(character.getScript(scriptName));
+                        });
+                        popupMenu.add(menuItem);
+                    }
+                }
+                popupMenu.show(charactersList, e.getX(), e.getY());
+            }
+        }
     }
 
     private void showLocationPopup(MouseEvent event) {
@@ -156,9 +189,19 @@ public class PlayerFrame extends JFrame {
                 playerLocation = player.getLocation().getWest(); //Запад
                 break;
         }
+        //Скрипты локаций
         Script.run(currentLocation.getScript("onLeave"));
+        //Скрипты НПЦ
+        for (int i = 0; i < charactersListModel.size(); i++)
+            Script.run(charactersListModel.getElementAt(i).getScript("onPlayerLeave"));
+
         currentLocation = playerLocation != null ? playerLocation : currentLocation;
         player.setLocation(currentLocation);
+
+        updateCharacters();
+        for (int i = 0; i < charactersListModel.size(); i++)
+            Script.run(charactersListModel.getElementAt(i).getScript("onPlayerArrive")); //TODO: Двойной вызов updateCharacters()
+
         Script.run(currentLocation.getScript("onEnter"));
         proceed(); //продолжить, выполнить сценарии и игровую логику
     }
@@ -183,6 +226,7 @@ public class PlayerFrame extends JFrame {
     private void initialize(SaveFile saveFile) {
         player = saveFile.getPlayer();
         locations = saveFile.getLocations();
+        characters = saveFile.getCharacters();
         items = saveFile.getItems();
         currentLocation = player.getLocation();
         output.println("<b>" + saveFile.getGameName() + "</b>");
@@ -200,6 +244,7 @@ public class PlayerFrame extends JFrame {
         Script.setProperty("items", items);
         Script.setProperty("player", player);
         Script.setProperty("locations", locations);
+        Script.setProperty("characters", characters);
         Script.setProperty("game", this);
         Script.initFunctions();
     }
@@ -218,10 +263,17 @@ public class PlayerFrame extends JFrame {
 
         //Заполняем список предметов в локации
         updateItems();
+        //Заполняем список персонажей в локации
+        updateCharacters();
 
         //Дизаблим не используемые кнопки передвижения
         directionButtonsEnable();
 
+    }
+
+    private void updateCharacters() {
+        charactersListModel.clear();
+        characters.stream().filter(c -> c.getLocation().equals(currentLocation)).forEach(charactersListModel::addElement);
     }
 
     //Обновляем список предметов в локации

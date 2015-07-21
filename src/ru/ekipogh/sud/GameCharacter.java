@@ -2,7 +2,9 @@ package ru.ekipogh.sud;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by dedov_d on 03.07.2015.
@@ -12,6 +14,8 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
     private short sex;
     private Location location;
     private List<Item> inventory;
+
+    private Map<String, String> scripts;
 
     public Equipment getEquipment() {
         return equipment;
@@ -27,7 +31,10 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
         this.name = name;
         this.sex = 0;
         this.inventory = new ArrayList<>();
-        equipment = new Equipment();
+        this.equipment = new Equipment();
+        this.scripts = new HashMap<>();
+        this.scripts.put("onPlayerArrive", "");
+        this.scripts.put("onPlayerLeave", "");
     }
 
     public List<Item> getInventory() {
@@ -82,4 +89,27 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
         equipment.uneqip(item);
     }
 
+    public Map<String, String> getScripts() {
+        return scripts;
+    }
+
+    public void setScript(String scriptName, String scriptText) {
+        scripts.put(scriptName, scriptText);
+    }
+
+    public String getScript(String scriptName) {
+        return scripts.get(scriptName);
+    }
+
+    public void removeScript(String scriptName) {
+        scripts.remove(scriptName);
+    }
+
+    public void addScript(String scriptName, String scriptText) {
+        scripts.put(scriptName, scriptText);
+    }
+
+    public String toString() {
+        return this.name;
+    }
 }
