@@ -17,6 +17,7 @@ public class Location implements Serializable {
     private List<Item> inventory;
     private Map<String, String> scripts;
     private String picturePath;
+    private boolean available;
 
     public String getPicturePath() {
         return picturePath;
@@ -136,5 +137,13 @@ public class Location implements Serializable {
 
     public boolean equals(Location location) {
         return location != null && this.id == location.id;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 }

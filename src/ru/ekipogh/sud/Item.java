@@ -1,6 +1,8 @@
 package ru.ekipogh.sud;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Дмитрий on 04.05.2015.
@@ -11,11 +13,13 @@ public class Item implements Serializable {
     private String name;
     private String description;
     private String equipmentSlot;
+    private Map<String, String> scripts;
 
     public Item(String name) {
         this.name = name;
         this.type = ItemTypes.GENERIC;
         this.id = Sequencer.getNewID();
+        this.scripts = new HashMap<>();
     }
 
     public ItemTypes getType() {
@@ -53,6 +57,26 @@ public class Item implements Serializable {
 
     public void setEquipmentSlot(String equipmentSlot) {
         Equipment.getSlotNames().stream().filter(s -> s.equals(equipmentSlot)).forEach(s -> this.equipmentSlot = equipmentSlot);
+    }
+
+    public Map<String, String> getScripts() {
+        return scripts;
+    }
+
+    public void setScript(String scriptName, String scriptText) {
+        scripts.put(scriptName, scriptText);
+    }
+
+    public String getScript(String scriptName) {
+        return scripts.get(scriptName);
+    }
+
+    public void removeScript(String scriptName) {
+        scripts.remove(scriptName);
+    }
+
+    public void addScript(String scriptName, String scriptText) {
+        scripts.put(scriptName, scriptText);
     }
 
     public int getId() {

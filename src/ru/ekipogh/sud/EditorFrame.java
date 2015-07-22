@@ -73,6 +73,7 @@ public class EditorFrame extends JFrame {
     private DefaultComboBoxModel<Location> charLocationModel;
     private DefaultListModel<String> scriptListModel;
     private DefaultListModel<String> charScriptListModel;
+    private DefaultListModel<String> itemScriptListModel;
     private JButton addScriptLocButton;
     private JButton deleteScriptLocButton;
     private JButton saveScriptButton;
@@ -84,15 +85,22 @@ public class EditorFrame extends JFrame {
     private JRadioButton femCharButton;
     private JRadioButton maleCharButton;
     private JRadioButton sexlessCharButton;
-    private JComboBox charLocCombo;
+    private JComboBox<Location> charLocCombo;
     private JButton charSaveButton;
     private JButton addCharButton;
     private JButton deleteCharButton;
-    private JList characterScriptList;
+    private JList<String> characterScriptList;
     private RSyntaxTextArea characterScriptText;
     private JButton saveCharScriptButton;
     private JButton addCharScriptButton;
     private JButton deleteCharScriptButton;
+    private JRadioButton availableButton;
+    private JRadioButton notAvailableButton;
+    private JList<String> itemScriptsList;
+    private RSyntaxTextArea itemScriptText;
+    private JButton saveItemScriptButton;
+    private JButton addItemScriptButton;
+    private JButton deleteItemScriptButton;
 
     private GameCharacter player;
 
@@ -124,6 +132,9 @@ public class EditorFrame extends JFrame {
 
         charScriptListModel = new DefaultListModel<>();
         characterScriptList.setModel(charScriptListModel);
+
+        itemScriptListModel = new DefaultListModel<>();
+        itemScriptsList.setModel(itemScriptListModel);
 
         equipTableModel = new DefaultTableModel() {
             @Override
@@ -194,9 +205,11 @@ public class EditorFrame extends JFrame {
         JMenuItem newGameMenu = new JMenuItem("Новая");
         openGameMenu = new JMenuItem("Открыть");
         saveGameMenu = new JMenuItem("Сохранить");
+        JMenuItem startGameMenu = new JMenuItem("Запустить игру");
         menuFile.add(newGameMenu);
         menuFile.add(openGameMenu);
         menuFile.add(saveGameMenu);
+        menuFile.add(startGameMenu);
         menuBar.add(menuFile);
 
         setJMenuBar(menuBar);
@@ -206,6 +219,8 @@ public class EditorFrame extends JFrame {
         openGameMenu.addActionListener(e -> openGame());
 
         addLocButton.addActionListener(e -> addNewLocation());
+
+        startGameMenu.addActionListener(e -> startGame());
 
         locationsList.addListSelectionListener(e -> {
             setLocationFormElementsEnabled();
@@ -273,7 +288,7 @@ public class EditorFrame extends JFrame {
         saveSlotsButton.addActionListener(e -> saveSlotNames());
         locationScriptsList.addListSelectionListener(e -> selectLocationScript());
         saveScriptButton.addActionListener(e -> saveSelectedScript());
-        deleteScriptLocButton.addActionListener(e -> deleteSelectedLocationScript());
+        deleteScriptLocButton.addActionListener(e -> deleteLocationScript());
         addScriptLocButton.addActionListener(e -> addScriptToLocation());
         pictureDialogButton.addActionListener(e -> showChooseDialog());
         charactersList.addListSelectionListener(e -> {
@@ -287,6 +302,51 @@ public class EditorFrame extends JFrame {
         deleteCharScriptButton.addActionListener(e -> deleteCharScript());
         characterScriptList.addListSelectionListener(e -> selectCharScript());
         saveCharScriptButton.addActionListener(e -> saveCharScript());
+        itemScriptsList.addListSelectionListener(e -> selectItemScript());
+        saveItemScriptButton.addActionListener(e -> saveItemScript());
+        addItemScriptButton.addActionListener(e -> addItemScript());
+        deleteItemScriptButton.addActionListener(e -> deleteItemScript());
+    }
+
+    private void deleteItemScript() {
+        int indexS = itemScriptsList.getSelectedIndex();
+        int indexI = itemsList.getSelectedIndex();
+        if (indexS >= 0) {
+            String scriptName = itemScriptListModel.getElementAt(indexS);
+            Item item = itemsListModel.getElementAt(indexI);
+            itemScriptListModel.removeElementAt(indexS);
+            item.removeScript(scriptName);
+        }
+    }
+
+    private void addItemScript() {
+        int index = itemsList.getSelectedIndex();
+        Item item = itemsListModel.getElementAt(index);
+        String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
+        item.addScript(scriptName, "");
+        itemScriptListModel.addElement(scriptName);
+    }
+
+    private void saveItemScript() {
+        int indexS = itemScriptsList.getSelectedIndex();
+        int indexI = itemsList.getSelectedIndex();
+        String scriptName = itemScriptListModel.getElementAt(indexS); //TODo: BUG:java.lang.ArrayIndexOutOfBoundsException: -1 (посисбле во всех других сэйв функциях?)
+        Item item = itemsListModel.getElementAt(indexI);
+        item.setScript(scriptName, itemScriptText.getText());
+    }
+
+    private void selectItemScript() {
+        int indexI = itemsList.getSelectedIndex();
+        int indexS = itemScriptsList.getSelectedIndex();
+        if (indexS >= 0) {
+            Item selectedItem = itemsListModel.getElementAt(indexI);
+            String selectedScript = itemScriptListModel.getElementAt(indexS);
+            itemScriptText.setText(selectedItem.getScript(selectedScript));
+        }
+    }
+
+    private void startGame() {
+        //TODO: запуск игры
     }
 
     private void saveCharScript() {
@@ -296,7 +356,6 @@ public class EditorFrame extends JFrame {
         GameCharacter character = charactersListModel.getElementAt(indexC);
         character.setScript(scriptName, characterScriptText.getText());
     }
-
 
     private void selectCharScript() {
         int index = characterScriptList.getSelectedIndex();
@@ -313,15 +372,16 @@ public class EditorFrame extends JFrame {
     private void deleteCharScript() {
         int indexS = characterScriptList.getSelectedIndex();
         int indexC = charactersList.getSelectedIndex();
-        String scriptName = charScriptListModel.getElementAt(indexS);
-        GameCharacter character = charactersListModel.getElementAt(indexC);
+        if (indexS >= 0) {
+            String scriptName = charScriptListModel.getElementAt(indexS);
+            GameCharacter character = charactersListModel.getElementAt(indexC);
 
-        if (!scriptName.equals("onPlayerArrive") && !scriptName.equals("onPlayerLeave")) {
-            charactersListModel.removeElementAt(indexS);
-            character.removeScript(scriptName);
+            if (!scriptName.equals("onPlayerArrive") && !scriptName.equals("onPlayerLeave")) {
+                charactersListModel.removeElementAt(indexS);
+                character.removeScript(scriptName);
+            }
         }
     }
-
 
     private void addCharScript() {
         int index = charactersList.getSelectedIndex();
@@ -341,7 +401,6 @@ public class EditorFrame extends JFrame {
         GameCharacter character = new GameCharacter("Введите имя");
         charactersListModel.addElement(character);
     }
-
 
     private void saveSelectedCharacter() {
         int index = charactersList.getSelectedIndex();
@@ -378,7 +437,6 @@ public class EditorFrame extends JFrame {
         }
     }
 
-
     private void setCharsFromItemsEnabled() {
         boolean enabled = charactersList.getSelectedIndex() >= 0;
         charNameFiled.setEnabled(enabled);
@@ -408,14 +466,16 @@ public class EditorFrame extends JFrame {
         scriptListModel.addElement(scriptName);
     }
 
-    private void deleteSelectedLocationScript() {
+    private void deleteLocationScript() {
         int indexS = locationScriptsList.getSelectedIndex();
         int indexL = locationsList.getSelectedIndex();
-        String scriptName = scriptListModel.getElementAt(indexS);
-        if (!scriptName.equals("onEnter") && !scriptName.equals("onExit")) {
-            Location location = locationsListModel.elementAt(indexL);
-            location.removeScript(scriptName);
-            scriptListModel.remove(indexS);
+        if (indexS >= 0) {
+            String scriptName = scriptListModel.getElementAt(indexS);
+            if (!scriptName.equals("onEnter") && !scriptName.equals("onExit")) {
+                Location location = locationsListModel.elementAt(indexL);
+                location.removeScript(scriptName);
+                scriptListModel.remove(indexS);
+            }
         }
     }
 
@@ -426,7 +486,6 @@ public class EditorFrame extends JFrame {
         Location location = locationsListModel.elementAt(indexL);
         location.setScript(scriptName, locationScriptText.getText());
     }
-
 
     private void selectLocationScript() {
         int index = locationScriptsList.getSelectedIndex();
@@ -453,7 +512,6 @@ public class EditorFrame extends JFrame {
         Equipment.setSlotNames(slots);
     }
 
-
     private void addSlot() {
         equipTableModel.addRow(new Object[]{"/path/to/file", new ImageIcon(), "название"});
         Utils.updateRowHeights(equipTable);
@@ -461,10 +519,8 @@ public class EditorFrame extends JFrame {
 
     private void showSlotField() {
         if (itemType.getModel().getSelectedItem() == ItemTypes.EQUIPPABLE) {
-//            slotLabel.setEnabled(true);
             slotCombo.setEnabled(true);
         } else {
-//            slotLabel.setEnabled(false);
             slotCombo.setEnabled(false);
         }
     }
@@ -495,13 +551,12 @@ public class EditorFrame extends JFrame {
 
     private void addItemToLocation() {
         int indexLoc = locationsList.getSelectedIndex();
-        Location selectedLoc = locationsListModel.getElementAt(indexLoc);
+        Location selectedLoc = locationsListModel.getElementAt(indexLoc);  //TODO: BUG:java.lang.ArrayIndexOutOfBoundsException: -1
         int indexItem = locationTabItemsList.getSelectedIndex();
         Item selectedItem = itemsListModel.getElementAt(indexItem);
         selectedLoc.addItem(selectedItem);
         locationItemsListModel.addElement(selectedItem);
     }
-
 
     private void selectItem() {
         int index = itemsList.getSelectedIndex();
@@ -512,6 +567,8 @@ public class EditorFrame extends JFrame {
             itemType.setSelectedItem(selected.getType());
             itemIdField.setText(String.valueOf(selected.getId()));
             slotCombo.setSelectedItem(selected.getEquipmentSlot());
+            itemScriptListModel.clear();
+            selected.getScripts().keySet().forEach(itemScriptListModel::addElement);
         }
     }
 
@@ -689,6 +746,7 @@ public class EditorFrame extends JFrame {
         selectedLocation.setSouth(southModel.getElementAt(southIndex));
         selectedLocation.setEast(eastModel.getElementAt(eastIndex));
         selectedLocation.setWest(westModel.getElementAt(westIndex));
+        selectedLocation.setAvailable(availableButton.isSelected());
         /*if (picturePathField.getText().isEmpty())
             selectedLocation.setPicturePath("/data/empty.png"); //TODO: I can't think properly right now and this is not working. You! Yes, you! Fix it!*/
         selectedLocation.setPicturePath(picturePathField.getText());
@@ -712,6 +770,8 @@ public class EditorFrame extends JFrame {
             selected.getScripts().keySet().forEach(scriptListModel::addElement);
             selected.getInventory().forEach(locationItemsListModel::addElement);
             picturePathField.setText(selected.getPicturePath());
+            availableButton.setSelected(selected.isAvailable());
+            notAvailableButton.setSelected(!selected.isAvailable());
         }
     }
 
@@ -745,5 +805,7 @@ public class EditorFrame extends JFrame {
         saveScriptButton.setEnabled(enabled);
         pictureDialogButton.setEnabled(enabled);
         picturePathField.setEnabled(enabled);
+        availableButton.setEnabled(enabled);
+        notAvailableButton.setEnabled(enabled);
     }
 }

@@ -102,9 +102,7 @@ public class PlayerFrame extends JFrame {
                 for (String scriptName : character.getScripts().keySet()) {
                     if (!scriptName.equals("onPlayerArrive") && !scriptName.equals("onPlayerLeave")) {
                         menuItem = new JMenuItem(scriptName);
-                        menuItem.addActionListener(ev -> {
-                            Script.run(character.getScript(scriptName));
-                        });
+                        menuItem.addActionListener(ev -> Script.run(character.getScript(scriptName)));
                         popupMenu.add(menuItem);
                     }
                 }
@@ -120,9 +118,7 @@ public class PlayerFrame extends JFrame {
             for (String scriptName : currentLocation.getScripts().keySet()) {
                 if (!scriptName.equals("onEnter") && !scriptName.equals("onLeave")) {
                     menuItem = new JMenuItem(scriptName);
-                    menuItem.addActionListener(e -> {
-                        Script.run(currentLocation.getScript(scriptName));
-                    });
+                    menuItem.addActionListener(e -> Script.run(currentLocation.getScript(scriptName)));
                     popupMenu.add(menuItem);
                 }
             }
@@ -154,6 +150,13 @@ public class PlayerFrame extends JFrame {
                 popupMenu.add(menuItem);
             }
             //TODO: Сonsume etc
+            selected.getScripts().entrySet().forEach(entry -> {
+                JMenuItem menu = new JMenuItem(entry.getKey());
+                menu.addActionListener(e1 -> {
+                    Script.run(entry.getValue());
+                });
+                popupMenu.add(menu);
+            });
             popupMenu.show(itemsList, e.getX(), e.getY());
         }
     }
@@ -282,24 +285,12 @@ public class PlayerFrame extends JFrame {
         currentLocation.getInventory().forEach(itemsListModel::addElement);
     }
 
-    //Дизаблим кнопки передвижения соответствующие null выходам
+    //Дизаблим кнопки передвижения соответствующие null выходам и выходам, у которых заблокирован доступ
     private void directionButtonsEnable() {
-        if (currentLocation.getNorth() == null)
-            northButton.setEnabled(false);
-        else
-            northButton.setEnabled(true);
-        if (currentLocation.getSouth() == null)
-            southButton.setEnabled(false);
-        else
-            southButton.setEnabled(true);
-        if (currentLocation.getEast() == null)
-            eastButton.setEnabled(false);
-        else
-            eastButton.setEnabled(true);
-        if (currentLocation.getWest() == null)
-            westButton.setEnabled(false);
-        else
-            westButton.setEnabled(true);
+        northButton.setEnabled((currentLocation.getNorth() != null && currentLocation.getNorth().isAvailable()));
+        southButton.setEnabled((currentLocation.getSouth() != null && currentLocation.getSouth().isAvailable()));
+        eastButton.setEnabled((currentLocation.getEast() != null && currentLocation.getEast().isAvailable()));
+        westButton.setEnabled((currentLocation.getWest() != null && currentLocation.getWest().isAvailable()));
     }
 
     public static GameCharacter getPlayer() {
