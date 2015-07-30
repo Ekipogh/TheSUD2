@@ -44,6 +44,7 @@ public class Location implements Serializable {
         this.scripts = new HashMap<>();
         scripts.put("onEnter", "");
         scripts.put("onLeave", "");
+        this.available = true;
     }
 
     public void setDescription(String description) {

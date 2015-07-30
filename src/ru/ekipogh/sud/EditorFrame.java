@@ -29,6 +29,8 @@ public class EditorFrame extends JFrame {
     private final DefaultListModel<Item> locationItemsListModel;
     private final DefaultTableModel equipTableModel;
     private final DefaultListModel<GameCharacter> charactersListModel;
+    private final DefaultListModel<Item> characterItemsListModel;
+    private final DefaultListModel<Item> playerItemsListModel;
     private DefaultListModel<Location> locationsListModel;
     private JPanel rootPanel;
     private JList<Location> locationsList;
@@ -101,6 +103,14 @@ public class EditorFrame extends JFrame {
     private JButton saveItemScriptButton;
     private JButton addItemScriptButton;
     private JButton deleteItemScriptButton;
+    private JList<Item> charTabItemsList;
+    private JList<Item> charItemsList;
+    private JButton addItemToChar;
+    private JButton deleteItemFromChar;
+    private JList<Item> playerTabItemsList;
+    private JList<Item> playerItemsList;
+    private JButton addItemToPlayerButton;
+    private JButton deleteItemFromPlayerButton;
 
     private GameCharacter player;
 
@@ -170,6 +180,12 @@ public class EditorFrame extends JFrame {
         locationTabItemsList.setModel(itemsListModel);
         locationItemsListModel = new DefaultListModel<>();
         locationItemsList.setModel(locationItemsListModel);
+        characterItemsListModel = new DefaultListModel<>();
+        charItemsList.setModel(characterItemsListModel);
+        charTabItemsList.setModel(itemsListModel);
+        playerTabItemsList.setModel(itemsListModel);
+        playerItemsListModel = new DefaultListModel<>();
+        playerItemsList.setModel(playerItemsListModel);
 
         itemType.setModel(new DefaultComboBoxModel<>(ItemTypes.values()));
 
@@ -296,7 +312,7 @@ public class EditorFrame extends JFrame {
             selectChar();
         });
         charSaveButton.addActionListener(e -> saveSelectedCharacter());
-        addCharButton.addActionListener(e -> addCharacter());
+        addCharButton.addActionListener(e -> addNewCharacter());
         deleteCharButton.addActionListener(e -> deleteSelectedCharacter());
         addCharScriptButton.addActionListener(e -> addCharScript());
         deleteCharScriptButton.addActionListener(e -> deleteCharScript());
@@ -306,6 +322,98 @@ public class EditorFrame extends JFrame {
         saveItemScriptButton.addActionListener(e -> saveItemScript());
         addItemScriptButton.addActionListener(e -> addItemScript());
         deleteItemScriptButton.addActionListener(e -> deleteItemScript());
+        charTabItemsList.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                if (((JList) e.getSource()).getSelectedIndex() >= 0) {
+                    deleteItemFromChar.setEnabled(false);
+                    addItemToChar.setEnabled(true);
+                }
+            }
+        });
+        charItemsList.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                if (((JList) e.getSource()).getSelectedIndex() >= 0) {
+                    deleteItemFromChar.setEnabled(true);
+                    addItemToLoc.setEnabled(false);
+                }
+            }
+        });
+        addItemToChar.addActionListener(e -> addItemToCharacter());
+        deleteItemFromChar.addActionListener(e -> deleteItemFromCharacter());
+        playerTabItemsList.addFocusListener(new FocusAdapter() {
+        });
+        playerTabItemsList.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                if (((JList) e.getSource()).getSelectedIndex() >= 0) {
+                    deleteItemFromPlayerButton.setEnabled(false);
+                    addItemToPlayerButton.setEnabled(true);
+                }
+            }
+        });
+        playerItemsList.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                if (((JList) e.getSource()).getSelectedIndex() >= 0) {
+                    deleteItemFromPlayerButton.setEnabled(true);
+                    addItemToPlayerButton.setEnabled(false);
+                }
+            }
+        });
+        addItemToPlayerButton.addActionListener(e -> addItemToPlayer());
+        deleteItemFromPlayerButton.addActionListener(e -> deleteItemFromPlayer());
+    }
+
+    private void deleteItemFromPlayer() {
+        int indexI = playerItemsList.getSelectedIndex();
+        if (indexI >= 0) {
+            Item item = playerItemsListModel.getElementAt(indexI);
+            player.getInventory().remove(item);
+            playerItemsListModel.removeElementAt(indexI);
+            if (indexI == 0)
+                deleteItemFromPlayerButton.setEnabled(false);
+            playerItemsList.setSelectedIndex((indexI > 0) ? indexI - 1 : indexI);
+        }
+    }
+
+    private void addItemToPlayer() {
+        int indexI = playerTabItemsList.getSelectedIndex();
+        if (indexI >= 0) {
+            Item item = itemsListModel.getElementAt(indexI);
+            player.addToInventory(item);
+            playerItemsListModel.addElement(item);
+        }
+    }
+
+    private void deleteItemFromCharacter() {
+        int indexC = charactersList.getSelectedIndex();
+        int indexI = charItemsList.getSelectedIndex();
+        if (indexI >= 0 && indexC >= 0) {
+            GameCharacter selectedC = charactersListModel.getElementAt(indexC);
+            Item selectedItem = characterItemsListModel.getElementAt(indexI);
+            selectedC.getInventory().remove(selectedItem);
+            characterItemsListModel.removeElement(selectedItem);
+            if (indexI == 0)
+                deleteItemFromChar.setEnabled(false);
+            charItemsList.setSelectedIndex((indexI > 0) ? indexI - 1 : indexI);
+        }
+    }
+
+    private void addItemToCharacter() {
+        int indexC = charactersList.getSelectedIndex();
+        int indexI = charTabItemsList.getSelectedIndex();
+        if (indexC >= 0 && indexI >= 0) {
+            GameCharacter selectedC = charactersListModel.getElementAt(indexC);
+            Item selectedItem = itemsListModel.getElementAt(indexI);
+            selectedC.addToInventory(selectedItem);
+            characterItemsListModel.addElement(selectedItem);
+        }
     }
 
     private void deleteItemScript() {
@@ -321,18 +429,22 @@ public class EditorFrame extends JFrame {
 
     private void addItemScript() {
         int index = itemsList.getSelectedIndex();
-        Item item = itemsListModel.getElementAt(index);
-        String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
-        item.addScript(scriptName, "");
-        itemScriptListModel.addElement(scriptName);
+        if (index >= 0) {
+            Item item = itemsListModel.getElementAt(index);
+            String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
+            item.addScript(scriptName, "");
+            itemScriptListModel.addElement(scriptName);
+        }
     }
 
     private void saveItemScript() {
         int indexS = itemScriptsList.getSelectedIndex();
         int indexI = itemsList.getSelectedIndex();
-        String scriptName = itemScriptListModel.getElementAt(indexS); //TODo: BUG:java.lang.ArrayIndexOutOfBoundsException: -1 (посисбле во всех других сэйв функциях?)
-        Item item = itemsListModel.getElementAt(indexI);
-        item.setScript(scriptName, itemScriptText.getText());
+        if (indexI >= 0 && indexS >= 0) {
+            String scriptName = itemScriptListModel.getElementAt(indexS); //TODo: BUG:java.lang.ArrayIndexOutOfBoundsException: -1 (посисбле во всех других сэйв функциях?)
+            Item item = itemsListModel.getElementAt(indexI);
+            item.setScript(scriptName, itemScriptText.getText());
+        }
     }
 
     private void selectItemScript() {
@@ -352,9 +464,11 @@ public class EditorFrame extends JFrame {
     private void saveCharScript() {
         int indexS = characterScriptList.getSelectedIndex();
         int indexC = charactersList.getSelectedIndex();
-        String scriptName = charScriptListModel.getElementAt(indexS);
-        GameCharacter character = charactersListModel.getElementAt(indexC);
-        character.setScript(scriptName, characterScriptText.getText());
+        if (indexC >= 0 && indexS >= 0) {
+            String scriptName = charScriptListModel.getElementAt(indexS);
+            GameCharacter character = charactersListModel.getElementAt(indexC);
+            character.setScript(scriptName, characterScriptText.getText());
+        }
     }
 
     private void selectCharScript() {
@@ -385,10 +499,12 @@ public class EditorFrame extends JFrame {
 
     private void addCharScript() {
         int index = charactersList.getSelectedIndex();
-        GameCharacter character = charactersListModel.getElementAt(index);
-        String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
-        character.addScript(scriptName, "");
-        charScriptListModel.addElement(scriptName);
+        if (index >= 0) {
+            GameCharacter character = charactersListModel.getElementAt(index);
+            String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
+            character.addScript(scriptName, "");
+            charScriptListModel.addElement(scriptName);
+        }
     }
 
     private void deleteSelectedCharacter() {
@@ -397,7 +513,7 @@ public class EditorFrame extends JFrame {
         charactersList.setSelectedIndex((index > 0) ? index - 1 : index);
     }
 
-    private void addCharacter() {
+    private void addNewCharacter() {
         GameCharacter character = new GameCharacter("Введите имя");
         charactersListModel.addElement(character);
     }
@@ -443,6 +559,8 @@ public class EditorFrame extends JFrame {
         femCharButton.setEnabled(enabled);
         maleCharButton.setEnabled(enabled);
         sexlessCharButton.setEnabled(enabled);
+        charTabItemsList.setEnabled(enabled);
+        charItemsList.setEnabled(enabled);
         charLocCombo.setEnabled(enabled);
         charSaveButton.setEnabled(enabled);
         addCharButton.setEnabled(enabled);
@@ -460,10 +578,12 @@ public class EditorFrame extends JFrame {
 
     private void addScriptToLocation() {
         int index = locationsList.getSelectedIndex();
-        Location location = locationsListModel.elementAt(index);
-        String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
-        location.addScript(scriptName, "");
-        scriptListModel.addElement(scriptName);
+        if (index >= 0) {
+            Location location = locationsListModel.elementAt(index);
+            String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
+            location.addScript(scriptName, "");
+            scriptListModel.addElement(scriptName);
+        }
     }
 
     private void deleteLocationScript() {
@@ -481,10 +601,12 @@ public class EditorFrame extends JFrame {
 
     private void saveSelectedScript() {
         int indexS = locationScriptsList.getSelectedIndex();
-        String scriptName = scriptListModel.getElementAt(indexS);
         int indexL = locationsList.getSelectedIndex();
-        Location location = locationsListModel.elementAt(indexL);
-        location.setScript(scriptName, locationScriptText.getText());
+        if (indexS >= 0 && indexL >= 0) {
+            String scriptName = scriptListModel.getElementAt(indexS);
+            Location location = locationsListModel.elementAt(indexL);
+            location.setScript(scriptName, locationScriptText.getText());
+        }
     }
 
     private void selectLocationScript() {
@@ -527,14 +649,16 @@ public class EditorFrame extends JFrame {
 
     private void deleteItemFromLocation() {
         int indexLoc = locationsList.getSelectedIndex();
-        Location selectedLoc = locationsListModel.getElementAt(indexLoc);
         int indexItem = locationItemsList.getSelectedIndex();
-        Item selectedItem = locationItemsListModel.getElementAt(indexItem);
-        selectedLoc.getInventory().remove(selectedItem);
-        locationItemsListModel.removeElement(selectedItem);
-        if (indexItem == 0)
-            deleteItemFromLoc.setEnabled(false);
-        locationItemsList.setSelectedIndex((indexItem > 0) ? indexItem - 1 : indexItem);
+        if (indexItem >= 0 && indexLoc >= 0) {
+            Location selectedLoc = locationsListModel.getElementAt(indexLoc);
+            Item selectedItem = locationItemsListModel.getElementAt(indexItem);
+            selectedLoc.getInventory().remove(selectedItem);
+            locationItemsListModel.removeElement(selectedItem);
+            if (indexItem == 0)
+                deleteItemFromLoc.setEnabled(false);
+            locationItemsList.setSelectedIndex((indexItem > 0) ? indexItem - 1 : indexItem);
+        }
     }
 
     private void saveSelectedItem() {
@@ -551,11 +675,13 @@ public class EditorFrame extends JFrame {
 
     private void addItemToLocation() {
         int indexLoc = locationsList.getSelectedIndex();
-        Location selectedLoc = locationsListModel.getElementAt(indexLoc);  //TODO: BUG:java.lang.ArrayIndexOutOfBoundsException: -1
         int indexItem = locationTabItemsList.getSelectedIndex();
-        Item selectedItem = itemsListModel.getElementAt(indexItem);
-        selectedLoc.addItem(selectedItem);
-        locationItemsListModel.addElement(selectedItem);
+        if (indexLoc >= 0 && indexItem >= 0) {
+            Location selectedLoc = locationsListModel.getElementAt(indexLoc);
+            Item selectedItem = itemsListModel.getElementAt(indexItem);
+            selectedLoc.addItem(selectedItem);
+            locationItemsListModel.addElement(selectedItem);
+        }
     }
 
     private void selectItem() {
@@ -578,7 +704,6 @@ public class EditorFrame extends JFrame {
         itemsList.setSelectedIndex((index > 0) ? index - 1 : index);
     }
 
-
     private void setItemFormElementsEnabled() {
         boolean enabled = itemsList.getSelectedIndex() >= 0;
         itemName.setEnabled(enabled);
@@ -588,7 +713,6 @@ public class EditorFrame extends JFrame {
         itemType.setEnabled(enabled);
         slotCombo.setEnabled(enabled);
     }
-
 
     private void addNewItem() {
         Item newItem = new Item("Введите название");
@@ -617,6 +741,7 @@ public class EditorFrame extends JFrame {
                 southModel.addElement(l);
                 eastModel.addElement(l);
                 westModel.addElement(l);
+                charLocationModel.addElement(l);
             }
 
             itemsListModel.clear();
@@ -654,6 +779,7 @@ public class EditorFrame extends JFrame {
                 break;
         }
         playerLocation.setSelectedItem(player.getLocation());
+        player.getInventory().forEach(playerItemsListModel::addElement);
     }
 
 
