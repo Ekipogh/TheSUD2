@@ -14,8 +14,13 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
     private short sex;
     private Location location;
     private List<Item> inventory;
+    private static List<CharacterCategory> categories = new ArrayList<>();
 
     private Map<String, String> scripts;
+
+    public static void setCategories(List<CharacterCategory> categories) {
+        GameCharacter.categories = categories;
+    }
 
     public Equipment getEquipment() {
         return equipment;

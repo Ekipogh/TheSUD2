@@ -42,17 +42,19 @@ class InventoryFrame extends JFrame {
         itemsListModel = new DefaultListModel<>();
         itemsList.setModel(itemsListModel);
 
+        //Картинки слотов не редактируемы
         equipmentTableModel = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
+
         equipmentTable.setModel(equipmentTableModel);
         equipmentTableModel.addColumn("Слот");
         equipmentTableModel.addColumn("Предмет");
-        equipmentTable.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer());
-        player.getInventory().forEach(itemsListModel::addElement);
+        equipmentTable.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer()); //для отображения картинок слотов
+        player.getInventory().forEach(itemsListModel::addElement); //заполняем список инвенторя
 
         updateEquipmentTable();
 
@@ -102,27 +104,36 @@ class InventoryFrame extends JFrame {
         if (selected instanceof Item) {
             menuItem = new JMenuItem("Снять");
             menuItem.addActionListener(e -> {
-                equipmentTableModel.setValueAt("Пусто", row, col);
-                player.unequip(((Item) selected));
-                itemsListModel.addElement((Item) selected);
+                unequipItem(((Item) selected), row, col);
             });
             popupMenu.add(menuItem);
         }
         return popupMenu;
     }
 
-    private void updateEquipmentTable() {
+    private void unequipItem(Item item, int row, int col) {
+        equipmentTableModel.setValueAt("Пусто", row, col);
+        unequipItem(item);
+    }
+
+    private void unequipItem(Item item) {
+        player.unequip(item);
+        itemsListModel.addElement(item);
+        Script.run(item.getScript("onUnequip"));
+    }
+
+    private void updateEquipmentTable() {  //Заполнение таблицы экипировки
         equipmentTableModel.setRowCount(0);
         for (String s : Equipment.getSlotNames()) {
             Item item = player.getEquipedItem(s);
             equipmentTableModel.addRow(new Object[]{new ImageIcon(Equipment.getImage(s)), item != null ? item : "Пусто"});
         }
 
-        Utils.updateRowHeights(equipmentTable);
+        Utils.updateRowHeights(equipmentTable); //обновление высоты ячеек
     }
 
 
-    private void showInventoryPopup(MouseEvent e) {
+    private void showInventoryPopup(MouseEvent e) {  //меню инвенторя
         JMenuItem menuItem;
         JPopupMenu popupMenu = new JPopupMenu();
         int index = itemsList.getSelectedIndex();
@@ -135,12 +146,23 @@ class InventoryFrame extends JFrame {
                 menuItem.addActionListener(e1 -> equipItem(selected));
                 popupMenu.add(menuItem);
             }
+            if (type == ItemTypes.CONSUMABLE) {
+                menuItem = new JMenuItem("Использовать");
+                menuItem.addActionListener(e1 -> useItem(selected));
+                popupMenu.add(menuItem);
+            }
             menuItem = new JMenuItem("Бросить");
             menuItem.addActionListener(e1 -> dropItem(selected));
             popupMenu.add(menuItem);
-            //TODO: consume, drop
             popupMenu.show(itemsList, e.getX(), e.getY());
         }
+    }
+
+    private void useItem(Item item) {
+        Script.run(item.getScript("onUse"));
+        //Удалем предмет из инвенторя
+        player.getInventory().remove(item);
+        itemsListModel.removeElement(item);
     }
 
     private void dropItem(Item item) {
@@ -148,13 +170,14 @@ class InventoryFrame extends JFrame {
         player.getInventory().remove(item);
         itemsListModel.removeElement(item);
         playerFrame.updateItems();
+        Script.run(item.getScript("onDrop"));
     }
 
     private void equipItem(Item item) {
         player.equip(item);
         itemsListModel.removeElement(item);
         player.getInventory().remove(item);
-
+        Script.run(item.getScript("onEquip"));
         updateEquipmentTable();
     }
 }

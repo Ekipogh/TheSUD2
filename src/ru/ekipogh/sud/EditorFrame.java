@@ -31,6 +31,15 @@ public class EditorFrame extends JFrame {
     private final DefaultListModel<GameCharacter> charactersListModel;
     private final DefaultListModel<Item> characterItemsListModel;
     private final DefaultListModel<Item> playerItemsListModel;
+    private final DefaultListModel<LocationCategory> locationCategoriesListModel;
+    private final DefaultListModel<String> locationCategoryScriptsListModel;
+    private final DefaultListModel<ItemCategory> itemCotegoriesListModel;
+    private final DefaultListModel<String> itemCategoryScriptsListModel;
+    private final DefaultListModel<CharacterCategory> charCategoriesListModel;
+    private final DefaultListModel<String> charCategoryScriptsListModel;
+    private final DefaultComboBoxModel<LocationCategory> locationCategoryComboModel;
+    private final DefaultComboBoxModel<ItemCategory> itemCategoryComboModel;
+    private final DefaultComboBoxModel<CharacterCategory> charCategoryComboModel;
     private DefaultListModel<Location> locationsListModel;
     private JPanel rootPanel;
     private JList<Location> locationsList;
@@ -57,12 +66,12 @@ public class EditorFrame extends JFrame {
     private JButton deleteItemButton;
     private JTextField itemName;
     private JTextArea itemDescription;
-    private JComboBox<ItemTypes> itemType;
+    private JComboBox<ItemTypes> itemTypeCombo;
     private JButton saveItemButton;
     private JList<Item> locationTabItemsList;
     private JList<Item> locationItemsList;
-    private JButton addItemToLoc;
-    private JButton deleteItemFromLoc;
+    private JButton addItemToLocButton;
+    private JButton deleteItemFromLocButton;
     private JComboBox<String> slotCombo;
     private JTable equipTable;
     private JButton addSlotButton;
@@ -105,12 +114,34 @@ public class EditorFrame extends JFrame {
     private JButton deleteItemScriptButton;
     private JList<Item> charTabItemsList;
     private JList<Item> charItemsList;
-    private JButton addItemToChar;
-    private JButton deleteItemFromChar;
+    private JButton addItemToCharButton;
+    private JButton deleteItemFromCharButton;
     private JList<Item> playerTabItemsList;
     private JList<Item> playerItemsList;
     private JButton addItemToPlayerButton;
     private JButton deleteItemFromPlayerButton;
+    private JComboBox<ItemCategory> itemCategoryCombo;
+    private JComboBox<LocationCategory> locationCategoryCombo;
+    private JComboBox<CharacterCategory> charCategoryCombo;
+    private JList<LocationCategory> locationCategoriesList;
+    private JButton addLocationCategoryButton;
+    private JButton deleteLocationCategoryButton;
+    private JList<String> locationCategoryScriptsList;
+    private JTextField locationCategoryNameFiled;
+    private RSyntaxTextArea locationCategoryScriptText;
+    private JButton saveLocationCategoryScriptButton;
+    private JList<ItemCategory> itemCotegoriesList;
+    private JList<String> itemCategoryScriptsList;
+    private RSyntaxTextArea itemCategoryScriptText;
+    private JButton addItemCategoryButton;
+    private JButton deleteItemCategoryButton;
+    private JButton saveItemCategoryButton;
+    private JList<CharacterCategory> charCategoriesList;
+    private JList<String> charCategoryScriptsList;
+    private RSyntaxTextArea charCategoryScriptText;
+    private JButton addCharCategoryButton;
+    private JButton deleteCharCategoryButton;
+    private JButton saveCharCategoryButton;
 
     private GameCharacter player;
 
@@ -125,17 +156,12 @@ public class EditorFrame extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); //TODO: создать метод закрытия окна
 
+        //модели листов
         locationsListModel = new DefaultListModel<>();
         locationsList.setModel(locationsListModel);
 
         charactersListModel = new DefaultListModel<>();
         charactersList.setModel(charactersListModel);
-
-        locationScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
-        locationScriptText.setCodeFoldingEnabled(true);
-
-        characterScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
-        characterScriptText.setCodeFoldingEnabled(true);
 
         scriptListModel = new DefaultListModel<>();
         locationScriptsList.setModel(scriptListModel);
@@ -146,6 +172,96 @@ public class EditorFrame extends JFrame {
         itemScriptListModel = new DefaultListModel<>();
         itemScriptsList.setModel(itemScriptListModel);
 
+        itemsListModel = new DefaultListModel<>();
+        itemsList.setModel(itemsListModel);
+
+        locationTabItemsList.setModel(itemsListModel);
+        charTabItemsList.setModel(itemsListModel);
+        playerTabItemsList.setModel(itemsListModel);
+
+        locationItemsListModel = new DefaultListModel<>();
+        locationItemsList.setModel(locationItemsListModel);
+
+        characterItemsListModel = new DefaultListModel<>();
+        charItemsList.setModel(characterItemsListModel);
+
+        playerItemsListModel = new DefaultListModel<>();
+        playerItemsList.setModel(playerItemsListModel);
+
+        locationCategoriesListModel = new DefaultListModel<>();
+        locationCategoriesList.setModel(locationCategoriesListModel);
+
+        locationCategoryScriptsListModel = new DefaultListModel<>();
+        locationCategoryScriptsList.setModel(locationCategoryScriptsListModel);
+
+        itemCotegoriesListModel = new DefaultListModel<>();
+        itemCotegoriesList.setModel(itemCotegoriesListModel);
+
+        itemCategoryScriptsListModel = new DefaultListModel<>();
+        itemCategoryScriptsList.setModel(itemCategoryScriptsListModel);
+
+        charCategoriesListModel = new DefaultListModel<>();
+        charCategoriesList.setModel(charCategoriesListModel);
+
+        charCategoryScriptsListModel = new DefaultListModel<>();
+        charCategoryScriptsList.setModel(charCategoryScriptsListModel);
+
+        //поля скриптов
+        locationScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+        locationScriptText.setCodeFoldingEnabled(true);
+
+        characterScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+        characterScriptText.setCodeFoldingEnabled(true);
+
+        locationCategoryScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+        locationCategoryScriptText.setCodeFoldingEnabled(true);
+
+        itemCategoryScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+        itemCategoryScriptText.setCodeFoldingEnabled(true);
+
+        charCategoryScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+        charCategoryScriptText.setCodeFoldingEnabled(true);
+
+        //модели комбобоксов
+        itemTypeCombo.setModel(new DefaultComboBoxModel<>(ItemTypes.values()));
+
+        northModel = new DefaultComboBoxModel<>();
+        southModel = new DefaultComboBoxModel<>();
+        eastModel = new DefaultComboBoxModel<>();
+        westModel = new DefaultComboBoxModel<>();
+        playerLocationModel = new DefaultComboBoxModel<>();
+        charLocationModel = new DefaultComboBoxModel<>();
+        slotNamesModel = new DefaultComboBoxModel<>();
+        slotCombo.setModel(slotNamesModel);
+
+        locationCategoryComboModel = new DefaultComboBoxModel<>();
+        locationCategoryCombo.setModel(locationCategoryComboModel);
+
+        itemCategoryComboModel = new DefaultComboBoxModel<>();
+        itemCategoryCombo.setModel(itemCategoryComboModel);
+
+        charCategoryComboModel = new DefaultComboBoxModel<>();
+        charCategoryCombo.setModel(charCategoryComboModel);
+
+        northModel.addElement(null);
+        southModel.addElement(null);
+        eastModel.addElement(null);
+        westModel.addElement(null);
+        playerLocationModel.addElement(null);
+        charLocationModel.addElement(null);
+
+        locationCategoryComboModel.addElement(null);
+        itemCategoryComboModel.addElement(null);
+        charCategoryComboModel.addElement(null);
+
+        locNorth.setModel(northModel);
+        locSouth.setModel(southModel);
+        locEast.setModel(eastModel);
+        locWest.setModel(westModel);
+        playerLocation.setModel(playerLocationModel);
+        charLocCombo.setModel(charLocationModel);
+
+        //модели таблиц
         equipTableModel = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -161,13 +277,13 @@ public class EditorFrame extends JFrame {
                 }
             }
         };
-
         equipTable.setModel(equipTableModel);
         equipTableModel.addColumn("Путь к иконке");
         equipTableModel.addColumn("Иконка");
         equipTableModel.addColumn("Название");
         equipTable.getColumnModel().getColumn(1).setCellRenderer(new ImageRenderer());
 
+        //заполнение таблицы экипировки
         Equipment.getSlotMap().entrySet().forEach((entry) -> {
             String slotName = entry.getKey();
             String icon = entry.getValue();
@@ -175,47 +291,9 @@ public class EditorFrame extends JFrame {
         });
         Utils.updateRowHeights(equipTable);
 
-        itemsListModel = new DefaultListModel<>();
-        itemsList.setModel(itemsListModel);
-        locationTabItemsList.setModel(itemsListModel);
-        locationItemsListModel = new DefaultListModel<>();
-        locationItemsList.setModel(locationItemsListModel);
-        characterItemsListModel = new DefaultListModel<>();
-        charItemsList.setModel(characterItemsListModel);
-        charTabItemsList.setModel(itemsListModel);
-        playerTabItemsList.setModel(itemsListModel);
-        playerItemsListModel = new DefaultListModel<>();
-        playerItemsList.setModel(playerItemsListModel);
-
-        itemType.setModel(new DefaultComboBoxModel<>(ItemTypes.values()));
-
-        northModel = new DefaultComboBoxModel<>();
-        southModel = new DefaultComboBoxModel<>();
-        eastModel = new DefaultComboBoxModel<>();
-        westModel = new DefaultComboBoxModel<>();
-        playerLocationModel = new DefaultComboBoxModel<>();
-        charLocationModel = new DefaultComboBoxModel<>();
-
-        slotNamesModel = new DefaultComboBoxModel<>();
-        //default init
         Equipment.getSlotNames().forEach(slotNamesModel::addElement);
-        //default init
-        slotCombo.setModel(slotNamesModel);
 
-        northModel.addElement(null);
-        southModel.addElement(null);
-        eastModel.addElement(null);
-        westModel.addElement(null);
-        playerLocationModel.addElement(null);
-        charLocationModel.addElement(null);
-
-        locNorth.setModel(northModel);
-        locSouth.setModel(southModel);
-        locEast.setModel(eastModel);
-        locWest.setModel(westModel);
-        playerLocation.setModel(playerLocationModel);
-        charLocCombo.setModel(charLocationModel);
-
+        //меню окна
         JMenuBar menuBar = new JMenuBar();
         JMenu menuFile = new JMenu("Файл");
         JMenuItem newGameMenu = new JMenuItem("Новая");
@@ -230,6 +308,71 @@ public class EditorFrame extends JFrame {
 
         setJMenuBar(menuBar);
 
+        //листенеры
+        //листенеры конопок
+        saveLocButton.addActionListener(e -> saveSelectedLocation());
+
+        deleteLocButton.addActionListener(e -> deleteSelectedLocation());
+
+        savePlayer.addActionListener(e -> savePlayer());
+
+        addItemButton.addActionListener(e -> addNewItem());
+
+        deleteItemButton.addActionListener(e -> deleteSelectedItem());
+
+        addItemToLocButton.addActionListener(e -> addItemToLocation());
+
+        saveItemButton.addActionListener(e -> saveSelectedItem());
+
+        deleteItemFromLocButton.addActionListener(e -> deleteItemFromLocation());
+
+        addSlotButton.addActionListener(e -> addSlot());
+
+        deleteSlotButton.addActionListener(e -> deleteSlot());
+
+        saveSlotsButton.addActionListener(e -> saveSlotNames());
+
+        saveScriptButton.addActionListener(e -> saveSelectedScript());
+
+        deleteScriptLocButton.addActionListener(e -> deleteLocationScript());
+
+        addScriptLocButton.addActionListener(e -> addScriptToLocation());
+
+        pictureDialogButton.addActionListener(e -> showChooseDialog());
+
+        charSaveButton.addActionListener(e -> saveSelectedCharacter());
+
+        addCharButton.addActionListener(e -> addNewCharacter());
+
+        deleteCharButton.addActionListener(e -> deleteSelectedCharacter());
+
+        addCharScriptButton.addActionListener(e -> addCharScript());
+
+        deleteCharScriptButton.addActionListener(e -> deleteCharScript());
+
+        saveCharScriptButton.addActionListener(e -> saveCharScript());
+
+        saveItemScriptButton.addActionListener(e -> saveItemScript());
+
+        addItemScriptButton.addActionListener(e -> addItemScript());
+
+        deleteItemScriptButton.addActionListener(e -> deleteItemScript());
+
+        addItemToCharButton.addActionListener(e -> addItemToCharacter());
+
+        deleteItemFromCharButton.addActionListener(e -> deleteItemFromCharacter());
+
+        addItemToPlayerButton.addActionListener(e -> addItemToPlayer());
+
+        deleteItemFromPlayerButton.addActionListener(e -> deleteItemFromPlayer());
+
+        addLocationCategoryButton.addActionListener(e -> addLocationCategory());
+
+        deleteLocationCategoryButton.addActionListener(e -> deleteLocationCategory());
+
+        saveLocationCategoryScriptButton.addActionListener(e -> saveLocationCategoryScript());
+
+        //листенеры меню
         saveGameMenu.addActionListener(e -> saveGame());
 
         openGameMenu.addActionListener(e -> openGame());
@@ -238,97 +381,57 @@ public class EditorFrame extends JFrame {
 
         startGameMenu.addActionListener(e -> startGame());
 
+        //листенеры листов
         locationsList.addListSelectionListener(e -> {
             setLocationFormElementsEnabled();
             selectLocation();
         });
 
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                Main.launcher.setVisible(true);
-                super.windowClosing(e);
-            }
-        });
-
-        saveLocButton.addActionListener(e -> saveSelectedLocation());
-        deleteLocButton.addActionListener(e -> deleteSelectedLocation());
-        savePlayer.addActionListener(e -> savePlayer());
-        addItemButton.addActionListener(e -> addNewItem());
         itemsList.addListSelectionListener(e -> {
             setItemFormElementsEnabled();
             selectItem();
         });
-        deleteItemButton.addActionListener(e -> deleteSelectedItem());
-        addItemToLoc.addActionListener(e -> addItemToLocation());
-        saveItemButton.addActionListener(e -> saveSelectedItem());
 
-        deleteItemFromLoc.addActionListener(e -> deleteItemFromLocation());
+        locationScriptsList.addListSelectionListener(e -> selectLocationScript());
+
         locationTabItemsList.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
                 super.focusGained(e);
                 if (((JList) e.getSource()).getSelectedIndex() >= 0) {
-                    deleteItemFromLoc.setEnabled(false);
-                    addItemToLoc.setEnabled(true);
+                    deleteItemFromLocButton.setEnabled(false);
+                    addItemToLocButton.setEnabled(true);
                 }
             }
         });
+
         locationItemsList.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
                 super.focusGained(e);
                 if (((JList) e.getSource()).getSelectedIndex() >= 0) {
-                    deleteItemFromLoc.setEnabled(true);
-                    addItemToLoc.setEnabled(false);
+                    deleteItemFromLocButton.setEnabled(true);
+                    addItemToLocButton.setEnabled(false);
                 }
             }
         });
-        itemType.addActionListener(e -> showSlotField());
-        addSlotButton.addActionListener(e -> addSlot());
-        deleteSlotButton.addActionListener(e -> {
-            Item found = null;
-            int row = equipTable.getSelectedRow();
-            for (int i = 0; i < itemsListModel.getSize(); i++) {
-                Item item = itemsListModel.getElementAt(i);
-                if (item.getType() == ItemTypes.EQUIPPABLE && item.getEquipmentSlot() == equipTableModel.getValueAt(row, 2))
-                    found = item;
-            }
-            if (found == null) {
-                if (row > -1) {
-                    equipTableModel.removeRow(row);
-                }
-            } else
-                JOptionPane.showMessageDialog(null, "Удаление невозможно существует предмет (" + found.getName() + ") с таким слотом экипировки");
-        });
-        saveSlotsButton.addActionListener(e -> saveSlotNames());
-        locationScriptsList.addListSelectionListener(e -> selectLocationScript());
-        saveScriptButton.addActionListener(e -> saveSelectedScript());
-        deleteScriptLocButton.addActionListener(e -> deleteLocationScript());
-        addScriptLocButton.addActionListener(e -> addScriptToLocation());
-        pictureDialogButton.addActionListener(e -> showChooseDialog());
+
         charactersList.addListSelectionListener(e -> {
             setCharsFromItemsEnabled();
             selectChar();
         });
-        charSaveButton.addActionListener(e -> saveSelectedCharacter());
-        addCharButton.addActionListener(e -> addNewCharacter());
-        deleteCharButton.addActionListener(e -> deleteSelectedCharacter());
-        addCharScriptButton.addActionListener(e -> addCharScript());
-        deleteCharScriptButton.addActionListener(e -> deleteCharScript());
+
         characterScriptList.addListSelectionListener(e -> selectCharScript());
-        saveCharScriptButton.addActionListener(e -> saveCharScript());
+
         itemScriptsList.addListSelectionListener(e -> selectItemScript());
-        saveItemScriptButton.addActionListener(e -> saveItemScript());
-        addItemScriptButton.addActionListener(e -> addItemScript());
-        deleteItemScriptButton.addActionListener(e -> deleteItemScript());
+
         charTabItemsList.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
                 super.focusGained(e);
                 if (((JList) e.getSource()).getSelectedIndex() >= 0) {
-                    deleteItemFromChar.setEnabled(false);
-                    addItemToChar.setEnabled(true);
+                    deleteItemFromCharButton.setEnabled(false);
+                    addItemToCharButton.setEnabled(true);
                 }
             }
         });
@@ -337,15 +440,12 @@ public class EditorFrame extends JFrame {
             public void focusGained(FocusEvent e) {
                 super.focusGained(e);
                 if (((JList) e.getSource()).getSelectedIndex() >= 0) {
-                    deleteItemFromChar.setEnabled(true);
-                    addItemToLoc.setEnabled(false);
+                    deleteItemFromCharButton.setEnabled(true);
+                    addItemToLocButton.setEnabled(false);
                 }
             }
         });
-        addItemToChar.addActionListener(e -> addItemToCharacter());
-        deleteItemFromChar.addActionListener(e -> deleteItemFromCharacter());
-        playerTabItemsList.addFocusListener(new FocusAdapter() {
-        });
+
         playerTabItemsList.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -366,8 +466,105 @@ public class EditorFrame extends JFrame {
                 }
             }
         });
-        addItemToPlayerButton.addActionListener(e -> addItemToPlayer());
-        deleteItemFromPlayerButton.addActionListener(e -> deleteItemFromPlayer());
+
+        locationCategoriesList.addListSelectionListener(e -> selectLocationCategory());
+        locationCategoryScriptsList.addListSelectionListener(e -> selectCategoryScript());
+
+        //листенеры комбобоксов
+        itemTypeCombo.addActionListener(e -> showSlotField());
+
+        //листенеры текстфилдов
+        locationCategoryNameFiled.addActionListener(e -> saveLocationCategoryName());
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Main.launcher.setVisible(true);
+                super.windowClosing(e);
+            }
+        });
+    }
+
+    private void selectCategoryScript() {
+        int indexCat = locationCategoriesList.getSelectedIndex();
+        int indexS = locationCategoryScriptsList.getSelectedIndex();
+        if (indexCat >= 0 && indexS >= 0) {
+            LocationCategory locationCategory = locationCategoriesListModel.elementAt(indexCat);
+            String scriptName = locationCategoryScriptsListModel.elementAt(indexS);
+            locationCategoryScriptText.setText(locationCategory.getScript(scriptName));
+        }
+    }
+
+    private void selectLocationCategory() {
+        int indexCat = locationCategoriesList.getSelectedIndex();
+        if (indexCat >= 0) {
+            LocationCategory locationCategory = locationCategoriesListModel.elementAt(indexCat);
+            locationCategoryNameFiled.setText(locationCategory.getName());
+            locationCategoryScriptsListModel.clear();
+            locationCategory.getScripts().keySet().forEach(locationCategoryScriptsListModel::addElement);
+        }
+    }
+
+    private void saveLocationCategoryScript() {
+        int indexCat = locationCategoriesList.getSelectedIndex();
+        int indexS = locationCategoryScriptsList.getSelectedIndex();
+        if (indexCat >= 0 && indexS >= 0) {
+            LocationCategory locationCategory = locationCategoriesListModel.elementAt(indexCat);
+            String scriptName = locationCategoryScriptsListModel.elementAt(indexS);
+            locationCategory.setScript(scriptName, locationCategoryScriptText.getText());
+        }
+    }
+
+    private void saveLocationCategoryName() {
+        int indexCat = locationCategoriesList.getSelectedIndex();
+        if (indexCat >= 0) {
+            LocationCategory locationCategory = locationCategoriesListModel.elementAt(indexCat);
+            String name = locationCategoryNameFiled.getText();
+            for (LocationCategory category : Location.getCategories()) {
+                if (category.getName().equals(name)) {
+                    JOptionPane.showMessageDialog(this, "Категория с таким названием уже существует");
+                    return;
+                }
+            }
+            locationCategory.setName(name);
+        }
+    }
+
+    private void deleteLocationCategory() {
+        int indexCat = locationCategoriesList.getSelectedIndex();
+        if (indexCat >= 0) {
+            LocationCategory locationCategory = locationCategoriesListModel.elementAt(indexCat);
+            Location.deleteCategory(locationCategory);
+            locationCategoriesListModel.removeElement(locationCategory);
+            for (int i = 0; i < locationsListModel.size(); i++) {
+                Location l = locationsListModel.elementAt(i);
+                if (l.getCategory().equals(locationCategory))
+                    l.removeCategory();
+            }
+            locationCategoriesList.setSelectedIndex((indexCat > 0) ? indexCat - 1 : indexCat);
+        }
+    }
+
+    private void addLocationCategory() {
+        LocationCategory locationCategory = new LocationCategory("Название категории");
+        Location.addNewCategory(locationCategory);
+        locationCategoriesListModel.addElement(locationCategory);
+    }
+
+    private void deleteSlot() {
+        Item found = null;
+        int row = equipTable.getSelectedRow();
+        for (int i = 0; i < itemsListModel.getSize(); i++) {
+            Item item = itemsListModel.getElementAt(i);
+            if (item.getType() == ItemTypes.EQUIPPABLE && item.getEquipmentSlot() == equipTableModel.getValueAt(row, 2))
+                found = item;
+        }
+        if (found == null) {
+            if (row > -1) {
+                equipTableModel.removeRow(row);
+            }
+        } else
+            JOptionPane.showMessageDialog(null, "Удаление невозможно существует предмет (" + found.getName() + ") с таким слотом экипировки");
     }
 
     private void deleteItemFromPlayer() {
@@ -400,7 +597,7 @@ public class EditorFrame extends JFrame {
             selectedC.getInventory().remove(selectedItem);
             characterItemsListModel.removeElement(selectedItem);
             if (indexI == 0)
-                deleteItemFromChar.setEnabled(false);
+                deleteItemFromCharButton.setEnabled(false);
             charItemsList.setSelectedIndex((indexI > 0) ? indexI - 1 : indexI);
         }
     }
@@ -640,7 +837,7 @@ public class EditorFrame extends JFrame {
     }
 
     private void showSlotField() {
-        if (itemType.getModel().getSelectedItem() == ItemTypes.EQUIPPABLE) {
+        if (itemTypeCombo.getModel().getSelectedItem() == ItemTypes.EQUIPPABLE) {
             slotCombo.setEnabled(true);
         } else {
             slotCombo.setEnabled(false);
@@ -656,7 +853,7 @@ public class EditorFrame extends JFrame {
             selectedLoc.getInventory().remove(selectedItem);
             locationItemsListModel.removeElement(selectedItem);
             if (indexItem == 0)
-                deleteItemFromLoc.setEnabled(false);
+                deleteItemFromLocButton.setEnabled(false);
             locationItemsList.setSelectedIndex((indexItem > 0) ? indexItem - 1 : indexItem);
         }
     }
@@ -666,7 +863,7 @@ public class EditorFrame extends JFrame {
         Item selected = itemsListModel.getElementAt(index);
         selected.setName(itemName.getText());
         selected.setDescription(itemDescription.getText());
-        ItemTypes type = (ItemTypes) itemType.getSelectedItem();
+        ItemTypes type = (ItemTypes) itemTypeCombo.getSelectedItem();
         selected.setType(type);
         if (slotCombo.isEnabled())
             selected.setEquipmentSlot(String.valueOf(slotCombo.getSelectedItem()));
@@ -690,7 +887,7 @@ public class EditorFrame extends JFrame {
             Item selected = itemsListModel.getElementAt(index);
             itemName.setText(selected.getName());
             itemDescription.setText(selected.getDescription());
-            itemType.setSelectedItem(selected.getType());
+            itemTypeCombo.setSelectedItem(selected.getType());
             itemIdField.setText(String.valueOf(selected.getId()));
             slotCombo.setSelectedItem(selected.getEquipmentSlot());
             itemScriptListModel.clear();
@@ -710,7 +907,7 @@ public class EditorFrame extends JFrame {
         itemDescription.setEnabled(enabled);
         saveItemButton.setEnabled(enabled);
         deleteItemButton.setEnabled(enabled);
-        itemType.setEnabled(enabled);
+        itemTypeCombo.setEnabled(enabled);
         slotCombo.setEnabled(enabled);
     }
 
@@ -761,6 +958,10 @@ public class EditorFrame extends JFrame {
             Utils.updateRowHeights(equipTable);
             gameName.setText(saveFile.getGameName());
             gameStartMessage.setText(saveFile.getGameStartMessage());
+
+            Location.setCategories(saveFile.getLocationCategories());
+            Item.setCategories(saveFile.getItemCategories());
+            GameCharacter.setCategories(saveFile.getCharacterCategories());
             updatePlayerTab();
         }
     }

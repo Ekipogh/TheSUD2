@@ -18,6 +18,16 @@ public class Location implements Serializable {
     private Map<String, String> scripts;
     private String picturePath;
     private boolean available;
+    private static List<LocationCategory> categories = new ArrayList<>();
+    private LocationCategory category;
+
+    public static List<LocationCategory> getCategories() {
+        return categories;
+    }
+
+    public static void setCategories(List<LocationCategory> categories) {
+        Location.categories = categories;
+    }
 
     public String getPicturePath() {
         return picturePath;
@@ -146,5 +156,21 @@ public class Location implements Serializable {
 
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    public static void addNewCategory(LocationCategory locationCategory) {
+        categories.add(locationCategory);
+    }
+
+    public static void deleteCategory(LocationCategory locationCategory) {
+        categories.remove(locationCategory);
+    }
+
+    public LocationCategory getCategory() {
+        return category;
+    }
+
+    public void removeCategory() {
+        this.category = null;
     }
 }

@@ -166,6 +166,7 @@ public class PlayerFrame extends JFrame {
         currentLocation.removeItem(item);
         player.equip(item);
         itemsListModel.removeElement(item);
+        Script.run(item.getScript("onEquip"));
     }
 
     //положить предмет в инвентарь игрока
@@ -173,6 +174,7 @@ public class PlayerFrame extends JFrame {
         itemsListModel.removeElement(item);
         currentLocation.removeItem(item);
         player.addToInventory(item);
+        Script.run(item.getScript("onTake"));
     }
 
     //передвижение игрока

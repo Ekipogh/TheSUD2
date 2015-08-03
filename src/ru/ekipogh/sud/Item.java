@@ -1,7 +1,9 @@
 package ru.ekipogh.sud;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,12 +16,22 @@ public class Item implements Serializable {
     private String description;
     private String equipmentSlot;
     private Map<String, String> scripts;
+    private static List<ItemCategory> categories = new ArrayList<>();
 
     public Item(String name) {
         this.name = name;
         this.type = ItemTypes.GENERIC;
         this.id = Sequencer.getNewID();
         this.scripts = new HashMap<>();
+        this.scripts.put("onTake", "");
+        this.scripts.put("onDrop", "");
+        this.scripts.put("onEquip", "");
+        this.scripts.put("onUse", "");
+        this.scripts.put("onUnequip", "");
+    }
+
+    public static void setCategories(List<ItemCategory> categories) {
+        Item.categories = categories;
     }
 
     public ItemTypes getType() {

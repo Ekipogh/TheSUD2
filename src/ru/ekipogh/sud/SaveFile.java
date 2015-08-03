@@ -17,6 +17,34 @@ public class SaveFile implements Serializable {
     private List<GameCharacter> characters;
     private int sequencerID;
 
+    public List<LocationCategory> getLocationCategories() {
+        return locationCategories;
+    }
+
+    public void setLocationCategories(List<LocationCategory> locationCategories) {
+        this.locationCategories = locationCategories;
+    }
+
+    public List<ItemCategory> getItemCategories() {
+        return itemCategories;
+    }
+
+    public void setItemCategories(List<ItemCategory> itemCategories) {
+        this.itemCategories = itemCategories;
+    }
+
+    public List<CharacterCategory> getCharacterCategories() {
+        return characterCategories;
+    }
+
+    public void setCharacterCategories(List<CharacterCategory> characterCategories) {
+        this.characterCategories = characterCategories;
+    }
+
+    private List<LocationCategory> locationCategories;
+    private List<ItemCategory> itemCategories;
+    private List<CharacterCategory> characterCategories;
+
     public List<Item> getItems() {
         return items;
     }
