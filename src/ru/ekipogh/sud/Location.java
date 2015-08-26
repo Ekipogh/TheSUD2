@@ -173,4 +173,8 @@ public class Location implements Serializable {
     public void removeCategory() {
         this.category = null;
     }
+
+    public void setCategory(LocationCategory category) {
+        this.category = category;
+    }
 }

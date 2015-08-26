@@ -12,7 +12,7 @@ public class CharacterCategory {
     public CharacterCategory(String name) {
         this.name = name;
         this.scripts = new HashMap<>();
-        this.scripts.put("onPlayerArrive", "");
-        this.scripts.put("onPlayerLeave", "");
+        this.scripts.put("_onPlayerArrive", "");
+        this.scripts.put("_onPlayerLeave", "");
     }
 }

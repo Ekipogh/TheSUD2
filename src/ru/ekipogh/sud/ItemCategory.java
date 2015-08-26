@@ -12,10 +12,43 @@ public class ItemCategory {
     public ItemCategory(String name) {
         this.name = name;
         this.scripts = new HashMap<>();
-        this.scripts.put("onTake", "");
-        this.scripts.put("onDrop", "");
-        this.scripts.put("onEquip", "");
-        this.scripts.put("onUse", "");
-        this.scripts.put("onUnequip", "");
+        this.scripts.put("_onTake", "");
+        this.scripts.put("_onDrop", "");
+        this.scripts.put("_onEquip", "");
+        this.scripts.put("_onUse", "");
+        this.scripts.put("_onUnequip", "");
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setScript(String scriptName, String scriptText) {
+        scripts.put(scriptName, scriptText);
+    }
+
+    public HashMap<String, String> getScripts() {
+        return scripts;
+    }
+
+    public String getScript(String scriptName) {
+        return scripts.get(scriptName);
+    }
+
+    @Override
+    public String toString() {
+        return "IC: " + this.name;
+    }
+
+    public void addScript(String scriptName, String scriptText) {
+        this.scripts.put(scriptName, scriptText);
+    }
+
+    public void deleteScript(String scriptName) {
+        this.scripts.remove(scriptName);
     }
 }

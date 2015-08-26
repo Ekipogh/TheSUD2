@@ -34,7 +34,8 @@ public class Script {
         }
     }
 
-    public static void run(String script) {
+    public static void run(String script, Object caller) {
+        setProperty("caller", caller);
         if (!script.isEmpty())
             context.evaluateString(scope, script, "<cmd>", 1, null);
     }

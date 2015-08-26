@@ -26,7 +26,7 @@ public class LauncherFrame extends JFrame {
 
         editorButton.addActionListener(e -> {
             LauncherFrame.this.setVisible(false);
-            Main.editor = new EditorFrame();
+            Main.editor = new EditorFrame(gamePathField.getText());
         });
 
         setVisible(true);
@@ -37,8 +37,10 @@ public class LauncherFrame extends JFrame {
     private void startGame() {
         String pathToGame = gamePathField.getText();
         File gameFile = new File(pathToGame);
-        if (gameFile.exists()) new PlayerFrame(pathToGame);
-        else
+        if (gameFile.exists()) {
+            this.setVisible(false);
+            new PlayerFrame(pathToGame);
+        } else
             JOptionPane.showMessageDialog(this, "Файла с игрой не существует, выберите другой!");
     }
 

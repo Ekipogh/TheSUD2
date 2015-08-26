@@ -38,8 +38,8 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
         this.inventory = new ArrayList<>();
         this.equipment = new Equipment();
         this.scripts = new HashMap<>();
-        this.scripts.put("onPlayerArrive", "");
-        this.scripts.put("onPlayerLeave", "");
+        this.scripts.put("_onPlayerArrive", "");
+        this.scripts.put("_onPlayerLeave", "");
     }
 
     public List<Item> getInventory() {

@@ -18,6 +18,10 @@ class InventoryFrame extends JFrame {
     private JTable equipmentTable;
     private DefaultTableModel equipmentTableModel;
     private GameCharacter player = PlayerFrame.getPlayer();
+    private final String ONUSE = "_onUse";
+    private final String ONDROP = "_onDrop";
+    private final String ONEQUIP = "_onEquip";
+    private final String ONUNEQUIP = "_onUnequip";
 
     public InventoryFrame(PlayerFrame playerFrame) {
         super("Инвентарь");
@@ -119,7 +123,9 @@ class InventoryFrame extends JFrame {
     private void unequipItem(Item item) {
         player.unequip(item);
         itemsListModel.addElement(item);
-        Script.run(item.getScript("onUnequip"));
+        Script.run(item.getScript(ONUNEQUIP), item);
+        if (item.getCategory() != null)
+            Script.run(item.getCategory().getScript(ONUNEQUIP), item);
     }
 
     private void updateEquipmentTable() {  //Заполнение таблицы экипировки
@@ -159,7 +165,9 @@ class InventoryFrame extends JFrame {
     }
 
     private void useItem(Item item) {
-        Script.run(item.getScript("onUse"));
+        Script.run(item.getScript(ONUSE), item);
+        if (item.getCategory() != null)
+            Script.run(item.getCategory().getScript(ONUSE), item);
         //Удалем предмет из инвенторя
         player.getInventory().remove(item);
         itemsListModel.removeElement(item);
@@ -170,14 +178,18 @@ class InventoryFrame extends JFrame {
         player.getInventory().remove(item);
         itemsListModel.removeElement(item);
         playerFrame.updateItems();
-        Script.run(item.getScript("onDrop"));
+        Script.run(item.getScript(ONDROP), item);
+        if (item.getCategory() != null)
+            Script.run(item.getCategory().getScript(ONDROP), item);
     }
 
     private void equipItem(Item item) {
         player.equip(item);
         itemsListModel.removeElement(item);
         player.getInventory().remove(item);
-        Script.run(item.getScript("onEquip"));
+        Script.run(item.getScript(ONEQUIP), item);
+        if (item.getCategory() != null)
+            Script.run(item.getCategory().getScript(ONEQUIP), item);
         updateEquipmentTable();
     }
 }

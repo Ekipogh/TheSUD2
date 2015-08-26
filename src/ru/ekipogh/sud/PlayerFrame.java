@@ -3,6 +3,8 @@ package ru.ekipogh.sud;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +35,13 @@ public class PlayerFrame extends JFrame {
     private DefaultListModel<Item> itemsListModel;
     private DefaultListModel<GameCharacter> charactersListModel;
     private JPopupMenu popupMenu;
+    private final String ONTAKE = "_onTake";
+    private final String ONEQUIP = "_onEquip";
+    private final String ONUSE = "_onUse";
+    private final String ONENTER = "_onEnter";
+    private final String ONLEAVE = "_onLeave";
+    private final String ONPLAYERARRIVE = "_onPlayerArrive";
+    private final String ONPLAYERLEAVE = "_onPlayerLeave";
 
     private static Location currentLocation;
     private List<Item> items;
@@ -72,6 +81,7 @@ public class PlayerFrame extends JFrame {
                 }
             }
         });
+        //меню персонажей
         charactersList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -81,11 +91,21 @@ public class PlayerFrame extends JFrame {
             }
         });
         inventoryButton.addActionListener(e -> showInventoryScreen());
+
+        //меню локации
         locationPicPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 showLocationPopup(e);
+            }
+        });
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Main.launcher.setVisible(true);
+                super.windowClosing(e);
             }
         });
     }
@@ -100,9 +120,9 @@ public class PlayerFrame extends JFrame {
                 GameCharacter character = charactersListModel.getElementAt(row);
                 popupMenu.removeAll();
                 for (String scriptName : character.getScripts().keySet()) {
-                    if (!scriptName.equals("onPlayerArrive") && !scriptName.equals("onPlayerLeave")) {
+                    if (!scriptName.startsWith("_on")) {
                         menuItem = new JMenuItem(scriptName);
-                        menuItem.addActionListener(ev -> Script.run(character.getScript(scriptName)));
+                        menuItem.addActionListener(ev -> Script.run(character.getScript(scriptName), character));
                         popupMenu.add(menuItem);
                     }
                 }
@@ -116,9 +136,9 @@ public class PlayerFrame extends JFrame {
             JMenuItem menuItem;
             popupMenu.removeAll();
             for (String scriptName : currentLocation.getScripts().keySet()) {
-                if (!scriptName.equals("onEnter") && !scriptName.equals("onLeave")) {
+                if (!scriptName.startsWith("_on")) {
                     menuItem = new JMenuItem(scriptName);
-                    menuItem.addActionListener(e -> Script.run(currentLocation.getScript(scriptName)));
+                    menuItem.addActionListener(e -> Script.run(currentLocation.getScript(scriptName), currentLocation));
                     popupMenu.add(menuItem);
                 }
             }
@@ -149,16 +169,42 @@ public class PlayerFrame extends JFrame {
                 menuItem.addActionListener(e1 -> equipItem(selected));
                 popupMenu.add(menuItem);
             }
-            //TODO: Сonsume etc
+            if (type == ItemTypes.CONSUMABLE) {
+                menuItem = new JMenuItem("Использовать");
+                menuItem.addActionListener(e1 -> useItem(selected));
+                popupMenu.add(menuItem);
+            }
+            //Кастомные скрипты
             selected.getScripts().entrySet().forEach(entry -> {
-                JMenuItem menu = new JMenuItem(entry.getKey());
-                menu.addActionListener(e1 -> {
-                    Script.run(entry.getValue());
-                });
-                popupMenu.add(menu);
+                if (!entry.getKey().startsWith("_on")) {
+                    JMenuItem menu = new JMenuItem(entry.getKey());
+                    menu.addActionListener(e1 -> {
+                        Script.run(entry.getValue(), selected);
+                    });
+                    popupMenu.add(menu);
+                }
             });
+            //Скрипты категории
+            if (selected.getCategory() != null) {
+                selected.getCategory().getScripts().entrySet().forEach(entry -> {
+                    if (!entry.getKey().startsWith("_on")) {
+                        JMenuItem menu = new JMenuItem(entry.getKey());
+                        menu.addActionListener(e1 -> {
+                            Script.run(entry.getValue(), selected);
+                        });
+                        popupMenu.add(menu);
+                    }
+                });
+            }
             popupMenu.show(itemsList, e.getX(), e.getY());
         }
+    }
+
+    private void useItem(Item item) {
+        Script.run(item.getScript(ONUSE), item);
+        if (item.getCategory() != null)
+            Script.run(item.getCategory().getScript(ONUSE), item);
+        itemsListModel.removeElement(item);
     }
 
     //надеть предмет
@@ -166,7 +212,9 @@ public class PlayerFrame extends JFrame {
         currentLocation.removeItem(item);
         player.equip(item);
         itemsListModel.removeElement(item);
-        Script.run(item.getScript("onEquip"));
+        Script.run(item.getScript(ONEQUIP), item);
+        if (item.getCategory() != null)
+            Script.run(item.getCategory().getScript(ONEQUIP), item);
     }
 
     //положить предмет в инвентарь игрока
@@ -174,7 +222,9 @@ public class PlayerFrame extends JFrame {
         itemsListModel.removeElement(item);
         currentLocation.removeItem(item);
         player.addToInventory(item);
-        Script.run(item.getScript("onTake"));
+        Script.run(item.getScript(ONTAKE), item);
+        if (item.getCategory() != null)
+            Script.run(item.getCategory().getScript(ONTAKE), item);
     }
 
     //передвижение игрока
@@ -195,19 +245,27 @@ public class PlayerFrame extends JFrame {
                 break;
         }
         //Скрипты локаций
-        Script.run(currentLocation.getScript("onLeave"));
+        Script.run(currentLocation.getScript(ONLEAVE), currentLocation);
+        if (currentLocation.getCategory() != null)
+            Script.run(currentLocation.getCategory().getScript(ONLEAVE), currentLocation);
         //Скрипты НПЦ
-        for (int i = 0; i < charactersListModel.size(); i++)
-            Script.run(charactersListModel.getElementAt(i).getScript("onPlayerLeave"));
+        for (int i = 0; i < charactersListModel.size(); i++) {
+            GameCharacter character = charactersListModel.getElementAt(i);
+            Script.run(character.getScript(ONPLAYERLEAVE), character);
+        }
 
         currentLocation = playerLocation != null ? playerLocation : currentLocation;
         player.setLocation(currentLocation);
 
         updateCharacters();
-        for (int i = 0; i < charactersListModel.size(); i++)
-            Script.run(charactersListModel.getElementAt(i).getScript("onPlayerArrive")); //TODO: Двойной вызов updateCharacters()
+        for (int i = 0; i < charactersListModel.size(); i++) {
+            GameCharacter character = charactersListModel.getElementAt(i);
+            Script.run(character.getScript(ONPLAYERARRIVE), character); //TODO: Двойной вызов updateCharacters()
+        }
 
-        Script.run(currentLocation.getScript("onEnter"));
+        Script.run(currentLocation.getScript(ONENTER), currentLocation);
+        if (currentLocation.getCategory() != null)
+            Script.run(currentLocation.getCategory().getScript(ONENTER), currentLocation);
         proceed(); //продолжить, выполнить сценарии и игровую логику
     }
 
@@ -240,7 +298,6 @@ public class PlayerFrame extends JFrame {
         Map<String, String> slotNames = saveFile.getSlotNames();
         Equipment.setSlotNames(slotNames);
         initJS();
-        Script.run("out.println(\"SUP from JS\")");
     }
 
     private void initJS() {

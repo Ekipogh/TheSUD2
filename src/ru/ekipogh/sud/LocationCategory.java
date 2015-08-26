@@ -1,19 +1,20 @@
 package ru.ekipogh.sud;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Created by dedov_d on 03.08.2015.
  */
-public class LocationCategory {
+public class LocationCategory implements Serializable {
     private String name;
     private HashMap<String, String> scripts;
 
     public LocationCategory(String name) {
         this.name = name;
         this.scripts = new HashMap<>();
-        scripts.put("onEnter", "");
-        scripts.put("onLeave", "");
+        scripts.put("_onEnter", "");
+        scripts.put("_onLeave", "");
     }
 
     public String getName() {
@@ -34,5 +35,18 @@ public class LocationCategory {
 
     public String getScript(String scriptName) {
         return scripts.get(scriptName);
+    }
+
+    @Override
+    public String toString() {
+        return "LC: " + this.name;
+    }
+
+    public void addScript(String scriptName, String scriptText) {
+        this.scripts.put(scriptName, scriptText);
+    }
+
+    public void deleteScript(String scriptName) {
+        this.scripts.remove(scriptName);
     }
 }

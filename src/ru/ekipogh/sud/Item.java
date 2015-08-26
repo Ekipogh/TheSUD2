@@ -17,21 +17,26 @@ public class Item implements Serializable {
     private String equipmentSlot;
     private Map<String, String> scripts;
     private static List<ItemCategory> categories = new ArrayList<>();
+    private ItemCategory category;
 
     public Item(String name) {
         this.name = name;
         this.type = ItemTypes.GENERIC;
         this.id = Sequencer.getNewID();
         this.scripts = new HashMap<>();
-        this.scripts.put("onTake", "");
-        this.scripts.put("onDrop", "");
-        this.scripts.put("onEquip", "");
-        this.scripts.put("onUse", "");
-        this.scripts.put("onUnequip", "");
+        this.scripts.put("_onTake", "");
+        this.scripts.put("_onDrop", "");
+        this.scripts.put("_onEquip", "");
+        this.scripts.put("_onUse", "");
+        this.scripts.put("_onUnequip", "");
     }
 
     public static void setCategories(List<ItemCategory> categories) {
         Item.categories = categories;
+    }
+
+    public static List<ItemCategory> getCategories() {
+        return categories;
     }
 
     public ItemTypes getType() {
@@ -93,5 +98,25 @@ public class Item implements Serializable {
 
     public int getId() {
         return id;
+    }
+
+    public static void addNewCategory(ItemCategory itemCategory) {
+        categories.add(itemCategory);
+    }
+
+    public static void deleteCategory(ItemCategory itemCategory) {
+        categories.remove(itemCategory);
+    }
+
+    public ItemCategory getCategory() {
+        return category;
+    }
+
+    public void removeCategory() {
+        this.category = null;
+    }
+
+    public void setCategory(ItemCategory category) {
+        this.category = category;
     }
 }
