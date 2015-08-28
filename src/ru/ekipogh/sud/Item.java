@@ -119,4 +119,8 @@ public class Item implements Serializable {
     public void setCategory(ItemCategory category) {
         this.category = category;
     }
+
+    public static void clearCategories() {
+        categories = new ArrayList<>();
+    }
 }

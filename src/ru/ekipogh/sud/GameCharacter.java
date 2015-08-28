@@ -17,9 +17,14 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
     private static List<CharacterCategory> categories = new ArrayList<>();
 
     private Map<String, String> scripts;
+    private CharacterCategory category;
 
     public static void setCategories(List<CharacterCategory> categories) {
         GameCharacter.categories = categories;
+    }
+
+    public static List<CharacterCategory> getCategories() {
+        return categories;
     }
 
     public Equipment getEquipment() {
@@ -116,5 +121,25 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
 
     public String toString() {
         return this.name;
+    }
+
+    public static void addNewCategory(CharacterCategory characterCategory) {
+        categories.add(characterCategory);
+    }
+
+    public static void deleteCategory(CharacterCategory characterCategory) {
+        categories.remove(characterCategory);
+    }
+
+    public CharacterCategory getCategory() {
+        return category;
+    }
+
+    public void removeCategory() {
+        this.category = null;
+    }
+
+    public static void clearCategories() {
+        categories = new ArrayList<>();
     }
 }

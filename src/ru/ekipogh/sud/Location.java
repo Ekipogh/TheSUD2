@@ -177,4 +177,8 @@ public class Location implements Serializable {
     public void setCategory(LocationCategory category) {
         this.category = category;
     }
+
+    public static void clearCategories() {
+        categories = new ArrayList<>();
+    }
 }

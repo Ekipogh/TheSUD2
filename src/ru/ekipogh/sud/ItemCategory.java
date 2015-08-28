@@ -1,11 +1,12 @@
 package ru.ekipogh.sud;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Created by dedov_d on 03.08.2015.
  */
-public class ItemCategory {
+public class ItemCategory implements Serializable {
     private String name;
     private HashMap<String, String> scripts;
 

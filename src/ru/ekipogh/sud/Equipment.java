@@ -20,14 +20,10 @@ public class Equipment implements Serializable {
         return slots;
     }
 
-    //private static String[] slotNames = {"голова", "тело", "ноги", "рука"}; //default equipment slots
     private static Map<String, String> slotNames = new HashMap<>();
 
     static {
-        slotNames.put("голова", "src/data/head.png");
-        slotNames.put("торс", "src/data/torso.png");
-        slotNames.put("ноги", "src/data/legs.png");
-        slotNames.put("рука", "src/data/hand.png");
+        clearSlots();
     }
 
     public static Map<String, String> getSlotMap() {
@@ -39,9 +35,6 @@ public class Equipment implements Serializable {
     }
 
     public static void addSlotName(String imagePath, String slotName) {
-        /*int length = slotNames.length;
-        slotNames = Arrays.copyOf(slotNames, length + 1);
-        slotNames[length] = slotName;*/
         slotNames.put(slotName, imagePath);
     }
 
@@ -72,5 +65,12 @@ public class Equipment implements Serializable {
     public void uneqip(Item item) {
         String slot = item.getEquipmentSlot();
         slots.remove(slot);
+    }
+
+    public static void clearSlots() {
+        slotNames.put("голова", "src/data/head.png");
+        slotNames.put("торс", "src/data/torso.png");
+        slotNames.put("ноги", "src/data/legs.png");
+        slotNames.put("рука", "src/data/hand.png");
     }
 }

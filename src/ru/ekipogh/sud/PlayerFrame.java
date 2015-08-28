@@ -126,6 +126,15 @@ public class PlayerFrame extends JFrame {
                         popupMenu.add(menuItem);
                     }
                 }
+                if (character.getCategory() != null) {
+                    for (String scriptName : character.getCategory().getScripts().keySet()) {
+                        if (!scriptName.startsWith("_on")) {
+                            menuItem = new JMenuItem(scriptName);
+                            menuItem.addActionListener(ev -> Script.run(character.getCategory().getScript(scriptName), character));
+                            popupMenu.add(menuItem);
+                        }
+                    }
+                }
                 popupMenu.show(charactersList, e.getX(), e.getY());
             }
         }
@@ -253,6 +262,12 @@ public class PlayerFrame extends JFrame {
             GameCharacter character = charactersListModel.getElementAt(i);
             Script.run(character.getScript(ONPLAYERLEAVE), character);
         }
+        for (int i = 0; i < charactersListModel.size(); i++) {
+            GameCharacter character = charactersListModel.getElementAt(i);
+            if (character.getCategory() != null)
+                Script.run(character.getCategory().getScript(ONPLAYERLEAVE), character);
+            Script.run(character.getScript(ONPLAYERLEAVE), character);
+        }
 
         currentLocation = playerLocation != null ? playerLocation : currentLocation;
         player.setLocation(currentLocation);
@@ -260,6 +275,8 @@ public class PlayerFrame extends JFrame {
         updateCharacters();
         for (int i = 0; i < charactersListModel.size(); i++) {
             GameCharacter character = charactersListModel.getElementAt(i);
+            if (character.getCategory() != null)
+                Script.run(character.getCategory().getScript(ONPLAYERARRIVE), character);
             Script.run(character.getScript(ONPLAYERARRIVE), character); //TODO: Двойной вызов updateCharacters()
         }
 
