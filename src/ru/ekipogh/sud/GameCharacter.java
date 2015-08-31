@@ -15,6 +15,8 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
     private Location location;
     private List<Item> inventory;
     private static List<CharacterCategory> categories = new ArrayList<>();
+    private Map<String, Object> values;
+    private int id;
 
     private Map<String, String> scripts;
     private CharacterCategory category;
@@ -45,6 +47,8 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
         this.scripts = new HashMap<>();
         this.scripts.put("_onPlayerArrive", "");
         this.scripts.put("_onPlayerLeave", "");
+        this.values = new HashMap<>();
+        this.id = Sequencer.getNewID();
     }
 
     public List<Item> getInventory() {
@@ -141,5 +145,21 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
 
     public static void clearCategories() {
         categories = new ArrayList<>();
+    }
+
+    public void setValue(String valueName, Object value) {
+        this.values.put(valueName, value);
+    }
+
+    public Object getValue(String valueName) {
+        return values.get(valueName);
+    }
+
+    public Map getValues() {
+        return values;
+    }
+
+    public int getId() {
+        return id;
     }
 }

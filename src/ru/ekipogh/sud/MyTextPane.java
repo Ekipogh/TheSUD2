@@ -14,7 +14,7 @@ public class MyTextPane extends JTextPane {
         this.setEditable(false);
         this.addHyperlinkListener(e -> { // Обработка ссылок
             if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
-                //TODO узнаем в Description ссылки имя юзер скрипта, извлекаем его текст и отправляем выполняться (Имплементировать юзерскрипты)
+                Script.run(e.getDescription(), PlayerFrame.getPlayer());
             }
         });
     }

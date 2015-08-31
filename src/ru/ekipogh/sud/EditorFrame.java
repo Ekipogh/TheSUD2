@@ -148,6 +148,9 @@ public class EditorFrame extends JFrame {
     private JButton addCharCategoryScriptButton;
     private JButton deleteCharCategoryScriptButton;
     private JTextField charCategoryNameField;
+    private RSyntaxTextArea initScriptText;
+    private JTextField charIdField;
+    private RSyntaxTextArea userScriptText;
 
     private GameCharacter player;
     private String gamePath;
@@ -222,6 +225,9 @@ public class EditorFrame extends JFrame {
         characterScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         characterScriptText.setCodeFoldingEnabled(true);
 
+        itemScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+        itemScriptText.setCodeFoldingEnabled(true);
+
         locationCategoryScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         locationCategoryScriptText.setCodeFoldingEnabled(true);
 
@@ -230,6 +236,9 @@ public class EditorFrame extends JFrame {
 
         charCategoryScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         charCategoryScriptText.setCodeFoldingEnabled(true);
+
+        initScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+        initScriptText.setCodeFoldingEnabled(true);
 
         //модели комбобоксов
         itemTypeCombo.setModel(new DefaultComboBoxModel<>(ItemTypes.values()));
@@ -565,6 +574,7 @@ public class EditorFrame extends JFrame {
         locationCategoryComboModel.removeAllElements();
         itemCategoryComboModel.removeAllElements();
         charCategoryComboModel.removeAllElements();
+        initScriptText.setText("");
     }
 
     private void saveCharCategoryScript() {
@@ -619,8 +629,10 @@ public class EditorFrame extends JFrame {
         if (index >= 0) {
             CharacterCategory characterCategory = charCategoriesListModel.elementAt(index);
             String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
-            characterCategory.addScript(scriptName, "");
-            charCategoryScriptsListModel.addElement(scriptName);
+            if (scriptName != null) {
+                characterCategory.addScript(scriptName, "");
+                charCategoryScriptsListModel.addElement(scriptName);
+            }
         }
     }
 
@@ -673,8 +685,10 @@ public class EditorFrame extends JFrame {
         if (index >= 0) {
             ItemCategory itemCategory = itemCotegoriesListModel.elementAt(index);
             String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
-            itemCategory.addScript(scriptName, "");
-            itemCategoryScriptsListModel.addElement(scriptName);
+            if (scriptName != null) {
+                itemCategory.addScript(scriptName, "");
+                itemCategoryScriptsListModel.addElement(scriptName);
+            }
         }
     }
 
@@ -915,8 +929,10 @@ public class EditorFrame extends JFrame {
         if (index >= 0) {
             Item item = itemsListModel.getElementAt(index);
             String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
-            item.addScript(scriptName, "");
-            itemScriptListModel.addElement(scriptName);
+            if (scriptName != null) {
+                item.addScript(scriptName, "");
+                itemScriptListModel.addElement(scriptName);
+            }
         }
     }
 
@@ -986,8 +1002,10 @@ public class EditorFrame extends JFrame {
         if (index >= 0) {
             GameCharacter character = charactersListModel.getElementAt(index);
             String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
-            character.addScript(scriptName, "");
-            charScriptListModel.addElement(scriptName);
+            if (scriptName != null) {
+                character.addScript(scriptName, "");
+                charScriptListModel.addElement(scriptName);
+            }
         }
     }
 
@@ -1031,6 +1049,7 @@ public class EditorFrame extends JFrame {
                     maleCharButton.setSelected(true);
                     break;
             }
+            charIdField.setText(String.valueOf(selected.getId()));
             charLocationModel.setSelectedItem(selected.getLocation());
             charScriptListModel.removeAllElements();
             selected.getScripts().keySet().forEach(charScriptListModel::addElement);
@@ -1055,8 +1074,10 @@ public class EditorFrame extends JFrame {
         if (index >= 0) {
             Location location = locationsListModel.elementAt(index);
             String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
-            location.addScript(scriptName, "");
-            locationScriptListModel.addElement(scriptName);
+            if (scriptName != null) {
+                location.addScript(scriptName, "");
+                locationScriptListModel.addElement(scriptName);
+            }
         }
     }
 
@@ -1253,6 +1274,8 @@ public class EditorFrame extends JFrame {
         gameName.setText(saveFile.getGameName());
         gameStartMessage.setText(saveFile.getGameStartMessage());
 
+        initScriptText.setText(saveFile.getInitScript());
+
         Location.setCategories(saveFile.getLocationCategories());
         Item.setCategories(saveFile.getItemCategories());
         GameCharacter.setCategories(saveFile.getCharacterCategories());
@@ -1315,6 +1338,7 @@ public class EditorFrame extends JFrame {
                 saveFile.setItemCategories(Item.getCategories());
                 saveFile.setLocationCategories(Location.getCategories());
                 saveFile.setSlotNames(slotsNames);
+                saveFile.setInitScript(initScriptText.getText());
                 saveFile.save(gamePath);
             } else
                 JOptionPane.showMessageDialog(this, "Выберите стартовую локацию игрока!");

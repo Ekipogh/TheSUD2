@@ -18,6 +18,7 @@ public class Item implements Serializable {
     private Map<String, String> scripts;
     private static List<ItemCategory> categories = new ArrayList<>();
     private ItemCategory category;
+    private Map<String, Object> values;
 
     public Item(String name) {
         this.name = name;
@@ -29,6 +30,7 @@ public class Item implements Serializable {
         this.scripts.put("_onEquip", "");
         this.scripts.put("_onUse", "");
         this.scripts.put("_onUnequip", "");
+        this.values = new HashMap<>();
     }
 
     public static void setCategories(List<ItemCategory> categories) {
@@ -118,6 +120,18 @@ public class Item implements Serializable {
 
     public void setCategory(ItemCategory category) {
         this.category = category;
+    }
+
+    public void setValue(String valueName, Object value) {
+        this.values.put(valueName, value);
+    }
+
+    public Object getValue(String valueName) {
+        return values.get(valueName);
+    }
+
+    public Map getValues() {
+        return values;
     }
 
     public static void clearCategories() {

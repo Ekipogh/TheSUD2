@@ -20,6 +20,7 @@ public class Location implements Serializable {
     private boolean available;
     private static List<LocationCategory> categories = new ArrayList<>();
     private LocationCategory category;
+    private Map<String, Object> values;
 
     public static List<LocationCategory> getCategories() {
         return categories;
@@ -52,9 +53,22 @@ public class Location implements Serializable {
         this.exits = new Location[4];
         this.inventory = new ArrayList<>();
         this.scripts = new HashMap<>();
-        scripts.put("onEnter", "");
-        scripts.put("onLeave", "");
+        scripts.put("_onEnter", "");
+        scripts.put("_onLeave", "");
         this.available = true;
+        this.values = new HashMap<>();
+    }
+
+    public void setValue(String valueName, Object value) {
+        this.values.put(valueName, value);
+    }
+
+    public Object getValue(String valueName) {
+        return values.get(valueName);
+    }
+
+    public Map getValues() {
+        return values;
     }
 
     public void setDescription(String description) {

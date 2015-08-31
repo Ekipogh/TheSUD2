@@ -32,6 +32,7 @@ public class PlayerFrame extends JFrame {
     private JButton inventoryButton;
     private JLabel locationPic;
     private JPanel locationPicPanel;
+    private JTextField jsInputField;
     private DefaultListModel<Item> itemsListModel;
     private DefaultListModel<GameCharacter> charactersListModel;
     private JPopupMenu popupMenu;
@@ -108,6 +109,12 @@ public class PlayerFrame extends JFrame {
                 super.windowClosing(e);
             }
         });
+
+        jsInputField.addActionListener(e -> runScript());
+    }
+
+    private void runScript() {
+        Script.run(jsInputField.getText(), player);
     }
 
     private void showCharPopup(MouseEvent e) {
@@ -314,10 +321,10 @@ public class PlayerFrame extends JFrame {
         playerName.setText(player.getName());
         Map<String, String> slotNames = saveFile.getSlotNames();
         Equipment.setSlotNames(slotNames);
-        initJS();
+        initJS(saveFile.getInitScript());
     }
 
-    private void initJS() {
+    private void initJS(String initScript) {
         Script.init();
         Script.setProperty("out", output);
         Script.setProperty("items", items);
@@ -326,6 +333,7 @@ public class PlayerFrame extends JFrame {
         Script.setProperty("characters", characters);
         Script.setProperty("game", this);
         Script.initFunctions();
+        Script.run(initScript, null);
     }
 
     //выполнение сценариев и игровой логики
@@ -347,12 +355,11 @@ public class PlayerFrame extends JFrame {
 
         //Дизаблим не используемые кнопки передвижения
         directionButtonsEnable();
-
     }
 
-    private void updateCharacters() {
+    public void updateCharacters() {
         charactersListModel.clear();
-        characters.stream().filter(c -> c.getLocation().equals(currentLocation)).forEach(charactersListModel::addElement);
+        characters.stream().filter(c -> currentLocation.equals(c.getLocation())).forEach(charactersListModel::addElement);
     }
 
     //Обновляем список предметов в локации

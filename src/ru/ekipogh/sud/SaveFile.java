@@ -16,6 +16,15 @@ public class SaveFile implements Serializable {
     private List<Item> items;
     private List<GameCharacter> characters;
     private int sequencerID;
+    private String initScript;
+
+    public String getInitScript() {
+        return initScript;
+    }
+
+    public void setInitScript(String initScript) {
+        this.initScript = initScript;
+    }
 
     public List<LocationCategory> getLocationCategories() {
         return locationCategories;

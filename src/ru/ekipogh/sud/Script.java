@@ -23,6 +23,7 @@ public class Script {
     public static void init() {
         context = Context.enter();
         scope = context.initStandardObjects();
+//        context.evaluateString(scope, "importPackage(\"ru.ekipogh.sud\")", "<cmd>", 1, null);
     }
 
     public static void initFunctions() {
