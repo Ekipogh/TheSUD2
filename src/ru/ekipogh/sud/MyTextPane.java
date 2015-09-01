@@ -20,9 +20,11 @@ public class MyTextPane extends JTextPane {
     }
 
     public void println(String str) {
+        //<img src = "file:/D:/Tomato/IdeaProjects/TheSUD2/photo.jpg">
+        String s = (String) Script.run("magic()", str);
         String temp = this.getText();
         int breakIndex = temp.lastIndexOf("</body>");
-        temp = temp.substring(0, breakIndex) + str + "<br>" + temp.substring(breakIndex);
+        temp = temp.substring(0, breakIndex) + s + "<br>" + temp.substring(breakIndex);
         this.setText(temp);
     }
 }

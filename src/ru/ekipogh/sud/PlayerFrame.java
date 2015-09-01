@@ -5,6 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +47,7 @@ public class PlayerFrame extends JFrame {
 
     private static Location currentLocation;
     private List<Item> items;
+    private String gamePath;
 
     private PlayerFrame() {
         super("The SUD2");
@@ -194,9 +196,7 @@ public class PlayerFrame extends JFrame {
             selected.getScripts().entrySet().forEach(entry -> {
                 if (!entry.getKey().startsWith("_on")) {
                     JMenuItem menu = new JMenuItem(entry.getKey());
-                    menu.addActionListener(e1 -> {
-                        Script.run(entry.getValue(), selected);
-                    });
+                    menu.addActionListener(e1 -> Script.run(entry.getValue(), selected));
                     popupMenu.add(menu);
                 }
             });
@@ -205,9 +205,7 @@ public class PlayerFrame extends JFrame {
                 selected.getCategory().getScripts().entrySet().forEach(entry -> {
                     if (!entry.getKey().startsWith("_on")) {
                         JMenuItem menu = new JMenuItem(entry.getKey());
-                        menu.addActionListener(e1 -> {
-                            Script.run(entry.getValue(), selected);
-                        });
+                        menu.addActionListener(e1 -> Script.run(entry.getValue(), selected));
                         popupMenu.add(menu);
                     }
                 });
@@ -316,12 +314,13 @@ public class PlayerFrame extends JFrame {
         characters = saveFile.getCharacters();
         items = saveFile.getItems();
         currentLocation = player.getLocation();
-        output.println("<b>" + saveFile.getGameName() + "</b>");
-        output.println(saveFile.getGameStartMessage());
         playerName.setText(player.getName());
         Map<String, String> slotNames = saveFile.getSlotNames();
         Equipment.setSlotNames(slotNames);
+        gamePath = saveFile.getPath();
         initJS(saveFile.getInitScript());
+        output.println("<b>" + saveFile.getGameName() + "</b>");
+        output.println(saveFile.getGameStartMessage());
     }
 
     private void initJS(String initScript) {
@@ -332,6 +331,7 @@ public class PlayerFrame extends JFrame {
         Script.setProperty("locations", locations);
         Script.setProperty("characters", characters);
         Script.setProperty("game", this);
+        Script.setProperty("gameDir", new File(gamePath).getParent());
         Script.initFunctions();
         Script.run(initScript, null);
     }

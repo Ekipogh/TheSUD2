@@ -23,7 +23,6 @@ public class Script {
     public static void init() {
         context = Context.enter();
         scope = context.initStandardObjects();
-//        context.evaluateString(scope, "importPackage(\"ru.ekipogh.sud\")", "<cmd>", 1, null);
     }
 
     public static void initFunctions() {
@@ -35,9 +34,10 @@ public class Script {
         }
     }
 
-    public static void run(String script, Object caller) {
+    public static Object run(String script, Object caller) {
         setProperty("caller", caller);
         if (!script.isEmpty())
-            context.evaluateString(scope, script, "<cmd>", 1, null);
+            return context.evaluateString(scope, script, "<cmd>", 1, null);
+        return null;
     }
 }

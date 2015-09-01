@@ -32,6 +32,12 @@ function addItemToLocation(itemId, locationId){
     }
 }
 
+function magic(){
+    var re = /<\s*img\s+src\s*=\s*\"(.*)\">/g;
+    var subst = '$1';
+    return caller.replace(re, "<img src = \"file:/"+gameDir+"\\"+subst+"\">");
+}
+
 function spawnCharacter(charId){
     if(!isNaN(charId)){
         var char = getCharacterById(charId);

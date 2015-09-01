@@ -308,6 +308,7 @@ public class EditorFrame extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         JMenu menuFile = new JMenu("Файл");
         JMenuItem newGameMenu = new JMenuItem("Новая");
+        newGameMenu.setMnemonic('N');
         openGameMenu = new JMenuItem("Открыть");
         saveGameMenu = new JMenuItem("Сохранить");
         JMenuItem startGameMenu = new JMenuItem("Запустить игру");
@@ -957,7 +958,6 @@ public class EditorFrame extends JFrame {
     }
 
     private void startGame() {
-        this.dispose();
         new PlayerFrame(gamePath);
     }
 
@@ -1301,48 +1301,51 @@ public class EditorFrame extends JFrame {
 
 
     private void saveGame() {
-        JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
-        FileFilter ff = new FileNameExtensionFilter("TheSUD game", "sud");
-        fc.setFileFilter(ff);
-        int response = fc.showSaveDialog(saveGameMenu);
-        if (response == JFileChooser.APPROVE_OPTION) {
-            if (player.getLocation() != null) {
+        if (gamePath.isEmpty()) {
+            JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
+            FileFilter ff = new FileNameExtensionFilter("TheSUD game", "sud");
+            fc.setFileFilter(ff);
+            int response = fc.showSaveDialog(saveGameMenu);
+            if (response == JFileChooser.APPROVE_OPTION)
                 gamePath = fc.getSelectedFile().getPath();
-                System.out.println("Saving to " + gamePath);
-                SaveFile saveFile = new SaveFile();
-                saveFile.setPlayer(player);
-                saveFile.setSequencerID(Sequencer.getCurrentId());
-                ArrayList<Location> locations = new ArrayList<>();
-                for (int i = 0; i < locationsListModel.size(); i++) {
-                    locations.add(locationsListModel.getElementAt(i));
-                }
-                ArrayList<GameCharacter> characters = new ArrayList<>();
-                for (int i = 0; i < charactersListModel.size(); i++) {
-                    characters.add(charactersListModel.getElementAt(i));
-                }
-                saveFile.setCharacters(characters);
-                saveFile.setLocations(locations);
-                saveFile.setGameName(gameName.getText());
-                saveFile.setGameStartMessage(gameStartMessage.getText());
-                ArrayList<Item> items = new ArrayList<>();
-                for (int i = 0; i < itemsListModel.getSize(); i++)
-                    items.add(itemsListModel.getElementAt(i));
-                saveFile.setItems(items);
-                Map<String, String> slotsNames = new HashMap<>();
-                for (int i = 0; i < equipTableModel.getRowCount(); i++) { //TODO: сохраняется в одну сторону, открывается в другую (пока не критично)
-                    String slotName = String.valueOf(equipTableModel.getValueAt(i, 2));
-                    String slotImagePath = String.valueOf(equipTableModel.getValueAt(i, 0));
-                    slotsNames.put(slotName, slotImagePath);
-                }
-                saveFile.setCharacterCategories(GameCharacter.getCategories());
-                saveFile.setItemCategories(Item.getCategories());
-                saveFile.setLocationCategories(Location.getCategories());
-                saveFile.setSlotNames(slotsNames);
-                saveFile.setInitScript(initScriptText.getText());
-                saveFile.save(gamePath);
-            } else
-                JOptionPane.showMessageDialog(this, "Выберите стартовую локацию игрока!");
+            else
+                return;
         }
+        if (player.getLocation() != null) {
+            System.out.println("Saving to " + gamePath);
+            SaveFile saveFile = new SaveFile();
+            saveFile.setPlayer(player);
+            saveFile.setSequencerID(Sequencer.getCurrentId());
+            ArrayList<Location> locations = new ArrayList<>();
+            for (int i = 0; i < locationsListModel.size(); i++) {
+                locations.add(locationsListModel.getElementAt(i));
+            }
+            ArrayList<GameCharacter> characters = new ArrayList<>();
+            for (int i = 0; i < charactersListModel.size(); i++) {
+                characters.add(charactersListModel.getElementAt(i));
+            }
+            saveFile.setCharacters(characters);
+            saveFile.setLocations(locations);
+            saveFile.setGameName(gameName.getText());
+            saveFile.setGameStartMessage(gameStartMessage.getText());
+            ArrayList<Item> items = new ArrayList<>();
+            for (int i = 0; i < itemsListModel.getSize(); i++)
+                items.add(itemsListModel.getElementAt(i));
+            saveFile.setItems(items);
+            Map<String, String> slotsNames = new HashMap<>();
+            for (int i = 0; i < equipTableModel.getRowCount(); i++) { //TODO: сохраняется в одну сторону, открывается в другую (пока не критично)
+                String slotName = String.valueOf(equipTableModel.getValueAt(i, 2));
+                String slotImagePath = String.valueOf(equipTableModel.getValueAt(i, 0));
+                slotsNames.put(slotName, slotImagePath);
+            }
+            saveFile.setCharacterCategories(GameCharacter.getCategories());
+            saveFile.setItemCategories(Item.getCategories());
+            saveFile.setLocationCategories(Location.getCategories());
+            saveFile.setSlotNames(slotsNames);
+            saveFile.setInitScript(initScriptText.getText());
+            saveFile.save(gamePath);
+        } else
+            JOptionPane.showMessageDialog(this, "Выберите стартовую локацию игрока!");
     }
 
     private void savePlayer() {

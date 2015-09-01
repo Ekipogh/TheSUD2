@@ -17,6 +17,7 @@ public class SaveFile implements Serializable {
     private List<GameCharacter> characters;
     private int sequencerID;
     private String initScript;
+    private String path;
 
     public String getInitScript() {
         return initScript;
@@ -87,6 +88,7 @@ public class SaveFile implements Serializable {
     }
 
     public void save(String path) {
+        this.path = path;
         try {
             FileOutputStream fos = new FileOutputStream(path);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -140,5 +142,9 @@ public class SaveFile implements Serializable {
 
     public void setCharacters(List<GameCharacter> characters) {
         this.characters = characters;
+    }
+
+    public String getPath() {
+        return path;
     }
 }
