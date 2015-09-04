@@ -145,6 +145,7 @@ public class EditorFrame extends JFrame {
     private JTextField charCategoryNameField;
     private RSyntaxTextArea initScriptText;
     private JTextField charIdField;
+    private JTextArea playerDescriptionArea;
     private RSyntaxTextArea userScriptText;
 
     private GameCharacter player;
@@ -591,6 +592,7 @@ public class EditorFrame extends JFrame {
         itemCategoryComboModel.removeAllElements();
         charCategoryComboModel.removeAllElements();
         initScriptText.setText("");
+        playerDescriptionArea.setText("");
     }
 
     private void saveCharCategoryScript() {
@@ -1314,6 +1316,7 @@ public class EditorFrame extends JFrame {
         }
         playerLocation.setSelectedItem(player.getLocation());
         player.getInventory().forEach(playerItemsListModel::addElement);
+        playerDescriptionArea.setText(player.getDescription());
     }
 
 
@@ -1379,6 +1382,7 @@ public class EditorFrame extends JFrame {
             player.setSex(0);
         Location pLocation = (Location) playerLocation.getSelectedItem();
         player.setLocation(pLocation);
+        player.setDescription(playerDescriptionArea.getText());
     }
 
     private void deleteSelectedLocation() {

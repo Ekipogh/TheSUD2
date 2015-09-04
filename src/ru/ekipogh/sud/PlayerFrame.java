@@ -8,6 +8,8 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by dedov_d on 27.04.2015.
@@ -34,6 +36,7 @@ public class PlayerFrame extends JFrame {
     private JLabel locationPic;
     private JPanel locationPicPanel;
     private JTextField jsInputField;
+    private JTextArea playerDescriptionArea;
     private DefaultListModel<Item> itemsListModel;
     private DefaultListModel<GameCharacter> charactersListModel;
     private JPopupMenu popupMenu;
@@ -355,6 +358,7 @@ public class PlayerFrame extends JFrame {
 
         //Дизаблим не используемые кнопки передвижения
         directionButtonsEnable();
+        playerDescriptionArea.setText(parse(player.getDescription()));
     }
 
     public void updateCharacters() {
@@ -366,6 +370,16 @@ public class PlayerFrame extends JFrame {
     public void updateItems() {
         itemsListModel.clear();
         currentLocation.getInventory().forEach(itemsListModel::addElement);
+    }
+
+    private String parse(String text) {
+        String results = "";
+        Matcher m = Pattern.compile("\\<\\<(.*?)\\>\\>").matcher(text);
+        if (m.find()) {
+            results = m.replaceAll(String.valueOf(Script.run(m.group(1), null)));
+        }
+        //results = text.replaceAll("\\<\\<(.*?)\\>\\>", "$1" + "f");
+        return results;
     }
 
     //Дизаблим кнопки передвижения соответствующие null выходам и выходам, у которых заблокирован доступ

@@ -21,6 +21,12 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
     private Map<String, String> scripts;
     private CharacterCategory category;
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    private String description;
+
     public static void setCategories(List<CharacterCategory> categories) {
         GameCharacter.categories = categories;
     }
@@ -161,5 +167,9 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
 
     public int getId() {
         return id;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }
