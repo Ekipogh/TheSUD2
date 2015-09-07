@@ -131,6 +131,7 @@ public class PlayerFrame extends JFrame {
                 JMenuItem menuItem;
                 GameCharacter character = charactersListModel.getElementAt(row);
                 popupMenu.removeAll();
+
                 for (String scriptName : character.getScripts().keySet()) {
                     if (!scriptName.startsWith("_on")) {
                         menuItem = new JMenuItem(scriptName);
@@ -147,9 +148,16 @@ public class PlayerFrame extends JFrame {
                         }
                     }
                 }
+                menuItem = new JMenuItem("Описание");
+                menuItem.addActionListener(ev -> showCharDescription(character));
+                popupMenu.add(menuItem);
                 popupMenu.show(charactersList, e.getX(), e.getY());
             }
         }
+    }
+
+    private void showCharDescription(GameCharacter character) {
+        output.println(parseDescription(character.getDescription(), character));
     }
 
     private void showLocationPopup(MouseEvent event) {
@@ -163,8 +171,15 @@ public class PlayerFrame extends JFrame {
                     popupMenu.add(menuItem);
                 }
             }
+            menuItem = new JMenuItem("Описание");
+            menuItem.addActionListener(e -> showLocationDescription());
+            popupMenu.add(menuItem);
             popupMenu.show(locationPic, event.getX(), event.getY());
         }
+    }
+
+    private void showLocationDescription() {
+        output.println(parseDescription(currentLocation.getDescription(), currentLocation));
     }
 
     private void showInventoryScreen() {
@@ -213,8 +228,16 @@ public class PlayerFrame extends JFrame {
                     }
                 });
             }
+
+            menuItem = new JMenuItem("Описание");
+            menuItem.addActionListener(ev -> showItemDescription(selected));
+            popupMenu.add(menuItem);
             popupMenu.show(itemsList, e.getX(), e.getY());
         }
+    }
+
+    private void showItemDescription(Item item) {
+        output.println(parseDescription(item.getDescription(), item));
     }
 
     private void useItem(Item item) {
@@ -333,6 +356,7 @@ public class PlayerFrame extends JFrame {
         Script.setProperty("player", player);
         Script.setProperty("locations", locations);
         Script.setProperty("characters", characters);
+        Script.setProperty("currentLocation", currentLocation);
         Script.setProperty("game", this);
         Script.setProperty("gameDir", new File(gamePath).getParent());
         Script.initFunctions();
@@ -343,7 +367,7 @@ public class PlayerFrame extends JFrame {
     private void proceed() {
         output.println("<b>" + currentLocation.getName() + "</b>");
         if (!currentLocation.getDescription().isEmpty())
-            output.println(currentLocation.getDescription());
+            output.println(parseDescription(currentLocation.getDescription(), currentLocation));
 
         //изменяем рисунок локации
         if (currentLocation.getPicturePath() == null || currentLocation.getPicturePath().isEmpty())
@@ -358,7 +382,7 @@ public class PlayerFrame extends JFrame {
 
         //Дизаблим не используемые кнопки передвижения
         directionButtonsEnable();
-        playerDescriptionArea.setText(parse(player.getDescription()));
+        playerDescriptionArea.setText(parseDescription(player.getDescription(), player));
     }
 
     public void updateCharacters() {
@@ -372,11 +396,11 @@ public class PlayerFrame extends JFrame {
         currentLocation.getInventory().forEach(itemsListModel::addElement);
     }
 
-    private String parse(String text) {
+    private String parseDescription(String description, Object object) {
         String results = "";
-        Matcher m = Pattern.compile("\\<\\<(.*?)\\>\\>").matcher(text);
+        Matcher m = Pattern.compile("\\<\\<(.*?)\\>\\>").matcher(description);
         if (m.find()) {
-            results = m.replaceAll(String.valueOf(Script.run(m.group(1), null)));
+            results = m.replaceAll(String.valueOf(Script.run(m.group(1), object)));
         }
         //results = text.replaceAll("\\<\\<(.*?)\\>\\>", "$1" + "f");
         return results;
