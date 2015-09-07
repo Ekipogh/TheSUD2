@@ -49,10 +49,7 @@ public class EditorFrame extends JFrame {
     private JButton deleteLocButton;
     private JButton saveLocButton;
     private JTextField playerName;
-    private JRadioButton female;
-    private JRadioButton male;
     private JComboBox<Location> playerLocation;
-    private JRadioButton sexless;
     private JButton savePlayer;
     private JTextField gameName;
     private JTextArea gameStartMessage;
@@ -86,9 +83,6 @@ public class EditorFrame extends JFrame {
     private JTextField itemIdField;
     private JList<GameCharacter> charactersList;
     private JTextField charNameFiled;
-    private JRadioButton femCharButton;
-    private JRadioButton maleCharButton;
-    private JRadioButton sexlessCharButton;
     private JComboBox<Location> charLocCombo;
     private JButton charSaveButton;
     private JButton addCharButton;
@@ -146,6 +140,7 @@ public class EditorFrame extends JFrame {
     private RSyntaxTextArea initScriptText;
     private JTextField charIdField;
     private JTextArea playerDescriptionArea;
+    private JTextArea charDescriptionArea;
     private RSyntaxTextArea userScriptText;
 
     private GameCharacter player;
@@ -1044,13 +1039,8 @@ public class EditorFrame extends JFrame {
         int index = charactersList.getSelectedIndex();
         GameCharacter selected = charactersListModel.getElementAt(index);
         selected.setName(charNameFiled.getText());
-        if (femCharButton.isSelected())
-            selected.setSex(1);
-        if (maleCharButton.isSelected())
-            selected.setSex(2);
-        if (sexlessCharButton.isSelected())
-            selected.setSex(0);
         selected.setLocation((Location) charLocationModel.getSelectedItem());
+        selected.setDescription(charDescriptionArea.getText());
     }
 
     private void selectChar() {
@@ -1058,35 +1048,23 @@ public class EditorFrame extends JFrame {
         if (index != -1) {
             GameCharacter selected = charactersListModel.getElementAt(index);
             charNameFiled.setText(selected.getName());
-            switch (selected.getSex()) {
-                case 0:
-                    sexlessCharButton.setSelected(true);
-                    break;
-                case 1:
-                    femCharButton.setSelected(true);
-                    break;
-                case 2:
-                    maleCharButton.setSelected(true);
-                    break;
-            }
             charIdField.setText(String.valueOf(selected.getId()));
             charLocationModel.setSelectedItem(selected.getLocation());
             charScriptListModel.removeAllElements();
             selected.getScripts().keySet().forEach(charScriptListModel::addElement);
+            charDescriptionArea.setText(selected.getDescription());
         }
     }
 
     private void setCharsFromItemsEnabled() {
         boolean enabled = charactersList.getSelectedIndex() >= 0;
         charNameFiled.setEnabled(enabled);
-        femCharButton.setEnabled(enabled);
-        maleCharButton.setEnabled(enabled);
-        sexlessCharButton.setEnabled(enabled);
         charTabItemsList.setEnabled(enabled);
         charItemsList.setEnabled(enabled);
         charLocCombo.setEnabled(enabled);
         charSaveButton.setEnabled(enabled);
         addCharButton.setEnabled(enabled);
+        charDescriptionArea.setEnabled(enabled);
     }
 
     private void addScriptToLocation() {
@@ -1212,6 +1190,7 @@ public class EditorFrame extends JFrame {
             itemScriptListModel.clear();
             itemCategoryCombo.setSelectedItem(selected.getCategory());
             selected.getScripts().keySet().forEach(itemScriptListModel::addElement);
+            itemDescription.setText(selected.getDescription());
         }
     }
 
@@ -1303,17 +1282,6 @@ public class EditorFrame extends JFrame {
 
     private void updatePlayerTab() {
         playerName.setText(player.getName());
-        switch (player.getSex()) {
-            case 0:
-                sexless.setSelected(true);
-                break;
-            case 1:
-                female.setSelected(true);
-                break;
-            case 2:
-                male.setSelected(true);
-                break;
-        }
         playerLocation.setSelectedItem(player.getLocation());
         player.getInventory().forEach(playerItemsListModel::addElement);
         playerDescriptionArea.setText(player.getDescription());
@@ -1374,12 +1342,6 @@ public class EditorFrame extends JFrame {
 
     private void savePlayer() {
         player.setName(playerName.getText());
-        if (female.isSelected())
-            player.setSex(1);
-        if (male.isSelected())
-            player.setSex(2);
-        if (sexless.isSelected())
-            player.setSex(0);
         Location pLocation = (Location) playerLocation.getSelectedItem();
         player.setLocation(pLocation);
         player.setDescription(playerDescriptionArea.getText());

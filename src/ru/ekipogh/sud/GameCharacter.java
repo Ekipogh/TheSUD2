@@ -11,7 +11,6 @@ import java.util.Map;
  */
 public class GameCharacter implements Serializable { //TODO: Нужни ли различные классы для игрока и неписей?
     private String name;
-    private short sex;
     private Location location;
     private List<Item> inventory;
     private static List<CharacterCategory> categories = new ArrayList<>();
@@ -47,7 +46,6 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
 
     public GameCharacter(String name) {
         this.name = name;
-        this.sex = 0;
         this.inventory = new ArrayList<>();
         this.equipment = new Equipment();
         this.scripts = new HashMap<>();
@@ -69,15 +67,6 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
         return location;
     }
 
-    private void setSex(short sex) {
-        if (sex >= 0 && sex <= 2)
-            this.sex = sex;
-    }
-
-    public void setSex(int sex) {
-        setSex((short) (sex));
-    }
-
     public String getName() {
         return name;
     }
@@ -86,10 +75,6 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
         if (name.length() < 21)
             this.name = name;
 
-    }
-
-    public short getSex() {
-        return sex;
     }
 
     public void addToInventory(Item item) {
