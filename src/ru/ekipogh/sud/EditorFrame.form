@@ -897,17 +897,22 @@
                           <text value="Описание"/>
                         </properties>
                       </component>
-                      <component id="50d4f" class="javax.swing.JTextArea" binding="charDescriptionArea">
+                      <scrollpane id="59e3a">
                         <constraints>
-                          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                            <preferred-size width="150" height="50"/>
-                          </grid>
+                          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
-                        <properties>
-                          <enabled value="false"/>
-                          <text value=""/>
-                        </properties>
-                      </component>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="50d4f" class="javax.swing.JTextArea" binding="charDescriptionArea">
+                            <constraints/>
+                            <properties>
+                              <enabled value="false"/>
+                              <text value=""/>
+                            </properties>
+                          </component>
+                        </children>
+                      </scrollpane>
                     </children>
                   </grid>
                   <grid id="828ac" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

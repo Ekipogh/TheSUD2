@@ -530,7 +530,7 @@ public class EditorFrame extends JFrame {
         });
 
         if (!gamePath.isEmpty())
-            openGame();
+            loadGame();
     }
 
     private void saveAs() {
@@ -1225,59 +1225,63 @@ public class EditorFrame extends JFrame {
         if (response == JFileChooser.APPROVE_OPTION) {
             gamePath = fc.getSelectedFile().getPath();
 
-            System.out.println("Opening file " + gamePath);
-            SaveFile saveFile = SaveFile.open(gamePath);
-            player = saveFile.getPlayer();
-
-            Sequencer.setID(saveFile.getSequencerID());
-
-            locationsListModel.clear();
-            for (Location l : saveFile.getLocations()) {
-                playerLocationModel.addElement(l);
-                locationsListModel.addElement(l);
-                northModel.addElement(l);
-                southModel.addElement(l);
-                eastModel.addElement(l);
-                westModel.addElement(l);
-                charLocationModel.addElement(l);
-            }
-
-            itemsListModel.clear();
-            saveFile.getItems().forEach(itemsListModel::addElement);
-
-            charactersListModel.clear();
-            saveFile.getCharacters().forEach(charactersListModel::addElement);
-
-            Map<String, String> slotNames = saveFile.getSlotNames();
-            Equipment.setSlotNames(slotNames);
-            equipTableModel.setRowCount(0);
-            slotNamesModel.removeAllElements();
-            for (Map.Entry<String, String> slotsEntry : slotNames.entrySet()) {
-                equipTableModel.addRow(new Object[]{slotsEntry.getValue(), new ImageIcon(slotsEntry.getValue()), slotsEntry.getKey()});
-                slotNamesModel.addElement(slotsEntry.getKey());
-            }
-            Utils.updateRowHeights(equipTable);
-
-            saveFile.getCharacterCategories().forEach(charCategoriesListModel::addElement);
-            saveFile.getCharacterCategories().forEach(GameCharacter::addNewCategory);
-            saveFile.getCharacterCategories().forEach(charCategoryComboModel::addElement);
-            saveFile.getItemCategories().forEach(itemCotegoriesListModel::addElement);
-            saveFile.getItemCategories().forEach(Item::addNewCategory);
-            saveFile.getItemCategories().forEach(itemCategoryComboModel::addElement);
-            saveFile.getLocationCategories().forEach(locationCategoriesListModel::addElement);
-            saveFile.getLocationCategories().forEach(Location::addNewCategory);
-            saveFile.getLocationCategories().forEach(locationCategoryComboModel::addElement);
-
-            gameName.setText(saveFile.getGameName());
-            gameStartMessage.setText(saveFile.getGameStartMessage());
-
-            initScriptText.setText(saveFile.getInitScript());
-
-            Location.setCategories(saveFile.getLocationCategories());
-            Item.setCategories(saveFile.getItemCategories());
-            GameCharacter.setCategories(saveFile.getCharacterCategories());
-            updatePlayerTab();
+            loadGame();
         }
+    }
+
+    private void loadGame() {
+        System.out.println("Opening file " + gamePath);
+        SaveFile saveFile = SaveFile.open(gamePath);
+        player = saveFile.getPlayer();
+
+        Sequencer.setID(saveFile.getSequencerID());
+
+        locationsListModel.clear();
+        for (Location l : saveFile.getLocations()) {
+            playerLocationModel.addElement(l);
+            locationsListModel.addElement(l);
+            northModel.addElement(l);
+            southModel.addElement(l);
+            eastModel.addElement(l);
+            westModel.addElement(l);
+            charLocationModel.addElement(l);
+        }
+
+        itemsListModel.clear();
+        saveFile.getItems().forEach(itemsListModel::addElement);
+
+        charactersListModel.clear();
+        saveFile.getCharacters().forEach(charactersListModel::addElement);
+
+        Map<String, String> slotNames = saveFile.getSlotNames();
+        Equipment.setSlotNames(slotNames);
+        equipTableModel.setRowCount(0);
+        slotNamesModel.removeAllElements();
+        for (Map.Entry<String, String> slotsEntry : slotNames.entrySet()) {
+            equipTableModel.addRow(new Object[]{slotsEntry.getValue(), new ImageIcon(slotsEntry.getValue()), slotsEntry.getKey()});
+            slotNamesModel.addElement(slotsEntry.getKey());
+        }
+        Utils.updateRowHeights(equipTable);
+
+        saveFile.getCharacterCategories().forEach(charCategoriesListModel::addElement);
+        saveFile.getCharacterCategories().forEach(GameCharacter::addNewCategory);
+        saveFile.getCharacterCategories().forEach(charCategoryComboModel::addElement);
+        saveFile.getItemCategories().forEach(itemCotegoriesListModel::addElement);
+        saveFile.getItemCategories().forEach(Item::addNewCategory);
+        saveFile.getItemCategories().forEach(itemCategoryComboModel::addElement);
+        saveFile.getLocationCategories().forEach(locationCategoriesListModel::addElement);
+        saveFile.getLocationCategories().forEach(Location::addNewCategory);
+        saveFile.getLocationCategories().forEach(locationCategoryComboModel::addElement);
+
+        gameName.setText(saveFile.getGameName());
+        gameStartMessage.setText(saveFile.getGameStartMessage());
+
+        initScriptText.setText(saveFile.getInitScript());
+
+        Location.setCategories(saveFile.getLocationCategories());
+        Item.setCategories(saveFile.getItemCategories());
+        GameCharacter.setCategories(saveFile.getCharacterCategories());
+        updatePlayerTab();
     }
 
     private void updatePlayerTab() {
