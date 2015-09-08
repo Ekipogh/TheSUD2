@@ -74,11 +74,9 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="c43bb" class="javax.swing.JList" binding="itemsList">
+                          <component id="7594c" class="javax.swing.JTree" binding="itemsTree">
                             <constraints/>
-                            <properties>
-                              <selectionMode value="0"/>
-                            </properties>
+                            <properties/>
                           </component>
                         </children>
                       </scrollpane>
@@ -89,11 +87,9 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="72d2c" class="javax.swing.JList" binding="charactersList">
+                          <component id="fc633" class="javax.swing.JTree" binding="charactersTree">
                             <constraints/>
-                            <properties>
-                              <selectionMode value="0"/>
-                            </properties>
+                            <properties/>
                           </component>
                         </children>
                       </scrollpane>

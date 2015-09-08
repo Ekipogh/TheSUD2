@@ -7,6 +7,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -141,7 +143,12 @@ public class EditorFrame extends JFrame {
     private JTextField charIdField;
     private JTextArea playerDescriptionArea;
     private JTextArea charDescriptionArea;
+    private JTree tree1;
+    private JButton addButton;
+    private JButton delButton;
     private RSyntaxTextArea userScriptText;
+    private DefaultTreeModel treeModel;
+    private DefaultMutableTreeNode top;
 
     private GameCharacter player;
     private String gamePath;
@@ -531,6 +538,19 @@ public class EditorFrame extends JFrame {
 
         if (!gamePath.isEmpty())
             loadGame();
+
+        //test area
+        top = new DefaultMutableTreeNode("Test");
+        treeModel = new DefaultTreeModel(top);
+        tree1.setModel(treeModel);
+        top.add(new DefaultMutableTreeNode("Sup!"));
+        addButton.addActionListener(e -> {
+            treeModel.insertNodeInto(new DefaultMutableTreeNode("Sup1"), top, top.getChildCount());
+        });
+        delButton.addActionListener(e -> {
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree1.getSelectionPath().getLastPathComponent();
+            treeModel.removeNodeFromParent(node);
+        });
     }
 
     private void saveAs() {
@@ -1041,6 +1061,7 @@ public class EditorFrame extends JFrame {
         selected.setName(charNameFiled.getText());
         selected.setLocation((Location) charLocationModel.getSelectedItem());
         selected.setDescription(charDescriptionArea.getText());
+        selected.setCategory((CharacterCategory) charCategoryComboModel.getSelectedItem());
     }
 
     private void selectChar() {
@@ -1053,6 +1074,7 @@ public class EditorFrame extends JFrame {
             charScriptListModel.removeAllElements();
             selected.getScripts().keySet().forEach(charScriptListModel::addElement);
             charDescriptionArea.setText(selected.getDescription());
+            charCategoryCombo.setSelectedItem(selected.getCategory());
         }
     }
 

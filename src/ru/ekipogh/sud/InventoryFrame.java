@@ -82,8 +82,10 @@ class InventoryFrame extends JFrame {
 
                 JTable table = (JTable) e.getSource();
                 int r = table.rowAtPoint(e.getPoint());
-                if (r >= 0 && r < table.getRowCount()) {
+                int c = table.columnAtPoint(e.getPoint());
+                if (r >= 0 && r < table.getRowCount() && c >= 0 && c < table.getColumnCount()) {
                     table.setRowSelectionInterval(r, r);
+                    table.setColumnSelectionInterval(c, c);
                 } else {
                     table.clearSelection();
                 }

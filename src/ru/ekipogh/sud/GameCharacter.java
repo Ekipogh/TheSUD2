@@ -157,4 +157,8 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
     public String getDescription() {
         return description;
     }
+
+    public void setCategory(CharacterCategory category) {
+        this.category = category;
+    }
 }
