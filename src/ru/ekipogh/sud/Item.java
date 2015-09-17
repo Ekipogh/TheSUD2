@@ -15,21 +15,21 @@ public class Item implements Serializable {
     private String name;
     private String description;
     private String equipmentSlot;
-    private Map<String, String> scripts;
     private static List<ItemCategory> categories = new ArrayList<>();
     private ItemCategory category;
     private Map<String, Object> values;
+    private Map<String, Script> newScripts;
 
     public Item(String name) {
         this.name = name;
         this.type = ItemTypes.GENERIC;
         this.id = Sequencer.getNewID();
-        this.scripts = new HashMap<>();
-        this.scripts.put("_onTake", "");
-        this.scripts.put("_onDrop", "");
-        this.scripts.put("_onEquip", "");
-        this.scripts.put("_onUse", "");
-        this.scripts.put("_onUnequip", "");
+        this.newScripts = new HashMap<>();
+        this.newScripts.put("_onTake", new Script("", true));
+        this.newScripts.put("_onDrop", new Script("", true));
+        this.newScripts.put("_onEquip", new Script("", true));
+        this.newScripts.put("_onUse", new Script("", true));
+        this.newScripts.put("_onUnequip", new Script("", true));
         this.values = new HashMap<>();
     }
 
@@ -78,26 +78,6 @@ public class Item implements Serializable {
         Equipment.getSlotNames().stream().filter(s -> s.equals(equipmentSlot)).forEach(s -> this.equipmentSlot = equipmentSlot);
     }
 
-    public Map<String, String> getScripts() {
-        return scripts;
-    }
-
-    public void setScript(String scriptName, String scriptText) {
-        scripts.put(scriptName, scriptText);
-    }
-
-    public String getScript(String scriptName) {
-        return scripts.get(scriptName);
-    }
-
-    public void removeScript(String scriptName) {
-        scripts.remove(scriptName);
-    }
-
-    public void addScript(String scriptName, String scriptText) {
-        scripts.put(scriptName, scriptText);
-    }
-
     public int getId() {
         return id;
     }
@@ -136,5 +116,21 @@ public class Item implements Serializable {
 
     public static void clearCategories() {
         categories = new ArrayList<>();
+    }
+
+    public Map<String, Script> getNewScripts() {
+        return newScripts;
+    }
+
+    public Script getNewScript(String scriptName) {
+        return newScripts.get(scriptName);
+    }
+
+    public void setNewScript(String scriptName, Script script) {
+        newScripts.put(scriptName, script);
+    }
+
+    public void removeNewScript(String scriptName) {
+        this.newScripts.remove(scriptName);
     }
 }

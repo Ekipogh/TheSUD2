@@ -17,7 +17,7 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
     private Map<String, Object> values;
     private int id;
 
-    private Map<String, String> scripts;
+    private Map<String, Script> newScripts;
     private CharacterCategory category;
 
     public void setDescription(String description) {
@@ -48,9 +48,9 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
         this.name = name;
         this.inventory = new ArrayList<>();
         this.equipment = new Equipment();
-        this.scripts = new HashMap<>();
-        this.scripts.put("_onPlayerArrive", "");
-        this.scripts.put("_onPlayerLeave", "");
+        this.newScripts = new HashMap<>();
+        this.newScripts.put("_onPlayerArrive", new Script("", true));
+        this.newScripts.put("_onPlayerLeave", new Script("", true));
         this.values = new HashMap<>();
         this.id = Sequencer.getNewID();
     }
@@ -92,26 +92,6 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
     public void unequip(Item item) {
         inventory.add(item);
         equipment.uneqip(item);
-    }
-
-    public Map<String, String> getScripts() {
-        return scripts;
-    }
-
-    public void setScript(String scriptName, String scriptText) {
-        scripts.put(scriptName, scriptText);
-    }
-
-    public String getScript(String scriptName) {
-        return scripts.get(scriptName);
-    }
-
-    public void removeScript(String scriptName) {
-        scripts.remove(scriptName);
-    }
-
-    public void addScript(String scriptName, String scriptText) {
-        scripts.put(scriptName, scriptText);
     }
 
     public String toString() {
@@ -160,5 +140,21 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
 
     public void setCategory(CharacterCategory category) {
         this.category = category;
+    }
+
+    public Map<String, Script> getNewScripts() {
+        return newScripts;
+    }
+
+    public Script getNewScript(String scriptName) {
+        return newScripts.get(scriptName);
+    }
+
+    public void setNewScript(String scriptName, Script script) {
+        newScripts.put(scriptName, script);
+    }
+
+    public void removeNewScript(String scriptName) {
+        this.newScripts.remove(scriptName);
     }
 }

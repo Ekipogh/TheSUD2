@@ -7,8 +7,6 @@ import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -143,15 +141,17 @@ public class EditorFrame extends JFrame {
     private JTextField charIdField;
     private JTextArea playerDescriptionArea;
     private JTextArea charDescriptionArea;
-    private JTree tree1;
-    private JButton addButton;
-    private JButton delButton;
-    private RSyntaxTextArea userScriptText;
-    private DefaultTreeModel treeModel;
-    private DefaultMutableTreeNode top;
-
+    private JTable table1;
+    private JCheckBox locationScriptEnabledBox;
+    private JCheckBox itemScriptEnabledBox;
+    private JCheckBox characterScriptEnabledBox;
+    private JCheckBox locationCategoryScriptEnabledBox;
+    private JCheckBox itemCategoryScriptEnabledBox;
+    private JCheckBox characterCategoryScriptEnabledBox;
+    private JTable locationScriptTable;
     private GameCharacter player;
     private String gamePath;
+
 
     public EditorFrame(String gamePath) {
         super("Редактор");
@@ -540,17 +540,9 @@ public class EditorFrame extends JFrame {
             loadGame();
 
         //test area
-        top = new DefaultMutableTreeNode("Test");
-        treeModel = new DefaultTreeModel(top);
-        tree1.setModel(treeModel);
-        top.add(new DefaultMutableTreeNode("Sup!"));
-        addButton.addActionListener(e -> {
-            treeModel.insertNodeInto(new DefaultMutableTreeNode("Sup1"), top, top.getChildCount());
-        });
-        delButton.addActionListener(e -> {
-            DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree1.getSelectionPath().getLastPathComponent();
-            treeModel.removeNodeFromParent(node);
-        });
+        CheckTableModel tableModel = new CheckTableModel();
+        table1.setModel(tableModel);
+        tableModel.addRow(true, "sadjklsjdlk");
     }
 
     private void saveAs() {
@@ -616,7 +608,8 @@ public class EditorFrame extends JFrame {
         if (indexCat >= 0 && indexS >= 0) {
             CharacterCategory characterCategory = charCategoriesListModel.elementAt(indexCat);
             String scriptName = charCategoryScriptsListModel.elementAt(indexS);
-            characterCategory.setScript(scriptName, charCategoryScriptText.getText());
+            //characterCategory.setScript(scriptName, charCategoryScriptText.getText());
+            characterCategory.setNewScript(scriptName, new Script(charCategoryScriptText.getText(), characterCategoryScriptEnabledBox.isSelected()));
         }
     }
 
@@ -642,7 +635,10 @@ public class EditorFrame extends JFrame {
         if (indexCat >= 0 && indexS >= 0) {
             CharacterCategory characterCategory = charCategoriesListModel.elementAt(indexCat);
             String scriptName = charCategoryScriptsListModel.elementAt(indexS);
-            charCategoryScriptText.setText(characterCategory.getScript(scriptName));
+            //charCategoryScriptText.setText(characterCategory.getScript(scriptName));
+            Script script = characterCategory.getNewScript(scriptName);
+            charCategoryScriptText.setText(script.getText());
+            characterCategoryScriptEnabledBox.setSelected(script.isEnabled());
         }
     }
 
@@ -652,8 +648,10 @@ public class EditorFrame extends JFrame {
         if (indexCat >= 0 && indexS >= 0) {
             CharacterCategory characterCategory = charCategoriesListModel.elementAt(indexCat);
             String scriptName = charCategoryScriptsListModel.elementAt(indexS);
-            characterCategory.deleteScript(scriptName);
-            charCategoryScriptsListModel.removeElement(scriptName);
+            if (!scriptName.startsWith("_on")) {
+                characterCategory.removeNewScript(scriptName);
+                charCategoryScriptsListModel.removeElement(scriptName);
+            }
         }
     }
 
@@ -663,7 +661,8 @@ public class EditorFrame extends JFrame {
             CharacterCategory characterCategory = charCategoriesListModel.elementAt(index);
             String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
             if (scriptName != null) {
-                characterCategory.addScript(scriptName, "");
+                Script script = new Script("", true);
+                characterCategory.setNewScript(scriptName, script);
                 charCategoryScriptsListModel.addElement(scriptName);
             }
         }
@@ -698,7 +697,8 @@ public class EditorFrame extends JFrame {
             CharacterCategory characterCategory = charCategoriesListModel.elementAt(indexCat);
             charCategoryNameField.setText(characterCategory.getName());
             charCategoryScriptsListModel.clear();
-            characterCategory.getScripts().keySet().forEach(charCategoryScriptsListModel::addElement);
+            //characterCategory.getScripts().keySet().forEach(charCategoryScriptsListModel::addElement);
+            characterCategory.getNewScripts().keySet().forEach(charCategoryScriptsListModel::addElement);
         }
     }
 
@@ -708,8 +708,10 @@ public class EditorFrame extends JFrame {
         if (indexCat >= 0 && indexS >= 0) {
             ItemCategory itemCategory = itemCotegoriesListModel.elementAt(indexCat);
             String scriptName = itemCategoryScriptsListModel.elementAt(indexS);
-            itemCategory.deleteScript(scriptName);
-            itemCategoryScriptsListModel.removeElement(scriptName);
+            if (!scriptName.startsWith("_on")) {
+                itemCategory.removeNewScript(scriptName);
+                itemCategoryScriptsListModel.removeElement(scriptName);
+            }
         }
     }
 
@@ -719,7 +721,8 @@ public class EditorFrame extends JFrame {
             ItemCategory itemCategory = itemCotegoriesListModel.elementAt(index);
             String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
             if (scriptName != null) {
-                itemCategory.addScript(scriptName, "");
+                Script script = new Script("", true);
+                itemCategory.setNewScript(scriptName, script);
                 itemCategoryScriptsListModel.addElement(scriptName);
             }
         }
@@ -731,8 +734,10 @@ public class EditorFrame extends JFrame {
         if (indexCat >= 0 && indexS >= 0) {
             LocationCategory locationCategory = locationCategoriesListModel.elementAt(indexCat);
             String scriptName = locationCategoryScriptsListModel.elementAt(indexS);
-            locationCategory.deleteScript(scriptName);
-            locationCategoryScriptsListModel.removeElement(scriptName);
+            if (!scriptName.startsWith("_on")) {
+                locationCategory.removeNewScript(scriptName);
+                locationCategoryScriptsListModel.removeElement(scriptName);
+            }
         }
     }
 
@@ -741,8 +746,11 @@ public class EditorFrame extends JFrame {
         if (index >= 0) {
             LocationCategory locationCategory = locationCategoriesListModel.elementAt(index);
             String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
-            locationCategory.addScript(scriptName, "");
-            locationCategoryScriptsListModel.addElement(scriptName);
+            if (scriptName != null) {
+                Script script = new Script("", true);
+                locationCategory.setNewScript(scriptName, script);
+                locationCategoryScriptsListModel.addElement(scriptName);
+            }
         }
     }
 
@@ -752,7 +760,8 @@ public class EditorFrame extends JFrame {
         if (indexCat >= 0 && indexS >= 0) {
             ItemCategory itemCategory = itemCotegoriesListModel.elementAt(indexCat);
             String scriptName = itemCategoryScriptsListModel.elementAt(indexS);
-            itemCategory.setScript(scriptName, locationCategoryScriptText.getText());
+            //itemCategory.setScript(scriptName, locationCategoryScriptText.getText());
+            itemCategory.setNewScript(scriptName, new Script(itemCategoryScriptText.getText(), itemCategoryScriptEnabledBox.isSelected()));
         }
     }
 
@@ -778,7 +787,10 @@ public class EditorFrame extends JFrame {
         if (indexCat >= 0 && indexS >= 0) {
             ItemCategory itemCategory = itemCotegoriesListModel.elementAt(indexCat);
             String scriptName = itemCategoryScriptsListModel.elementAt(indexS);
-            itemCategoryScriptText.setText(itemCategory.getScript(scriptName));
+            Script script = itemCategory.getNewScript(scriptName);
+            itemCategoryScriptText.setText(script.getText());
+            itemCategoryScriptEnabledBox.setSelected(script.isEnabled());
+            //itemCategoryScriptText.setText(itemCategory.getScript(scriptName));
         }
     }
 
@@ -788,7 +800,8 @@ public class EditorFrame extends JFrame {
             ItemCategory itemCategory = itemCotegoriesListModel.elementAt(indexCat);
             itemCategoryNameField.setText(itemCategory.getName());
             itemCategoryScriptsListModel.clear();
-            itemCategory.getScripts().keySet().forEach(itemCategoryScriptsListModel::addElement);
+            //itemCategory.getScripts().keySet().forEach(itemCategoryScriptsListModel::addElement);
+            itemCategory.getNewScripts().keySet().forEach(itemCategoryScriptsListModel::addElement);
         }
     }
 
@@ -821,7 +834,10 @@ public class EditorFrame extends JFrame {
         if (indexCat >= 0 && indexS >= 0) {
             LocationCategory locationCategory = locationCategoriesListModel.elementAt(indexCat);
             String scriptName = locationCategoryScriptsListModel.elementAt(indexS);
-            locationCategoryScriptText.setText(locationCategory.getScript(scriptName));
+            Script script = locationCategory.getNewScript(scriptName);
+            locationCategoryScriptText.setText(script.getText());
+            locationCategoryScriptEnabledBox.setSelected(script.isEnabled());
+            //locationCategoryScriptText.setText(locationCategory.getScript(scriptName));
         }
     }
 
@@ -831,7 +847,8 @@ public class EditorFrame extends JFrame {
             LocationCategory locationCategory = locationCategoriesListModel.elementAt(indexCat);
             locationCategoryNameFiled.setText(locationCategory.getName());
             locationCategoryScriptsListModel.clear();
-            locationCategory.getScripts().keySet().forEach(locationCategoryScriptsListModel::addElement);
+            //locationCategory.getScripts().keySet().forEach(locationCategoryScriptsListModel::addElement);
+            locationCategory.getNewScripts().keySet().forEach(locationCategoryScriptsListModel::addElement);
         }
     }
 
@@ -841,7 +858,8 @@ public class EditorFrame extends JFrame {
         if (indexCat >= 0 && indexS >= 0) {
             LocationCategory locationCategory = locationCategoriesListModel.elementAt(indexCat);
             String scriptName = locationCategoryScriptsListModel.elementAt(indexS);
-            locationCategory.setScript(scriptName, locationCategoryScriptText.getText());
+            //locationCategory.setScript(scriptName, locationCategoryScriptText.getText());
+            locationCategory.setNewScript(scriptName, new Script(locationCategoryScriptText.getText(), locationCategoryScriptEnabledBox.isSelected()));
         }
     }
 
@@ -951,9 +969,11 @@ public class EditorFrame extends JFrame {
         int indexI = itemsList.getSelectedIndex();
         if (indexS >= 0) {
             String scriptName = itemScriptListModel.getElementAt(indexS);
-            Item item = itemsListModel.getElementAt(indexI);
-            itemScriptListModel.removeElementAt(indexS);
-            item.removeScript(scriptName);
+            if (!scriptName.startsWith("_on")) {
+                Item item = itemsListModel.getElementAt(indexI);
+                itemScriptListModel.removeElementAt(indexS);
+                item.removeNewScript(scriptName);
+            }
         }
     }
 
@@ -963,7 +983,8 @@ public class EditorFrame extends JFrame {
             Item item = itemsListModel.getElementAt(index);
             String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
             if (scriptName != null) {
-                item.addScript(scriptName, "");
+                Script script = new Script("", true);
+                item.setNewScript(scriptName, script);
                 itemScriptListModel.addElement(scriptName);
             }
         }
@@ -975,7 +996,8 @@ public class EditorFrame extends JFrame {
         if (indexI >= 0 && indexS >= 0) {
             String scriptName = itemScriptListModel.getElementAt(indexS); //TODo: BUG:java.lang.ArrayIndexOutOfBoundsException: -1 (посисбле во всех других сэйв функциях?)
             Item item = itemsListModel.getElementAt(indexI);
-            item.setScript(scriptName, itemScriptText.getText());
+            //item.setScript(scriptName, itemScriptText.getText());
+            item.setNewScript(scriptName, new Script(itemScriptText.getText(), itemScriptEnabledBox.isSelected()));
         }
     }
 
@@ -985,7 +1007,10 @@ public class EditorFrame extends JFrame {
         if (indexS >= 0) {
             Item selectedItem = itemsListModel.getElementAt(indexI);
             String selectedScript = itemScriptListModel.getElementAt(indexS);
-            itemScriptText.setText(selectedItem.getScript(selectedScript));
+            //itemScriptText.setText(selectedItem.getScript(selectedScript));
+            Script script = selectedItem.getNewScript(selectedScript);
+            itemScriptText.setText(script.getText());
+            itemScriptEnabledBox.setSelected(script.isEnabled());
         }
     }
 
@@ -1002,18 +1027,21 @@ public class EditorFrame extends JFrame {
         if (indexC >= 0 && indexS >= 0) {
             String scriptName = charScriptListModel.getElementAt(indexS);
             GameCharacter character = charactersListModel.getElementAt(indexC);
-            character.setScript(scriptName, characterScriptText.getText());
+            //character.setScript(scriptName, characterScriptText.getText());
+            character.setNewScript(scriptName, new Script(characterScriptText.getText(), characterScriptEnabledBox.isSelected()));
         }
     }
 
     private void selectCharScript() {
         int index = characterScriptList.getSelectedIndex();
         if (index >= 0) {
-            String script = charScriptListModel.getElementAt(index);
+            String scriptName = charScriptListModel.getElementAt(index);
             int indexC = charactersList.getSelectedIndex();
             GameCharacter character = charactersListModel.elementAt(indexC);
             characterScriptText.setEnabled(true);
-            characterScriptText.setText(character.getScript(script));
+            Script script = character.getNewScript(scriptName);
+            characterScriptText.setText(script.getText());
+            characterScriptEnabledBox.setSelected(script.isEnabled());
         } else
             characterScriptText.setEnabled(false);
     }
@@ -1024,10 +1052,9 @@ public class EditorFrame extends JFrame {
         if (indexS >= 0) {
             String scriptName = charScriptListModel.getElementAt(indexS);
             GameCharacter character = charactersListModel.getElementAt(indexC);
-
-            if (!scriptName.equals("onPlayerArrive") && !scriptName.equals("onPlayerLeave")) {
+            if (!scriptName.startsWith("_on")) {
                 charactersListModel.removeElementAt(indexS);
-                character.removeScript(scriptName);
+                character.removeNewScript(scriptName);
             }
         }
     }
@@ -1038,7 +1065,8 @@ public class EditorFrame extends JFrame {
             GameCharacter character = charactersListModel.getElementAt(index);
             String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
             if (scriptName != null) {
-                character.addScript(scriptName, "");
+                Script script = new Script("", true);
+                character.setNewScript(scriptName, script);
                 charScriptListModel.addElement(scriptName);
             }
         }
@@ -1072,7 +1100,7 @@ public class EditorFrame extends JFrame {
             charIdField.setText(String.valueOf(selected.getId()));
             charLocationModel.setSelectedItem(selected.getLocation());
             charScriptListModel.removeAllElements();
-            selected.getScripts().keySet().forEach(charScriptListModel::addElement);
+            selected.getNewScripts().keySet().forEach(charScriptListModel::addElement);
             charDescriptionArea.setText(selected.getDescription());
             charCategoryCombo.setSelectedItem(selected.getCategory());
         }
@@ -1095,7 +1123,8 @@ public class EditorFrame extends JFrame {
             Location location = locationsListModel.elementAt(index);
             String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
             if (scriptName != null) {
-                location.addScript(scriptName, "");
+                Script script = new Script("", true);
+                location.setNewScript(scriptName, script);
                 locationScriptListModel.addElement(scriptName);
             }
         }
@@ -1106,9 +1135,9 @@ public class EditorFrame extends JFrame {
         int indexL = locationsList.getSelectedIndex();
         if (indexS >= 0) {
             String scriptName = locationScriptListModel.getElementAt(indexS);
-            if (!scriptName.equals("onEnter") && !scriptName.equals("onExit")) {
+            if (!scriptName.startsWith("_on")) {
                 Location location = locationsListModel.elementAt(indexL);
-                location.removeScript(scriptName);
+                location.removeNewScript(scriptName);
                 locationScriptListModel.remove(indexS);
             }
         }
@@ -1120,19 +1149,22 @@ public class EditorFrame extends JFrame {
         if (indexS >= 0 && indexL >= 0) {
             String scriptName = locationScriptListModel.getElementAt(indexS);
             Location location = locationsListModel.elementAt(indexL);
-            location.setScript(scriptName, locationScriptText.getText());
+            //location.setScript(scriptName, locationScriptText.getText());
+            location.setNewScript(scriptName, new Script(locationScriptText.getText(), locationScriptEnabledBox.isSelected()));
         }
     }
 
     private void selectLocationScript() {
         int index = locationScriptsList.getSelectedIndex();
-        System.out.println(index);
         if (index >= 0) {
-            String script = locationScriptListModel.getElementAt(index);
+            String scriptName = locationScriptListModel.getElementAt(index);
             int indexL = locationsList.getSelectedIndex();
             Location location = locationsListModel.elementAt(indexL);
             locationScriptText.setEnabled(true);
-            locationScriptText.setText(location.getScript(script));
+            //locationScriptText.setText(location.getScript(script));
+            Script script = location.getNewScript(scriptName);
+            locationScriptText.setText(script.getText());
+            locationScriptEnabledBox.setSelected(script.isEnabled());
         } else
             locationScriptText.setEnabled(false);
     }
@@ -1211,7 +1243,8 @@ public class EditorFrame extends JFrame {
             slotCombo.setSelectedItem(selected.getEquipmentSlot());
             itemScriptListModel.clear();
             itemCategoryCombo.setSelectedItem(selected.getCategory());
-            selected.getScripts().keySet().forEach(itemScriptListModel::addElement);
+            //selected.getScripts().keySet().forEach(itemScriptListModel::addElement);
+            selected.getNewScripts().keySet().forEach(itemScriptListModel::addElement);
             itemDescription.setText(selected.getDescription());
         }
     }
@@ -1428,7 +1461,8 @@ public class EditorFrame extends JFrame {
             locWest.getModel().setSelectedItem(selected.getWest());
             locationItemsListModel.clear();
             locationScriptListModel.removeAllElements();
-            selected.getScripts().keySet().forEach(locationScriptListModel::addElement);
+            //selected.getScripts().keySet().forEach(locationScriptListModel::addElement);
+            selected.getNewScripts().keySet().forEach(locationScriptListModel::addElement);
             selected.getInventory().forEach(locationItemsListModel::addElement);
             availableButton.setSelected(selected.isAvailable());
             notAvailableButton.setSelected(!selected.isAvailable());

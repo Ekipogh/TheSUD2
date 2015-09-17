@@ -15,12 +15,12 @@ public class Location implements Serializable {
     private String description;  //optional location Description
     private Location[] exits;  //items can be null
     private List<Item> inventory;
-    private Map<String, String> scripts;
     private String picturePath;
     private boolean available;
     private static List<LocationCategory> categories = new ArrayList<>();
     private LocationCategory category;
     private Map<String, Object> values;
+    private Map<String, Script> newScripts;
 
     public static List<LocationCategory> getCategories() {
         return categories;
@@ -52,11 +52,11 @@ public class Location implements Serializable {
         this.description = "";
         this.exits = new Location[4];
         this.inventory = new ArrayList<>();
-        this.scripts = new HashMap<>();
-        scripts.put("_onEnter", "");
-        scripts.put("_onLeave", "");
         this.available = true;
         this.values = new HashMap<>();
+        this.newScripts = new HashMap<>();
+        newScripts.put("_onEnter", new Script("", true));
+        newScripts.put("_onLeave", new Script("", true));
     }
 
     public void setValue(String valueName, Object value) {
@@ -136,26 +136,6 @@ public class Location implements Serializable {
         inventory.remove(item);
     }
 
-    public Map<String, String> getScripts() {
-        return scripts;
-    }
-
-    public void setScript(String scriptName, String scriptText) {
-        scripts.put(scriptName, scriptText);
-    }
-
-    public String getScript(String scriptName) {
-        return scripts.get(scriptName);
-    }
-
-    public void removeScript(String scriptName) {
-        scripts.remove(scriptName);
-    }
-
-    public void addScript(String scriptName, String scriptText) {
-        scripts.put(scriptName, scriptText);
-    }
-
     public String toString() {
         return name;
     }
@@ -194,5 +174,21 @@ public class Location implements Serializable {
 
     public static void clearCategories() {
         categories = new ArrayList<>();
+    }
+
+    public Map<String, Script> getNewScripts() {
+        return newScripts;
+    }
+
+    public Script getNewScript(String scriptName) {
+        return newScripts.get(scriptName);
+    }
+
+    public void setNewScript(String scriptName, Script script) {
+        newScripts.put(scriptName, script);
+    }
+
+    public void removeNewScript(String scriptName) {
+        this.newScripts.remove(scriptName);
     }
 }
