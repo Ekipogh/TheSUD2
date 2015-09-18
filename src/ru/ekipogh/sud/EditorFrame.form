@@ -438,7 +438,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="8f01d" class="javax.swing.JButton" binding="addItemToLocButton">
+                      <component id="8f01d" class="javax.swing.JButton" binding="addItemToLocationButton">
                         <constraints>
                           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -519,7 +519,7 @@
                   <text value="Сохранить"/>
                 </properties>
               </component>
-              <component id="770f4" class="javax.swing.JButton" binding="addLocButton">
+              <component id="770f4" class="javax.swing.JButton" binding="addLocationButton">
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -876,7 +876,7 @@
                           <text value="Начальная локация"/>
                         </properties>
                       </component>
-                      <component id="94ff6" class="javax.swing.JComboBox" binding="charLocCombo">
+                      <component id="94ff6" class="javax.swing.JComboBox" binding="characterLocationCombo">
                         <constraints>
                           <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -893,7 +893,7 @@
                           <text value="Категория"/>
                         </properties>
                       </component>
-                      <component id="75b38" class="javax.swing.JComboBox" binding="charCategoryCombo">
+                      <component id="75b38" class="javax.swing.JComboBox" binding="characterCategoryCombo">
                         <constraints>
                           <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -991,7 +991,7 @@
                           <text value="Сохранить"/>
                         </properties>
                       </component>
-                      <component id="2ff18" class="javax.swing.JButton" binding="addCharScriptButton">
+                      <component id="2ff18" class="javax.swing.JButton" binding="addCharacterScriptButton">
                         <constraints>
                           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -1031,7 +1031,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="91a3f" class="javax.swing.JButton" binding="addItemToCharButton">
+                      <component id="91a3f" class="javax.swing.JButton" binding="addItemToCharacterButton">
                         <constraints>
                           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -1056,7 +1056,7 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="5e7c2" class="javax.swing.JList" binding="charTabItemsList">
+                          <component id="5e7c2" class="javax.swing.JList" binding="characterTabItemsList">
                             <constraints/>
                             <properties>
                               <enabled value="true"/>
@@ -1073,7 +1073,7 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="263b3" class="javax.swing.JList" binding="charItemsList">
+                          <component id="263b3" class="javax.swing.JList" binding="characterItemsList">
                             <constraints/>
                             <properties>
                               <enabled value="true"/>
@@ -1105,7 +1105,7 @@
                   </component>
                 </children>
               </scrollpane>
-              <component id="c139a" class="javax.swing.JButton" binding="addCharButton">
+              <component id="c139a" class="javax.swing.JButton" binding="addCharacterButton">
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -1295,6 +1295,86 @@
                           </component>
                         </children>
                       </scrollpane>
+                    </children>
+                  </grid>
+                  <grid id="17f76" layout-manager="GridLayoutManager" row-count="2" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <tabbedpane title="Скрипты"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <scrollpane id="2dce2">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="8" fill="2" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="-1"/>
+                          </grid>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="9889f" class="javax.swing.JList" binding="playerScriptList">
+                            <constraints/>
+                            <properties>
+                              <selectionMode value="0"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </scrollpane>
+                      <scrollpane id="bcb4b">
+                        <constraints>
+                          <grid row="0" column="2" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                            <preferred-size width="350" height="-1"/>
+                          </grid>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="bb3e5" class="org.fife.ui.rsyntaxtextarea.RSyntaxTextArea" binding="playerScriptText">
+                            <constraints/>
+                            <properties/>
+                          </component>
+                        </children>
+                      </scrollpane>
+                      <component id="f7ba" class="javax.swing.JButton" binding="savePlayerScriptButton">
+                        <constraints>
+                          <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value="Сохранить"/>
+                        </properties>
+                      </component>
+                      <component id="e3826" class="javax.swing.JButton" binding="addPlayerScriptButton">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value="+"/>
+                        </properties>
+                      </component>
+                      <component id="c57f7" class="javax.swing.JButton" binding="deletePlayerScriptButton">
+                        <constraints>
+                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value="-"/>
+                        </properties>
+                      </component>
+                      <component id="665e4" class="javax.swing.JCheckBox" binding="playerScriptEnableBox">
+                        <constraints>
+                          <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <selected value="true"/>
+                          <text value="Доступен"/>
+                        </properties>
+                      </component>
+                      <hspacer id="20234">
+                        <constraints>
+                          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </hspacer>
                     </children>
                   </grid>
                 </children>
@@ -1653,7 +1733,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="1d7b4" class="javax.swing.JButton" binding="addCharCategoryButton">
+                      <component id="1d7b4" class="javax.swing.JButton" binding="addCharacterCategoryButton">
                         <constraints>
                           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -1734,7 +1814,7 @@
                         </constraints>
                         <properties/>
                       </component>
-                      <component id="39c5d" class="javax.swing.JButton" binding="saveCharCategoryScriptButton">
+                      <component id="39c5d" class="javax.swing.JButton" binding="saveCharacterCategoryScriptButton">
                         <constraints>
                           <grid row="3" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -1742,7 +1822,7 @@
                           <text value="Сохранить"/>
                         </properties>
                       </component>
-                      <component id="9f6bb" class="javax.swing.JButton" binding="addCharCategoryScriptButton">
+                      <component id="9f6bb" class="javax.swing.JButton" binding="addCharacterCategoryScriptButton">
                         <constraints>
                           <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>

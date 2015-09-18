@@ -125,9 +125,9 @@ class InventoryFrame extends JFrame {
     private void unequipItem(Item item) {
         player.unequip(item);
         itemsListModel.addElement(item);
-        Script.run(item.getNewScript(ONUNEQUIP).getText(), item);
+        Script.run(item.getScript(ONUNEQUIP).getText(), item);
         if (item.getCategory() != null)
-            Script.run(item.getCategory().getNewScript(ONUNEQUIP).getText(), item);
+            Script.run(item.getCategory().getScript(ONUNEQUIP).getText(), item);
     }
 
     private void updateEquipmentTable() {  //Заполнение таблицы экипировки
@@ -167,9 +167,9 @@ class InventoryFrame extends JFrame {
     }
 
     private void useItem(Item item) {
-        Script.run(item.getNewScript(ONUSE).getText(), item);
+        Script.run(item.getScript(ONUSE).getText(), item);
         if (item.getCategory() != null)
-            Script.run(item.getCategory().getNewScript(ONUSE).getText(), item);
+            Script.run(item.getCategory().getScript(ONUSE).getText(), item);
         //Удалем предмет из инвенторя
         player.getInventory().remove(item);
         itemsListModel.removeElement(item);
@@ -180,18 +180,18 @@ class InventoryFrame extends JFrame {
         player.getInventory().remove(item);
         itemsListModel.removeElement(item);
         playerFrame.updateItems();
-        Script.run(item.getNewScript(ONDROP).getText(), item);
+        Script.run(item.getScript(ONDROP).getText(), item);
         if (item.getCategory() != null)
-            Script.run(item.getCategory().getNewScript(ONDROP).getText(), item);
+            Script.run(item.getCategory().getScript(ONDROP).getText(), item);
     }
 
     private void equipItem(Item item) {
         player.equip(item);
         itemsListModel.removeElement(item);
         player.getInventory().remove(item);
-        Script.run(item.getNewScript(ONEQUIP).getText(), item);
+        Script.run(item.getScript(ONEQUIP).getText(), item);
         if (item.getCategory() != null)
-            Script.run(item.getCategory().getNewScript(ONEQUIP).getText(), item);
+            Script.run(item.getCategory().getScript(ONEQUIP).getText(), item);
         updateEquipmentTable();
     }
 }

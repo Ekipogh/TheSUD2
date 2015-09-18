@@ -18,18 +18,18 @@ public class Item implements Serializable {
     private static List<ItemCategory> categories = new ArrayList<>();
     private ItemCategory category;
     private Map<String, Object> values;
-    private Map<String, Script> newScripts;
+    private Map<String, Script> scripts;
 
     public Item(String name) {
         this.name = name;
         this.type = ItemTypes.GENERIC;
         this.id = Sequencer.getNewID();
-        this.newScripts = new HashMap<>();
-        this.newScripts.put("_onTake", new Script("", true));
-        this.newScripts.put("_onDrop", new Script("", true));
-        this.newScripts.put("_onEquip", new Script("", true));
-        this.newScripts.put("_onUse", new Script("", true));
-        this.newScripts.put("_onUnequip", new Script("", true));
+        this.scripts = new HashMap<>();
+        this.scripts.put("_onTake", new Script("", true));
+        this.scripts.put("_onDrop", new Script("", true));
+        this.scripts.put("_onEquip", new Script("", true));
+        this.scripts.put("_onUse", new Script("", true));
+        this.scripts.put("_onUnequip", new Script("", true));
         this.values = new HashMap<>();
     }
 
@@ -118,19 +118,19 @@ public class Item implements Serializable {
         categories = new ArrayList<>();
     }
 
-    public Map<String, Script> getNewScripts() {
-        return newScripts;
+    public Map<String, Script> getScripts() {
+        return scripts;
     }
 
-    public Script getNewScript(String scriptName) {
-        return newScripts.get(scriptName);
+    public Script getScript(String scriptName) {
+        return scripts.get(scriptName);
     }
 
-    public void setNewScript(String scriptName, Script script) {
-        newScripts.put(scriptName, script);
+    public void setScript(String scriptName, Script script) {
+        scripts.put(scriptName, script);
     }
 
-    public void removeNewScript(String scriptName) {
-        this.newScripts.remove(scriptName);
+    public void removeScript(String scriptName) {
+        this.scripts.remove(scriptName);
     }
 }

@@ -20,7 +20,7 @@ public class Location implements Serializable {
     private static List<LocationCategory> categories = new ArrayList<>();
     private LocationCategory category;
     private Map<String, Object> values;
-    private Map<String, Script> newScripts;
+    private Map<String, Script> scripts;
 
     public static List<LocationCategory> getCategories() {
         return categories;
@@ -54,9 +54,9 @@ public class Location implements Serializable {
         this.inventory = new ArrayList<>();
         this.available = true;
         this.values = new HashMap<>();
-        this.newScripts = new HashMap<>();
-        newScripts.put("_onEnter", new Script("", true));
-        newScripts.put("_onLeave", new Script("", true));
+        this.scripts = new HashMap<>();
+        this.scripts.put("_onEnter", new Script("", true));
+        this.scripts.put("_onLeave", new Script("", true));
     }
 
     public void setValue(String valueName, Object value) {
@@ -176,19 +176,19 @@ public class Location implements Serializable {
         categories = new ArrayList<>();
     }
 
-    public Map<String, Script> getNewScripts() {
-        return newScripts;
+    public Map<String, Script> getScripts() {
+        return scripts;
     }
 
-    public Script getNewScript(String scriptName) {
-        return newScripts.get(scriptName);
+    public Script getScript(String scriptName) {
+        return scripts.get(scriptName);
     }
 
-    public void setNewScript(String scriptName, Script script) {
-        newScripts.put(scriptName, script);
+    public void setScript(String scriptName, Script script) {
+        scripts.put(scriptName, script);
     }
 
-    public void removeNewScript(String scriptName) {
-        this.newScripts.remove(scriptName);
+    public void removeScript(String scriptName) {
+        this.scripts.remove(scriptName);
     }
 }
