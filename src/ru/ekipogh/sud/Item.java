@@ -23,6 +23,7 @@ public class Item implements Serializable {
     public Item(String name) {
         this.name = name;
         this.type = ItemTypes.GENERIC;
+        this.description = "";
         this.id = Sequencer.getNewID();
         this.scripts = new HashMap<>();
         this.scripts.put("_onTake", new Script("", true));

@@ -14,9 +14,9 @@ public class Location implements Serializable {
     private int id;  //required location ID
     private String description;  //optional location Description
     private Location[] exits;  //items can be null
+    private boolean[] exitsOpened;
     private List<Item> inventory;
     private String picturePath;
-    private boolean available;
     private static List<LocationCategory> categories = new ArrayList<>();
     private LocationCategory category;
     private Map<String, Object> values;
@@ -51,8 +51,8 @@ public class Location implements Serializable {
         this.id = Sequencer.getNewID();
         this.description = "";
         this.exits = new Location[4];
+        this.exitsOpened = new boolean[4];
         this.inventory = new ArrayList<>();
-        this.available = true;
         this.values = new HashMap<>();
         this.scripts = new HashMap<>();
         this.scripts.put("_onEnter", new Script("", true));
@@ -103,27 +103,61 @@ public class Location implements Serializable {
         exits[3] = west;
     }
 
+    public void setNorthOpened(boolean opened) {
+        exitsOpened[0] = opened;
+    }
+
+    public void setSouthOpened(boolean opened) {
+        exitsOpened[1] = opened;
+    }
+
+    public void setEastOpened(boolean opened) {
+        exitsOpened[2] = opened;
+    }
+
+    public void setWestOpened(boolean opened) {
+        exitsOpened[3] = opened;
+    }
+
+    public boolean isNorthOpened() {
+        return exitsOpened[0];
+    }
+
+    public boolean isSouthOpened() {
+        return exitsOpened[1];
+    }
+
+    public boolean isEastOpened() {
+        return exitsOpened[2];
+    }
+
+    public boolean isWestOpened() {
+        return exitsOpened[3];
+    }
+
     public Location getNorth() {
-        return exits[0];
+        return exitsOpened[0] ? exits[0] : null;
     }
 
     public Location getSouth() {
-        return exits[1];
+        return exitsOpened[1] ? exits[1] : null;
     }
 
     public Location getEast() {
-        return exits[2];
+        return exitsOpened[2] ? exits[2] : null;
     }
 
     public Location getWest() {
-        return exits[3];
+        return exitsOpened[3] ? exits[3] : null;
     }
 
     public void removeFromExits(Location toRemove) {
         if (toRemove != null) {
             for (int i = 0; i < exits.length; i++) {
-                if (toRemove.equals(exits[i]))
-                    exits[i] = null;
+                if (toRemove.equals(exits[i])) {
+                    this.exits[i] = null;
+                    this.exitsOpened[i] = false;
+                }
             }
         }
     }
@@ -142,14 +176,6 @@ public class Location implements Serializable {
 
     public boolean equals(Location location) {
         return location != null && this.id == location.id;
-    }
-
-    public boolean isAvailable() {
-        return available;
-    }
-
-    public void setAvailable(boolean available) {
-        this.available = available;
     }
 
     public static void addNewCategory(LocationCategory locationCategory) {

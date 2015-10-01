@@ -47,3 +47,8 @@ function spawnCharacter(charId){
     }
 }
 
+function isFunctionTest(name){
+    var type = typeof this[name]
+    return type == "function";
+}
+

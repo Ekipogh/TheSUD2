@@ -1,6 +1,8 @@
 package ru.ekipogh.sud;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -53,8 +55,9 @@ public class PlayerFrame extends JFrame {
     private final String ONPLAYERLEAVE = "_onPlayerLeave";
 
     private static Location currentLocation;
-    private List<Item> items;
+    private List<Item> items; //TODO: нужно ли? Наверное нужно для скриптов. Скорее нужно
     private String gamePath;
+    private String savePath;
 
     private PlayerFrame() {
         super("The SUD2");
@@ -88,80 +91,145 @@ public class PlayerFrame extends JFrame {
             }
         });
 
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("Файл");
+        JMenuItem newGame = new JMenuItem("Заново");
+        JMenuItem loadSave = new JMenuItem("Загрузить сохранение");
+        JMenuItem saveSave = new JMenuItem("Сохранить игру");
+        JMenuItem saveSaveAs = new JMenuItem("Сохранить игру как");
+
+        newGame.addActionListener(e -> loadGameFile(gamePath));
+        loadSave.addActionListener(e -> loadSave());
+        saveSave.addActionListener(e -> saveSave());
+        saveSaveAs.addActionListener(e -> saveSaveAs());
+
+        menu.add(newGame);
+        menu.add(loadSave);
+        menu.add(saveSave);
+        menu.add(saveSaveAs);
+
+        menuBar.add(menu);
+
+        setJMenuBar(menuBar);
+
         setVisible(true);
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         //меню персонажей
-        charactersTree.addMouseListener(new
-
-                                                MouseAdapter() {
-                                                    @Override
-                                                    public void mouseClicked(MouseEvent e) {
-                                                        super.mouseClicked(e);
-                                                        TreePath treePath = charactersTree.getSelectionPath();
-                                                        if (treePath != null) {
-                                                            DefaultMutableTreeNode selected = (DefaultMutableTreeNode) treePath.getLastPathComponent();
-                                                            if (selected != null && selected instanceof SudTreeNode && e.getClickCount() == 2 && selected.isLeaf())
-                                                                ((SudTreeNode) selected).invoke();
-                                                        }
-                                                    }
-                                                }
-
-        );
+        charactersTree.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                TreePath treePath = charactersTree.getSelectionPath();
+                if (treePath != null) {
+                    DefaultMutableTreeNode selected = (DefaultMutableTreeNode) treePath.getLastPathComponent();
+                    if (selected != null && selected instanceof SudTreeNode && e.getClickCount() == 2 && selected.isLeaf())
+                        ((SudTreeNode) selected).invoke();
+                }
+            }
+        });
 
         //меню предметов
-        itemsTree.addMouseListener(new
+        itemsTree.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                TreePath treePath = itemsTree.getSelectionPath();
+                if (treePath != null) {
+                    DefaultMutableTreeNode selected = (DefaultMutableTreeNode) treePath.getLastPathComponent();
+                    if (selected != null && selected instanceof SudTreeNode && e.getClickCount() == 2 && selected.isLeaf())
+                        ((SudTreeNode) selected).invoke();
+                }
+            }
+        });
 
-                                           MouseAdapter() {
-                                               @Override
-                                               public void mouseClicked(MouseEvent e) {
-                                                   super.mouseClicked(e);
-                                                   TreePath treePath = itemsTree.getSelectionPath();
-                                                   if (treePath != null) {
-                                                       DefaultMutableTreeNode selected = (DefaultMutableTreeNode) treePath.getLastPathComponent();
-                                                       if (selected != null && selected instanceof SudTreeNode && e.getClickCount() == 2 && selected.isLeaf())
-                                                           ((SudTreeNode) selected).invoke();
-                                                   }
-                                               }
-                                           }
-
-        );
-
-        inventoryButton.addActionListener(e ->
-
-                        showInventoryScreen()
-
-        );
+        inventoryButton.addActionListener(e -> showInventoryScreen());
 
         //меню локации
-        locationPicPanel.addMouseListener(new
-
-                                                  MouseAdapter() {
-                                                      @Override
-                                                      public void mouseClicked(MouseEvent e) {
-                                                          super.mouseClicked(e);
-                                                          showLocationPopup(e);
-                                                      }
-                                                  }
-
-        );
+        locationPicPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                showLocationPopup(e);
+            }
+        });
 
         addWindowListener(new WindowAdapter() {
-                              @Override
-                              public void windowClosing(WindowEvent e) {
-                                  Main.launcher.setVisible(true);
-                                  super.windowClosing(e);
-                              }
-                          }
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Main.launcher.setVisible(true);
+                super.windowClosing(e);
+            }
+        });
 
-        );
+        jsInputField.addActionListener(e -> runScript());
+    }
 
-        jsInputField.addActionListener(e ->
+    private void saveSaveAs() {
+        JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
+        FileFilter ff = new FileNameExtensionFilter("TheSUD game save", "sudsav");
+        fc.setFileFilter(ff);
+        int response = fc.showSaveDialog(this);
+        if (response == JFileChooser.APPROVE_OPTION) {
+            savePath = fc.getSelectedFile().getPath();
+        }
+        save();
+    }
 
-                        runScript()
+    private void saveSave() {
+        if (savePath == null) {
+            JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
+            FileFilter ff = new FileNameExtensionFilter("TheSUD game save", "sudsav");
+            fc.setFileFilter(ff);
+            int response = fc.showSaveDialog(this);
+            if (response == JFileChooser.APPROVE_OPTION) {
+                savePath = fc.getSelectedFile().getPath();
+            } else return;
+        }
+        save();
+    }
 
-        );
+    private void save() {
+        SaveFile saveFile = new SaveFile();
+        saveFile.setPlayer(player);
+        saveFile.setCharacters(characters);
+        saveFile.setLocations(locations);
+        saveFile.setItems(items);
+
+        //костыль,это не нужно сохранять
+        Script.setProperty("game", null);
+        Script.setProperty("sout", null);
+        Script.setProperty("out", null);
+
+        SaveFile.setScope(Script.getScope());
+        System.out.println("Saving gamestate to " + savePath);
+        saveFile.save(savePath);
+        System.out.println("Saved!");
+
+        Script.setProperty("game", this);
+        Script.setProperty("sout", System.out);
+        Script.setProperty("out", output);
+    }
+
+    private void loadSave() {
+        JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
+        FileFilter ff = new FileNameExtensionFilter("TheSUD game", "sudsav");
+        fc.setFileFilter(ff);
+        int response = fc.showOpenDialog(this);
+        if (response == JFileChooser.APPROVE_OPTION) {
+            this.savePath = fc.getSelectedFile().getPath();
+            SaveFile saveFile = SaveFile.open(savePath);
+            player = saveFile.getPlayer();
+            characters = saveFile.getCharacters();
+            locations = saveFile.getLocations();
+            currentLocation = player.getLocation();
+            items = saveFile.getItems();
+            System.out.println("Loading gamestate from " + savePath);
+            Script.set(saveFile.getScopeObjects());
+            System.out.println("Loaded!");
+            proceed();
+        }
     }
 
     private void showPlayerPopUp(MouseEvent e) {
@@ -175,9 +243,7 @@ public class PlayerFrame extends JFrame {
             }
         }
         menuItem = new JMenuItem("Описание");
-        menuItem.addActionListener(ev -> {
-            output.println(parseDescription(player.getDescription(), player));
-        });
+        menuItem.addActionListener(ev -> output.println(parseDescription(player.getDescription(), player)));
         popupMenu.add(menuItem);
         popupMenu.show(playerName, e.getX(), e.getY());
     }
@@ -304,33 +370,34 @@ public class PlayerFrame extends JFrame {
     //загрузка файла игры
     private void loadGameFile(String pathToGame) {
         //существование файла игры гарантируется лаунчером, пробуем загрухить из него данные
-        SaveFile saveFile = SaveFile.open(pathToGame);
+        GameFile gameFile = GameFile.open(pathToGame);
 
         //инициализация переменных игры из файла
-        initialize(saveFile);
+        initialize(gameFile);
 
         proceed();
     }
 
     //инициализация параметров игры
-    private void initialize(SaveFile saveFile) {
-        player = saveFile.getPlayer();
-        locations = saveFile.getLocations();
-        characters = saveFile.getCharacters();
-        items = saveFile.getItems();
+    private void initialize(GameFile gameFile) {
+        player = gameFile.getPlayer();
+        locations = gameFile.getLocations();
+        characters = gameFile.getCharacters();
+        items = gameFile.getItems();
         currentLocation = player.getLocation();
         playerName.setText(player.getName());
-        Map<String, String> slotNames = saveFile.getSlotNames();
+        Map<String, String> slotNames = gameFile.getSlotNames();
         Equipment.setSlotNames(slotNames);
-        gamePath = saveFile.getPath();
-        initJS(saveFile.getInitScript());
-        output.println("<b>" + saveFile.getGameName() + "</b>");
-        output.println(saveFile.getGameStartMessage());
+        gamePath = gameFile.getPath();
+        initJS(gameFile.getInitScript());
+        output.println("<b>" + gameFile.getGameName() + "</b>");
+        output.println(gameFile.getGameStartMessage());
     }
 
     private void initJS(String initScript) {
         Script.init();
         Script.setProperty("out", output);
+        Script.setProperty("sout", System.out);
         Script.setProperty("items", items);
         Script.setProperty("player", player);
         Script.setProperty("locations", locations);
@@ -410,10 +477,10 @@ public class PlayerFrame extends JFrame {
 
     //Дизаблим кнопки передвижения соответствующие null выходам и выходам, у которых заблокирован доступ
     private void directionButtonsEnable() {
-        northButton.setEnabled((currentLocation.getNorth() != null && currentLocation.getNorth().isAvailable()));
-        southButton.setEnabled((currentLocation.getSouth() != null && currentLocation.getSouth().isAvailable()));
-        eastButton.setEnabled((currentLocation.getEast() != null && currentLocation.getEast().isAvailable()));
-        westButton.setEnabled((currentLocation.getWest() != null && currentLocation.getWest().isAvailable()));
+        northButton.setEnabled((currentLocation.getNorth() != null));
+        southButton.setEnabled((currentLocation.getSouth() != null));
+        eastButton.setEnabled((currentLocation.getEast() != null));
+        westButton.setEnabled((currentLocation.getWest() != null));
     }
 
     public static GameCharacter getPlayer() {

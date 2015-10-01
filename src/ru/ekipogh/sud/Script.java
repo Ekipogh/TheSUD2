@@ -7,6 +7,7 @@ import org.mozilla.javascript.ScriptableObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -16,6 +17,14 @@ public class Script implements Serializable {
     private static Context context;
     private static Scriptable scope;
     private String scriptText;
+
+    public static Scriptable getScope() {
+        return scope;
+    }
+
+    public static Context getContext() {
+        return context;
+    }
 
     public boolean isEnabled() {
         return enabled;
@@ -27,12 +36,6 @@ public class Script implements Serializable {
         this.scriptText = text;
         this.enabled = enabled;
     }
-
-    /*public Object run(Object caller) {
-        if (enabled)
-            return Script.run(scriptText, caller);
-        return null;
-    }*/
 
     public static void setProperty(String property, Object object) {
         Object wrappedOut = Context.javaToJS(object, scope);
@@ -62,5 +65,11 @@ public class Script implements Serializable {
 
     public String getText() {
         return scriptText;
+    }
+
+    public static void set(Map<String, Object> scopeObjects) {
+        for (Map.Entry<String, Object> e : scopeObjects.entrySet()) {
+            setProperty(e.getKey(), e.getValue());
+        }
     }
 }

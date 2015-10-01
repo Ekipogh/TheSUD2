@@ -93,8 +93,6 @@ public class EditorFrame extends JFrame {
     private JButton saveCharScriptButton;
     private JButton addCharacterScriptButton;
     private JButton deleteCharScriptButton;
-    private JRadioButton availableButton;
-    private JRadioButton notAvailableButton;
     private JList<String> itemScriptsList;
     private RSyntaxTextArea itemScriptText;
     private JButton saveItemScriptButton;
@@ -142,7 +140,6 @@ public class EditorFrame extends JFrame {
     private JTextField charIdField;
     private JTextArea playerDescriptionArea;
     private JTextArea charDescriptionArea;
-    private JTable table1;
     private JCheckBox locationScriptEnabledBox;
     private JCheckBox itemScriptEnabledBox;
     private JCheckBox characterScriptEnabledBox;
@@ -155,6 +152,10 @@ public class EditorFrame extends JFrame {
     private RSyntaxTextArea playerScriptText;
     private JCheckBox playerScriptEnableBox;
     private JButton savePlayerScriptButton;
+    private JCheckBox northEnabledBox;
+    private JCheckBox southEnabledBox;
+    private JCheckBox eastEnabledBox;
+    private JCheckBox westEnabledBox;
     private GameCharacter player;
     private String gamePath;
 
@@ -566,9 +567,6 @@ public class EditorFrame extends JFrame {
             loadGame();
 
         //test area
-        CheckTableModel tableModel = new CheckTableModel();
-        table1.setModel(tableModel);
-        tableModel.addRow(true, "sadjklsjdlk");
     }
 
     private void savePlayerScript() {
@@ -1349,13 +1347,13 @@ public class EditorFrame extends JFrame {
 
     private void loadGame() {
         System.out.println("Opening file " + gamePath);
-        SaveFile saveFile = SaveFile.open(gamePath);
-        player = saveFile.getPlayer();
+        GameFile gameFile = GameFile.open(gamePath);
+        player = gameFile.getPlayer();
 
-        Sequencer.setID(saveFile.getSequencerID());
+        Sequencer.setID(gameFile.getSequencerID());
 
         locationsListModel.clear();
-        for (Location l : saveFile.getLocations()) {
+        for (Location l : gameFile.getLocations()) {
             playerLocationModel.addElement(l);
             locationsListModel.addElement(l);
             northModel.addElement(l);
@@ -1366,12 +1364,12 @@ public class EditorFrame extends JFrame {
         }
 
         itemsListModel.clear();
-        saveFile.getItems().forEach(itemsListModel::addElement);
+        gameFile.getItems().forEach(itemsListModel::addElement);
 
         charactersListModel.clear();
-        saveFile.getCharacters().forEach(charactersListModel::addElement);
+        gameFile.getCharacters().forEach(charactersListModel::addElement);
 
-        Map<String, String> slotNames = saveFile.getSlotNames();
+        Map<String, String> slotNames = gameFile.getSlotNames();
         Equipment.setSlotNames(slotNames);
         equipTableModel.setRowCount(0);
         slotNamesModel.removeAllElements();
@@ -1381,24 +1379,24 @@ public class EditorFrame extends JFrame {
         }
         Utils.updateRowHeights(equipTable);
 
-        saveFile.getCharacterCategories().forEach(charCategoriesListModel::addElement);
-        saveFile.getCharacterCategories().forEach(GameCharacter::addNewCategory);
-        saveFile.getCharacterCategories().forEach(characterCategoryComboModel::addElement);
-        saveFile.getItemCategories().forEach(itemCotegoriesListModel::addElement);
-        saveFile.getItemCategories().forEach(Item::addNewCategory);
-        saveFile.getItemCategories().forEach(itemCategoryComboModel::addElement);
-        saveFile.getLocationCategories().forEach(locationCategoriesListModel::addElement);
-        saveFile.getLocationCategories().forEach(Location::addNewCategory);
-        saveFile.getLocationCategories().forEach(locationCategoryComboModel::addElement);
+        gameFile.getCharacterCategories().forEach(charCategoriesListModel::addElement);
+        gameFile.getCharacterCategories().forEach(GameCharacter::addNewCategory);
+        gameFile.getCharacterCategories().forEach(characterCategoryComboModel::addElement);
+        gameFile.getItemCategories().forEach(itemCotegoriesListModel::addElement);
+        gameFile.getItemCategories().forEach(Item::addNewCategory);
+        gameFile.getItemCategories().forEach(itemCategoryComboModel::addElement);
+        gameFile.getLocationCategories().forEach(locationCategoriesListModel::addElement);
+        gameFile.getLocationCategories().forEach(Location::addNewCategory);
+        gameFile.getLocationCategories().forEach(locationCategoryComboModel::addElement);
 
-        gameName.setText(saveFile.getGameName());
-        gameStartMessage.setText(saveFile.getGameStartMessage());
+        gameName.setText(gameFile.getGameName());
+        gameStartMessage.setText(gameFile.getGameStartMessage());
 
-        initScriptText.setText(saveFile.getInitScript());
+        initScriptText.setText(gameFile.getInitScript());
 
-        Location.setCategories(saveFile.getLocationCategories());
-        Item.setCategories(saveFile.getItemCategories());
-        GameCharacter.setCategories(saveFile.getCharacterCategories());
+        Location.setCategories(gameFile.getLocationCategories());
+        Item.setCategories(gameFile.getItemCategories());
+        GameCharacter.setCategories(gameFile.getCharacterCategories());
         updatePlayerTab();
     }
 
@@ -1428,9 +1426,9 @@ public class EditorFrame extends JFrame {
     private void saveGame() {
         if (player.getLocation() != null) {
             System.out.println("Saving to " + gamePath);
-            SaveFile saveFile = new SaveFile();
-            saveFile.setPlayer(player);
-            saveFile.setSequencerID(Sequencer.getCurrentId());
+            GameFile gameFile = new GameFile();
+            gameFile.setPlayer(player);
+            gameFile.setSequencerID(Sequencer.getCurrentId());
             ArrayList<Location> locations = new ArrayList<>();
             for (int i = 0; i < locationsListModel.size(); i++) {
                 locations.add(locationsListModel.getElementAt(i));
@@ -1439,26 +1437,26 @@ public class EditorFrame extends JFrame {
             for (int i = 0; i < charactersListModel.size(); i++) {
                 characters.add(charactersListModel.getElementAt(i));
             }
-            saveFile.setCharacters(characters);
-            saveFile.setLocations(locations);
-            saveFile.setGameName(gameName.getText());
-            saveFile.setGameStartMessage(gameStartMessage.getText());
+            gameFile.setCharacters(characters);
+            gameFile.setLocations(locations);
+            gameFile.setGameName(gameName.getText());
+            gameFile.setGameStartMessage(gameStartMessage.getText());
             ArrayList<Item> items = new ArrayList<>();
             for (int i = 0; i < itemsListModel.getSize(); i++)
                 items.add(itemsListModel.getElementAt(i));
-            saveFile.setItems(items);
+            gameFile.setItems(items);
             Map<String, String> slotsNames = new HashMap<>();
             for (int i = 0; i < equipTableModel.getRowCount(); i++) { //TODO: сохраняется в одну сторону, открывается в другую (пока не критично)
                 String slotName = String.valueOf(equipTableModel.getValueAt(i, 2));
                 String slotImagePath = String.valueOf(equipTableModel.getValueAt(i, 0));
                 slotsNames.put(slotName, slotImagePath);
             }
-            saveFile.setCharacterCategories(GameCharacter.getCategories());
-            saveFile.setItemCategories(Item.getCategories());
-            saveFile.setLocationCategories(Location.getCategories());
-            saveFile.setSlotNames(slotsNames);
-            saveFile.setInitScript(initScriptText.getText());
-            saveFile.save(gamePath);
+            gameFile.setCharacterCategories(GameCharacter.getCategories());
+            gameFile.setItemCategories(Item.getCategories());
+            gameFile.setLocationCategories(Location.getCategories());
+            gameFile.setSlotNames(slotsNames);
+            gameFile.setInitScript(initScriptText.getText());
+            gameFile.save(gamePath);
         } else
             JOptionPane.showMessageDialog(this, "Выберите стартовую локацию игрока!");
     }
@@ -1483,7 +1481,6 @@ public class EditorFrame extends JFrame {
         }
 
         locationsListModel.removeElementAt(index);
-        //select next other location TODO: hmmmm.....
         locationsList.setSelectedIndex((index > 0) ? index - 1 : index);
         northModel.removeElement(selected);
         southModel.removeElement(selected);
@@ -1507,7 +1504,10 @@ public class EditorFrame extends JFrame {
         selectedLocation.setSouth(southModel.getElementAt(southIndex));
         selectedLocation.setEast(eastModel.getElementAt(eastIndex));
         selectedLocation.setWest(westModel.getElementAt(westIndex));
-        selectedLocation.setAvailable(availableButton.isSelected());
+        selectedLocation.setNorthOpened(northEnabledBox.isSelected());
+        selectedLocation.setSouthOpened(southEnabledBox.isSelected());
+        selectedLocation.setEastOpened(eastEnabledBox.isSelected());
+        selectedLocation.setWestOpened(westEnabledBox.isSelected());
         selectedLocation.setCategory((LocationCategory) locationCategoryComboModel.getSelectedItem());
         locationsList.updateUI();
     }
@@ -1528,8 +1528,10 @@ public class EditorFrame extends JFrame {
             //selected.getScripts().keySet().forEach(locationScriptListModel::addElement);
             selected.getScripts().keySet().forEach(locationScriptListModel::addElement);
             selected.getInventory().forEach(locationItemsListModel::addElement);
-            availableButton.setSelected(selected.isAvailable());
-            notAvailableButton.setSelected(!selected.isAvailable());
+            northEnabledBox.setSelected(selected.isNorthOpened());
+            southEnabledBox.setSelected(selected.isSouthOpened());
+            eastEnabledBox.setSelected(selected.isEastOpened());
+            westEnabledBox.setSelected(selected.isWestOpened());
             locationCategoryCombo.setSelectedItem(selected.getCategory());
         }
     }
@@ -1562,7 +1564,9 @@ public class EditorFrame extends JFrame {
         locationTabItemsList.setEnabled(enabled);
         locationScriptsList.setEnabled(enabled);
         saveLocScriptButton.setEnabled(enabled);
-        availableButton.setEnabled(enabled);
-        notAvailableButton.setEnabled(enabled);
+        northEnabledBox.setEnabled(enabled);
+        southEnabledBox.setEnabled(enabled);
+        eastEnabledBox.setEnabled(enabled);
+        westEnabledBox.setEnabled(enabled);
     }
 }
