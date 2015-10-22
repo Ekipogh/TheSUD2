@@ -511,6 +511,8 @@ public class PlayerFrame extends JFrame {
         southButton.setEnabled((currentLocation.getSouth() != null && currentLocation.isSouthOpened()));
         eastButton.setEnabled((currentLocation.getEast() != null && currentLocation.isEastOpened()));
         westButton.setEnabled((currentLocation.getWest() != null && currentLocation.isWestOpened()));
+        upButton.setEnabled((currentLocation.getUp() != null && currentLocation.isUpOpened()));
+        downButton.setEnabled((currentLocation.getDown() != null && currentLocation.isDownOpened()));
     }
 
     public static GameCharacter getPlayer() {

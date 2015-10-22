@@ -21,9 +21,13 @@ public class EditorFrame extends JFrame {
     private final DefaultComboBoxModel<Location> southModel;
     private final DefaultComboBoxModel<Location> eastModel;
     private final DefaultComboBoxModel<Location> westModel;
+    private final DefaultComboBoxModel<Location> upModel;
+    private final DefaultComboBoxModel<Location> downModel;
+    private final DefaultComboBoxModel<Location> playerLocationModel;
+    private final DefaultComboBoxModel<String> slotNamesModel;
+    private final DefaultComboBoxModel<Location> characterLocationModel;
     private final DefaultListModel<Item> itemsListModel;
     private final DefaultListModel<Item> locationItemsListModel;
-    private final DefaultTableModel equipTableModel;
     private final DefaultListModel<GameCharacter> charactersListModel;
     private final DefaultListModel<Item> characterItemsListModel;
     private final DefaultListModel<Item> playerItemsListModel;
@@ -34,10 +38,12 @@ public class EditorFrame extends JFrame {
     private final DefaultListModel<CharacterCategory> charactersCategoriesListModel;
     private final DefaultListModel<String> charCategoryScriptsListModel;
     private final DefaultListModel<String> playerScriptListModel;
-    private final DefaultComboBoxModel<Location> upModel;
-    private final DefaultComboBoxModel<Location> downModel;
     private final DefaultListModel<ItemCategory> itemCategoriesListModel;
-    private DefaultListModel<Location> locationsListModel;
+    private final DefaultListModel<Location> locationsListModel;
+    private final DefaultListModel<String> locationScriptListModel;
+    private final DefaultListModel<String> characterScriptListModel;
+    private final DefaultListModel<String> itemScriptListModel;
+    private final DefaultTableModel equipTableModel;
     private JPanel rootPanel;
     private JList<Location> locationsList;
     private JTextField locName;
@@ -73,12 +79,6 @@ public class EditorFrame extends JFrame {
     private JButton saveSlotsButton;
     private JList<String> locationScriptsList;
     private RSyntaxTextArea locationScriptText;
-    private DefaultComboBoxModel<Location> playerLocationModel;
-    private DefaultComboBoxModel<String> slotNamesModel;
-    private DefaultComboBoxModel<Location> characterLocationModel;
-    private DefaultListModel<String> locationScriptListModel;
-    private DefaultListModel<String> characterScriptListModel;
-    private DefaultListModel<String> itemScriptListModel;
     private JButton addScriptLocButton;
     private JButton deleteScriptLocButton;
     private JButton saveLocScriptButton;
@@ -170,8 +170,8 @@ public class EditorFrame extends JFrame {
     private JList<ItemCategory> itemCategoriesList;
     private JButton addCategoryToItemButton;
     private JButton deleteCategoryFromItemButton;
-    private DefaultListModel<CharacterCategory> characterCategoryListModel;
-    private DefaultListModel<LocationCategory> locationCategoryListModel;
+    private final DefaultListModel<CharacterCategory> characterCategoryListModel;
+    private final DefaultListModel<LocationCategory> locationCategoryListModel;
 
     private GameCharacter player;
     private String gamePath;
@@ -1458,6 +1458,7 @@ public class EditorFrame extends JFrame {
     private void loadGame() {
         System.out.println("Opening file " + gamePath);
         GameFile gameFile = GameFile.open(gamePath);
+        assert gameFile != null;
         player = gameFile.getPlayer();
 
         Sequencer.setID(gameFile.getSequencerID());

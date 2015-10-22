@@ -68,9 +68,9 @@ public class Equipment implements Serializable {
     }
 
     public static void clearSlots() {
-        slotNames.put("голова", "src/data/head.png");
-        slotNames.put("торс", "src/data/torso.png");
-        slotNames.put("ноги", "src/data/legs.png");
-        slotNames.put("рука", "src/data/hand.png");
+        slotNames.put("голова", "data/head.png");
+        slotNames.put("торс", "data/torso.png");
+        slotNames.put("ноги", "data/legs.png");
+        slotNames.put("рука", "data/hand.png");
     }
 }

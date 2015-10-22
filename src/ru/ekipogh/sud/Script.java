@@ -49,7 +49,7 @@ public class Script implements Serializable {
 
     public static void initFunctions() {
         try {
-            String functions = new Scanner(new File("src/lib/functions.js")).useDelimiter("\\Z").next();
+            String functions = new Scanner(new File("lib/functions.js")).useDelimiter("\\Z").next();
             context.evaluateString(scope, functions, "functions.js", 1, null);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
