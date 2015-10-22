@@ -15,8 +15,8 @@ public class Item implements Serializable {
     private String name;
     private String description;
     private String equipmentSlot;
-    private static List<ItemCategory> categories = new ArrayList<>();
-    private ItemCategory category;
+    private static List<ItemCategory> itemCategories = new ArrayList<>();
+    private List<ItemCategory> categories;
     private Map<String, Object> values;
     private Map<String, Script> scripts;
 
@@ -32,14 +32,15 @@ public class Item implements Serializable {
         this.scripts.put("_onUse", new Script("", true));
         this.scripts.put("_onUnequip", new Script("", true));
         this.values = new HashMap<>();
+        this.categories = new ArrayList<>();
     }
 
-    public static void setCategories(List<ItemCategory> categories) {
-        Item.categories = categories;
+    public static void setItemCategories(List<ItemCategory> categories) {
+        Item.itemCategories = categories;
     }
 
-    public static List<ItemCategory> getCategories() {
-        return categories;
+    public static List<ItemCategory> getItemCategories() {
+        return Item.itemCategories;
     }
 
     public ItemTypes getType() {
@@ -83,24 +84,24 @@ public class Item implements Serializable {
         return id;
     }
 
-    public static void addNewCategory(ItemCategory itemCategory) {
-        categories.add(itemCategory);
+    public static void addItemCategory(ItemCategory itemCategory) {
+        Item.itemCategories.add(itemCategory);
     }
 
-    public static void deleteCategory(ItemCategory itemCategory) {
-        categories.remove(itemCategory);
+    public static void deleteItemCategory(ItemCategory itemCategory) {
+        Item.itemCategories.remove(itemCategory);
     }
 
-    public ItemCategory getCategory() {
-        return category;
+    public List<ItemCategory> getCategories() {
+        return categories;
     }
 
-    public void removeCategory() {
-        this.category = null;
+    public void removeCategory(ItemCategory category) {
+        this.categories.remove(category);
     }
 
-    public void setCategory(ItemCategory category) {
-        this.category = category;
+    public void setCategories(List<ItemCategory> categories) {
+        this.categories = categories;
     }
 
     public void setValue(String valueName, Object value) {
@@ -115,8 +116,8 @@ public class Item implements Serializable {
         return values;
     }
 
-    public static void clearCategories() {
-        categories = new ArrayList<>();
+    public static void clearItemsCategories() {
+        Item.itemCategories = new ArrayList<>();
     }
 
     public Map<String, Script> getScripts() {
@@ -133,5 +134,11 @@ public class Item implements Serializable {
 
     public void removeScript(String scriptName) {
         this.scripts.remove(scriptName);
+    }
+
+    public void addCategory(ItemCategory category) {
+        if (!categories.contains(category)) {
+            categories.add(category);
+        }
     }
 }

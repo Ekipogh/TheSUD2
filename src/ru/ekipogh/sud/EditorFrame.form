@@ -137,7 +137,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <grid id="55488" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="55488" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <tabbedpane title="Информация"/>
@@ -156,7 +156,7 @@
                       </component>
                       <vspacer id="b1bd2">
                         <constraints>
-                          <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                          <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                         </constraints>
                       </vspacer>
                       <component id="e5f99" class="javax.swing.JTextField" binding="locName">
@@ -198,21 +198,6 @@
                           <text value="Описание"/>
                         </properties>
                       </component>
-                      <component id="84e79" class="javax.swing.JLabel">
-                        <constraints>
-                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <labelFor value="881c6"/>
-                          <text value="Категория"/>
-                        </properties>
-                      </component>
-                      <component id="881c6" class="javax.swing.JComboBox" binding="locationCategoryCombo">
-                        <constraints>
-                          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties/>
-                      </component>
                       <scrollpane id="31e67">
                         <constraints>
                           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -230,7 +215,7 @@
                       </scrollpane>
                     </children>
                   </grid>
-                  <grid id="4968c" layout-manager="GridLayoutManager" row-count="5" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="4968c" layout-manager="GridLayoutManager" row-count="7" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <tabbedpane title="Выходы"/>
@@ -249,10 +234,10 @@
                       </component>
                       <vspacer id="5bebb">
                         <constraints>
-                          <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                          <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                         </constraints>
                       </vspacer>
-                      <component id="e7438" class="javax.swing.JComboBox" binding="locNorth">
+                      <component id="e7438" class="javax.swing.JComboBox" binding="northComboBox">
                         <constraints>
                           <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -269,7 +254,7 @@
                           <text value="Юг"/>
                         </properties>
                       </component>
-                      <component id="5407c" class="javax.swing.JComboBox" binding="locSouth">
+                      <component id="5407c" class="javax.swing.JComboBox" binding="southComboBox">
                         <constraints>
                           <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -286,7 +271,7 @@
                           <text value="Восток"/>
                         </properties>
                       </component>
-                      <component id="92211" class="javax.swing.JComboBox" binding="locEast">
+                      <component id="92211" class="javax.swing.JComboBox" binding="eastComboBox">
                         <constraints>
                           <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -303,7 +288,7 @@
                           <text value="Запад"/>
                         </properties>
                       </component>
-                      <component id="882f0" class="javax.swing.JComboBox" binding="locWest">
+                      <component id="882f0" class="javax.swing.JComboBox" binding="westComboBox">
                         <constraints>
                           <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -353,9 +338,53 @@
                       </component>
                       <hspacer id="b6ef8">
                         <constraints>
-                          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
                       </hspacer>
+                      <component id="ccfa3" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value="Вверх"/>
+                        </properties>
+                      </component>
+                      <component id="bab62" class="javax.swing.JComboBox" binding="upComboBox">
+                        <constraints>
+                          <grid row="4" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="cee2" class="javax.swing.JCheckBox" binding="upEnabledBox">
+                        <constraints>
+                          <grid row="4" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value=""/>
+                        </properties>
+                      </component>
+                      <component id="e64f5" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value="Вниз"/>
+                        </properties>
+                      </component>
+                      <component id="421dc" class="javax.swing.JComboBox" binding="downComboBox">
+                        <constraints>
+                          <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="71081" class="javax.swing.JCheckBox" binding="downEnabledBox">
+                        <constraints>
+                          <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value=""/>
+                        </properties>
+                      </component>
                     </children>
                   </grid>
                   <grid id="d6c0" layout-manager="GridLayoutManager" row-count="2" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -505,6 +534,48 @@
                       </scrollpane>
                     </children>
                   </grid>
+                  <grid id="4052c" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <tabbedpane title="Категории"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="87eb" class="javax.swing.JList" binding="locationAllCategoriesList">
+                        <constraints>
+                          <grid row="0" column="0" row-span="2" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="50"/>
+                          </grid>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="52e11" class="javax.swing.JList" binding="locationCategoriesList">
+                        <constraints>
+                          <grid row="0" column="2" row-span="2" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="50"/>
+                          </grid>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="a7ff1" class="javax.swing.JButton" binding="addCategoryToLocationButton">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value="&gt;&gt;"/>
+                        </properties>
+                      </component>
+                      <component id="7caee" class="javax.swing.JButton" binding="deleteCategoryFromLocationButton">
+                        <constraints>
+                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value="&lt;&lt;"/>
+                        </properties>
+                      </component>
+                    </children>
+                  </grid>
                 </children>
               </tabbedpane>
               <scrollpane id="a7119">
@@ -585,7 +656,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <grid id="cba5b" layout-manager="GridLayoutManager" row-count="7" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="cba5b" layout-manager="GridLayoutManager" row-count="6" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <tabbedpane title="Общее"/>
@@ -604,7 +675,7 @@
                       </component>
                       <vspacer id="b50ea">
                         <constraints>
-                          <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                          <grid row="5" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                         </constraints>
                       </vspacer>
                       <component id="aee6d" class="javax.swing.JTextField" binding="itemName">
@@ -676,21 +747,6 @@
                         <properties>
                           <editable value="false"/>
                         </properties>
-                      </component>
-                      <component id="1bf5a" class="javax.swing.JLabel">
-                        <constraints>
-                          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <labelFor value="b52eb"/>
-                          <text value="Котегория"/>
-                        </properties>
-                      </component>
-                      <component id="b52eb" class="javax.swing.JComboBox" binding="itemCategoryCombo">
-                        <constraints>
-                          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties/>
                       </component>
                       <scrollpane id="87b5d">
                         <constraints>
@@ -785,6 +841,48 @@
                       </hspacer>
                     </children>
                   </grid>
+                  <grid id="6374f" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <tabbedpane title="Категории"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="bea71" class="javax.swing.JList" binding="itemAllCategoriesList">
+                        <constraints>
+                          <grid row="0" column="0" row-span="2" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="50"/>
+                          </grid>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="e7b0a" class="javax.swing.JList" binding="itemCategoriesList">
+                        <constraints>
+                          <grid row="0" column="2" row-span="2" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="50"/>
+                          </grid>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="3b5cb" class="javax.swing.JButton" binding="addCategoryToItemButton">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value="&gt;&gt;"/>
+                        </properties>
+                      </component>
+                      <component id="5ada4" class="javax.swing.JButton" binding="deleteCategoryFromItemButton">
+                        <constraints>
+                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value="&lt;&lt;"/>
+                        </properties>
+                      </component>
+                    </children>
+                  </grid>
                 </children>
               </tabbedpane>
               <scrollpane id="2d051">
@@ -848,7 +946,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <grid id="7c29e" layout-manager="GridLayoutManager" row-count="6" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="7c29e" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <tabbedpane title="Общее"/>
@@ -867,7 +965,7 @@
                       </component>
                       <vspacer id="80bb0">
                         <constraints>
-                          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                         </constraints>
                       </vspacer>
                       <component id="5b6c7" class="javax.swing.JTextField" binding="charNameFiled">
@@ -896,21 +994,6 @@
                         <properties>
                           <enabled value="true"/>
                         </properties>
-                      </component>
-                      <component id="949b9" class="javax.swing.JLabel">
-                        <constraints>
-                          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <labelFor value="75b38"/>
-                          <text value="Категория"/>
-                        </properties>
-                      </component>
-                      <component id="75b38" class="javax.swing.JComboBox" binding="characterCategoryCombo">
-                        <constraints>
-                          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties/>
                       </component>
                       <component id="c610d" class="javax.swing.JTextField" binding="charIdField">
                         <constraints>
@@ -1096,6 +1179,48 @@
                           </component>
                         </children>
                       </scrollpane>
+                    </children>
+                  </grid>
+                  <grid id="7a0d8" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <tabbedpane title="Категории"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="a1fa4" class="javax.swing.JList" binding="characterAllCategoriesList">
+                        <constraints>
+                          <grid row="0" column="0" row-span="2" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="50"/>
+                          </grid>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="7d5ff" class="javax.swing.JList" binding="characterCategoryList">
+                        <constraints>
+                          <grid row="0" column="2" row-span="2" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                            <preferred-size width="150" height="50"/>
+                          </grid>
+                        </constraints>
+                        <properties/>
+                      </component>
+                      <component id="933ce" class="javax.swing.JButton" binding="addCategoryToCharacterButton">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value="&gt;&gt;"/>
+                        </properties>
+                      </component>
+                      <component id="1f612" class="javax.swing.JButton" binding="deleteCategoryFromCharacterButton">
+                        <constraints>
+                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value="&lt;&lt;"/>
+                        </properties>
+                      </component>
                     </children>
                   </grid>
                 </children>
@@ -1499,7 +1624,7 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="3b2e0" class="javax.swing.JList" binding="locationCategoriesList">
+                          <component id="3b2e0" class="javax.swing.JList" binding="locationsCategoriesList">
                             <constraints/>
                             <properties>
                               <layoutOrientation value="1"/>
@@ -1631,7 +1756,7 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="2b3e8" class="javax.swing.JList" binding="itemCotegoriesList">
+                          <component id="2b3e8" class="javax.swing.JList" binding="itemsCategoriesList">
                             <constraints/>
                             <properties>
                               <layoutOrientation value="1"/>
@@ -1769,7 +1894,7 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="95b7b" class="javax.swing.JList" binding="charCategoriesList">
+                          <component id="95b7b" class="javax.swing.JList" binding="charactersCategoriesList">
                             <constraints/>
                             <properties>
                               <layoutOrientation value="1"/>

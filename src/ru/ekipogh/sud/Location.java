@@ -13,21 +13,22 @@ public class Location implements Serializable {
     private String name; //required location Name
     private int id;  //required location ID
     private String description;  //optional location Description
-    private Location[] exits;  //items can be null
-    private boolean[] exitsOpened;
-    private List<Item> inventory;
-    private String picturePath;
-    private static List<LocationCategory> categories = new ArrayList<>();
-    private LocationCategory category;
-    private Map<String, Object> values;
-    private Map<String, Script> scripts;
+    private Location[] exits;  //items can be null 0 = north 1 = south 2 = east 3 = west 4 = up 5 = down
+    private boolean[] exitsOpened; //is direction available
+    private List<Item> inventory; //stores items
+    @Deprecated
+    private String picturePath; //picture of location
+    private static List<LocationCategory> locationCategories = new ArrayList<>(); //categories of locations
+    private Map<String, Object> values; //values and names of custom variables
+    private Map<String, Script> scripts; //
+    private List<LocationCategory> categories;
 
-    public static List<LocationCategory> getCategories() {
-        return categories;
+    public static List<LocationCategory> getLocationCategories() {
+        return locationCategories;
     }
 
-    public static void setCategories(List<LocationCategory> categories) {
-        Location.categories = categories;
+    public static void setLocationCategories(List<LocationCategory> categories) {
+        Location.locationCategories = categories;
     }
 
     public String getPicturePath() {
@@ -50,13 +51,14 @@ public class Location implements Serializable {
         this.name = name;
         this.id = Sequencer.getNewID();
         this.description = "";
-        this.exits = new Location[4];
-        this.exitsOpened = new boolean[4];
+        this.exits = new Location[6];
+        this.exitsOpened = new boolean[6];
         this.inventory = new ArrayList<>();
         this.values = new HashMap<>();
         this.scripts = new HashMap<>();
         this.scripts.put("_onEnter", new Script("", true));
         this.scripts.put("_onLeave", new Script("", true));
+        this.categories = new ArrayList<>();
     }
 
     public void setValue(String valueName, Object value) {
@@ -103,6 +105,14 @@ public class Location implements Serializable {
         exits[3] = west;
     }
 
+    public void setUp(Location up) {
+        exits[4] = up;
+    }
+
+    public void setDown(Location down) {
+        exits[5] = down;
+    }
+
     public void setNorthOpened(boolean opened) {
         exitsOpened[0] = opened;
     }
@@ -117,6 +127,14 @@ public class Location implements Serializable {
 
     public void setWestOpened(boolean opened) {
         exitsOpened[3] = opened;
+    }
+
+    public void setUpOpened(boolean opened) {
+        exitsOpened[4] = opened;
+    }
+
+    public void setDownOpened(boolean opened) {
+        exitsOpened[5] = opened;
     }
 
     public boolean isNorthOpened() {
@@ -135,20 +153,36 @@ public class Location implements Serializable {
         return exitsOpened[3];
     }
 
+    public boolean isUpOpened() {
+        return exitsOpened[4];
+    }
+
+    public boolean isDownOpened() {
+        return exitsOpened[5];
+    }
+
     public Location getNorth() {
-        return exitsOpened[0] ? exits[0] : null;
+        return exits[0];
     }
 
     public Location getSouth() {
-        return exitsOpened[1] ? exits[1] : null;
+        return exits[1];
     }
 
     public Location getEast() {
-        return exitsOpened[2] ? exits[2] : null;
+        return exits[2];
     }
 
     public Location getWest() {
-        return exitsOpened[3] ? exits[3] : null;
+        return exits[3];
+    }
+
+    public Location getUp() {
+        return exits[4];
+    }
+
+    public Location getDown() {
+        return exits[5];
     }
 
     public void removeFromExits(Location toRemove) {
@@ -178,28 +212,30 @@ public class Location implements Serializable {
         return location != null && this.id == location.id;
     }
 
-    public static void addNewCategory(LocationCategory locationCategory) {
-        categories.add(locationCategory);
+    public static void addLocationCategory(LocationCategory locationCategory) {
+        locationCategories.add(locationCategory);
     }
 
-    public static void deleteCategory(LocationCategory locationCategory) {
-        categories.remove(locationCategory);
+    public static void deleteLocationCategory(LocationCategory locationCategory) {
+        locationCategories.remove(locationCategory);
     }
 
-    public LocationCategory getCategory() {
-        return category;
+    public List<LocationCategory> getCategories() {
+        return categories;
     }
 
-    public void removeCategory() {
-        this.category = null;
+    public void removeCategory(LocationCategory category) {
+        this.categories.remove(category);
     }
 
-    public void setCategory(LocationCategory category) {
-        this.category = category;
+    public void addCategory(LocationCategory category) {
+        if (!categories.contains(category)) {
+            categories.add(category);
+        }
     }
 
-    public static void clearCategories() {
-        categories = new ArrayList<>();
+    public static void clearLocationsCategories() {
+        locationCategories = new ArrayList<>();
     }
 
     public Map<String, Script> getScripts() {
@@ -216,5 +252,9 @@ public class Location implements Serializable {
 
     public void removeScript(String scriptName) {
         this.scripts.remove(scriptName);
+    }
+
+    public void setCategories(List<LocationCategory> categories) {
+        this.categories = categories;
     }
 }

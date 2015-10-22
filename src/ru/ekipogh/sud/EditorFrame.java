@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,26 +27,26 @@ public class EditorFrame extends JFrame {
     private final DefaultListModel<GameCharacter> charactersListModel;
     private final DefaultListModel<Item> characterItemsListModel;
     private final DefaultListModel<Item> playerItemsListModel;
-    private final DefaultListModel<LocationCategory> locationCategoriesListModel;
+    private final DefaultListModel<LocationCategory> locationsCategoriesListModel;
     private final DefaultListModel<String> locationCategoryScriptsListModel;
-    private final DefaultListModel<ItemCategory> itemCotegoriesListModel;
+    private final DefaultListModel<ItemCategory> itemsCategoriesListModel;
     private final DefaultListModel<String> itemCategoryScriptsListModel;
-    private final DefaultListModel<CharacterCategory> charCategoriesListModel;
+    private final DefaultListModel<CharacterCategory> charactersCategoriesListModel;
     private final DefaultListModel<String> charCategoryScriptsListModel;
-    private final DefaultComboBoxModel<LocationCategory> locationCategoryComboModel;
-    private final DefaultComboBoxModel<ItemCategory> itemCategoryComboModel;
-    private final DefaultComboBoxModel<CharacterCategory> characterCategoryComboModel;
     private final DefaultListModel<String> playerScriptListModel;
+    private final DefaultComboBoxModel<Location> upModel;
+    private final DefaultComboBoxModel<Location> downModel;
+    private final DefaultListModel<ItemCategory> itemCategoriesListModel;
     private DefaultListModel<Location> locationsListModel;
     private JPanel rootPanel;
     private JList<Location> locationsList;
     private JTextField locName;
     private JTextField locID;
     private JTextArea locDescription;
-    private JComboBox<Location> locNorth;
-    private JComboBox<Location> locSouth;
-    private JComboBox<Location> locEast;
-    private JComboBox<Location> locWest;
+    private JComboBox<Location> northComboBox;
+    private JComboBox<Location> southComboBox;
+    private JComboBox<Location> eastComboBox;
+    private JComboBox<Location> westComboBox;
     private JButton addLocationButton;
     private JButton deleteLocButton;
     private JButton saveLocButton;
@@ -106,23 +107,20 @@ public class EditorFrame extends JFrame {
     private JList<Item> playerItemsList;
     private JButton addItemToPlayerButton;
     private JButton deleteItemFromPlayerButton;
-    private JComboBox<ItemCategory> itemCategoryCombo;
-    private JComboBox<LocationCategory> locationCategoryCombo;
-    private JComboBox<CharacterCategory> characterCategoryCombo;
-    private JList<LocationCategory> locationCategoriesList;
+    private JList<LocationCategory> locationsCategoriesList;
     private JButton addLocationCategoryButton;
     private JButton deleteLocationCategoryButton;
     private JList<String> locationCategoryScriptsList;
     private JTextField locationCategoryNameFiled;
     private RSyntaxTextArea locationCategoryScriptText;
     private JButton saveLocationCategoryScriptButton;
-    private JList<ItemCategory> itemCotegoriesList;
+    private JList<ItemCategory> itemsCategoriesList;
     private JList<String> itemCategoryScriptsList;
     private RSyntaxTextArea itemCategoryScriptText;
     private JButton addItemCategoryButton;
     private JButton deleteItemCategoryButton;
     private JButton saveItemCategoryScriptButton;
-    private JList<CharacterCategory> charCategoriesList;
+    private JList<CharacterCategory> charactersCategoriesList;
     private JList<String> charCategoryScriptsList;
     private RSyntaxTextArea charCategoryScriptText;
     private JButton addCharacterCategoryButton;
@@ -156,6 +154,25 @@ public class EditorFrame extends JFrame {
     private JCheckBox southEnabledBox;
     private JCheckBox eastEnabledBox;
     private JCheckBox westEnabledBox;
+    private JComboBox<Location> upComboBox;
+    private JCheckBox upEnabledBox;
+    private JComboBox<Location> downComboBox;
+    private JCheckBox downEnabledBox;
+    private JList<CharacterCategory> characterAllCategoriesList;
+    private JList<CharacterCategory> characterCategoryList;
+    private JButton addCategoryToCharacterButton;
+    private JButton deleteCategoryFromCharacterButton;
+    private JList<LocationCategory> locationAllCategoriesList;
+    private JList<LocationCategory> locationCategoriesList;
+    private JButton addCategoryToLocationButton;
+    private JButton deleteCategoryFromLocationButton;
+    private JList<ItemCategory> itemAllCategoriesList;
+    private JList<ItemCategory> itemCategoriesList;
+    private JButton addCategoryToItemButton;
+    private JButton deleteCategoryFromItemButton;
+    private DefaultListModel<CharacterCategory> characterCategoryListModel;
+    private DefaultListModel<LocationCategory> locationCategoryListModel;
+
     private GameCharacter player;
     private String gamePath;
 
@@ -183,8 +200,12 @@ public class EditorFrame extends JFrame {
         characterItemsListModel = new DefaultListModel<>();
         characterItemsList.setModel(characterItemsListModel);
 
-        charCategoriesListModel = new DefaultListModel<>();
-        charCategoriesList.setModel(charCategoriesListModel);
+        charactersCategoriesListModel = new DefaultListModel<>();
+        charactersCategoriesList.setModel(charactersCategoriesListModel);
+        characterAllCategoriesList.setModel(charactersCategoriesListModel);
+
+        characterCategoryListModel = new DefaultListModel<>();
+        characterCategoryList.setModel(characterCategoryListModel);
 
         charCategoryScriptsListModel = new DefaultListModel<>();
         charCategoryScriptsList.setModel(charCategoryScriptsListModel);
@@ -204,8 +225,9 @@ public class EditorFrame extends JFrame {
         locationItemsListModel = new DefaultListModel<>();
         locationItemsList.setModel(locationItemsListModel);
 
-        locationCategoriesListModel = new DefaultListModel<>();
-        locationCategoriesList.setModel(locationCategoriesListModel);
+        locationsCategoriesListModel = new DefaultListModel<>();
+        locationsCategoriesList.setModel(locationsCategoriesListModel);
+        locationAllCategoriesList.setModel(locationsCategoriesListModel);
 
         locationCategoryScriptsListModel = new DefaultListModel<>();
         locationCategoryScriptsList.setModel(locationCategoryScriptsListModel);
@@ -216,11 +238,18 @@ public class EditorFrame extends JFrame {
         itemsListModel = new DefaultListModel<>();
         itemsList.setModel(itemsListModel);
 
-        itemCotegoriesListModel = new DefaultListModel<>();
-        itemCotegoriesList.setModel(itemCotegoriesListModel);
+        itemsCategoriesListModel = new DefaultListModel<>();
+        itemsCategoriesList.setModel(itemsCategoriesListModel);
+        itemAllCategoriesList.setModel(itemsCategoriesListModel);
 
         itemCategoryScriptsListModel = new DefaultListModel<>();
         itemCategoryScriptsList.setModel(itemCategoryScriptsListModel);
+
+        locationCategoryListModel = new DefaultListModel<>();
+        locationCategoriesList.setModel(locationCategoryListModel);
+
+        itemCategoriesListModel = new DefaultListModel<>();
+        itemCategoriesList.setModel(itemCategoriesListModel);
 
         locationTabItemsList.setModel(itemsListModel);
         characterTabItemsList.setModel(itemsListModel);
@@ -258,41 +287,35 @@ public class EditorFrame extends JFrame {
         southModel = new DefaultComboBoxModel<>();
         eastModel = new DefaultComboBoxModel<>();
         westModel = new DefaultComboBoxModel<>();
+        upModel = new DefaultComboBoxModel<>();
+        downModel = new DefaultComboBoxModel<>();
 
         playerLocationModel = new DefaultComboBoxModel<>();
         characterLocationModel = new DefaultComboBoxModel<>();
 
         slotNamesModel = new DefaultComboBoxModel<>();
 
-        locationCategoryComboModel = new DefaultComboBoxModel<>();
-        itemCategoryComboModel = new DefaultComboBoxModel<>();
-        characterCategoryComboModel = new DefaultComboBoxModel<>();
-
         northModel.addElement(null);
         southModel.addElement(null);
         eastModel.addElement(null);
         westModel.addElement(null);
+        upModel.addElement(null);
+        downModel.addElement(null);
 
         playerLocationModel.addElement(null);
         characterLocationModel.addElement(null);
 
-        locationCategoryComboModel.addElement(null);
-        itemCategoryComboModel.addElement(null);
-        characterCategoryComboModel.addElement(null);
-
-        locNorth.setModel(northModel);
-        locSouth.setModel(southModel);
-        locEast.setModel(eastModel);
-        locWest.setModel(westModel);
+        northComboBox.setModel(northModel);
+        southComboBox.setModel(southModel);
+        eastComboBox.setModel(eastModel);
+        westComboBox.setModel(westModel);
+        upComboBox.setModel(upModel);
+        downComboBox.setModel(downModel);
 
         characterLocationCombo.setModel(characterLocationModel);
         playerLocation.setModel(playerLocationModel);
 
         slotCombo.setModel(slotNamesModel);
-
-        characterCategoryCombo.setModel(characterCategoryComboModel);
-        locationCategoryCombo.setModel(locationCategoryComboModel);
-        itemCategoryCombo.setModel(itemCategoryComboModel);
 
         //модели таблиц
         equipTableModel = new DefaultTableModel() {
@@ -432,6 +455,18 @@ public class EditorFrame extends JFrame {
 
         deleteItemCategoryButton.addActionListener(e -> deleteItemCategory());
 
+        addCategoryToCharacterButton.addActionListener(e -> addCategoryToCharacter());
+
+        deleteCategoryFromCharacterButton.addActionListener(e -> deleteCategoryFromCharacter());
+
+        addCategoryToLocationButton.addActionListener(e -> addCategoryToLocation());
+
+        deleteCategoryFromLocationButton.addActionListener(e -> deleteCategoryFromLocation());
+
+        addCategoryToItemButton.addActionListener(e -> addCategoryToItem());
+
+        deleteCategoryFromItemButton.addActionListener(e -> deleteCategoryFromItem());
+
         //листенеры меню
         newGameMenu.addActionListener(e -> newGame());
         newGameMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_MASK));
@@ -451,11 +486,11 @@ public class EditorFrame extends JFrame {
         //листенеры листов
         charCategoryScriptsList.addListSelectionListener(e -> selectCharCategoryScript());
 
-        charCategoriesList.addListSelectionListener(e -> selectCharCategory());
+        charactersCategoriesList.addListSelectionListener(e -> selectCharCategory());
 
         itemCategoryScriptsList.addListSelectionListener(e -> selectItemCategoryScript());
 
-        itemCotegoriesList.addListSelectionListener(e -> selectItemCategory());
+        itemsCategoriesList.addListSelectionListener(e -> selectItemCategory());
 
         locationsList.addListSelectionListener(e -> {
             setLocationFormElementsEnabled();
@@ -544,11 +579,29 @@ public class EditorFrame extends JFrame {
 
         playerScriptList.addListSelectionListener(e -> selectPlayerScript());
 
-        locationCategoriesList.addListSelectionListener(e -> selectLocationCategory());
+        locationsCategoriesList.addListSelectionListener(e -> selectLocationCategory());
         locationCategoryScriptsList.addListSelectionListener(e -> selectLocationCategoryScript());
 
         //листенеры комбобоксов
         itemTypeCombo.addActionListener(e -> showSlotField());
+        northComboBox.addActionListener(e -> {
+            if (northComboBox.getSelectedItem() != null) northEnabledBox.setSelected(true);
+        });
+        southComboBox.addActionListener(e -> {
+            if (southComboBox.getSelectedItem() != null) southEnabledBox.setSelected(true);
+        });
+        eastComboBox.addActionListener(e -> {
+            if (eastComboBox.getSelectedItem() != null) eastEnabledBox.setSelected(true);
+        });
+        westComboBox.addActionListener(e -> {
+            if (westComboBox.getSelectedItem() != null) westEnabledBox.setSelected(true);
+        });
+        upComboBox.addActionListener(e -> {
+            if (upComboBox.getSelectedItem() != null) upEnabledBox.setSelected(true);
+        });
+        downComboBox.addActionListener(e -> {
+            if (downComboBox.getSelectedItem() != null) downEnabledBox.setSelected(true);
+        });
 
         //листенеры текстфилдов
         locationCategoryNameFiled.addActionListener(e -> saveLocationCategoryName());
@@ -567,6 +620,78 @@ public class EditorFrame extends JFrame {
             loadGame();
 
         //test area
+    }
+
+    private void deleteCategoryFromItem() {
+        int indexI = itemsList.getSelectedIndex();
+        int indexC = itemCategoriesList.getSelectedIndex();
+        if (indexI >= 0 && indexC >= 0) {
+            Item item = itemsListModel.getElementAt(indexI);
+            ItemCategory category = itemCategoriesListModel.getElementAt(indexC);
+            item.removeCategory(category);
+            itemCategoriesListModel.removeElement(category);
+        }
+    }
+
+    private void addCategoryToItem() {
+        int indexI = itemsList.getSelectedIndex();
+        int indexC = itemAllCategoriesList.getSelectedIndex();
+        if (indexI >= 0 && indexC >= 0) {
+            Item item = itemsListModel.getElementAt(indexI);
+            ItemCategory category = itemsCategoriesListModel.getElementAt(indexC);
+            if (!item.getCategories().contains(category)) {
+                item.addCategory(category);
+                itemCategoriesListModel.addElement(category);
+            }
+        }
+    }
+
+    private void deleteCategoryFromLocation() {
+        int indexL = locationsList.getSelectedIndex();
+        int indexC = locationCategoriesList.getSelectedIndex();
+        if (indexL >= 0 && indexC >= 0) {
+            Location location = locationsListModel.getElementAt(indexL);
+            LocationCategory category = locationCategoryListModel.getElementAt(indexC);
+            location.removeCategory(category);
+            locationCategoryListModel.removeElement(category);
+        }
+    }
+
+    private void addCategoryToLocation() {
+        int indexL = locationsList.getSelectedIndex();
+        int indexC = locationAllCategoriesList.getSelectedIndex();
+        if (indexL >= 0 && indexC >= 0) {
+            Location location = locationsListModel.getElementAt(indexL);
+            LocationCategory category = locationsCategoriesListModel.getElementAt(indexC);
+            if (!location.getCategories().contains(category)) {
+                location.addCategory(category);
+                locationCategoryListModel.addElement(category);
+            }
+        }
+    }
+
+    private void deleteCategoryFromCharacter() {
+        int indexCh = charactersList.getSelectedIndex();
+        int indexCC = characterCategoryList.getSelectedIndex();
+        if (indexCh >= 0 && indexCC >= 0) {
+            GameCharacter character = charactersListModel.getElementAt(indexCh);
+            CharacterCategory category = characterCategoryListModel.getElementAt(indexCC);
+            character.removeCategory(category);
+            characterCategoryListModel.removeElement(category);
+        }
+    }
+
+    private void addCategoryToCharacter() {
+        int indexCh = charactersList.getSelectedIndex();
+        int indexCC = characterAllCategoriesList.getSelectedIndex();
+        if (indexCh >= 0 && indexCC >= 0) {
+            GameCharacter character = charactersListModel.getElementAt(indexCh);
+            CharacterCategory category = charactersCategoriesListModel.getElementAt(indexCC);
+            if (!character.getCategories().contains(category)) {
+                character.addCategory(category);
+                characterCategoryListModel.addElement(category);
+            }
+        }
     }
 
     private void savePlayerScript() {
@@ -611,10 +736,13 @@ public class EditorFrame extends JFrame {
         FileFilter ff = new FileNameExtensionFilter("TheSUD game", "sud");
         fc.setFileFilter(ff);
         int response = fc.showSaveDialog(this);
-        if (response == JFileChooser.APPROVE_OPTION)
+        if (response == JFileChooser.APPROVE_OPTION) {
             gamePath = fc.getSelectedFile().getPath();
-        else
+            if (!gamePath.endsWith(".sud"))
+                gamePath += ".sud";
+        } else {
             return;
+        }
         saveGame();
     }
 
@@ -647,27 +775,24 @@ public class EditorFrame extends JFrame {
         characterLocationModel.removeAllElements();
         characterLocationModel.addElement(null);
         playerLocationModel.removeAllElements();
-        Item.clearCategories();
-        Location.clearCategories();
-        GameCharacter.clearCategories();
+        Item.clearItemsCategories();
+        Location.clearLocationsCategories();
+        GameCharacter.clearCharactersCategories();
         Equipment.clearSlots();
         equipTableModel.setRowCount(0);
         fillEquipmentTable();
-        locationCategoriesListModel.clear();
-        itemCotegoriesListModel.clear();
-        charCategoriesListModel.clear();
-        locationCategoryComboModel.removeAllElements();
-        itemCategoryComboModel.removeAllElements();
-        characterCategoryComboModel.removeAllElements();
+        locationsCategoriesListModel.clear();
+        itemsCategoriesListModel.clear();
+        charactersCategoriesListModel.clear();
         initScriptText.setText("");
         playerDescriptionArea.setText("");
     }
 
     private void saveCharCategoryScript() {
-        int indexCat = charCategoriesList.getSelectedIndex();
+        int indexCat = charactersCategoriesList.getSelectedIndex();
         int indexS = charCategoryScriptsList.getSelectedIndex();
         if (indexCat >= 0 && indexS >= 0) {
-            CharacterCategory characterCategory = charCategoriesListModel.elementAt(indexCat);
+            CharacterCategory characterCategory = charactersCategoriesListModel.elementAt(indexCat);
             String scriptName = charCategoryScriptsListModel.elementAt(indexS);
             //characterCategory.setScript(scriptName, charCategoryScriptText.getText());
             characterCategory.setScript(scriptName, new Script(charCategoryScriptText.getText(), characterCategoryScriptEnabledBox.isSelected()));
@@ -675,26 +800,26 @@ public class EditorFrame extends JFrame {
     }
 
     private void saveCharCategoryName() {
-        int indexCat = charCategoriesList.getSelectedIndex();
+        int indexCat = charactersCategoriesList.getSelectedIndex();
         if (indexCat >= 0) {
-            CharacterCategory characterCategory = charCategoriesListModel.elementAt(indexCat);
+            CharacterCategory characterCategory = charactersCategoriesListModel.elementAt(indexCat);
             String name = charCategoryNameField.getText();
-            for (CharacterCategory category : GameCharacter.getCategories()) {
+            for (CharacterCategory category : GameCharacter.getCharacterCategories()) {
                 if (category.getName().equals(name)) {
                     JOptionPane.showMessageDialog(this, "Категория с таким названием уже существует");
                     return;
                 }
             }
             characterCategory.setName(name);
-            charCategoriesList.updateUI();
+            charactersCategoriesList.updateUI();
         }
     }
 
     private void selectCharCategoryScript() {
-        int indexCat = charCategoriesList.getSelectedIndex();
+        int indexCat = charactersCategoriesList.getSelectedIndex();
         int indexS = charCategoryScriptsList.getSelectedIndex();
         if (indexCat >= 0 && indexS >= 0) {
-            CharacterCategory characterCategory = charCategoriesListModel.elementAt(indexCat);
+            CharacterCategory characterCategory = charactersCategoriesListModel.elementAt(indexCat);
             String scriptName = charCategoryScriptsListModel.elementAt(indexS);
             //charCategoryScriptText.setText(characterCategory.getScript(scriptName));
             Script script = characterCategory.getScript(scriptName);
@@ -704,10 +829,10 @@ public class EditorFrame extends JFrame {
     }
 
     private void deleteCharCategoryScript() {
-        int indexCat = charCategoriesList.getSelectedIndex();
+        int indexCat = charactersCategoriesList.getSelectedIndex();
         int indexS = charCategoryScriptsList.getSelectedIndex();
         if (indexCat >= 0 && indexS >= 0) {
-            CharacterCategory characterCategory = charCategoriesListModel.elementAt(indexCat);
+            CharacterCategory characterCategory = charactersCategoriesListModel.elementAt(indexCat);
             String scriptName = charCategoryScriptsListModel.elementAt(indexS);
             if (!scriptName.startsWith("_on")) {
                 characterCategory.removeScript(scriptName);
@@ -717,9 +842,9 @@ public class EditorFrame extends JFrame {
     }
 
     private void addCharCategoryScript() {
-        int index = charCategoriesList.getSelectedIndex();
+        int index = charactersCategoriesList.getSelectedIndex();
         if (index >= 0) {
-            CharacterCategory characterCategory = charCategoriesListModel.elementAt(index);
+            CharacterCategory characterCategory = charactersCategoriesListModel.elementAt(index);
             String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
             if (scriptName != null) {
                 Script script = new Script("", true);
@@ -730,44 +855,39 @@ public class EditorFrame extends JFrame {
     }
 
     private void deleteCharCategory() {
-        int indexCat = charCategoriesList.getSelectedIndex();
+        int indexCat = charactersCategoriesList.getSelectedIndex();
         if (indexCat >= 0) {
-            CharacterCategory characterCategory = charCategoriesListModel.elementAt(indexCat);
+            CharacterCategory characterCategory = charactersCategoriesListModel.elementAt(indexCat);
             GameCharacter.deleteCategory(characterCategory);
-            charCategoriesListModel.removeElement(characterCategory);
+            charactersCategoriesListModel.removeElement(characterCategory);
             for (int i = 0; i < charactersListModel.size(); i++) {
-                GameCharacter character = charactersListModel.elementAt(i);
-                if (character.getCategory().equals(characterCategory))
-                    character.removeCategory();
+                charactersListModel.get(i).removeCategory(characterCategory);
             }
-            characterCategoryComboModel.removeElement(characterCategory);
-            charCategoriesList.setSelectedIndex((indexCat > 0) ? indexCat - 1 : indexCat);
+            charactersCategoriesList.setSelectedIndex((indexCat > 0) ? indexCat - 1 : indexCat);
         }
     }
 
     private void addCharCategory() {
         CharacterCategory characterCategory = new CharacterCategory("Название категории");
-        GameCharacter.addNewCategory(characterCategory);
-        charCategoriesListModel.addElement(characterCategory);
-        characterCategoryComboModel.addElement(characterCategory);
+        GameCharacter.addCharacterCategory(characterCategory);
+        charactersCategoriesListModel.addElement(characterCategory);
     }
 
     private void selectCharCategory() {
-        int indexCat = charCategoriesList.getSelectedIndex();
+        int indexCat = charactersCategoriesList.getSelectedIndex();
         if (indexCat >= 0) {
-            CharacterCategory characterCategory = charCategoriesListModel.elementAt(indexCat);
+            CharacterCategory characterCategory = charactersCategoriesListModel.elementAt(indexCat);
             charCategoryNameField.setText(characterCategory.getName());
             charCategoryScriptsListModel.clear();
-            //characterCategory.getScripts().keySet().forEach(charCategoryScriptsListModel::addElement);
             characterCategory.getScripts().keySet().forEach(charCategoryScriptsListModel::addElement);
         }
     }
 
     private void deleteItemCategoryScript() {
-        int indexCat = itemCotegoriesList.getSelectedIndex();
+        int indexCat = itemsCategoriesList.getSelectedIndex();
         int indexS = itemCategoryScriptsList.getSelectedIndex();
         if (indexCat >= 0 && indexS >= 0) {
-            ItemCategory itemCategory = itemCotegoriesListModel.elementAt(indexCat);
+            ItemCategory itemCategory = itemsCategoriesListModel.elementAt(indexCat);
             String scriptName = itemCategoryScriptsListModel.elementAt(indexS);
             if (!scriptName.startsWith("_on")) {
                 itemCategory.removeScript(scriptName);
@@ -777,9 +897,9 @@ public class EditorFrame extends JFrame {
     }
 
     private void addItemCategoryScript() {
-        int index = itemCotegoriesList.getSelectedIndex();
+        int index = itemsCategoriesList.getSelectedIndex();
         if (index >= 0) {
-            ItemCategory itemCategory = itemCotegoriesListModel.elementAt(index);
+            ItemCategory itemCategory = itemsCategoriesListModel.elementAt(index);
             String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
             if (scriptName != null) {
                 Script script = new Script("", true);
@@ -790,10 +910,10 @@ public class EditorFrame extends JFrame {
     }
 
     private void deleteLocationCategoryScript() {
-        int indexCat = locationCategoriesList.getSelectedIndex();
+        int indexCat = locationsCategoriesList.getSelectedIndex();
         int indexS = locationCategoryScriptsList.getSelectedIndex();
         if (indexCat >= 0 && indexS >= 0) {
-            LocationCategory locationCategory = locationCategoriesListModel.elementAt(indexCat);
+            LocationCategory locationCategory = locationsCategoriesListModel.elementAt(indexCat);
             String scriptName = locationCategoryScriptsListModel.elementAt(indexS);
             if (!scriptName.startsWith("_on")) {
                 locationCategory.removeScript(scriptName);
@@ -803,9 +923,9 @@ public class EditorFrame extends JFrame {
     }
 
     private void addLocationCategoryScript() {
-        int index = locationCategoriesList.getSelectedIndex();
+        int index = locationsCategoriesList.getSelectedIndex();
         if (index >= 0) {
-            LocationCategory locationCategory = locationCategoriesListModel.elementAt(index);
+            LocationCategory locationCategory = locationsCategoriesListModel.elementAt(index);
             String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
             if (scriptName != null) {
                 Script script = new Script("", true);
@@ -816,10 +936,10 @@ public class EditorFrame extends JFrame {
     }
 
     private void saveItemCategoryScript() {
-        int indexCat = itemCotegoriesList.getSelectedIndex();
+        int indexCat = itemsCategoriesList.getSelectedIndex();
         int indexS = itemCategoryScriptsList.getSelectedIndex();
         if (indexCat >= 0 && indexS >= 0) {
-            ItemCategory itemCategory = itemCotegoriesListModel.elementAt(indexCat);
+            ItemCategory itemCategory = itemsCategoriesListModel.elementAt(indexCat);
             String scriptName = itemCategoryScriptsListModel.elementAt(indexS);
             //itemCategory.setScript(scriptName, locationCategoryScriptText.getText());
             itemCategory.setScript(scriptName, new Script(itemCategoryScriptText.getText(), itemCategoryScriptEnabledBox.isSelected()));
@@ -827,140 +947,128 @@ public class EditorFrame extends JFrame {
     }
 
     private void saveItemCategoryName() {
-        int indexCat = itemCotegoriesList.getSelectedIndex();
+        int indexCat = itemsCategoriesList.getSelectedIndex();
         if (indexCat >= 0) {
-            ItemCategory itemCategory = itemCotegoriesListModel.elementAt(indexCat);
+            ItemCategory itemCategory = itemsCategoriesListModel.elementAt(indexCat);
             String name = itemCategoryNameField.getText();
-            for (ItemCategory category : Item.getCategories()) {
+            for (ItemCategory category : Item.getItemCategories()) {
                 if (category.getName().equals(name)) {
                     JOptionPane.showMessageDialog(this, "Категория с таким названием уже существует");
                     return;
                 }
             }
             itemCategory.setName(name);
-            itemCotegoriesList.updateUI();
+            itemsCategoriesList.updateUI();
         }
     }
 
     private void selectItemCategoryScript() {
-        int indexCat = itemCotegoriesList.getSelectedIndex();
+        int indexCat = itemsCategoriesList.getSelectedIndex();
         int indexS = itemCategoryScriptsList.getSelectedIndex();
         if (indexCat >= 0 && indexS >= 0) {
-            ItemCategory itemCategory = itemCotegoriesListModel.elementAt(indexCat);
+            ItemCategory itemCategory = itemsCategoriesListModel.elementAt(indexCat);
             String scriptName = itemCategoryScriptsListModel.elementAt(indexS);
             Script script = itemCategory.getScript(scriptName);
             itemCategoryScriptText.setText(script.getText());
             itemCategoryScriptEnabledBox.setSelected(script.isEnabled());
-            //itemCategoryScriptText.setText(itemCategory.getScript(scriptName));
         }
     }
 
     private void selectItemCategory() {
-        int indexCat = itemCotegoriesList.getSelectedIndex();
+        int indexCat = itemsCategoriesList.getSelectedIndex();
         if (indexCat >= 0) {
-            ItemCategory itemCategory = itemCotegoriesListModel.elementAt(indexCat);
+            ItemCategory itemCategory = itemsCategoriesListModel.elementAt(indexCat);
             itemCategoryNameField.setText(itemCategory.getName());
             itemCategoryScriptsListModel.clear();
-            //itemCategory.getScripts().keySet().forEach(itemCategoryScriptsListModel::addElement);
             itemCategory.getScripts().keySet().forEach(itemCategoryScriptsListModel::addElement);
         }
     }
 
     private void deleteItemCategory() {
-        int indexCat = itemCotegoriesList.getSelectedIndex();
+        int indexCat = itemsCategoriesList.getSelectedIndex();
         if (indexCat >= 0) {
-            ItemCategory itemCategory = itemCotegoriesListModel.elementAt(indexCat);
-            Item.deleteCategory(itemCategory);
-            itemCotegoriesListModel.removeElement(itemCategory);
+            ItemCategory itemCategory = itemsCategoriesListModel.elementAt(indexCat);
+            Item.deleteItemCategory(itemCategory);
+            itemsCategoriesListModel.removeElement(itemCategory);
             for (int i = 0; i < itemsListModel.size(); i++) {
                 Item item = itemsListModel.elementAt(i);
-                if (item.getCategory().equals(itemCategory))
-                    item.removeCategory();
+                item.removeCategory(itemCategory);
             }
-            itemCategoryComboModel.removeElement(itemCategory);
-            itemCotegoriesList.setSelectedIndex((indexCat > 0) ? indexCat - 1 : indexCat);
+            itemsCategoriesList.setSelectedIndex((indexCat > 0) ? indexCat - 1 : indexCat);
         }
     }
 
     private void addItemCategory() {
         ItemCategory itemCategory = new ItemCategory("Название категории");
-        Item.addNewCategory(itemCategory);
-        itemCotegoriesListModel.addElement(itemCategory);
-        itemCategoryComboModel.addElement(itemCategory);
+        Item.addItemCategory(itemCategory);
+        itemsCategoriesListModel.addElement(itemCategory);
     }
 
     private void selectLocationCategoryScript() {
-        int indexCat = locationCategoriesList.getSelectedIndex();
+        int indexCat = locationsCategoriesList.getSelectedIndex();
         int indexS = locationCategoryScriptsList.getSelectedIndex();
         if (indexCat >= 0 && indexS >= 0) {
-            LocationCategory locationCategory = locationCategoriesListModel.elementAt(indexCat);
+            LocationCategory locationCategory = locationsCategoriesListModel.elementAt(indexCat);
             String scriptName = locationCategoryScriptsListModel.elementAt(indexS);
             Script script = locationCategory.getScript(scriptName);
             locationCategoryScriptText.setText(script.getText());
             locationCategoryScriptEnabledBox.setSelected(script.isEnabled());
-            //locationCategoryScriptText.setText(locationCategory.getScript(scriptName));
         }
     }
 
     private void selectLocationCategory() {
-        int indexCat = locationCategoriesList.getSelectedIndex();
+        int indexCat = locationsCategoriesList.getSelectedIndex();
         if (indexCat >= 0) {
-            LocationCategory locationCategory = locationCategoriesListModel.elementAt(indexCat);
+            LocationCategory locationCategory = locationsCategoriesListModel.elementAt(indexCat);
             locationCategoryNameFiled.setText(locationCategory.getName());
             locationCategoryScriptsListModel.clear();
-            //locationCategory.getScripts().keySet().forEach(locationCategoryScriptsListModel::addElement);
             locationCategory.getScripts().keySet().forEach(locationCategoryScriptsListModel::addElement);
         }
     }
 
     private void saveLocationCategoryScript() {
-        int indexCat = locationCategoriesList.getSelectedIndex();
+        int indexCat = locationsCategoriesList.getSelectedIndex();
         int indexS = locationCategoryScriptsList.getSelectedIndex();
         if (indexCat >= 0 && indexS >= 0) {
-            LocationCategory locationCategory = locationCategoriesListModel.elementAt(indexCat);
+            LocationCategory locationCategory = locationsCategoriesListModel.elementAt(indexCat);
             String scriptName = locationCategoryScriptsListModel.elementAt(indexS);
-            //locationCategory.setScript(scriptName, locationCategoryScriptText.getText());
             locationCategory.setScript(scriptName, new Script(locationCategoryScriptText.getText(), locationCategoryScriptEnabledBox.isSelected()));
         }
     }
 
     private void saveLocationCategoryName() {
-        int indexCat = locationCategoriesList.getSelectedIndex();
+        int indexCat = locationsCategoriesList.getSelectedIndex();
         if (indexCat >= 0) {
-            LocationCategory locationCategory = locationCategoriesListModel.elementAt(indexCat);
+            LocationCategory locationCategory = locationsCategoriesListModel.elementAt(indexCat);
             String name = locationCategoryNameFiled.getText();
-            for (LocationCategory category : Location.getCategories()) {
+            for (LocationCategory category : Location.getLocationCategories()) {
                 if (category.getName().equals(name)) {
                     JOptionPane.showMessageDialog(this, "Категория с таким названием уже существует");
                     return;
                 }
             }
             locationCategory.setName(name);
-            locationCategoriesList.updateUI();
+            locationsCategoriesList.updateUI();
         }
     }
 
     private void deleteLocationCategory() {
-        int indexCat = locationCategoriesList.getSelectedIndex();
+        int indexCat = locationsCategoriesList.getSelectedIndex();
         if (indexCat >= 0) {
-            LocationCategory locationCategory = locationCategoriesListModel.elementAt(indexCat);
-            Location.deleteCategory(locationCategory);
-            locationCategoriesListModel.removeElement(locationCategory);
+            LocationCategory locationCategory = locationsCategoriesListModel.elementAt(indexCat);
+            Location.deleteLocationCategory(locationCategory);
+            locationsCategoriesListModel.removeElement(locationCategory);
             for (int i = 0; i < locationsListModel.size(); i++) {
-                Location l = locationsListModel.elementAt(i);
-                if (l.getCategory().equals(locationCategory))
-                    l.removeCategory();
+                locationsListModel.get(i).removeCategory(locationCategory);
             }
-            locationCategoryComboModel.removeElement(locationCategory);
-            locationCategoriesList.setSelectedIndex((indexCat > 0) ? indexCat - 1 : indexCat);
+            locationsCategoriesList.setSelectedIndex((indexCat > 0) ? indexCat - 1 : indexCat);
         }
     }
 
     private void addLocationCategory() {
         LocationCategory locationCategory = new LocationCategory("Название категории");
-        Location.addNewCategory(locationCategory);
-        locationCategoriesListModel.addElement(locationCategory);
-        locationCategoryComboModel.addElement(locationCategory);
+        Location.addLocationCategory(locationCategory);
+        locationsCategoriesListModel.addElement(locationCategory);
     }
 
     private void deleteSlot() {
@@ -1150,7 +1258,10 @@ public class EditorFrame extends JFrame {
         selected.setName(charNameFiled.getText());
         selected.setLocation((Location) characterLocationModel.getSelectedItem());
         selected.setDescription(charDescriptionArea.getText());
-        selected.setCategory((CharacterCategory) characterCategoryComboModel.getSelectedItem());
+        List<CharacterCategory> categories = new ArrayList<>();
+        for (int i = 0; i < characterCategoryListModel.size(); i++)
+            categories.add(characterCategoryListModel.getElementAt(i));
+        selected.setCategories(categories);
     }
 
     private void selectChar() {
@@ -1163,7 +1274,8 @@ public class EditorFrame extends JFrame {
             characterScriptListModel.removeAllElements();
             selected.getScripts().keySet().forEach(characterScriptListModel::addElement);
             charDescriptionArea.setText(selected.getDescription());
-            characterCategoryCombo.setSelectedItem(selected.getCategory());
+            characterCategoryListModel.removeAllElements();
+            selected.getCategories().forEach(characterCategoryListModel::addElement);
         }
     }
 
@@ -1276,7 +1388,6 @@ public class EditorFrame extends JFrame {
         selected.setDescription(itemDescription.getText());
         ItemTypes type = (ItemTypes) itemTypeCombo.getSelectedItem();
         selected.setType(type);
-        selected.setCategory((ItemCategory) itemCategoryCombo.getSelectedItem());
         if (slotCombo.isEnabled())
             selected.setEquipmentSlot(String.valueOf(slotCombo.getSelectedItem()));
         itemsList.updateUI();
@@ -1303,8 +1414,8 @@ public class EditorFrame extends JFrame {
             itemIdField.setText(String.valueOf(selected.getId()));
             slotCombo.setSelectedItem(selected.getEquipmentSlot());
             itemScriptListModel.clear();
-            itemCategoryCombo.setSelectedItem(selected.getCategory());
-            //selected.getScripts().keySet().forEach(itemScriptListModel::addElement);
+            itemCategoriesListModel.clear();
+            selected.getCategories().forEach(itemCategoriesListModel::addElement);
             selected.getScripts().keySet().forEach(itemScriptListModel::addElement);
             itemDescription.setText(selected.getDescription());
         }
@@ -1340,7 +1451,6 @@ public class EditorFrame extends JFrame {
         int response = fc.showOpenDialog(this);
         if (response == JFileChooser.APPROVE_OPTION) {
             gamePath = fc.getSelectedFile().getPath();
-
             loadGame();
         }
     }
@@ -1379,24 +1489,21 @@ public class EditorFrame extends JFrame {
         }
         Utils.updateRowHeights(equipTable);
 
-        gameFile.getCharacterCategories().forEach(charCategoriesListModel::addElement);
-        gameFile.getCharacterCategories().forEach(GameCharacter::addNewCategory);
-        gameFile.getCharacterCategories().forEach(characterCategoryComboModel::addElement);
-        gameFile.getItemCategories().forEach(itemCotegoriesListModel::addElement);
-        gameFile.getItemCategories().forEach(Item::addNewCategory);
-        gameFile.getItemCategories().forEach(itemCategoryComboModel::addElement);
-        gameFile.getLocationCategories().forEach(locationCategoriesListModel::addElement);
-        gameFile.getLocationCategories().forEach(Location::addNewCategory);
-        gameFile.getLocationCategories().forEach(locationCategoryComboModel::addElement);
+        gameFile.getCharacterCategories().forEach(charactersCategoriesListModel::addElement);
+        gameFile.getCharacterCategories().forEach(GameCharacter::addCharacterCategory);
+        gameFile.getItemCategories().forEach(itemsCategoriesListModel::addElement);
+        gameFile.getItemCategories().forEach(Item::addItemCategory);
+        gameFile.getLocationCategories().forEach(locationsCategoriesListModel::addElement);
+        gameFile.getLocationCategories().forEach(Location::addLocationCategory);
 
         gameName.setText(gameFile.getGameName());
         gameStartMessage.setText(gameFile.getGameStartMessage());
 
         initScriptText.setText(gameFile.getInitScript());
 
-        Location.setCategories(gameFile.getLocationCategories());
-        Item.setCategories(gameFile.getItemCategories());
-        GameCharacter.setCategories(gameFile.getCharacterCategories());
+        Location.setLocationCategories(gameFile.getLocationCategories());
+        Item.setItemCategories(gameFile.getItemCategories());
+        GameCharacter.setCharacterCategories(gameFile.getCharacterCategories());
         updatePlayerTab();
     }
 
@@ -1415,10 +1522,13 @@ public class EditorFrame extends JFrame {
             FileFilter ff = new FileNameExtensionFilter("TheSUD game", "sud");
             fc.setFileFilter(ff);
             int response = fc.showSaveDialog(this);
-            if (response == JFileChooser.APPROVE_OPTION)
+            if (response == JFileChooser.APPROVE_OPTION) {
                 gamePath = fc.getSelectedFile().getPath();
-            else
+                if (!gamePath.endsWith(".sud"))
+                    gamePath += ".sud";
+            } else {
                 return;
+            }
         }
         saveGame();
     }
@@ -1451,9 +1561,9 @@ public class EditorFrame extends JFrame {
                 String slotImagePath = String.valueOf(equipTableModel.getValueAt(i, 0));
                 slotsNames.put(slotName, slotImagePath);
             }
-            gameFile.setCharacterCategories(GameCharacter.getCategories());
-            gameFile.setItemCategories(Item.getCategories());
-            gameFile.setLocationCategories(Location.getCategories());
+            gameFile.setCharacterCategories(GameCharacter.getCharacterCategories());
+            gameFile.setItemCategories(Item.getItemCategories());
+            gameFile.setLocationCategories(Location.getLocationCategories());
             gameFile.setSlotNames(slotsNames);
             gameFile.setInitScript(initScriptText.getText());
             gameFile.save(gamePath);
@@ -1492,10 +1602,12 @@ public class EditorFrame extends JFrame {
 
     private void saveSelectedLocation() {
         int index = locationsList.getSelectedIndex();
-        int northIndex = locNorth.getSelectedIndex();
-        int southIndex = locSouth.getSelectedIndex();
-        int eastIndex = locEast.getSelectedIndex();
-        int westIndex = locWest.getSelectedIndex();
+        int northIndex = northComboBox.getSelectedIndex();
+        int southIndex = southComboBox.getSelectedIndex();
+        int eastIndex = eastComboBox.getSelectedIndex();
+        int westIndex = westComboBox.getSelectedIndex();
+        int upIndex = upComboBox.getSelectedIndex();
+        int downIndex = downComboBox.getSelectedIndex();
         Location selectedLocation = locationsListModel.getElementAt(index);
 
         selectedLocation.setName(locName.getText());
@@ -1504,11 +1616,14 @@ public class EditorFrame extends JFrame {
         selectedLocation.setSouth(southModel.getElementAt(southIndex));
         selectedLocation.setEast(eastModel.getElementAt(eastIndex));
         selectedLocation.setWest(westModel.getElementAt(westIndex));
+        selectedLocation.setUp(upModel.getElementAt(upIndex));
+        selectedLocation.setDown(downModel.getElementAt(downIndex));
         selectedLocation.setNorthOpened(northEnabledBox.isSelected());
         selectedLocation.setSouthOpened(southEnabledBox.isSelected());
         selectedLocation.setEastOpened(eastEnabledBox.isSelected());
         selectedLocation.setWestOpened(westEnabledBox.isSelected());
-        selectedLocation.setCategory((LocationCategory) locationCategoryComboModel.getSelectedItem());
+        selectedLocation.setUpOpened(upEnabledBox.isSelected());
+        selectedLocation.setDownOpened(downEnabledBox.isSelected());
         locationsList.updateUI();
     }
 
@@ -1519,10 +1634,12 @@ public class EditorFrame extends JFrame {
             locName.setText(selected.getName());
             locID.setText(String.valueOf(selected.getId()));
             locDescription.setText(selected.getDescription());
-            locNorth.getModel().setSelectedItem(selected.getNorth());
-            locSouth.getModel().setSelectedItem(selected.getSouth());
-            locEast.getModel().setSelectedItem(selected.getEast());
-            locWest.getModel().setSelectedItem(selected.getWest());
+            northComboBox.getModel().setSelectedItem(selected.getNorth());
+            southComboBox.getModel().setSelectedItem(selected.getSouth());
+            eastComboBox.getModel().setSelectedItem(selected.getEast());
+            westComboBox.getModel().setSelectedItem(selected.getWest());
+            upComboBox.getModel().setSelectedItem(selected.getUp());
+            downComboBox.getModel().setSelectedItem(selected.getDown());
             locationItemsListModel.clear();
             locationScriptListModel.removeAllElements();
             //selected.getScripts().keySet().forEach(locationScriptListModel::addElement);
@@ -1532,7 +1649,10 @@ public class EditorFrame extends JFrame {
             southEnabledBox.setSelected(selected.isSouthOpened());
             eastEnabledBox.setSelected(selected.isEastOpened());
             westEnabledBox.setSelected(selected.isWestOpened());
-            locationCategoryCombo.setSelectedItem(selected.getCategory());
+            upEnabledBox.setSelected(selected.isUpOpened());
+            downEnabledBox.setSelected(selected.isDownOpened());
+            locationCategoryListModel.removeAllElements();
+            selected.getCategories().forEach(locationCategoryListModel::addElement);
         }
     }
 
@@ -1555,10 +1675,12 @@ public class EditorFrame extends JFrame {
         deleteLocButton.setEnabled(enabled);
         locName.setEnabled(enabled);
         locDescription.setEnabled(enabled);
-        locNorth.setEnabled(enabled);
-        locSouth.setEnabled(enabled);
-        locEast.setEnabled(enabled);
-        locWest.setEnabled(enabled);
+        northComboBox.setEnabled(enabled);
+        southComboBox.setEnabled(enabled);
+        eastComboBox.setEnabled(enabled);
+        westComboBox.setEnabled(enabled);
+        upComboBox.setEnabled(enabled);
+        downComboBox.setEnabled(enabled);
         saveLocButton.setEnabled(enabled);
         locationItemsList.setEnabled(enabled);
         locationTabItemsList.setEnabled(enabled);
@@ -1568,5 +1690,11 @@ public class EditorFrame extends JFrame {
         southEnabledBox.setEnabled(enabled);
         eastEnabledBox.setEnabled(enabled);
         westEnabledBox.setEnabled(enabled);
+        upEnabledBox.setEnabled(enabled);
+        downEnabledBox.setEnabled(enabled);
+        locationAllCategoriesList.setEnabled(enabled);
+        locationCategoriesList.setEnabled(enabled);
+        addCategoryToLocationButton.setEnabled(enabled);
+        deleteCategoryFromLocationButton.setEnabled(enabled);
     }
 }

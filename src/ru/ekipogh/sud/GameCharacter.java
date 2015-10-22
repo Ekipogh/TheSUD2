@@ -13,12 +13,12 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
     private String name;
     private Location location;
     private List<Item> inventory;
-    private static List<CharacterCategory> categories = new ArrayList<>();
+    private static List<CharacterCategory> characterCategories = new ArrayList<>();
     private Map<String, Object> values;
     private int id;
 
     private Map<String, Script> scripts;
-    private CharacterCategory category;
+    private List<CharacterCategory> categories;
 
     public void setDescription(String description) {
         this.description = description;
@@ -26,12 +26,12 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
 
     private String description;
 
-    public static void setCategories(List<CharacterCategory> categories) {
-        GameCharacter.categories = categories;
+    public static void setCharacterCategories(List<CharacterCategory> characterCategories) {
+        GameCharacter.characterCategories = characterCategories;
     }
 
-    public static List<CharacterCategory> getCategories() {
-        return categories;
+    public static List<CharacterCategory> getCharacterCategories() {
+        return characterCategories;
     }
 
     private Equipment equipment;
@@ -45,6 +45,7 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
         this.scripts.put("_onPlayerLeave", new Script("", true));
         this.values = new HashMap<>();
         this.id = Sequencer.getNewID();
+        this.categories = new ArrayList<>();
     }
 
     public List<Item> getInventory() {
@@ -90,24 +91,24 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
         return this.name;
     }
 
-    public static void addNewCategory(CharacterCategory characterCategory) {
-        categories.add(characterCategory);
+    public static void addCharacterCategory(CharacterCategory characterCategory) {
+        characterCategories.add(characterCategory);
     }
 
     public static void deleteCategory(CharacterCategory characterCategory) {
-        categories.remove(characterCategory);
+        characterCategories.remove(characterCategory);
     }
 
-    public CharacterCategory getCategory() {
-        return category;
+    public List<CharacterCategory> getCategories() {
+        return categories;
     }
 
-    public void removeCategory() {
-        this.category = null;
+    public void removeCategory(CharacterCategory category) {
+        this.categories.remove(category);
     }
 
-    public static void clearCategories() {
-        categories = new ArrayList<>();
+    public static void clearCharactersCategories() {
+        characterCategories = new ArrayList<>();
     }
 
     public void setValue(String valueName, Object value) {
@@ -130,8 +131,13 @@ public class GameCharacter implements Serializable { //TODO: Нужни ли р�
         return description;
     }
 
-    public void setCategory(CharacterCategory category) {
-        this.category = category;
+    public void setCategories(List<CharacterCategory> categories) {
+        this.categories = categories;
+    }
+
+    public void addCategory(CharacterCategory category) {
+        if (!categories.contains(category))
+            categories.add(category);
     }
 
     public Map<String, Script> getScripts() {

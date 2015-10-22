@@ -126,8 +126,8 @@ class InventoryFrame extends JFrame {
         player.unequip(item);
         itemsListModel.addElement(item);
         Script.run(item.getScript(ONUNEQUIP).getText(), item);
-        if (item.getCategory() != null)
-            Script.run(item.getCategory().getScript(ONUNEQUIP).getText(), item);
+        for (ItemCategory category : item.getCategories())
+            Script.run(category.getScript(ONUNEQUIP).getText(), item);
     }
 
     private void updateEquipmentTable() {  //Заполнение таблицы экипировки
@@ -168,8 +168,8 @@ class InventoryFrame extends JFrame {
 
     private void useItem(Item item) {
         Script.run(item.getScript(ONUSE).getText(), item);
-        if (item.getCategory() != null)
-            Script.run(item.getCategory().getScript(ONUSE).getText(), item);
+        for (ItemCategory category : item.getCategories())
+            Script.run(category.getScript(ONUSE).getText(), item);
         //Удалем предмет из инвенторя
         player.getInventory().remove(item);
         itemsListModel.removeElement(item);
@@ -181,8 +181,8 @@ class InventoryFrame extends JFrame {
         itemsListModel.removeElement(item);
         playerFrame.updateItems();
         Script.run(item.getScript(ONDROP).getText(), item);
-        if (item.getCategory() != null)
-            Script.run(item.getCategory().getScript(ONDROP).getText(), item);
+        for (ItemCategory category : item.getCategories())
+            Script.run(category.getScript(ONDROP).getText(), item);
     }
 
     private void equipItem(Item item) {
@@ -190,8 +190,8 @@ class InventoryFrame extends JFrame {
         itemsListModel.removeElement(item);
         player.getInventory().remove(item);
         Script.run(item.getScript(ONEQUIP).getText(), item);
-        if (item.getCategory() != null)
-            Script.run(item.getCategory().getScript(ONEQUIP).getText(), item);
+        for (ItemCategory category : item.getCategories())
+            Script.run(category.getScript(ONEQUIP).getText(), item);
         updateEquipmentTable();
     }
 }

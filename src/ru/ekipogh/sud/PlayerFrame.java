@@ -21,10 +21,12 @@ import java.util.regex.Pattern;
  * Created by dedov_d on 27.04.2015.
  */
 public class PlayerFrame extends JFrame {
-    private final int NORTH = 0;
-    private final int SOUTH = 1;
-    private final int EAST = 2;
-    private final int WEST = 3;
+    private static final int UP = 4;
+    private static final int DOWN = 5;
+    private static final int NORTH = 0;
+    private static final int SOUTH = 1;
+    private static final int EAST = 2;
+    private static final int WEST = 3;
 
     private static GameCharacter player;
     private static List<Location> locations;
@@ -45,6 +47,8 @@ public class PlayerFrame extends JFrame {
     private JTextArea playerDescriptionArea;
     private JTree charactersTree;
     private JTree itemsTree;
+    private JButton upButton;
+    private JButton downButton;
     private JPopupMenu popupMenu;
     private final String ONTAKE = "_onTake";
     private final String ONEQUIP = "_onEquip";
@@ -64,7 +68,7 @@ public class PlayerFrame extends JFrame {
         setContentPane(rootPanel);
         pack();
         setLocationRelativeTo(null);
-        setSize(1024, 768);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         charactersTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode("Персонажы"));
         charactersTree.setModel(charactersTreeModel);
@@ -80,6 +84,8 @@ public class PlayerFrame extends JFrame {
         southButton.addActionListener(e -> move(SOUTH));
         westButton.addActionListener(e -> move(WEST));
         eastButton.addActionListener(e -> move(EAST));
+        upButton.addActionListener(e -> move(UP));
+        downButton.addActionListener(e -> move(DOWN));
 
         playerName.addMouseListener(new MouseAdapter() {
             @Override
@@ -173,6 +179,8 @@ public class PlayerFrame extends JFrame {
         int response = fc.showSaveDialog(this);
         if (response == JFileChooser.APPROVE_OPTION) {
             savePath = fc.getSelectedFile().getPath();
+            if (!savePath.endsWith(".sudsav"))
+                savePath += ".sudsav";
         }
         save();
     }
@@ -185,6 +193,8 @@ public class PlayerFrame extends JFrame {
             int response = fc.showSaveDialog(this);
             if (response == JFileChooser.APPROVE_OPTION) {
                 savePath = fc.getSelectedFile().getPath();
+                if (!savePath.endsWith(".sudsav"))
+                    savePath += ".sudsav";
             } else return;
         }
         save();
@@ -197,7 +207,7 @@ public class PlayerFrame extends JFrame {
         saveFile.setLocations(locations);
         saveFile.setItems(items);
 
-        //костыль,это не нужно сохранять
+        //костыль,это не нужно сохранять, сделать костыл попроще
         Script.setProperty("game", null);
         Script.setProperty("sout", null);
         Script.setProperty("out", null);
@@ -266,6 +276,15 @@ public class PlayerFrame extends JFrame {
                     menuItem.addActionListener(e -> Script.run(currentLocation.getScript(entry.getKey()).getText(), currentLocation));
                     popupMenu.add(menuItem);
                 }
+            for (LocationCategory category : currentLocation.getCategories()) {
+                for (Map.Entry<String, Script> entry : category.getScripts().entrySet()) {
+                    if (!entry.getKey().startsWith("_on")) {
+                        menuItem = new JMenuItem(entry.getKey());
+                        menuItem.addActionListener(e -> Script.run(entry.getValue().getText(), currentLocation));
+                        popupMenu.add(menuItem);
+                    }
+                }
+            }
             menuItem = new JMenuItem("Описание");
             menuItem.addActionListener(e -> showLocationDescription());
             popupMenu.add(menuItem);
@@ -287,8 +306,8 @@ public class PlayerFrame extends JFrame {
 
     private void useItem(Item item) {
         Script.run(item.getScript(ONUSE).getText(), item);
-        if (item.getCategory() != null)
-            Script.run(item.getCategory().getScript(ONUSE).getText(), item);
+        for (ItemCategory category : item.getCategories())
+            Script.run(category.getScript(ONUSE).getText(), item);
         ((DefaultMutableTreeNode) itemsTreeModel.getRoot()).remove((DefaultMutableTreeNode) itemsTree.getSelectionPath().getParentPath().getLastPathComponent());
         itemsTreeModel.reload();
     }
@@ -300,8 +319,8 @@ public class PlayerFrame extends JFrame {
         ((DefaultMutableTreeNode) itemsTreeModel.getRoot()).remove((DefaultMutableTreeNode) itemsTree.getSelectionPath().getParentPath().getLastPathComponent());
         itemsTreeModel.reload();
         Script.run(item.getScript(ONEQUIP).getText(), item);
-        if (item.getCategory() != null)
-            Script.run(item.getCategory().getScript(ONEQUIP).getText(), item);
+        for (ItemCategory category : item.getCategories())
+            Script.run(category.getScript(ONEQUIP).getText(), item);
     }
 
     //положить предмет в инвентарь игрока
@@ -311,35 +330,42 @@ public class PlayerFrame extends JFrame {
         currentLocation.removeItem(item);
         player.addToInventory(item);
         Script.run(item.getScript(ONTAKE).getText(), item);
-        if (item.getCategory() != null)
-            Script.run(item.getCategory().getScript(ONTAKE).getText(), item);
+        for (ItemCategory category : item.getCategories())
+            Script.run(category.getScript(ONTAKE).getText(), item);
     }
 
     //передвижение игрока
     private void move(int direction) {
         Location playerLocation = null;
         switch (direction) {
-            case 0:
+            case NORTH:
                 playerLocation = player.getLocation().getNorth(); //Север
                 break;
-            case 1:
+            case SOUTH:
                 playerLocation = player.getLocation().getSouth(); //Юг
                 break;
-            case 2:
+            case EAST:
                 playerLocation = player.getLocation().getEast(); //Восток
                 break;
-            case 3:
+            case WEST:
                 playerLocation = player.getLocation().getWest(); //Запад
+                break;
+            case UP:
+                playerLocation = player.getLocation().getUp();
+                break;
+            case DOWN:
+                playerLocation = player.getLocation().getDown();
                 break;
         }
         //Скрипты локаций
         Script.run(currentLocation.getScript(ONLEAVE).getText(), currentLocation);
-        if (currentLocation.getCategory() != null)
-            Script.run(currentLocation.getCategory().getScript(ONLEAVE).getText(), currentLocation);
+        for (LocationCategory category : currentLocation.getCategories())
+            Script.run(category.getScript(ONLEAVE).getText(), currentLocation);
         //Скрипты НПЦ
         characters.stream().filter(c -> currentLocation.equals(c.getLocation())).forEach(c -> {
-            if (c.getCategory() != null)
-                Script.run(c.getCategory().getScript(ONPLAYERLEAVE).getText(), c);
+            for (CharacterCategory characterCategory : c.getCategories()) {
+                Script.run(characterCategory.getScript(ONPLAYERLEAVE).getText(), c);
+            }
             Script.run(c.getScript(ONPLAYERLEAVE).getText(), c);
         });
 
@@ -349,14 +375,15 @@ public class PlayerFrame extends JFrame {
         updateCharacters();
 
         characters.stream().filter(c -> currentLocation.equals(c.getLocation())).forEach(c -> {
-            if (c.getCategory() != null)
-                Script.run(c.getCategory().getScript(ONPLAYERARRIVE).getText(), c);
+            for (CharacterCategory characterCategory : c.getCategories()) {
+                Script.run(characterCategory.getScript(ONPLAYERARRIVE).getText(), c);
+            }
             Script.run(c.getScript(ONPLAYERARRIVE).getText(), c);
         });
 
         Script.run(currentLocation.getScript(ONENTER).getText(), currentLocation);
-        if (currentLocation.getCategory() != null)
-            Script.run(currentLocation.getCategory().getScript(ONENTER).getText(), currentLocation);
+        for (LocationCategory category : currentLocation.getCategories())
+            Script.run(category.getScript(ONENTER).getText(), currentLocation);
 
         proceed(); //продолжить, выполнить сценарии и игровую логику
 
@@ -438,9 +465,12 @@ public class PlayerFrame extends JFrame {
             DefaultMutableTreeNode characterNode = new DefaultMutableTreeNode(c);
             DefaultMutableTreeNode top = (DefaultMutableTreeNode) charactersTreeModel.getRoot();
             charactersTreeModel.insertNodeInto(characterNode, top, top.getChildCount());
-            c.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> charactersTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(c.getScript(entry.getKey()).getText(), c)), characterNode, characterNode.getChildCount()));
-            if (c.getCategory() != null)
-                c.getCategory().getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> charactersTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(c.getScript(entry.getKey()).getText(), c)), characterNode, characterNode.getChildCount()));
+            c.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> charactersTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), c)), characterNode, characterNode.getChildCount()));
+            /*if (c.getCategories() != null)
+                c.getCategories().getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> charactersTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(c.getScript(entry.getKey()).getText(), c)), characterNode, characterNode.getChildCount()));*/
+            for (CharacterCategory characterCategory : c.getCategories()) {
+                characterCategory.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> charactersTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), c)), characterNode, characterNode.getChildCount()));
+            }
             charactersTreeModel.insertNodeInto(new SudTreeNode("Описание", l -> showCharDescription(c)), characterNode, characterNode.getChildCount());
         });
     }
@@ -454,8 +484,8 @@ public class PlayerFrame extends JFrame {
             DefaultMutableTreeNode top = (DefaultMutableTreeNode) itemsTreeModel.getRoot();
             itemsTreeModel.insertNodeInto(itemNode, top, top.getChildCount());
             i.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> itemsTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), i)), itemNode, itemNode.getChildCount()));
-            if (i.getCategory() != null)
-                i.getCategory().getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> itemsTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), i)), itemNode, itemNode.getChildCount()));
+            for (ItemCategory category : i.getCategories())
+                category.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> itemsTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), i)), itemNode, itemNode.getChildCount()));
             itemsTreeModel.insertNodeInto(new SudTreeNode("Описание", l -> showItemDescription(i)), itemNode, itemNode.getChildCount());
             if (i.getType() == ItemTypes.EQUIPPABLE)
                 itemsTreeModel.insertNodeInto(new SudTreeNode("Экипировать", l -> equipItem(i)), itemNode, itemNode.getChildCount());
@@ -477,10 +507,10 @@ public class PlayerFrame extends JFrame {
 
     //Дизаблим кнопки передвижения соответствующие null выходам и выходам, у которых заблокирован доступ
     private void directionButtonsEnable() {
-        northButton.setEnabled((currentLocation.getNorth() != null));
-        southButton.setEnabled((currentLocation.getSouth() != null));
-        eastButton.setEnabled((currentLocation.getEast() != null));
-        westButton.setEnabled((currentLocation.getWest() != null));
+        northButton.setEnabled((currentLocation.getNorth() != null && currentLocation.isNorthOpened()));
+        southButton.setEnabled((currentLocation.getSouth() != null && currentLocation.isSouthOpened()));
+        eastButton.setEnabled((currentLocation.getEast() != null && currentLocation.isEastOpened()));
+        westButton.setEnabled((currentLocation.getWest() != null && currentLocation.isWestOpened()));
     }
 
     public static GameCharacter getPlayer() {
