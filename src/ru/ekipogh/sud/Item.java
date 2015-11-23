@@ -19,8 +19,42 @@ public class Item implements Serializable {
     private List<ItemCategory> categories;
     private Map<String, Object> values;
     private Map<String, Script> scripts;
+    private boolean locked;
+    private List<Item> inventory;
+    private boolean isContainer;
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
+    public List<Item> getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(List<Item> inventory) {
+        this.inventory = inventory;
+    }
+
+    public boolean isContainer() {
+        return isContainer;
+    }
+
+    public void setContainer(boolean container) {
+        if (container) {
+            inventory = new ArrayList<>();
+        } else {
+            inventory = null;
+        }
+        isContainer = container;
+    }
 
     public Item(String name) {
+        this.isContainer = false;
+        this.locked = false;
         this.name = name;
         this.type = ItemTypes.GENERIC;
         this.description = "";
@@ -31,6 +65,7 @@ public class Item implements Serializable {
         this.scripts.put("_onEquip", new Script("", true));
         this.scripts.put("_onUse", new Script("", true));
         this.scripts.put("_onUnequip", new Script("", true));
+        this.scripts.put("_onUnlock", new Script("funtion(){return false;}", true));
         this.values = new HashMap<>();
         this.categories = new ArrayList<>();
     }
@@ -140,5 +175,13 @@ public class Item implements Serializable {
         if (!categories.contains(category)) {
             categories.add(category);
         }
+    }
+
+    public void addItem(Item item) {
+        inventory.add(item);
+    }
+
+    public void removeItem(Item item) {
+        inventory.remove(item);
     }
 }

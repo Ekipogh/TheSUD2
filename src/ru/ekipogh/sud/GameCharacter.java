@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by dedov_d on 03.07.2015.
  */
-public class GameCharacter implements Serializable { //TODO: Нужни ли различные классы для игрока и неписей?
+public class GameCharacter implements Serializable {
     private String name;
     private Location location;
     private List<Item> inventory;

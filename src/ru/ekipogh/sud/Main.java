@@ -7,10 +7,12 @@ class Main {
     public static EditorFrame editor;
 
     public static void main(String[] args) {
-        Icon empty = new ImageIcon();
-        UIManager.put("Tree.closedIcon", empty);
-        UIManager.put("Tree.openIcon", empty);
-        UIManager.put("Tree.leafIcon", empty);
+        /*Icon closed = new ImageIcon("data/closed.png");
+        Icon open = new ImageIcon("data/open.png");
+        Icon leaf = new ImageIcon("data/leaf.png");
+        UIManager.put("Tree.closedIcon", closed);
+        UIManager.put("Tree.openIcon", open);
+        UIManager.put("Tree.leafIcon", leaf);*/
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {

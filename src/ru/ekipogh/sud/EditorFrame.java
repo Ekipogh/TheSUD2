@@ -44,6 +44,7 @@ public class EditorFrame extends JFrame {
     private final DefaultListModel<String> characterScriptListModel;
     private final DefaultListModel<String> itemScriptListModel;
     private final DefaultTableModel equipTableModel;
+    private final DefaultListModel<Item> itemItemsListModel;
     private JPanel rootPanel;
     private JList<Location> locationsList;
     private JTextField locName;
@@ -170,6 +171,13 @@ public class EditorFrame extends JFrame {
     private JList<ItemCategory> itemCategoriesList;
     private JButton addCategoryToItemButton;
     private JButton deleteCategoryFromItemButton;
+    private JCheckBox isContainerBox;
+    private JPanel itemInventoryPanel;
+    private JList<Item> allItemsList;
+    private JList<Item> itemItemsList;
+    private JButton addItemToItemButton;
+    private JButton deleteItemFromItemButton;
+    private JCheckBox isLockedBox;
     private final DefaultListModel<CharacterCategory> characterCategoryListModel;
     private final DefaultListModel<LocationCategory> locationCategoryListModel;
 
@@ -254,6 +262,10 @@ public class EditorFrame extends JFrame {
         locationTabItemsList.setModel(itemsListModel);
         characterTabItemsList.setModel(itemsListModel);
         playerTabItemsList.setModel(itemsListModel);
+        allItemsList.setModel(itemsListModel);
+
+        itemItemsListModel = new DefaultListModel<>();
+        itemItemsList.setModel(itemItemsListModel);
 
         //поля скриптов
         characterScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
@@ -363,6 +375,10 @@ public class EditorFrame extends JFrame {
 
         //листенеры
         //листенеры конопок
+        deleteItemFromItemButton.addActionListener(e -> deleteItemFromItem());
+
+        addItemToItemButton.addActionListener(e -> addItemToItem());
+
         addCharacterButton.addActionListener(e -> addNewCharacter());
 
         addCharacterCategoryButton.addActionListener(e -> addCharCategory());
@@ -526,6 +542,28 @@ public class EditorFrame extends JFrame {
             }
         });
 
+        allItemsList.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                if (((JList) e.getSource()).getSelectedIndex() >= 0) {
+                    deleteItemFromItemButton.setEnabled(false);
+                    addItemToItemButton.setEnabled(true);
+                }
+            }
+        });
+
+        itemItemsList.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                if (((JList) e.getSource()).getSelectedIndex() >= 0) {
+                    deleteItemFromItemButton.setEnabled(true);
+                    addItemToItemButton.setEnabled(false);
+                }
+            }
+        });
+
         charactersList.addListSelectionListener(e -> {
             setCharsFromItemsEnabled();
             selectChar();
@@ -619,7 +657,61 @@ public class EditorFrame extends JFrame {
         if (!gamePath.isEmpty())
             loadGame();
 
+        //листенеры чекбоксов
+        isContainerBox.addActionListener(e -> setContainer());
+        isLockedBox.addActionListener(e -> setLocked());
+
         //test area
+    }
+
+    private void setLocked() {
+        int indexI = itemsList.getSelectedIndex();
+        if (indexI >= 0) {
+            Item item = itemsListModel.elementAt(indexI);
+            if (item.isContainer()) {
+                item.setLocked(isLockedBox.isSelected());
+            }
+        }
+    }
+
+    private void deleteItemFromItem() {
+        int indexI1 = itemsList.getSelectedIndex();
+        int indexI2 = itemItemsList.getSelectedIndex();
+        if (indexI1 >= 0 && indexI2 >= 0) {
+            Item selected = itemsListModel.getElementAt(indexI1);
+            Item toDelete = itemItemsListModel.getElementAt(indexI2);
+            selected.removeItem(toDelete);
+            itemItemsListModel.removeElement(toDelete);
+            if (indexI2 == 0)
+                deleteItemFromItemButton.setEnabled(false);
+            itemItemsList.setSelectedIndex((indexI2 > 0) ? indexI2 - 1 : indexI2);
+        }
+    }
+
+    private void addItemToItem() {
+        int indexI1 = itemsList.getSelectedIndex();
+        int indexI2 = allItemsList.getSelectedIndex();
+        if (indexI1 >= 0 && indexI2 >= 0) {
+            Item selected = itemsListModel.get(indexI1);
+            Item toAdd = itemsListModel.elementAt(indexI2);
+            if (selected.isContainer()) {
+                selected.addItem(toAdd);
+                itemItemsListModel.addElement(toAdd);
+            }
+        }
+    }
+
+    private void setContainer() {
+        int indexI = itemsList.getSelectedIndex();
+        if (indexI >= 0) {
+            Item item = itemsListModel.get(indexI);
+            boolean container = isContainerBox.isSelected();
+            item.setContainer(container);
+
+            itemInventoryPanel.setEnabled(container);
+            isLockedBox.setEnabled(container);
+
+        }
     }
 
     private void deleteCategoryFromItem() {
@@ -1418,6 +1510,10 @@ public class EditorFrame extends JFrame {
             selected.getCategories().forEach(itemCategoriesListModel::addElement);
             selected.getScripts().keySet().forEach(itemScriptListModel::addElement);
             itemDescription.setText(selected.getDescription());
+            itemInventoryPanel.setEnabled(selected.isContainer());
+            isLockedBox.setEnabled(selected.isContainer());
+            isLockedBox.setSelected(selected.isLocked());
+            isContainerBox.setSelected(selected.isContainer());
         }
     }
 

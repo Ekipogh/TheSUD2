@@ -14,8 +14,6 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by dedov_d on 27.04.2015.
@@ -49,6 +47,7 @@ public class PlayerFrame extends JFrame {
     private JTree itemsTree;
     private JButton upButton;
     private JButton downButton;
+    private JButton proceedButton;
     private JPopupMenu popupMenu;
     private final String ONTAKE = "_onTake";
     private final String ONEQUIP = "_onEquip";
@@ -59,9 +58,10 @@ public class PlayerFrame extends JFrame {
     private final String ONPLAYERLEAVE = "_onPlayerLeave";
 
     private static Location currentLocation;
-    private List<Item> items; //TODO: нужно ли? Наверное нужно для скриптов. Скорее нужно
+    private List<Item> items;
     private String gamePath;
     private String savePath;
+    private boolean paused = false;
 
     private PlayerFrame() {
         super("The SUD2");
@@ -86,6 +86,8 @@ public class PlayerFrame extends JFrame {
         eastButton.addActionListener(e -> move(EAST));
         upButton.addActionListener(e -> move(UP));
         downButton.addActionListener(e -> move(DOWN));
+
+        proceedButton.addActionListener(e -> unPause());
 
         playerName.addMouseListener(new MouseAdapter() {
             @Override
@@ -172,6 +174,16 @@ public class PlayerFrame extends JFrame {
         jsInputField.addActionListener(e -> runScript());
     }
 
+    private void unPause() {
+        paused = false;
+        proceedButton.setEnabled(false);
+        itemsTree.setEnabled(true);
+        charactersTree.setEnabled(true);
+        inventoryButton.setEnabled(true);
+        directionButtonsEnable();
+        output.setEnabled(true);
+    }
+
     private void saveSaveAs() {
         JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
         FileFilter ff = new FileNameExtensionFilter("TheSUD game save", "sudsav");
@@ -243,19 +255,23 @@ public class PlayerFrame extends JFrame {
     }
 
     private void showPlayerPopUp(MouseEvent e) {
-        JMenuItem menuItem;
-        popupMenu.removeAll();
-        for (Map.Entry<String, Script> entry : player.getScripts().entrySet()) {
-            if (!entry.getKey().startsWith("_on") && entry.getValue().isEnabled()) {
-                menuItem = new JMenuItem(entry.getKey());
-                menuItem.addActionListener(ev -> Script.run(player.getScript(entry.getKey()).getText(), player));
+        if (!paused) {
+            JMenuItem menuItem;
+            popupMenu.removeAll();
+            for (Map.Entry<String, Script> entry : player.getScripts().entrySet()) {
+                if (!entry.getKey().startsWith("_on") && entry.getValue().isEnabled()) {
+                    menuItem = new JMenuItem(entry.getKey());
+                    menuItem.addActionListener(ev -> Script.run(player.getScript(entry.getKey()).getText(), player));
+                    popupMenu.add(menuItem);
+                }
+            }
+            if (!player.getDescription().isEmpty()) {
+                menuItem = new JMenuItem("Описание");
+                menuItem.addActionListener(ev -> parseDescription(player.getDescription()));
                 popupMenu.add(menuItem);
             }
+            popupMenu.show(playerName, e.getX(), e.getY());
         }
-        menuItem = new JMenuItem("Описание");
-        menuItem.addActionListener(ev -> output.println(parseDescription(player.getDescription(), player)));
-        popupMenu.add(menuItem);
-        popupMenu.show(playerName, e.getX(), e.getY());
     }
 
     private void runScript() {
@@ -263,37 +279,41 @@ public class PlayerFrame extends JFrame {
     }
 
     private void showCharDescription(GameCharacter character) {
-        output.println(parseDescription(character.getDescription(), character));
+        parseDescription(character.getDescription());
     }
 
     private void showLocationPopup(MouseEvent event) {
-        if (SwingUtilities.isRightMouseButton(event)) {
-            JMenuItem menuItem;
-            popupMenu.removeAll();
-            for (Map.Entry<String, Script> entry : currentLocation.getScripts().entrySet())
-                if (!entry.getKey().startsWith("_on") && entry.getValue().isEnabled()) {
-                    menuItem = new JMenuItem(entry.getKey());
-                    menuItem.addActionListener(e -> Script.run(currentLocation.getScript(entry.getKey()).getText(), currentLocation));
-                    popupMenu.add(menuItem);
-                }
-            for (LocationCategory category : currentLocation.getCategories()) {
-                for (Map.Entry<String, Script> entry : category.getScripts().entrySet()) {
-                    if (!entry.getKey().startsWith("_on")) {
+        if (!paused) {
+            if (SwingUtilities.isRightMouseButton(event)) {
+                JMenuItem menuItem;
+                popupMenu.removeAll();
+                for (Map.Entry<String, Script> entry : currentLocation.getScripts().entrySet())
+                    if (!entry.getKey().startsWith("_on") && entry.getValue().isEnabled()) {
                         menuItem = new JMenuItem(entry.getKey());
-                        menuItem.addActionListener(e -> Script.run(entry.getValue().getText(), currentLocation));
+                        menuItem.addActionListener(e -> Script.run(currentLocation.getScript(entry.getKey()).getText(), currentLocation));
                         popupMenu.add(menuItem);
                     }
+                for (LocationCategory category : currentLocation.getCategories()) {
+                    for (Map.Entry<String, Script> entry : category.getScripts().entrySet()) {
+                        if (!entry.getKey().startsWith("_on")) {
+                            menuItem = new JMenuItem(entry.getKey());
+                            menuItem.addActionListener(e -> Script.run(entry.getValue().getText(), currentLocation));
+                            popupMenu.add(menuItem);
+                        }
+                    }
                 }
+                if (!currentLocation.getDescription().isEmpty()) {
+                    menuItem = new JMenuItem("Описание");
+                    menuItem.addActionListener(e -> showLocationDescription());
+                    popupMenu.add(menuItem);
+                }
+                popupMenu.show(locationPic, event.getX(), event.getY());
             }
-            menuItem = new JMenuItem("Описание");
-            menuItem.addActionListener(e -> showLocationDescription());
-            popupMenu.add(menuItem);
-            popupMenu.show(locationPic, event.getX(), event.getY());
         }
     }
 
     private void showLocationDescription() {
-        output.println(parseDescription(currentLocation.getDescription(), currentLocation));
+        parseDescription(currentLocation.getDescription());
     }
 
     private void showInventoryScreen() {
@@ -301,14 +321,19 @@ public class PlayerFrame extends JFrame {
     }
 
     private void showItemDescription(Item item) {
-        output.println(parseDescription(item.getDescription(), item));
+        parseDescription(item.getDescription());
     }
 
     private void useItem(Item item) {
         Script.run(item.getScript(ONUSE).getText(), item);
         for (ItemCategory category : item.getCategories())
             Script.run(category.getScript(ONUSE).getText(), item);
-        ((DefaultMutableTreeNode) itemsTreeModel.getRoot()).remove((DefaultMutableTreeNode) itemsTree.getSelectionPath().getParentPath().getLastPathComponent());
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) itemsTree.getSelectionPath().getParentPath().getLastPathComponent();
+        Object userObject = ((DefaultMutableTreeNode) node.getParent()).getUserObject();
+        if (userObject instanceof Item) {
+            ((Item) userObject).removeItem(((Item) node.getUserObject()));
+        }
+        ((DefaultMutableTreeNode) node.getParent()).remove(node);
         itemsTreeModel.reload();
     }
 
@@ -316,7 +341,12 @@ public class PlayerFrame extends JFrame {
     private void equipItem(Item item) {
         currentLocation.removeItem(item);
         player.equip(item);
-        ((DefaultMutableTreeNode) itemsTreeModel.getRoot()).remove((DefaultMutableTreeNode) itemsTree.getSelectionPath().getParentPath().getLastPathComponent());
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) itemsTree.getSelectionPath().getParentPath().getLastPathComponent();
+        Object userObject = ((DefaultMutableTreeNode) node.getParent()).getUserObject();
+        if (userObject instanceof Item) {
+            ((Item) userObject).removeItem(((Item) node.getUserObject()));
+        }
+        ((DefaultMutableTreeNode) node.getParent()).remove(node);
         itemsTreeModel.reload();
         Script.run(item.getScript(ONEQUIP).getText(), item);
         for (ItemCategory category : item.getCategories())
@@ -325,7 +355,12 @@ public class PlayerFrame extends JFrame {
 
     //положить предмет в инвентарь игрока
     private void moveItemToPlayerInventory(Item item) {
-        ((DefaultMutableTreeNode) itemsTreeModel.getRoot()).remove((DefaultMutableTreeNode) itemsTree.getSelectionPath().getParentPath().getLastPathComponent());
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) itemsTree.getSelectionPath().getParentPath().getLastPathComponent();
+        Object userObject = ((DefaultMutableTreeNode) node.getParent()).getUserObject();
+        if (userObject instanceof Item) {
+            ((Item) userObject).removeItem(((Item) node.getUserObject()));
+        }
+        ((DefaultMutableTreeNode) node.getParent()).remove(node);
         itemsTreeModel.reload();
         currentLocation.removeItem(item);
         player.addToInventory(item);
@@ -437,10 +472,10 @@ public class PlayerFrame extends JFrame {
     }
 
     //выполнение сценариев и игровой логики
-    private void proceed() {
+    public void proceed() {
         output.println("<b>" + currentLocation.getName() + "</b>");
         if (!currentLocation.getDescription().isEmpty())
-            output.println(parseDescription(currentLocation.getDescription(), currentLocation));
+            parseDescription(currentLocation.getDescription());
 
         //изменяем рисунок локации
         if (currentLocation.getPicturePath() == null || currentLocation.getPicturePath().isEmpty())
@@ -455,7 +490,7 @@ public class PlayerFrame extends JFrame {
 
         //Дизаблим не используемые кнопки передвижения
         directionButtonsEnable();
-        playerDescriptionArea.setText(parseDescription(player.getDescription(), player));
+        parseDescription(player.getDescription());
     }
 
     public void updateCharacters() {
@@ -471,12 +506,67 @@ public class PlayerFrame extends JFrame {
             for (CharacterCategory characterCategory : c.getCategories()) {
                 characterCategory.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> charactersTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), c)), characterNode, characterNode.getChildCount()));
             }
-            charactersTreeModel.insertNodeInto(new SudTreeNode("Описание", l -> showCharDescription(c)), characterNode, characterNode.getChildCount());
+            if (!c.getDescription().isEmpty())
+                charactersTreeModel.insertNodeInto(new SudTreeNode("Описание", l -> showCharDescription(c)), characterNode, characterNode.getChildCount());
         });
+    }
+
+    public void test(List<Item> items, boolean container) {
+        DefaultMutableTreeNode node = null;
+        if (!container) {
+            node = (DefaultMutableTreeNode) itemsTreeModel.getRoot();
+        } else {
+            DefaultMutableTreeNode root = ((DefaultMutableTreeNode) itemsTreeModel.getRoot());
+            node = (DefaultMutableTreeNode) itemsTreeModel.getChild(root, itemsTreeModel.getChildCount(root) - 1);
+        }
+        //DefaultMutableTreeNode node = itemsTree.getLastSelectedPathComponent() == null ? (DefaultMutableTreeNode) itemsTreeModel.getRoot() : (SudTreeNode) itemsTree.getLastSelectedPathComponent(); //Елси предметы локации getRoot, если контейнер - node = нода контейнера.
+        for (Item item : items) {
+            DefaultMutableTreeNode itemNode = new DefaultMutableTreeNode(item);
+            itemsTreeModel.insertNodeInto(itemNode, node, node.getChildCount());
+            item.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> itemsTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), item)), itemNode, itemNode.getChildCount()));
+            for (ItemCategory category : item.getCategories())
+                category.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> itemsTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), item)), itemNode, itemNode.getChildCount()));
+            if (!item.getDescription().isEmpty())
+                itemsTreeModel.insertNodeInto(new SudTreeNode("Описание", l -> showItemDescription(item)), itemNode, itemNode.getChildCount());
+            if (item.getType() == ItemTypes.EQUIPPABLE)
+                itemsTreeModel.insertNodeInto(new SudTreeNode("Экипировать", l -> equipItem(item)), itemNode, itemNode.getChildCount());
+            if (item.getType() == ItemTypes.EQUIPPABLE || item.getType() == ItemTypes.STORABLE)
+                itemsTreeModel.insertNodeInto(new SudTreeNode("Взять", l -> moveItemToPlayerInventory(item)), itemNode, itemNode.getChildCount());
+            if (item.getType() == ItemTypes.CONSUMABLE)
+                itemsTreeModel.insertNodeInto(new SudTreeNode("Использовать", l -> useItem(item)), itemNode, itemNode.getChildCount());
+            if (item.isContainer()) {
+                if (!item.isLocked()) {
+                    test(item.getInventory(), true);
+                } else {
+                    itemsTreeModel.insertNodeInto(new SudTreeNode("Отпереть", l -> unlockContainer(item)), itemNode, itemNode.getChildCount());
+                }
+            }
+            //если влокации есть контейенры, для каждого добавить опцию положить в ...
+            currentLocation.getInventory().stream().filter(i -> i.isContainer() && !i.isLocked()).forEach(i -> {
+                itemsTreeModel.insertNodeInto(new SudTreeNode("Положить в " + i.getName(), l -> storeInContainer(i, item)), itemNode, itemNode.getChildCount());
+            });
+        }
+    }
+
+    private void storeInContainer(Item container, Item item) {
+        container.addItem(item);
+        currentLocation.removeItem(item);
+        updateItems();
+    }
+
+    private void unlockContainer(Item item) {
+        item.setLocked(false);
+        updateItems();
     }
 
     //Обновляем список предметов в локации
     public void updateItems() {
+        ((DefaultMutableTreeNode) itemsTreeModel.getRoot()).removeAllChildren();
+        itemsTreeModel.reload();
+        test(currentLocation.getInventory(), false);
+    }
+
+    /*public void updateItems() {
         ((DefaultMutableTreeNode) itemsTreeModel.getRoot()).removeAllChildren();
         itemsTreeModel.reload();
         currentLocation.getInventory().forEach(i -> {
@@ -486,23 +576,30 @@ public class PlayerFrame extends JFrame {
             i.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> itemsTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), i)), itemNode, itemNode.getChildCount()));
             for (ItemCategory category : i.getCategories())
                 category.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> itemsTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), i)), itemNode, itemNode.getChildCount()));
-            itemsTreeModel.insertNodeInto(new SudTreeNode("Описание", l -> showItemDescription(i)), itemNode, itemNode.getChildCount());
+            if (!i.getDescription().isEmpty())
+                itemsTreeModel.insertNodeInto(new SudTreeNode("Описание", l -> showItemDescription(i)), itemNode, itemNode.getChildCount());
             if (i.getType() == ItemTypes.EQUIPPABLE)
                 itemsTreeModel.insertNodeInto(new SudTreeNode("Экипировать", l -> equipItem(i)), itemNode, itemNode.getChildCount());
             if (i.getType() == ItemTypes.EQUIPPABLE || i.getType() == ItemTypes.STORABLE)
                 itemsTreeModel.insertNodeInto(new SudTreeNode("Взять", l -> moveItemToPlayerInventory(i)), itemNode, itemNode.getChildCount());
             if (i.getType() == ItemTypes.CONSUMABLE)
                 itemsTreeModel.insertNodeInto(new SudTreeNode("Использовать", l -> useItem(i)), itemNode, itemNode.getChildCount());
+            if (i.isContainer() && i.isClosed() && !i.isLocked()) {
+                SudTreeNode node = new SudTreeNode("Открыть", l -> openContainer(i));
+                itemsTreeModel.insertNodeInto(node, itemNode, itemNode.getChildCount());
+            }
         });
-    }
+    }*/
 
-    private String parseDescription(String description, Object object) {
-        String results = "";
-        Matcher m = Pattern.compile("\\<\\<(.*?)\\>\\>").matcher(description);
+    private void parseDescription(String description) {
+        /*Matcher m = Pattern.compile("\\<\\<(.*?)\\>\\>").matcher(description);
         if (m.find()) {
-            results = m.replaceAll(String.valueOf(Script.run(m.group(1), object)));
+            description = m.replaceAll(Script.run(m.group(1), object).toString());
         }
-        return results;
+        return description;*/
+        description = description.replace("\"", "\\\"");
+        description = description.replace("\n", "");
+        Script.run("parser(\"" + description + "\");", null);
     }
 
     //Дизаблим кнопки передвижения соответствующие null выходам и выходам, у которых заблокирован доступ
@@ -513,6 +610,42 @@ public class PlayerFrame extends JFrame {
         westButton.setEnabled((currentLocation.getWest() != null && currentLocation.isWestOpened()));
         upButton.setEnabled((currentLocation.getUp() != null && currentLocation.isUpOpened()));
         downButton.setEnabled((currentLocation.getDown() != null && currentLocation.isDownOpened()));
+    }
+
+    public void alert(String text) {
+        JOptionPane.showMessageDialog(this, text);
+    }
+
+    public String prompt(String title, String def) {
+        return JOptionPane.showInputDialog(this, title, def);
+    }
+
+    public String prompt(String title) {
+        return prompt(title, "");
+    }
+
+    public String prompt() {
+        return prompt("Введите значение", "");
+    }
+
+    public boolean confirm(String question) {
+        int result = JOptionPane.showConfirmDialog(this, question, "Подтвердите", JOptionPane.OK_CANCEL_OPTION);
+        return result == JOptionPane.OK_OPTION;
+    }
+
+    public void pause() {
+        proceedButton.setEnabled(true);
+        itemsTree.setEnabled(false);
+        charactersTree.setEnabled(false);
+        northButton.setEnabled(false);
+        southButton.setEnabled(false);
+        eastButton.setEnabled(false);
+        westButton.setEnabled(false);
+        upButton.setEnabled(false);
+        downButton.setEnabled(false);
+        inventoryButton.setEnabled(false);
+        output.setEnabled(false);
+        paused = true;
     }
 
     public static GameCharacter getPlayer() {

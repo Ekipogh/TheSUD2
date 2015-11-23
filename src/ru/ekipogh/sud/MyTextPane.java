@@ -7,16 +7,23 @@ import javax.swing.event.HyperlinkEvent;
  * Created by dedov_d on 07.05.2015.
  */
 public class MyTextPane extends JTextPane {
+    private boolean enabled = true;
+
     public MyTextPane() {
         super();
         setContentType("text/html");
         this.setText("<html><head></head><body></body></html>");
         this.setEditable(false);
         this.addHyperlinkListener(e -> { // Обработка ссылок
-            if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
+            if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType()) && this.enabled) {
                 Script.run(e.getDescription(), PlayerFrame.getPlayer());
             }
         });
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public void println(String str) {
