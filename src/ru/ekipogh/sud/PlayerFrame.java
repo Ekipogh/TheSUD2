@@ -542,7 +542,7 @@ public class PlayerFrame extends JFrame {
                 }
             }
             //если влокации есть контейенры, для каждого добавить опцию положить в ...
-            currentLocation.getInventory().stream().filter(i -> i.isContainer() && !i.isLocked()).forEach(i -> {
+            currentLocation.getInventory().stream().filter(i -> i.isContainer() && !i.isLocked() && !i.equals(item) && !i.getInventory().contains(item)).forEach(i -> {
                 itemsTreeModel.insertNodeInto(new SudTreeNode("Положить в " + i.getName(), l -> storeInContainer(i, item)), itemNode, itemNode.getChildCount());
             });
         }
@@ -555,7 +555,7 @@ public class PlayerFrame extends JFrame {
     }
 
     private void unlockContainer(Item item) {
-        item.setLocked(false);
+        Script.run(item.getScript("_onUnlock").getText(), item);
         updateItems();
     }
 

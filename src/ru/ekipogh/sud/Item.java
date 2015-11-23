@@ -65,7 +65,7 @@ public class Item implements Serializable {
         this.scripts.put("_onEquip", new Script("", true));
         this.scripts.put("_onUse", new Script("", true));
         this.scripts.put("_onUnequip", new Script("", true));
-        this.scripts.put("_onUnlock", new Script("funtion(){return false;}", true));
+        this.scripts.put("_onUnlock", new Script("caller.setLocked(false);", true));
         this.values = new HashMap<>();
         this.categories = new ArrayList<>();
     }

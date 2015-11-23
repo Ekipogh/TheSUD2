@@ -1510,7 +1510,7 @@ public class EditorFrame extends JFrame {
             selected.getCategories().forEach(itemCategoriesListModel::addElement);
             selected.getScripts().keySet().forEach(itemScriptListModel::addElement);
             itemDescription.setText(selected.getDescription());
-            itemInventoryPanel.setEnabled(selected.isContainer());
+            itemInventoryPanel.setEnabled(selected.isContainer()); //TODO: не работает
             isLockedBox.setEnabled(selected.isContainer());
             isLockedBox.setSelected(selected.isLocked());
             isContainerBox.setSelected(selected.isContainer());
