@@ -34,4 +34,8 @@ public class MyTextPane extends JTextPane {
         temp = temp.substring(0, breakIndex) + s + "<br>" + temp.substring(breakIndex);
         this.setText(temp);
     }
+
+    public void clear() {
+        this.setText("<html><head></head><body></body></html>");
+    }
 }

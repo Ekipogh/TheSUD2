@@ -24,14 +24,16 @@ public class LauncherFrame extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        editorButton.addActionListener(e -> {
-            LauncherFrame.this.setVisible(false);
-            Main.editor = new EditorFrame(gamePathField.getText());
-        });
+        editorButton.addActionListener(e -> startEditor());
 
         setVisible(true);
         openFileButton.addActionListener(e -> chooseGameFile());
         playerButton.addActionListener(e -> startGame());
+    }
+
+    private void startEditor() {
+        this.setVisible(false);
+        Main.editor = new EditorFrame(gamePathField.getText());
     }
 
     private void startGame() {

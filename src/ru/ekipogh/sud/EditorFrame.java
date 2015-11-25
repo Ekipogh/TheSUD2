@@ -172,12 +172,12 @@ public class EditorFrame extends JFrame {
     private JButton addCategoryToItemButton;
     private JButton deleteCategoryFromItemButton;
     private JCheckBox isContainerBox;
-    private JPanel itemInventoryPanel;
     private JList<Item> allItemsList;
     private JList<Item> itemItemsList;
     private JButton addItemToItemButton;
     private JButton deleteItemFromItemButton;
     private JCheckBox isLockedBox;
+    private JTabbedPane itemTabbedPane;
     private final DefaultListModel<CharacterCategory> characterCategoryListModel;
     private final DefaultListModel<LocationCategory> locationCategoryListModel;
 
@@ -654,6 +654,7 @@ public class EditorFrame extends JFrame {
             }
         });
 
+        Sequencer.reset();
         if (!gamePath.isEmpty())
             loadGame();
 
@@ -708,7 +709,7 @@ public class EditorFrame extends JFrame {
             boolean container = isContainerBox.isSelected();
             item.setContainer(container);
 
-            itemInventoryPanel.setEnabled(container);
+            itemTabbedPane.setEnabledAt(itemTabbedPane.getTabCount() - 1, container);
             isLockedBox.setEnabled(container);
 
         }
@@ -1510,7 +1511,7 @@ public class EditorFrame extends JFrame {
             selected.getCategories().forEach(itemCategoriesListModel::addElement);
             selected.getScripts().keySet().forEach(itemScriptListModel::addElement);
             itemDescription.setText(selected.getDescription());
-            itemInventoryPanel.setEnabled(selected.isContainer()); //TODO: не работает
+            itemTabbedPane.setEnabledAt(itemTabbedPane.getTabCount() - 1, selected.isContainer());
             isLockedBox.setEnabled(selected.isContainer());
             isLockedBox.setSelected(selected.isLocked());
             isContainerBox.setSelected(selected.isContainer());

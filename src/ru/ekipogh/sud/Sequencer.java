@@ -17,4 +17,8 @@ public class Sequencer {
     public static int getCurrentId() {
         return id;
     }
+
+    public static void reset() {
+        id = 0;
+    }
 }
