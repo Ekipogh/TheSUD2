@@ -7,10 +7,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -107,9 +104,13 @@ public class PlayerFrame extends JFrame {
         JMenuItem saveSaveAs = new JMenuItem("Сохранить игру как");
 
         newGame.addActionListener(e -> loadGameFile(gamePath));
+        newGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_MASK));
         loadSave.addActionListener(e -> loadSave());
+        loadSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_MASK));
         saveSave.addActionListener(e -> saveSave());
+        saveSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK));
         saveSaveAs.addActionListener(e -> saveSaveAs());
+        saveSaveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK + InputEvent.SHIFT_MASK));
 
         menu.add(newGame);
         menu.add(loadSave);

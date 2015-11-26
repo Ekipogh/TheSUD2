@@ -59,7 +59,7 @@ public class EditorFrame extends JFrame {
     private JButton saveLocButton;
     private JTextField playerName;
     private JComboBox<Location> playerLocation;
-    private JButton savePlayer;
+    private JButton savePlayerButton;
     private JTextField gameName;
     private JTextArea gameStartMessage;
     private JList<Item> itemsList;
@@ -373,6 +373,8 @@ public class EditorFrame extends JFrame {
 
         setJMenuBar(menuBar);
 
+        String key = "Save Object";
+
         //листенеры
         //листенеры конопок
         deleteItemFromItemButton.addActionListener(e -> deleteItemFromItem());
@@ -406,12 +408,14 @@ public class EditorFrame extends JFrame {
         addLocationCategoryButton.addActionListener(e -> addLocationCategory());
 
         savePlayerScriptButton.addActionListener(e -> savePlayerScript());
+        savePlayerScriptButton.setMnemonic(KeyEvent.VK_S);
 
         deletePlayerScriptButton.addActionListener(e -> deletePlayerScript());
 
         addPlayerScriptButton.addActionListener(e -> addPlayerScript());
 
         saveCharacterCategoryScriptButton.addActionListener(e -> saveCharCategoryScript());
+        saveCharacterCategoryScriptButton.setMnemonic(KeyEvent.VK_ENTER);
 
         deleteCharCategoryScriptButton.addActionListener(e -> deleteCharCategoryScript());
 
@@ -424,16 +428,29 @@ public class EditorFrame extends JFrame {
         addLocationCategoryScriptButton.addActionListener(e -> addLocationCategoryScript());
 
         saveItemCategoryScriptButton.addActionListener(e -> saveItemCategoryScript());
+        saveItemCategoryScriptButton.setMnemonic(KeyEvent.VK_ENTER);
 
         saveLocButton.addActionListener(e -> saveSelectedLocation());
+        saveLocButton.setMnemonic(KeyEvent.VK_ENTER);
+        /*Action saveLocButtonAction = new AbstractAction("Сохранить локацию") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveSelectedLocation();
+            }
+        };
+        saveLocButton.setAction(saveLocButtonAction);
+        saveLocButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.SHIFT_MASK), key);
+        saveLocButton.getActionMap().put(key, saveLocButtonAction);*/
 
         deleteLocButton.addActionListener(e -> deleteSelectedLocation());
 
-        savePlayer.addActionListener(e -> savePlayer());
+        savePlayerButton.addActionListener(e -> savePlayer());
+        savePlayerButton.setMnemonic(KeyEvent.VK_ENTER);
 
         deleteItemButton.addActionListener(e -> deleteSelectedItem());
 
         saveItemButton.addActionListener(e -> saveSelectedItem());
+        saveItemButton.setMnemonic(KeyEvent.VK_ENTER);
 
         deleteItemFromLocButton.addActionListener(e -> deleteItemFromLocation());
 
@@ -442,22 +459,27 @@ public class EditorFrame extends JFrame {
         deleteSlotButton.addActionListener(e -> deleteSlot());
 
         saveSlotsButton.addActionListener(e -> saveSlotNames());
+        saveSlotsButton.setMnemonic(KeyEvent.VK_ENTER);
 
         saveLocScriptButton.addActionListener(e -> saveLocationScript());
+        saveLocScriptButton.setMnemonic(KeyEvent.VK_S);
 
         deleteScriptLocButton.addActionListener(e -> deleteLocationScript());
 
         addScriptLocButton.addActionListener(e -> addScriptToLocation());
 
         charSaveButton.addActionListener(e -> saveSelectedCharacter());
+        charSaveButton.setMnemonic(KeyEvent.VK_ENTER);
 
         deleteCharButton.addActionListener(e -> deleteSelectedCharacter());
 
         deleteCharScriptButton.addActionListener(e -> deleteCharScript());
 
         saveCharScriptButton.addActionListener(e -> saveCharScript());
+        saveCharScriptButton.setMnemonic(KeyEvent.VK_S);
 
         saveItemScriptButton.addActionListener(e -> saveItemScript());
+        saveItemScriptButton.setMnemonic(KeyEvent.VK_S);
 
         deleteItemScriptButton.addActionListener(e -> deleteItemScript());
 
@@ -468,6 +490,7 @@ public class EditorFrame extends JFrame {
         deleteLocationCategoryButton.addActionListener(e -> deleteLocationCategory());
 
         saveLocationCategoryScriptButton.addActionListener(e -> saveLocationCategoryScript());
+        saveLocationCategoryScriptButton.setMnemonic(KeyEvent.VK_ENTER);
 
         deleteItemCategoryButton.addActionListener(e -> deleteItemCategory());
 
