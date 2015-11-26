@@ -2,18 +2,22 @@ package ru.ekipogh.sud;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 /**
  * Created by dedov_d on 06.05.2015.
  */
 class InventoryFrame extends JFrame {
-    private final DefaultListModel<Item> itemsListModel;
+    private final DefaultTreeModel itemsTreeModel;
     private final PlayerFrame playerFrame;
-    private JList<Item> itemsList;
+    private JTree itemsTree;
     private JPanel rootPanel;
     private JTable equipmentTable;
     private DefaultTableModel equipmentTableModel;
@@ -43,8 +47,20 @@ class InventoryFrame extends JFrame {
         this.playerFrame = playerFrame;
         playerFrame.setEnabled(false);
 
-        itemsListModel = new DefaultListModel<>();
-        itemsList.setModel(itemsListModel);
+        itemsTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode("Инвентарь"));
+        itemsTree.setModel(itemsTreeModel);
+        itemsTree.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                TreePath treePath = itemsTree.getSelectionPath();
+                if (treePath != null) {
+                    DefaultMutableTreeNode selected = (DefaultMutableTreeNode) treePath.getLastPathComponent();
+                    if (selected != null && selected instanceof SudTreeNode && e.getClickCount() == 2 && selected.isLeaf())
+                        ((SudTreeNode) selected).invoke();
+                }
+            }
+        });
 
         //Картинки слотов не редактируемы
         equipmentTableModel = new DefaultTableModel() {
@@ -58,23 +74,10 @@ class InventoryFrame extends JFrame {
         equipmentTableModel.addColumn("Слот");
         equipmentTableModel.addColumn("Предмет");
         equipmentTable.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer()); //для отображения картинок слотов
-        player.getInventory().forEach(itemsListModel::addElement); //заполняем список инвенторя
+        updateItemsTree();
 
         updateEquipmentTable();
 
-        itemsList.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                if (SwingUtilities.isRightMouseButton(e)) {
-                    JList list = (JList) e.getSource();
-                    int row = list.locationToIndex(e.getPoint());
-                    list.setSelectedIndex(row);
-                    if (!itemsList.isSelectionEmpty())
-                        showInventoryPopup(e);
-                }
-            }
-        });
         equipmentTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -101,6 +104,65 @@ class InventoryFrame extends JFrame {
         });
     }
 
+    private void updateItemsTree() {
+        ((DefaultMutableTreeNode) itemsTreeModel.getRoot()).removeAllChildren();
+        itemsTreeModel.reload();
+        fillItemsTree(player.getInventory(), false);
+
+        expandAllNodes(itemsTree);
+    }
+
+    private static void expandAllNodes(JTree tree) {
+        for (int i = 0; i < tree.getRowCount(); ++i) {
+            tree.expandRow(i);
+        }
+    }
+
+    private void fillItemsTree(List<Item> inventory, boolean container) {
+        DefaultMutableTreeNode node;
+        if (!container) {
+            node = (DefaultMutableTreeNode) itemsTreeModel.getRoot();
+        } else {
+            DefaultMutableTreeNode root = ((DefaultMutableTreeNode) itemsTreeModel.getRoot());
+            node = (DefaultMutableTreeNode) itemsTreeModel.getChild(root, itemsTreeModel.getChildCount(root) - 1);
+        }
+        for (Item item : inventory) {
+            DefaultMutableTreeNode itemNode = new DefaultMutableTreeNode(item);
+            itemsTreeModel.insertNodeInto(itemNode, node, node.getChildCount());
+            item.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> itemsTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), item)), itemNode, itemNode.getChildCount()));
+            for (ItemCategory category : item.getCategories())
+                category.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> itemsTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), item)), itemNode, itemNode.getChildCount()));
+            if (item.getType() == ItemTypes.EQUIPPABLE)
+                itemsTreeModel.insertNodeInto(new SudTreeNode("Экипировать", l -> equipItem(item, inventory)), itemNode, itemNode.getChildCount());
+            if (item.getType() == ItemTypes.EQUIPPABLE || item.getType() == ItemTypes.STORABLE)
+                itemsTreeModel.insertNodeInto(new SudTreeNode("Бросить", l -> dropItem(item, inventory)), itemNode, itemNode.getChildCount());
+            if (item.getType() == ItemTypes.CONSUMABLE)
+                itemsTreeModel.insertNodeInto(new SudTreeNode("Использовать", l -> useItem(item, inventory)), itemNode, itemNode.getChildCount());
+            if (item.isContainer()) {
+                if (!item.isLocked()) {
+                    fillItemsTree(item.getInventory(), true);
+                } else {
+                    itemsTreeModel.insertNodeInto(new SudTreeNode("Отпереть", l -> unlockContainer(item)), itemNode, itemNode.getChildCount());
+                }
+            }
+            //если влокации есть контейенры, для каждого добавить опцию положить в ...
+            if (!container) {
+                inventory.stream().filter(i -> i.isContainer() && !i.isLocked() && !i.equals(item) && !i.getInventory().contains(item)).forEach(i -> itemsTreeModel.insertNodeInto(new SudTreeNode("Положить в " + i.getName(), l -> storeInContainer(i, item)), itemNode, itemNode.getChildCount()));
+            }
+        }
+    }
+
+    private void storeInContainer(Item item, Item container) {
+        container.addItem(item);
+        player.getInventory().remove(item);
+        updateItemsTree();
+    }
+
+    private void unlockContainer(Item container) {
+        Script.run(container.getScript("_onUnlock").getText(), container);
+        updateItemsTree();
+    }
+
     private JPopupMenu showEquipmentPopup() {
         JMenuItem menuItem;
         JPopupMenu popupMenu = new JPopupMenu();
@@ -109,9 +171,7 @@ class InventoryFrame extends JFrame {
         Object selected = equipmentTableModel.getValueAt(row, col);
         if (selected instanceof Item) {
             menuItem = new JMenuItem("Снять");
-            menuItem.addActionListener(e -> {
-                unequipItem(((Item) selected), row, col);
-            });
+            menuItem.addActionListener(e -> unequipItem(((Item) selected), row, col));
             popupMenu.add(menuItem);
         }
         return popupMenu;
@@ -124,7 +184,7 @@ class InventoryFrame extends JFrame {
 
     private void unequipItem(Item item) {
         player.unequip(item);
-        itemsListModel.addElement(item);
+        updateItemsTree();
         Script.run(item.getScript(ONUNEQUIP).getText(), item);
         for (ItemCategory category : item.getCategories())
             Script.run(category.getScript(ONUNEQUIP).getText(), item);
@@ -140,55 +200,29 @@ class InventoryFrame extends JFrame {
         Utils.updateRowHeights(equipmentTable); //обновление высоты ячеек
     }
 
-
-    private void showInventoryPopup(MouseEvent e) {  //меню инвенторя
-        JMenuItem menuItem;
-        JPopupMenu popupMenu = new JPopupMenu();
-        int index = itemsList.getSelectedIndex();
-        final Item selected = itemsListModel.getElementAt(index);
-        if (selected != null) {
-            ItemTypes type = selected.getType();
-            //можно положить в инвентарь съедобное и экипируемое
-            if (type == ItemTypes.EQUIPPABLE) {
-                menuItem = new JMenuItem("Экипировать");
-                menuItem.addActionListener(e1 -> equipItem(selected));
-                popupMenu.add(menuItem);
-            }
-            if (type == ItemTypes.CONSUMABLE) {
-                menuItem = new JMenuItem("Использовать");
-                menuItem.addActionListener(e1 -> useItem(selected));
-                popupMenu.add(menuItem);
-            }
-            menuItem = new JMenuItem("Бросить");
-            menuItem.addActionListener(e1 -> dropItem(selected));
-            popupMenu.add(menuItem);
-            popupMenu.show(itemsList, e.getX(), e.getY());
-        }
-    }
-
-    private void useItem(Item item) {
+    private void useItem(Item item, List<Item> inventory) {
         Script.run(item.getScript(ONUSE).getText(), item);
         for (ItemCategory category : item.getCategories())
             Script.run(category.getScript(ONUSE).getText(), item);
         //Удалем предмет из инвенторя
-        player.getInventory().remove(item);
-        itemsListModel.removeElement(item);
+        inventory.remove(item);
+        updateItemsTree();
     }
 
-    private void dropItem(Item item) {
+    private void dropItem(Item item, List<Item> inventory) {
         player.getLocation().addItem(item);
-        player.getInventory().remove(item);
-        itemsListModel.removeElement(item);
+        inventory.remove(item);
+        updateItemsTree();
         playerFrame.updateItems();
         Script.run(item.getScript(ONDROP).getText(), item);
         for (ItemCategory category : item.getCategories())
             Script.run(category.getScript(ONDROP).getText(), item);
     }
 
-    private void equipItem(Item item) {
+    private void equipItem(Item item, List<Item> inventory) {
         player.equip(item);
-        itemsListModel.removeElement(item);
-        player.getInventory().remove(item);
+        inventory.remove(item);
+        updateItemsTree();
         Script.run(item.getScript(ONEQUIP).getText(), item);
         for (ItemCategory category : item.getCategories())
             Script.run(category.getScript(ONEQUIP).getText(), item);
