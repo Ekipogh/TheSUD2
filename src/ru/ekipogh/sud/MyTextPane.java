@@ -35,6 +35,14 @@ public class MyTextPane extends JTextPane {
         this.setText(temp);
     }
 
+    public void print(String str) {
+        String s = (String) Script.run("magic()", str);
+        String temp = this.getText();
+        int breakIndex = temp.lastIndexOf("</body>");
+        temp = temp.substring(0, breakIndex) + s + temp.substring(breakIndex);
+        this.setText(temp);
+    }
+
     public void clear() {
         this.setText("<html><head></head><body></body></html>");
     }

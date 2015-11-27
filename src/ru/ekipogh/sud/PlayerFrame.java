@@ -491,6 +491,34 @@ public class PlayerFrame extends JFrame {
         //Дизаблим не используемые кнопки передвижения
         directionButtonsEnable();
         parseDescription(player.getDescription());
+        //отоброжаем выходы
+        String exits = "<b>Выходы: ";
+        Location north = currentLocation.getNorth();
+        Location south = currentLocation.getSouth();
+        Location east = currentLocation.getEast();
+        Location west = currentLocation.getWest();
+        Location up = currentLocation.getUp();
+        Location down = currentLocation.getDown();
+        if (north != null && currentLocation.isNorthOpened()) {
+            exits += "c ";
+        }
+        if (south != null && currentLocation.isSouthOpened()) {
+            exits += "ю ";
+        }
+        if (east != null && currentLocation.isEastOpened()) {
+            exits += "в ";
+        }
+        if (west != null && currentLocation.isWestOpened()) {
+            exits += "з ";
+        }
+        if (up != null && currentLocation.isUpOpened()) {
+            exits += "вв ";
+        }
+        if (down != null && currentLocation.isDownOpened()) {
+            exits += "вн ";
+        }
+        exits += "</b>";
+        output.println(exits);
     }
 
     //обновляем дерево персонажей
@@ -584,17 +612,45 @@ public class PlayerFrame extends JFrame {
     private void parseDescription(String description) {
         description = description.replace("\"", "\\\"");
         description = description.replace("\n", "");
-        Script.run("parser(\"" + description + "\");", null);
+        description = (String) Script.run("parser(\"" + description + "\");", null);
+        if (!"undefined".equals(description)) {
+            output.println(description);
+        }
+        //Script.run("parser(\"" + description + "\");", null);
     }
 
     //Дизаблим кнопки передвижения соответствующие null выходам и выходам, у которых заблокирован доступ
     private void directionButtonsEnable() {
-        northButton.setEnabled((currentLocation.getNorth() != null && currentLocation.isNorthOpened()));
-        southButton.setEnabled((currentLocation.getSouth() != null && currentLocation.isSouthOpened()));
-        eastButton.setEnabled((currentLocation.getEast() != null && currentLocation.isEastOpened()));
-        westButton.setEnabled((currentLocation.getWest() != null && currentLocation.isWestOpened()));
-        upButton.setEnabled((currentLocation.getUp() != null && currentLocation.isUpOpened()));
-        downButton.setEnabled((currentLocation.getDown() != null && currentLocation.isDownOpened()));
+        Location north = currentLocation.getNorth();
+        Location south = currentLocation.getSouth();
+        Location east = currentLocation.getEast();
+        Location west = currentLocation.getWest();
+        Location up = currentLocation.getUp();
+        Location down = currentLocation.getDown();
+        boolean northEnabled = currentLocation.getNorth() != null && currentLocation.isNorthOpened();
+        boolean southEnabled = currentLocation.getSouth() != null && currentLocation.isSouthOpened();
+        boolean eastEnabled = currentLocation.getEast() != null && currentLocation.isEastOpened();
+        boolean westEnabled = currentLocation.getWest() != null && currentLocation.isWestOpened();
+        boolean upEnabled = currentLocation.getUp() != null && currentLocation.isUpOpened();
+        boolean downEnabled = currentLocation.getDown() != null && currentLocation.isDownOpened();
+        northButton.setEnabled(northEnabled);
+        southButton.setEnabled(southEnabled);
+        eastButton.setEnabled(eastEnabled);
+        westButton.setEnabled(westEnabled);
+        upButton.setEnabled(upEnabled);
+        downButton.setEnabled(downEnabled);
+        if (northEnabled)
+            northButton.setToolTipText(north.getName());
+        if (southEnabled)
+            southButton.setToolTipText(south.getName());
+        if (eastEnabled)
+            eastButton.setToolTipText(east.getName());
+        if (westEnabled)
+            westButton.setToolTipText(west.getName());
+        if (upEnabled)
+            upButton.setToolTipText(up.getName());
+        if (downEnabled)
+            downButton.setToolTipText(down.getName());
     }
 
     @SuppressWarnings("unused")
