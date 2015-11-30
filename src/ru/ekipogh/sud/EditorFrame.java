@@ -203,7 +203,7 @@ public class EditorFrame extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-
+        commonScripts = new HashMap<>();
         commonScripts.put("_onPlayerMoves", new Script("", true));
         commonScripts.put("_onPlayerMovesNorth", new Script("", true));
         commonScripts.put("_onPlayerMovesSouth", new Script("", true));

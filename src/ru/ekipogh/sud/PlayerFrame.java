@@ -185,7 +185,7 @@ public class PlayerFrame extends JFrame {
         itemsTree.setEnabled(true);
         charactersTree.setEnabled(true);
         inventoryButton.setEnabled(true);
-        directionButtonsEnable();
+        updateButtons();
         output.setEnabled(true);
     }
 
@@ -487,6 +487,12 @@ public class PlayerFrame extends JFrame {
         Script.run(initScript, null);
     }
 
+    public void update() {
+        updateItems();
+        updateCharacters();
+        updateButtons();
+    }
+
     //выполнение сценариев и игровой логики
     public void proceed() {
         output.println("<b>" + currentLocation.getName() + "</b>");
@@ -505,7 +511,7 @@ public class PlayerFrame extends JFrame {
         updateCharacters();
 
         //Дизаблим не используемые кнопки передвижения
-        directionButtonsEnable();
+        updateButtons();
         parseDescription(player.getDescription());
         //отоброжаем выходы
         String exits = "<font color=\"DarkGrey\"><b>Выходы: ";
@@ -639,7 +645,7 @@ public class PlayerFrame extends JFrame {
     }
 
     //Дизаблим кнопки передвижения соответствующие null выходам и выходам, у которых заблокирован доступ
-    private void directionButtonsEnable() {
+    private void updateButtons() {
         Location north = currentLocation.getNorth();
         Location south = currentLocation.getSouth();
         Location east = currentLocation.getEast();

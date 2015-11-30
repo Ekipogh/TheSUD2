@@ -16,7 +16,7 @@ public class LauncherFrame extends JFrame {
     private JButton openFileButton;
 
     public LauncherFrame() {
-        super("TheSUD 2");
+        super("Лаунчер");
         setContentPane(rootPanel);
 
         pack();
