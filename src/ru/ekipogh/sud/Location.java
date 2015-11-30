@@ -58,6 +58,7 @@ public class Location implements Serializable {
         this.scripts = new HashMap<>();
         this.scripts.put("_onEnter", new Script("", true));
         this.scripts.put("_onLeave", new Script("", true));
+        this.scripts.put("_onStash", new Script("", true));
         this.categories = new ArrayList<>();
     }
 

@@ -9,6 +9,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.event.*;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +60,7 @@ public class PlayerFrame extends JFrame {
     private String gamePath;
     private String savePath;
     private boolean paused = false;
+    private HashMap<String, Script> commonScripts;
 
     private PlayerFrame() {
         super("The SUD2");
@@ -344,7 +346,7 @@ public class PlayerFrame extends JFrame {
         Script.run(item.getScript(ONUSE).getText(), item);
         for (ItemCategory category : item.getCategories())
             Script.run(category.getScript(ONUSE).getText(), item);
-
+        Script.run(commonScripts.get("_onPlayerUsesItem").getText(), item);
         updateItems();
     }
 
@@ -356,39 +358,48 @@ public class PlayerFrame extends JFrame {
         Script.run(item.getScript(ONEQUIP).getText(), item); //выполняем скрипты связаные с экипировкой предмета
         for (ItemCategory category : item.getCategories())
             Script.run(category.getScript(ONEQUIP).getText(), item);
+        Script.run(commonScripts.get("_onPlayerEquipsItem").getText(), item);
     }
 
     //положить предмет в инвентарь игрока
-    private void moveItemToPlayerInventory(Item item, List<Item> inventory) {
+    private void takeItem(Item item, List<Item> inventory) {
         inventory.remove(item); //убираем предмет из инвенторя откуда он был взят
         player.addToInventory(item);
-        updateItems();
         Script.run(item.getScript(ONTAKE).getText(), item);
         for (ItemCategory category : item.getCategories())
             Script.run(category.getScript(ONTAKE).getText(), item);
+        Script.run(commonScripts.get("_onPlayerTakesItem").getText(), item);
+        updateItems();
     }
 
     //передвижение игрока
     private void move(int direction) {
         Location playerLocation = null;
+        String scripName = null;
         switch (direction) {
             case NORTH:
                 playerLocation = player.getLocation().getNorth(); //Север
+                scripName = "_onPlayerMovesNorth";
                 break;
             case SOUTH:
                 playerLocation = player.getLocation().getSouth(); //Юг
+                scripName = "_onPlayerMovesSouth";
                 break;
             case EAST:
                 playerLocation = player.getLocation().getEast(); //Восток
+                scripName = "_onPlayerMovesEast";
                 break;
             case WEST:
                 playerLocation = player.getLocation().getWest(); //Запад
+                scripName = "_onPlayerMovesWest";
                 break;
             case UP:
                 playerLocation = player.getLocation().getUp(); //Вверх
+                scripName = "_onPlayerMovesUp";
                 break;
             case DOWN:
                 playerLocation = player.getLocation().getDown(); //Вниз
+                scripName = "_onPlayerMovesDown";
                 break;
         }
         //Скрипты локаций
@@ -405,6 +416,10 @@ public class PlayerFrame extends JFrame {
 
         currentLocation = playerLocation != null ? playerLocation : currentLocation;
         player.setLocation(currentLocation);
+
+        //common scripts
+        Script.run(commonScripts.get("_onPlayerMoves").getText(), playerLocation);
+        Script.run(commonScripts.get(scripName).getText(), playerLocation);
 
         updateCharacters();
 
@@ -442,6 +457,7 @@ public class PlayerFrame extends JFrame {
     //инициализация параметров игры
     private void initialize(GameFile gameFile) {
         player = gameFile.getPlayer();
+        commonScripts = gameFile.getCommonScripts();
         locations = gameFile.getLocations();
         characters = gameFile.getCharacters();
         items = gameFile.getItems();
@@ -492,7 +508,7 @@ public class PlayerFrame extends JFrame {
         directionButtonsEnable();
         parseDescription(player.getDescription());
         //отоброжаем выходы
-        String exits = "<b>Выходы: ";
+        String exits = "<font color=\"DarkGrey\"><b>Выходы: ";
         Location north = currentLocation.getNorth();
         Location south = currentLocation.getSouth();
         Location east = currentLocation.getEast();
@@ -517,7 +533,7 @@ public class PlayerFrame extends JFrame {
         if (down != null && currentLocation.isDownOpened()) {
             exits += "вн ";
         }
-        exits += "</b>";
+        exits += "</b></font>";
         output.println(exits);
     }
 
@@ -562,7 +578,7 @@ public class PlayerFrame extends JFrame {
                 itemsTreeModel.insertNodeInto(new SudTreeNode("Экипировать", l -> equipItem(item, items)), itemNode, itemNode.getChildCount());
             }
             if (item.getType() == ItemTypes.EQUIPPABLE || item.getType() == ItemTypes.STORABLE) {
-                itemsTreeModel.insertNodeInto(new SudTreeNode("Взять", l -> moveItemToPlayerInventory(item, items)), itemNode, itemNode.getChildCount());
+                itemsTreeModel.insertNodeInto(new SudTreeNode("Взять", l -> takeItem(item, items)), itemNode, itemNode.getChildCount());
             }
             if (item.getType() == ItemTypes.CONSUMABLE) {
                 itemsTreeModel.insertNodeInto(new SudTreeNode("Использовать", l -> useItem(item, items)), itemNode, itemNode.getChildCount());
@@ -576,13 +592,15 @@ public class PlayerFrame extends JFrame {
             }
             //если влокации есть контейенры, для каждого добавить опцию положить в ...
             if (!container) {
-                items.stream().filter(i -> i.isContainer() && !i.isLocked() && !i.equals(item) && !i.getInventory().contains(item)).forEach(i -> itemsTreeModel.insertNodeInto(new SudTreeNode("Положить в " + i.getName(), l -> storeInContainer(i, item)), itemNode, itemNode.getChildCount()));
+                items.stream().filter(i -> i.isContainer() && !i.isLocked() && !i.equals(item) && !i.getInventory().contains(item)).forEach(i -> itemsTreeModel.insertNodeInto(new SudTreeNode("Положить в " + i.getName(), l -> stashItem(i, item)), itemNode, itemNode.getChildCount()));
             }
         }
     }
 
     //кладем предмет в выбранный контейнер
-    private void storeInContainer(Item container, Item item) {
+    private void stashItem(Item container, Item item) {
+        Script.run(item.getScript("_onStash").getText(), new Object[]{item, container});
+        Script.run(commonScripts.get("_onPlayerStashesItem").getText(), new Object[]{item, container});
         container.addItem(item);
         currentLocation.removeItem(item);
         updateItems();
@@ -591,6 +609,7 @@ public class PlayerFrame extends JFrame {
     //открываем контейнер (скриптовая функция)
     private void unlockContainer(Item item) {
         Script.run(item.getScript("_onUnlock").getText(), item);
+        Script.run(commonScripts.get("_onPlayerUnlocksItem").getText(), item);
         updateItems();
     }
 
@@ -696,5 +715,9 @@ public class PlayerFrame extends JFrame {
 
     public static GameCharacter getPlayer() {
         return player;
+    }
+
+    public HashMap<String, Script> getCommonScripts() {
+        return commonScripts;
     }
 }

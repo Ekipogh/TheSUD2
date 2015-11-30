@@ -1,6 +1,7 @@
 package ru.ekipogh.sud;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ public class GameFile implements Serializable {
     private int sequencerID;
     private String initScript;
     private String path;
+    private HashMap<String, Script> commonScripts;
 
     public String getInitScript() {
         return initScript;
@@ -146,5 +148,13 @@ public class GameFile implements Serializable {
 
     public String getPath() {
         return path;
+    }
+
+    public void setCommonScripts(HashMap<String, Script> commonScripts) {
+        this.commonScripts = commonScripts;
+    }
+
+    public HashMap<String, Script> getCommonScripts() {
+        return commonScripts;
     }
 }

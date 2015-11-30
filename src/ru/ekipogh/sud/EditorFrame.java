@@ -45,6 +45,7 @@ public class EditorFrame extends JFrame {
     private final DefaultListModel<String> itemScriptListModel;
     private final DefaultTableModel equipTableModel;
     private final DefaultListModel<Item> itemItemsListModel;
+    private final DefaultListModel<String> commonScriptsListModel;
     private JPanel rootPanel;
     private JList<Location> locationsList;
     private JTextField locName;
@@ -178,8 +179,12 @@ public class EditorFrame extends JFrame {
     private JButton deleteItemFromItemButton;
     private JCheckBox isLockedBox;
     private JTabbedPane itemTabbedPane;
+    private JList<String> commonScriptsList;
+    private RSyntaxTextArea commonScriptText;
+    private JButton saveCommonScriptButton;
     private final DefaultListModel<CharacterCategory> characterCategoryListModel;
     private final DefaultListModel<LocationCategory> locationCategoryListModel;
+    private HashMap<String, Script> commonScripts;
 
     private GameCharacter player;
     private String gamePath;
@@ -197,6 +202,22 @@ public class EditorFrame extends JFrame {
 
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+
+        commonScripts.put("_onPlayerMoves", new Script("", true));
+        commonScripts.put("_onPlayerMovesNorth", new Script("", true));
+        commonScripts.put("_onPlayerMovesSouth", new Script("", true));
+        commonScripts.put("_onPlayerMovesEast", new Script("", true));
+        commonScripts.put("_onPlayerMovesWest", new Script("", true));
+        commonScripts.put("_onPlayerMovesUp", new Script("", true));
+        commonScripts.put("_onPlayerMovesDown", new Script("", true));
+        commonScripts.put("_onPlayerTakesItem", new Script("", true));
+        commonScripts.put("_onPlayerUsesItem", new Script("", true));
+        commonScripts.put("_onPlayerDropsItem", new Script("", true));
+        commonScripts.put("_onPlayerEquipsItem", new Script("", true));
+        commonScripts.put("_onPlayerUnequipsItem", new Script("", true));
+        commonScripts.put("_onPlayerUnlocksItem", new Script("", true));
+        commonScripts.put("_onPlayerStashesItem", new Script("", true));
 
         //модели листов
         charactersListModel = new DefaultListModel<>();
@@ -267,6 +288,11 @@ public class EditorFrame extends JFrame {
         itemItemsListModel = new DefaultListModel<>();
         itemItemsList.setModel(itemItemsListModel);
 
+        commonScriptsListModel = new DefaultListModel<>();
+        commonScriptsList.setModel(commonScriptsListModel);
+        //Заполняем commonScriptsList
+        commonScripts.keySet().forEach(commonScriptsListModel::addElement);
+
         //поля скриптов
         characterScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         characterScriptText.setCodeFoldingEnabled(true);
@@ -291,6 +317,9 @@ public class EditorFrame extends JFrame {
 
         initScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         initScriptText.setCodeFoldingEnabled(true);
+
+        commonScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+        commonScriptText.setCodeFoldingEnabled(true);
 
         //модели комбобоксов
         itemTypeCombo.setModel(new DefaultComboBoxModel<>(ItemTypes.values()));
@@ -377,6 +406,9 @@ public class EditorFrame extends JFrame {
 
         //листенеры
         //листенеры конопок
+        saveCommonScriptButton.addActionListener(e -> saveCommonScript());
+        saveCommonScriptButton.setMnemonic(KeyEvent.VK_ENTER);
+
         deleteItemFromItemButton.addActionListener(e -> deleteItemFromItem());
 
         addItemToItemButton.addActionListener(e -> addItemToItem());
@@ -523,6 +555,8 @@ public class EditorFrame extends JFrame {
         saveAsMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK + InputEvent.SHIFT_MASK));
 
         //листенеры листов
+        commonScriptsList.addListSelectionListener(e -> selectCommonScript());
+
         charCategoryScriptsList.addListSelectionListener(e -> selectCharCategoryScript());
 
         charactersCategoriesList.addListSelectionListener(e -> selectCharCategory());
@@ -686,6 +720,22 @@ public class EditorFrame extends JFrame {
         isLockedBox.addActionListener(e -> setLocked());
 
         //test area
+    }
+
+    private void saveCommonScript() {
+        int indexS = commonScriptsList.getSelectedIndex();
+        if (indexS >= 0) {
+            String scriptName = commonScriptsListModel.elementAt(indexS);
+            commonScripts.put(scriptName, new Script(commonScriptText.getText(), true));
+        }
+    }
+
+    private void selectCommonScript() {
+        int indexS = commonScriptsList.getSelectedIndex();
+        if (indexS >= 0) {
+            String scriptName = commonScriptsListModel.elementAt(indexS);
+            commonScriptText.setText(commonScripts.get(scriptName).getText());
+        }
     }
 
     private void setLocked() {
@@ -1583,6 +1633,8 @@ public class EditorFrame extends JFrame {
 
         Sequencer.setID(gameFile.getSequencerID());
 
+        commonScripts = gameFile.getCommonScripts();
+
         locationsListModel.clear();
         for (Location l : gameFile.getLocations()) {
             playerLocationModel.addElement(l);
@@ -1660,6 +1712,7 @@ public class EditorFrame extends JFrame {
             GameFile gameFile = new GameFile();
             gameFile.setPlayer(player);
             gameFile.setSequencerID(Sequencer.getCurrentId());
+            gameFile.setCommonScripts(commonScripts);
             ArrayList<Location> locations = new ArrayList<>();
             for (int i = 0; i < locationsListModel.size(); i++) {
                 locations.add(locationsListModel.getElementAt(i));

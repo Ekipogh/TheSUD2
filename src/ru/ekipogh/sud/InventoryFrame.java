@@ -147,12 +147,14 @@ class InventoryFrame extends JFrame {
             }
             //если влокации есть контейенры, для каждого добавить опцию положить в ...
             if (!container) {
-                inventory.stream().filter(i -> i.isContainer() && !i.isLocked() && !i.equals(item) && !i.getInventory().contains(item)).forEach(i -> itemsTreeModel.insertNodeInto(new SudTreeNode("Положить в " + i.getName(), l -> storeInContainer(i, item)), itemNode, itemNode.getChildCount()));
+                inventory.stream().filter(i -> i.isContainer() && !i.isLocked() && !i.equals(item) && !i.getInventory().contains(item)).forEach(i -> itemsTreeModel.insertNodeInto(new SudTreeNode("Положить в " + i.getName(), l -> stashItem(i, item)), itemNode, itemNode.getChildCount()));
             }
         }
     }
 
-    private void storeInContainer(Item item, Item container) {
+    private void stashItem(Item item, Item container) {
+        Script.run(item.getScript("_onStash").getText(), new Object[]{item, container});
+        Script.run(playerFrame.getCommonScripts().get("_onPlayerStashesItem").getText(), new Object[]{item, container});
         container.addItem(item);
         player.getInventory().remove(item);
         updateItemsTree();
@@ -160,6 +162,7 @@ class InventoryFrame extends JFrame {
 
     private void unlockContainer(Item container) {
         Script.run(container.getScript("_onUnlock").getText(), container);
+        Script.run(playerFrame.getCommonScripts().get("_onPlayerUnlocksItem").getText(), container);
         updateItemsTree();
     }
 
@@ -179,15 +182,12 @@ class InventoryFrame extends JFrame {
 
     private void unequipItem(Item item, int row, int col) {
         equipmentTableModel.setValueAt("Пусто", row, col);
-        unequipItem(item);
-    }
-
-    private void unequipItem(Item item) {
         player.unequip(item);
-        updateItemsTree();
         Script.run(item.getScript(ONUNEQUIP).getText(), item);
         for (ItemCategory category : item.getCategories())
             Script.run(category.getScript(ONUNEQUIP).getText(), item);
+        Script.run(playerFrame.getCommonScripts().get("_onPlayerUnequipsItem").getText(), item);
+        updateItemsTree();
     }
 
     private void updateEquipmentTable() {  //Заполнение таблицы экипировки
@@ -204,7 +204,8 @@ class InventoryFrame extends JFrame {
         Script.run(item.getScript(ONUSE).getText(), item);
         for (ItemCategory category : item.getCategories())
             Script.run(category.getScript(ONUSE).getText(), item);
-        //Удалем предмет из инвенторя
+        Script.run(playerFrame.getCommonScripts().get("_onPlayerUsesItem").getText(), item);
+        //Удалем предмет из инвентаря
         inventory.remove(item);
         updateItemsTree();
     }
@@ -212,20 +213,22 @@ class InventoryFrame extends JFrame {
     private void dropItem(Item item, List<Item> inventory) {
         player.getLocation().addItem(item);
         inventory.remove(item);
-        updateItemsTree();
-        playerFrame.updateItems();
         Script.run(item.getScript(ONDROP).getText(), item);
         for (ItemCategory category : item.getCategories())
             Script.run(category.getScript(ONDROP).getText(), item);
+        Script.run(playerFrame.getCommonScripts().get("_onPlayerDropsItem").getText(), item);
+        updateItemsTree();
+        playerFrame.updateItems();
     }
 
     private void equipItem(Item item, List<Item> inventory) {
         player.equip(item);
         inventory.remove(item);
-        updateItemsTree();
         Script.run(item.getScript(ONEQUIP).getText(), item);
         for (ItemCategory category : item.getCategories())
             Script.run(category.getScript(ONEQUIP).getText(), item);
+        Script.run(playerFrame.getCommonScripts().get("_onPlayerEquipsItem").getText(), item);
+        updateItemsTree();
         updateEquipmentTable();
     }
 }
