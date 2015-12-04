@@ -564,6 +564,7 @@ public class PlayerFrame extends JFrame {
 
     //заполняем дерево предметов
     public void fillItemsTree(List<Item> items, boolean container) {
+        //stackable fuffin around
         DefaultMutableTreeNode node;
         if (!container) {
             node = (DefaultMutableTreeNode) itemsTreeModel.getRoot();
@@ -571,7 +572,9 @@ public class PlayerFrame extends JFrame {
             DefaultMutableTreeNode root = ((DefaultMutableTreeNode) itemsTreeModel.getRoot());
             node = (DefaultMutableTreeNode) itemsTreeModel.getChild(root, itemsTreeModel.getChildCount(root) - 1);
         }
-        for (Item item : items) {
+        //for (Item item : items)
+        items.stream().sorted().forEach(item -> {
+            String itemName = item.getName();
             DefaultMutableTreeNode itemNode = new DefaultMutableTreeNode(item);
             itemsTreeModel.insertNodeInto(itemNode, node, node.getChildCount());
             item.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> itemsTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), item)), itemNode, itemNode.getChildCount()));
@@ -600,7 +603,7 @@ public class PlayerFrame extends JFrame {
             if (!container) {
                 items.stream().filter(i -> i.isContainer() && !i.isLocked() && !i.equals(item) && !i.getInventory().contains(item)).forEach(i -> itemsTreeModel.insertNodeInto(new SudTreeNode("Положить в " + i.getName(), l -> stashItem(i, item)), itemNode, itemNode.getChildCount()));
             }
-        }
+        });
     }
 
     //кладем предмет в выбранный контейнер

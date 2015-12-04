@@ -182,6 +182,7 @@ public class EditorFrame extends JFrame {
     private JList<String> commonScriptsList;
     private RSyntaxTextArea commonScriptText;
     private JButton saveCommonScriptButton;
+    private JCheckBox stackableBox;
     private final DefaultListModel<CharacterCategory> characterCategoryListModel;
     private final DefaultListModel<LocationCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
@@ -718,8 +719,17 @@ public class EditorFrame extends JFrame {
         //листенеры чекбоксов
         isContainerBox.addActionListener(e -> setContainer());
         isLockedBox.addActionListener(e -> setLocked());
+        stackableBox.addActionListener(e -> setStackable());
 
         //test area
+    }
+
+    private void setStackable() {
+        int indexI = itemsList.getSelectedIndex();
+        if (indexI >= 0) {
+            Item item = itemsListModel.get(indexI);
+            item.setStackable(stackableBox.isSelected());
+        }
     }
 
     private void saveCommonScript() {
@@ -1588,6 +1598,7 @@ public class EditorFrame extends JFrame {
             isLockedBox.setEnabled(selected.isContainer());
             isLockedBox.setSelected(selected.isLocked());
             isContainerBox.setSelected(selected.isContainer());
+            stackableBox.setSelected(selected.isStackable());
         }
     }
 

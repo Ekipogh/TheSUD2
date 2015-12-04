@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by Дмитрий on 04.05.2015.
  */
-public class Item implements Serializable {
+public class Item implements Serializable, Comparable {
     private int id;
     private ItemTypes type;
     private String name;
@@ -22,6 +22,7 @@ public class Item implements Serializable {
     private boolean locked;
     private List<Item> inventory;
     private boolean isContainer;
+    private boolean stackable;
 
     public boolean isLocked() {
         return locked;
@@ -54,6 +55,7 @@ public class Item implements Serializable {
 
     public Item(String name) {
         this.isContainer = false;
+        this.stackable = false;
         this.locked = false;
         this.name = name;
         this.type = ItemTypes.GENERIC;
@@ -183,5 +185,19 @@ public class Item implements Serializable {
 
     public void removeItem(Item item) {
         inventory.remove(item);
+    }
+
+    public boolean isStackable() {
+        return stackable;
+    }
+
+    public void setStackable(boolean stackable) {
+        this.stackable = stackable;
+    }
+
+    @Override
+    public int compareTo(Object i) {
+        if (this.id == ((Item) i).getId()) return 0;
+        return this.name.compareTo(((Item) i).getName());
     }
 }
