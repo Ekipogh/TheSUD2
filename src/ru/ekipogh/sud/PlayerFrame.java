@@ -341,7 +341,7 @@ public class PlayerFrame extends JFrame {
     }
 
     //используем предмет
-    private void useItem(Item item, List<Item> inventory) {
+    private void useItem(Item item, Inventory inventory) {
         inventory.remove(item);
         Script.run(item.getScript(ONUSE).getText(), item);
         for (ItemCategory category : item.getCategories())
@@ -351,7 +351,7 @@ public class PlayerFrame extends JFrame {
     }
 
     //надеть предмет
-    private void equipItem(Item item, List<Item> inventory) {
+    private void equipItem(Item item, Inventory inventory) {
         inventory.remove(item); //убираем предмет из инвенторя откуда он был экирирован
         player.equip(item);
         updateItems();
@@ -362,7 +362,7 @@ public class PlayerFrame extends JFrame {
     }
 
     //положить предмет в инвентарь игрока
-    private void takeItem(Item item, List<Item> inventory) {
+    private void takeItem(Item item, Inventory inventory) {
         inventory.remove(item); //убираем предмет из инвенторя откуда он был взят
         player.addToInventory(item);
         Script.run(item.getScript(ONTAKE).getText(), item);
@@ -563,34 +563,62 @@ public class PlayerFrame extends JFrame {
     }
 
     //заполняем дерево предметов
-    public void fillItemsTree(List<Item> items, boolean container) {
-        //stackable fuffin around
-        DefaultMutableTreeNode node;
+    public void fillItemsTree(Inventory inventory, boolean container) {
+        DefaultMutableTreeNode node; //куда добавляем строки
         if (!container) {
-            node = (DefaultMutableTreeNode) itemsTreeModel.getRoot();
+            node = (DefaultMutableTreeNode) itemsTreeModel.getRoot(); //в начало
         } else {
             DefaultMutableTreeNode root = ((DefaultMutableTreeNode) itemsTreeModel.getRoot());
-            node = (DefaultMutableTreeNode) itemsTreeModel.getChild(root, itemsTreeModel.getChildCount(root) - 1);
+            node = (DefaultMutableTreeNode) itemsTreeModel.getChild(root, itemsTreeModel.getChildCount(root) - 1); //в ноду предмета
         }
         //for (Item item : items)
-        items.stream().sorted().forEach(item -> {
-            String itemName = item.getName();
-            DefaultMutableTreeNode itemNode = new DefaultMutableTreeNode(item);
-            itemsTreeModel.insertNodeInto(itemNode, node, node.getChildCount());
+        //inventory.sort(Item::compareTo);
+        //items.stream().sorted().forEach(item -> {
+        for (int i = 0; i < inventory.size(); i++) {
+            Item item = inventory.get(i); //предмет для добавления
+            String itemName = item.getName(); //название предмета
+            int amount = inventory.amount(i); //количество предметов
+//            int count = 1;
+            /*if (item.isStackable()) {
+                for (int j = i + 1; j < inventory.size(); j++) {
+                    if (inventory.get(j).equals(item)) {
+                        count++;
+                    } else {
+                        break;
+                    }
+                }
+                i += count - 1;
+            }*/
+            SudTreeNode itemNode = new SudTreeNode(item, null); //нода предмета
+            itemNode.setText(itemName);
+            itemNode.setCount(amount);
+            itemsTreeModel.insertNodeInto(itemNode, node, node.getChildCount()); //вставляем ноду предмета в выбранную выше ноду
+
+            //далее скрипты и действия
+
+            //скрипты
             item.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> itemsTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), item)), itemNode, itemNode.getChildCount()));
             for (ItemCategory category : item.getCategories())
                 category.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> itemsTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), item)), itemNode, itemNode.getChildCount()));
             if (!item.getDescription().isEmpty()) {
                 itemsTreeModel.insertNodeInto(new SudTreeNode("Описание", l -> showItemDescription(item)), itemNode, itemNode.getChildCount());
             }
-            if (item.getType() == ItemTypes.EQUIPPABLE) {
-                itemsTreeModel.insertNodeInto(new SudTreeNode("Экипировать", l -> equipItem(item, items)), itemNode, itemNode.getChildCount());
-            }
-            if (item.getType() == ItemTypes.EQUIPPABLE || item.getType() == ItemTypes.STORABLE) {
-                itemsTreeModel.insertNodeInto(new SudTreeNode("Взять", l -> takeItem(item, items)), itemNode, itemNode.getChildCount());
-            }
-            if (item.getType() == ItemTypes.CONSUMABLE) {
-                itemsTreeModel.insertNodeInto(new SudTreeNode("Использовать", l -> useItem(item, items)), itemNode, itemNode.getChildCount());
+            //действия
+            switch (item.getType()) {
+                case EQUIPPABLE:
+                    itemsTreeModel.insertNodeInto(new SudTreeNode("Экипировать", l -> equipItem(item, inventory)), itemNode, itemNode.getChildCount());
+                    itemsTreeModel.insertNodeInto(new SudTreeNode("Взять", l -> takeItem(item, inventory)), itemNode, itemNode.getChildCount());
+                    break;
+                case STORABLE:
+                    if (item.isStackable() && amount > 1) {
+                        itemsTreeModel.insertNodeInto(new SudTreeNode("Взять...", l -> takeAmountOfItem(item, inventory, itemNode.getCount())), itemNode, itemNode.getChildCount());
+                    } else {
+                        itemsTreeModel.insertNodeInto(new SudTreeNode("Взять", l -> takeItem(item, inventory)), itemNode, itemNode.getChildCount());
+                    }
+                    break;
+                case CONSUMABLE:
+                    itemsTreeModel.insertNodeInto(new SudTreeNode("Использовать", l -> useItem(item, inventory)), itemNode, itemNode.getChildCount());
+                    break;
             }
             if (item.isContainer()) {
                 if (!item.isLocked()) {
@@ -601,12 +629,27 @@ public class PlayerFrame extends JFrame {
             }
             //если влокации есть контейенры, для каждого добавить опцию положить в ...
             if (!container) {
-                items.stream().filter(i -> i.isContainer() && !i.isLocked() && !i.equals(item) && !i.getInventory().contains(item)).forEach(i -> itemsTreeModel.insertNodeInto(new SudTreeNode("Положить в " + i.getName(), l -> stashItem(i, item)), itemNode, itemNode.getChildCount()));
+                inventory.stream().filter(itemC -> itemC.getKey().isContainer() && !itemC.getKey().isLocked() && !itemC.getKey().equals(item) && !itemC.getKey().getInventory().contains(item)).forEach(itemContained -> itemsTreeModel.insertNodeInto(new SudTreeNode("Положить в " + itemContained.getKey().getName(), l -> stashItem(itemContained.getKey(), item)), itemNode, itemNode.getChildCount()));
             }
-        });
+        }
+    }
+
+    private void takeAmountOfItem(Item item, Inventory items, int count) {
+        SpinnerNumberModel sModel = new SpinnerNumberModel(1, 1, count, 1);
+        JSpinner spinner = new JSpinner(sModel);
+        int option = JOptionPane.showOptionDialog(null, spinner, "Enter valid number", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+        if (option == JOptionPane.CANCEL_OPTION) {
+            return;
+        } else if (option == JOptionPane.OK_OPTION) {
+            int amount = (int) spinner.getModel().getValue();
+            for (int i = 0; i < amount; i++) {
+                takeItem(item, items);
+            }
+        }
     }
 
     //кладем предмет в выбранный контейнер
+
     private void stashItem(Item container, Item item) {
         Script.run(item.getScript("_onStash").getText(), new Object[]{item, container});
         Script.run(commonScripts.get("_onPlayerStashesItem").getText(), new Object[]{item, container});

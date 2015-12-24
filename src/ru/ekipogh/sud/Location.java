@@ -15,7 +15,8 @@ public class Location implements Serializable {
     private String description;  //optional location Description
     private Location[] exits;  //items can be null 0 = north 1 = south 2 = east 3 = west 4 = up 5 = down
     private boolean[] exitsOpened; //is direction available
-    private List<Item> inventory; //stores items
+    //private List<Item> inventory; //stores items
+    private Inventory inventory;
     @Deprecated
     private String picturePath; //picture of location
     private static List<LocationCategory> locationCategories = new ArrayList<>(); //categories of locations
@@ -39,7 +40,7 @@ public class Location implements Serializable {
         this.picturePath = picturePath;
     }
 
-    public List<Item> getInventory() {
+    public Inventory getInventory() {
         return inventory;
     }
 
@@ -53,7 +54,7 @@ public class Location implements Serializable {
         this.description = "";
         this.exits = new Location[6];
         this.exitsOpened = new boolean[6];
-        this.inventory = new ArrayList<>();
+        this.inventory = new Inventory();
         this.values = new HashMap<>();
         this.scripts = new HashMap<>();
         this.scripts.put("_onEnter", new Script("", true));
@@ -198,11 +199,19 @@ public class Location implements Serializable {
     }
 
     public void addItem(Item item) {
-        this.inventory.add(item);
+        addItem(item, 1);
+    }
+
+    private void addItem(Item item, int amount) {
+        this.inventory.add(item, amount);
+    }
+
+    private void removeItem(Item item, int amount) {
+        this.inventory.remove(item, amount);
     }
 
     public void removeItem(Item item) {
-        inventory.remove(item);
+        removeItem(item, 1);
     }
 
     public String toString() {

@@ -1549,7 +1549,7 @@ public class EditorFrame extends JFrame {
         if (indexItem >= 0 && indexLoc >= 0) {
             Location selectedLoc = locationsListModel.getElementAt(indexLoc);
             Item selectedItem = locationItemsListModel.getElementAt(indexItem);
-            selectedLoc.getInventory().remove(selectedItem);
+            selectedLoc.removeItem(selectedItem);
             locationItemsListModel.removeElement(selectedItem);
             if (indexItem == 0)
                 deleteItemFromLocButton.setEnabled(false);

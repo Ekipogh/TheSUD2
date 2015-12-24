@@ -10,6 +10,7 @@ import java.util.Map;
  * Created by Дмитрий on 04.05.2015.
  */
 public class Item implements Serializable, Comparable {
+    public static final long serialVersionUID = 1L;
     private int id;
     private ItemTypes type;
     private String name;
@@ -20,7 +21,7 @@ public class Item implements Serializable, Comparable {
     private Map<String, Object> values;
     private Map<String, Script> scripts;
     private boolean locked;
-    private List<Item> inventory;
+    private Inventory inventory;
     private boolean isContainer;
     private boolean stackable;
 
@@ -32,11 +33,11 @@ public class Item implements Serializable, Comparable {
         this.locked = locked;
     }
 
-    public List<Item> getInventory() {
+    public Inventory getInventory() {
         return inventory;
     }
 
-    public void setInventory(List<Item> inventory) {
+    public void setInventory(Inventory inventory) {
         this.inventory = inventory;
     }
 
@@ -46,8 +47,7 @@ public class Item implements Serializable, Comparable {
 
     public void setContainer(boolean container) {
         if (container) {
-            inventory = new ArrayList<>();
-        } else {
+            inventory = new Inventory();
             inventory = null;
         }
         isContainer = container;
@@ -199,5 +199,10 @@ public class Item implements Serializable, Comparable {
     public int compareTo(Object i) {
         if (this.id == ((Item) i).getId()) return 0;
         return this.name.compareTo(((Item) i).getName());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.id == ((Item) obj).id;
     }
 }

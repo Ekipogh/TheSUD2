@@ -12,7 +12,7 @@ import java.util.Map;
 public class GameCharacter implements Serializable {
     private String name;
     private Location location;
-    private List<Item> inventory;
+    private Inventory inventory;
     private static List<CharacterCategory> characterCategories = new ArrayList<>();
     private Map<String, Object> values;
     private int id;
@@ -38,7 +38,7 @@ public class GameCharacter implements Serializable {
 
     public GameCharacter(String name) {
         this.name = name;
-        this.inventory = new ArrayList<>();
+        this.inventory = new Inventory();
         this.equipment = new Equipment();
         this.scripts = new HashMap<>();
         this.scripts.put("_onPlayerArrive", new Script("", true));
@@ -48,7 +48,7 @@ public class GameCharacter implements Serializable {
         this.categories = new ArrayList<>();
     }
 
-    public List<Item> getInventory() {
+    public Inventory getInventory() {
         return inventory;
     }
 
