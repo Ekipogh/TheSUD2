@@ -364,7 +364,7 @@ public class PlayerFrame extends JFrame {
     //положить предмет в инвентарь игрока
     private void takeItem(Item item, Inventory inventory) {
         inventory.remove(item); //убираем предмет из инвенторя откуда он был взят
-        player.addToInventory(item);
+        player.addItem(item);
         Script.run(item.getScript(ONTAKE).getText(), item);
         for (ItemCategory category : item.getCategories())
             Script.run(category.getScript(ONTAKE).getText(), item);

@@ -1,12 +1,12 @@
 <component name="libraryTable">
   <library name="lib">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../rhino/js.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../RSyn/rsyntaxtextarea-2.5.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../rhino-1.7.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../rsyntaxtextarea-2.5.8.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="file://$PROJECT_DIR$/../../rhino/src" />
+      <root url="file://$PROJECT_DIR$/../RSyntaxTextArea-2.5.8/src/main/java" />
     </SOURCES>
   </library>
 </component>

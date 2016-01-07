@@ -1,13 +1,14 @@
 package ru.ekipogh.sud;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
 /**
  * Created by dedov_d on 22.12.2015.
  */
-public class Inventory {
+public class Inventory implements Iterable {
     private List<SudPair<Item, Integer>> items;
 
     public Inventory() {
@@ -15,14 +16,21 @@ public class Inventory {
     }
 
     public void remove(Item item, int amount) {
-        items.stream().filter(entry -> entry.getKey().equals(item)).forEach(entry -> {
-            int newAmount = entry.getValue() - amount;
-            if (newAmount == 0) {
-                items.remove(entry);
-            } else {
-                entry.setValue(newAmount);
+        SudPair<Item, Integer> pair = null;
+        for (SudPair<Item, Integer> p : items) {
+            if (p.getKey().equals(item)) {
+                pair = p;
+                break;
             }
-        });
+        }
+        if (pair != null) {
+            int newAmount = pair.getValue() - amount;
+            if (newAmount == 0) {
+                items.remove(pair);
+            } else {
+                pair.setValue(newAmount);
+            }
+        }
     }
 
     public void add(Item item, int amount) {
@@ -61,6 +69,34 @@ public class Inventory {
     }
 
     public boolean contains(Item item) {
-        return items.contains(item);
+        for (SudPair pair : items) {
+            if (pair.getKey().equals(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Iterator iterator() {
+        return items.iterator();
+    }
+
+    public int getAmount(Item item) {
+        for (SudPair<Item, Integer> pair : items) {
+            if (pair.getKey().equals(item)) {
+                return pair.getValue();
+            }
+        }
+        return 0;
+    }
+
+    public void setAmount(Item item, int amount) {
+        for (SudPair<Item, Integer> pair : items) {
+            if (pair.getKey().equals(item)) {
+                pair.setValue(amount);
+                return;
+            }
+        }
     }
 }

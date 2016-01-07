@@ -26,11 +26,11 @@ public class EditorFrame extends JFrame {
     private final DefaultComboBoxModel<Location> playerLocationModel;
     private final DefaultComboBoxModel<String> slotNamesModel;
     private final DefaultComboBoxModel<Location> characterLocationModel;
-    private final DefaultListModel<Item> itemsListModel;
-    private final DefaultListModel<Item> locationItemsListModel;
     private final DefaultListModel<GameCharacter> charactersListModel;
-    private final DefaultListModel<Item> characterItemsListModel;
-    private final DefaultListModel<Item> playerItemsListModel;
+    private final DefaultListModel<Item> itemsListModel;
+    private final DefaultListModel<SudPair<Item, Integer>> locationItemsListModel;
+    private final DefaultListModel<SudPair<Item, Integer>> characterItemsListModel;
+    private final DefaultListModel<SudPair<Item, Integer>> playerItemsListModel;
     private final DefaultListModel<LocationCategory> locationsCategoriesListModel;
     private final DefaultListModel<String> locationCategoryScriptsListModel;
     private final DefaultListModel<ItemCategory> itemsCategoriesListModel;
@@ -44,7 +44,7 @@ public class EditorFrame extends JFrame {
     private final DefaultListModel<String> characterScriptListModel;
     private final DefaultListModel<String> itemScriptListModel;
     private final DefaultTableModel equipTableModel;
-    private final DefaultListModel<Item> itemItemsListModel;
+    private final DefaultListModel<SudPair<Item, Integer>> itemItemsListModel;
     private final DefaultListModel<String> commonScriptsListModel;
     private JPanel rootPanel;
     private JList<Location> locationsList;
@@ -71,7 +71,7 @@ public class EditorFrame extends JFrame {
     private JComboBox<ItemTypes> itemTypeCombo;
     private JButton saveItemButton;
     private JList<Item> locationTabItemsList;
-    private JList<Item> locationItemsList;
+    private JList<SudPair<Item, Integer>> locationItemsList;
     private JButton addItemToLocationButton;
     private JButton deleteItemFromLocButton;
     private JComboBox<String> slotCombo;
@@ -102,11 +102,11 @@ public class EditorFrame extends JFrame {
     private JButton addItemScriptButton;
     private JButton deleteItemScriptButton;
     private JList<Item> characterTabItemsList;
-    private JList<Item> characterItemsList;
+    private JList<SudPair<Item, Integer>> characterItemsList;
     private JButton addItemToCharacterButton;
     private JButton deleteItemFromCharButton;
     private JList<Item> playerTabItemsList;
-    private JList<Item> playerItemsList;
+    private JList<SudPair<Item, Integer>> playerItemsList;
     private JButton addItemToPlayerButton;
     private JButton deleteItemFromPlayerButton;
     private JList<LocationCategory> locationsCategoriesList;
@@ -174,7 +174,7 @@ public class EditorFrame extends JFrame {
     private JButton deleteCategoryFromItemButton;
     private JCheckBox isContainerBox;
     private JList<Item> allItemsList;
-    private JList<Item> itemItemsList;
+    private JList<SudPair<Item, Integer>> itemItemsList;
     private JButton addItemToItemButton;
     private JButton deleteItemFromItemButton;
     private JCheckBox isLockedBox;
@@ -183,6 +183,14 @@ public class EditorFrame extends JFrame {
     private RSyntaxTextArea commonScriptText;
     private JButton saveCommonScriptButton;
     private JCheckBox stackableBox;
+    private JButton deleteSomeItemsFromItemButton;
+    private JButton addSomeItemsToItemButton;
+    private JButton addSomeItemsToLocationButton;
+    private JButton deleteSomeItemsFromLocationButton;
+    private JButton addSomeItemsToCharacterButton;
+    private JButton deleteSomeItemsFromCharacterButton;
+    private JButton addSomeItemsToPlayerButton;
+    private JButton deleteSomeItemsFromPlayerButton;
     private final DefaultListModel<CharacterCategory> characterCategoryListModel;
     private final DefaultListModel<LocationCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
@@ -403,11 +411,28 @@ public class EditorFrame extends JFrame {
 
         setJMenuBar(menuBar);
 
-        String key = "Save Object";
+        //String key = "Save Object";
 
         //листенеры
         //листенеры конопок
+        addSomeItemsToPlayerButton.addActionListener(e -> addSomeItemsToPlayer());
+
+        deleteSomeItemsFromPlayerButton.addActionListener(e -> deleteSomeItemsFromPlayer());
+
+        addSomeItemsToCharacterButton.addActionListener(e -> addSomeItemsToCharacter());
+
+        deleteSomeItemsFromCharacterButton.addActionListener(e -> deleteSomeItemsFromCharacter());
+
+        addSomeItemsToLocationButton.addActionListener(e -> addSomeItemsToLocation());
+
+        deleteSomeItemsFromLocationButton.addActionListener(e -> deleteSomeItemsFromLocation());
+
+        addSomeItemsToItemButton.addActionListener(e -> addSomeItemsToItem());
+
+        deleteSomeItemsFromItemButton.addActionListener(e -> deleteSomeItemsFromItem());
+
         saveCommonScriptButton.addActionListener(e -> saveCommonScript());
+
         saveCommonScriptButton.setMnemonic(KeyEvent.VK_ENTER);
 
         deleteItemFromItemButton.addActionListener(e -> deleteItemFromItem());
@@ -584,7 +609,9 @@ public class EditorFrame extends JFrame {
                 super.focusGained(e);
                 if (((JList) e.getSource()).getSelectedIndex() >= 0) {
                     deleteItemFromLocButton.setEnabled(false);
+                    deleteSomeItemsFromLocationButton.setEnabled(false);
                     addItemToLocationButton.setEnabled(true);
+                    addSomeItemsToLocationButton.setEnabled(true);
                 }
             }
         });
@@ -595,7 +622,9 @@ public class EditorFrame extends JFrame {
                 super.focusGained(e);
                 if (((JList) e.getSource()).getSelectedIndex() >= 0) {
                     deleteItemFromLocButton.setEnabled(true);
+                    deleteSomeItemsFromLocationButton.setEnabled(true);
                     addItemToLocationButton.setEnabled(false);
+                    addSomeItemsToLocationButton.setEnabled(false);
                 }
             }
         });
@@ -606,7 +635,9 @@ public class EditorFrame extends JFrame {
                 super.focusGained(e);
                 if (((JList) e.getSource()).getSelectedIndex() >= 0) {
                     deleteItemFromItemButton.setEnabled(false);
+                    deleteSomeItemsFromItemButton.setEnabled(false);
                     addItemToItemButton.setEnabled(true);
+                    addSomeItemsToItemButton.setEnabled(true);
                 }
             }
         });
@@ -617,7 +648,9 @@ public class EditorFrame extends JFrame {
                 super.focusGained(e);
                 if (((JList) e.getSource()).getSelectedIndex() >= 0) {
                     deleteItemFromItemButton.setEnabled(true);
+                    deleteSomeItemsFromItemButton.setEnabled(true);
                     addItemToItemButton.setEnabled(false);
+                    addSomeItemsToItemButton.setEnabled(false);
                 }
             }
         });
@@ -637,7 +670,9 @@ public class EditorFrame extends JFrame {
                 super.focusGained(e);
                 if (((JList) e.getSource()).getSelectedIndex() >= 0) {
                     deleteItemFromCharButton.setEnabled(false);
+                    deleteSomeItemsFromCharacterButton.setEnabled(false);
                     addItemToCharacterButton.setEnabled(true);
+                    addSomeItemsToCharacterButton.setEnabled(true);
                 }
             }
         });
@@ -647,7 +682,9 @@ public class EditorFrame extends JFrame {
                 super.focusGained(e);
                 if (((JList) e.getSource()).getSelectedIndex() >= 0) {
                     deleteItemFromCharButton.setEnabled(true);
+                    deleteSomeItemsFromCharacterButton.setEnabled(true);
                     addItemToLocationButton.setEnabled(false);
+                    addSomeItemsToLocationButton.setEnabled(false);
                 }
             }
         });
@@ -658,7 +695,9 @@ public class EditorFrame extends JFrame {
                 super.focusGained(e);
                 if (((JList) e.getSource()).getSelectedIndex() >= 0) {
                     deleteItemFromPlayerButton.setEnabled(false);
+                    deleteSomeItemsFromPlayerButton.setEnabled(false);
                     addItemToPlayerButton.setEnabled(true);
+                    addSomeItemsToPlayerButton.setEnabled(true);
                 }
             }
         });
@@ -668,7 +707,9 @@ public class EditorFrame extends JFrame {
                 super.focusGained(e);
                 if (((JList) e.getSource()).getSelectedIndex() >= 0) {
                     deleteItemFromPlayerButton.setEnabled(true);
+                    deleteSomeItemsFromPlayerButton.setEnabled(true);
                     addItemToPlayerButton.setEnabled(false);
+                    addSomeItemsToPlayerButton.setEnabled(false);
                 }
             }
         });
@@ -724,6 +765,102 @@ public class EditorFrame extends JFrame {
         //test area
     }
 
+    private void deleteSomeItemsFromItem() {
+        int index = itemItemsList.getSelectedIndex();
+        if (index >= 0) {
+            int count = itemItemsListModel.get(index).getValue();
+            SpinnerNumberModel sModel = new SpinnerNumberModel(1, 1, count, 1);
+            JSpinner spinner = new JSpinner(sModel);
+            int option = JOptionPane.showOptionDialog(null, spinner, "Введите количество", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+            if (option == JOptionPane.OK_OPTION) {
+                int amount = (int) spinner.getModel().getValue();
+                deleteItemFromItem(amount);
+            }
+        }
+    }
+
+    private void addSomeItemsToItem() {
+        SpinnerNumberModel sModel = new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1);
+        JSpinner spinner = new JSpinner(sModel);
+        int option = JOptionPane.showOptionDialog(null, spinner, "Введите количество", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+        if (option == JOptionPane.OK_OPTION) {
+            int amount = (int) spinner.getModel().getValue();
+            addItemToItem(amount);
+        }
+    }
+
+    private void deleteSomeItemsFromLocation() {
+        int index = locationItemsList.getSelectedIndex();
+        if (index >= 0) {
+            int count = locationItemsListModel.get(index).getValue();
+            SpinnerNumberModel sModel = new SpinnerNumberModel(1, 1, count, 1);
+            JSpinner spinner = new JSpinner(sModel);
+            int option = JOptionPane.showOptionDialog(null, spinner, "Введите количество", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+            if (option == JOptionPane.OK_OPTION) {
+                int amount = (int) spinner.getModel().getValue();
+                deleteItemFromLocation(amount);
+            }
+        }
+    }
+
+    private void addSomeItemsToLocation() {
+        SpinnerNumberModel sModel = new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1);
+        JSpinner spinner = new JSpinner(sModel);
+        int option = JOptionPane.showOptionDialog(null, spinner, "Введите количество", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+        if (option == JOptionPane.OK_OPTION) {
+            int amount = (int) spinner.getModel().getValue();
+            addItemToLocation(amount);
+        }
+    }
+
+    private void deleteSomeItemsFromCharacter() {
+        int index = characterItemsList.getSelectedIndex();
+        if (index >= 0) {
+            int count = characterItemsListModel.get(index).getValue();
+            SpinnerNumberModel sModel = new SpinnerNumberModel(1, 1, count, 1);
+            JSpinner spinner = new JSpinner(sModel);
+            int option = JOptionPane.showOptionDialog(null, spinner, "Введите количество", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+            if (option == JOptionPane.OK_OPTION) {
+                int amount = (int) spinner.getModel().getValue();
+                deleteItemFromCharacter(amount);
+            }
+        }
+    }
+
+    private void addSomeItemsToCharacter() {
+        SpinnerNumberModel sModel = new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1);
+        JSpinner spinner = new JSpinner(sModel);
+        int option = JOptionPane.showOptionDialog(null, spinner, "Введите количество", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+        if (option == JOptionPane.OK_OPTION) {
+            int amount = (int) spinner.getModel().getValue();
+            addItemToCharacter(amount);
+        }
+    }
+
+    private void deleteSomeItemsFromPlayer() {
+        int index = playerItemsList.getSelectedIndex();
+        if (index >= 0) {
+            int count = playerItemsListModel.get(index).getValue();
+            SpinnerNumberModel sModel = new SpinnerNumberModel(1, 1, count, 1);
+            JSpinner spinner = new JSpinner(sModel);
+            int option = JOptionPane.showOptionDialog(null, spinner, "Введите количество", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+            if (option == JOptionPane.OK_OPTION) {
+                int amount = (int) spinner.getModel().getValue();
+                deleteItemFromPlayer(amount);
+            }
+        }
+    }
+
+    private void addSomeItemsToPlayer() {
+        SpinnerNumberModel sModel = new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1);
+        JSpinner spinner = new JSpinner(sModel);
+        int option = JOptionPane.showOptionDialog(null, spinner, "Введите количество", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+        if (option == JOptionPane.OK_OPTION) {
+            int amount = (int) spinner.getModel().getValue();
+            addItemToPlayer(amount);
+        }
+    }
+
     private void setStackable() {
         int indexI = itemsList.getSelectedIndex();
         if (indexI >= 0) {
@@ -759,28 +896,47 @@ public class EditorFrame extends JFrame {
     }
 
     private void deleteItemFromItem() {
+        deleteItemFromItem(1);
+    }
+
+    private void deleteItemFromItem(int count) {
         int indexI1 = itemsList.getSelectedIndex();
         int indexI2 = itemItemsList.getSelectedIndex();
         if (indexI1 >= 0 && indexI2 >= 0) {
             Item selected = itemsListModel.getElementAt(indexI1);
-            Item toDelete = itemItemsListModel.getElementAt(indexI2);
-            selected.removeItem(toDelete);
-            itemItemsListModel.removeElement(toDelete);
-            if (indexI2 == 0)
-                deleteItemFromItemButton.setEnabled(false);
-            itemItemsList.setSelectedIndex((indexI2 > 0) ? indexI2 - 1 : indexI2);
+            Item toDelete = itemItemsListModel.getElementAt(indexI2).getKey();
+
+            int newAmount = itemItemsListModel.getElementAt(indexI2).getValue() - count;
+
+            if (newAmount != 0) {
+                itemItemsListModel.getElementAt(indexI2).setValue(newAmount);
+                itemItemsList.updateUI();
+            } else {
+                itemItemsListModel.removeElementAt(indexI2);
+            }
+            selected.removeItem(toDelete, count);
         }
     }
 
     private void addItemToItem() {
+        addItemToItem(1);
+    }
+
+    private void addItemToItem(int count) {
         int indexI1 = itemsList.getSelectedIndex();
         int indexI2 = allItemsList.getSelectedIndex();
         if (indexI1 >= 0 && indexI2 >= 0) {
             Item selected = itemsListModel.get(indexI1);
             Item toAdd = itemsListModel.elementAt(indexI2);
             if (selected.isContainer()) {
-                selected.addItem(toAdd);
-                itemItemsListModel.addElement(toAdd);
+                if (selected.getInventory().contains(toAdd)) {
+                    int newAmount = selected.getInventory().getAmount(toAdd) + count;
+                    itemItemsListModel.get(indexI2).setValue(newAmount);
+                    itemItemsList.updateUI();
+                } else {
+                    itemItemsListModel.addElement(new SudPair<>(toAdd, count));
+                }
+                selected.addItem(toAdd, count);
             }
         }
     }
@@ -1264,48 +1420,81 @@ public class EditorFrame extends JFrame {
     }
 
     private void deleteItemFromPlayer() {
+        deleteItemFromPlayer(1);
+    }
+
+    private void deleteItemFromPlayer(int count) {
         int indexI = playerItemsList.getSelectedIndex();
         if (indexI >= 0) {
-            Item item = playerItemsListModel.getElementAt(indexI);
-            player.getInventory().remove(item);
-            playerItemsListModel.removeElementAt(indexI);
-            if (indexI == 0)
-                deleteItemFromPlayerButton.setEnabled(false);
-            playerItemsList.setSelectedIndex((indexI > 0) ? indexI - 1 : indexI);
+            Item item = playerItemsListModel.getElementAt(indexI).getKey();
+            int newAmount = playerItemsListModel.get(indexI).getValue() - count;
+            if (newAmount != 0) {
+                playerItemsListModel.get(indexI).setValue(newAmount);
+                playerItemsList.updateUI();
+            } else {
+                playerItemsListModel.removeElementAt(indexI);
+            }
+            player.removeItem(item, count);
         }
     }
 
     private void addItemToPlayer() {
+        addItemToPlayer(1);
+    }
+
+    private void addItemToPlayer(int count) {
         int indexI = playerTabItemsList.getSelectedIndex();
         if (indexI >= 0) {
             Item item = itemsListModel.getElementAt(indexI);
-            player.addToInventory(item);
-            playerItemsListModel.addElement(item);
+            if (player.getInventory().contains(item)) {
+                int newAmount = player.getInventory().getAmount(item) + count;
+                playerItemsListModel.get(indexI).setValue(newAmount);
+            } else {
+                playerItemsListModel.addElement(new SudPair<>(item, count));
+            }
+            player.addItem(item, count);
         }
     }
 
     private void deleteItemFromCharacter() {
+        deleteItemFromCharacter(1);
+    }
+
+    private void deleteItemFromCharacter(int count) {
         int indexC = charactersList.getSelectedIndex();
         int indexI = characterItemsList.getSelectedIndex();
         if (indexI >= 0 && indexC >= 0) {
-            GameCharacter selectedC = charactersListModel.getElementAt(indexC);
-            Item selectedItem = characterItemsListModel.getElementAt(indexI);
-            selectedC.getInventory().remove(selectedItem);
-            characterItemsListModel.removeElement(selectedItem);
-            if (indexI == 0)
-                deleteItemFromCharButton.setEnabled(false);
-            characterItemsList.setSelectedIndex((indexI > 0) ? indexI - 1 : indexI);
+            GameCharacter character = charactersListModel.getElementAt(indexC);
+            Item item = characterItemsListModel.getElementAt(indexI).getKey();
+            int newAmount = characterItemsListModel.get(indexI).getValue() - count;
+            if (newAmount != 0) {
+                characterItemsListModel.get(indexI).setValue(newAmount);
+                characterItemsList.updateUI();
+            } else {
+                characterItemsListModel.removeElementAt(indexI);
+            }
+            character.removeItem(item, count);
         }
+
     }
 
     private void addItemToCharacter() {
+        addItemToCharacter(1);
+    }
+
+    private void addItemToCharacter(int count) {
         int indexC = charactersList.getSelectedIndex();
         int indexI = characterTabItemsList.getSelectedIndex();
         if (indexC >= 0 && indexI >= 0) {
-            GameCharacter selectedC = charactersListModel.getElementAt(indexC);
-            Item selectedItem = itemsListModel.getElementAt(indexI);
-            selectedC.addToInventory(selectedItem);
-            characterItemsListModel.addElement(selectedItem);
+            GameCharacter character = charactersListModel.getElementAt(indexC);
+            Item item = itemsListModel.getElementAt(indexI);
+            if (character.getInventory().contains(item)) {
+                int newAmount = character.getInventory().getAmount(item) + count;
+                characterItemsListModel.get(indexI).setValue(newAmount);
+            } else {
+                characterItemsListModel.addElement(new SudPair<>(item, count));
+            }
+            character.addItem(item, count);
         }
     }
 
@@ -1544,16 +1733,23 @@ public class EditorFrame extends JFrame {
     }
 
     private void deleteItemFromLocation() {
+        deleteItemFromLocation(1);
+    }
+
+    private void deleteItemFromLocation(int count) {
         int indexLoc = locationsList.getSelectedIndex();
         int indexItem = locationItemsList.getSelectedIndex();
         if (indexItem >= 0 && indexLoc >= 0) {
-            Location selectedLoc = locationsListModel.getElementAt(indexLoc);
-            Item selectedItem = locationItemsListModel.getElementAt(indexItem);
-            selectedLoc.removeItem(selectedItem);
-            locationItemsListModel.removeElement(selectedItem);
-            if (indexItem == 0)
-                deleteItemFromLocButton.setEnabled(false);
-            locationItemsList.setSelectedIndex((indexItem > 0) ? indexItem - 1 : indexItem);
+            Location location = locationsListModel.getElementAt(indexLoc);
+            Item item = locationItemsListModel.getElementAt(indexItem).getKey();
+            int newAmount = locationItemsListModel.get(indexItem).getValue() - count;
+            if (newAmount != 0) {
+                locationItemsListModel.get(indexItem).setValue(newAmount);
+                locationItemsList.updateUI();
+            } else {
+                locationItemsListModel.removeElementAt(indexItem);
+            }
+            location.removeItem(item, count);
         }
     }
 
@@ -1570,13 +1766,22 @@ public class EditorFrame extends JFrame {
     }
 
     private void addItemToLocation() {
+        addItemToLocation(1);
+    }
+
+    private void addItemToLocation(int count) {
         int indexLoc = locationsList.getSelectedIndex();
         int indexItem = locationTabItemsList.getSelectedIndex();
         if (indexLoc >= 0 && indexItem >= 0) {
-            Location selectedLoc = locationsListModel.getElementAt(indexLoc);
-            Item selectedItem = itemsListModel.getElementAt(indexItem);
-            selectedLoc.addItem(selectedItem);
-            locationItemsListModel.addElement(selectedItem);
+            Location location = locationsListModel.getElementAt(indexLoc);
+            Item item = itemsListModel.getElementAt(indexItem);
+            if (location.getInventory().contains(item)) {
+                int newAmount = location.getInventory().getAmount(item) + count;
+                locationItemsListModel.get(indexItem).setValue(newAmount);
+            } else {
+                locationItemsListModel.addElement(new SudPair<>(item, count));
+            }
+            location.addItem(item, count);
         }
     }
 
@@ -1694,7 +1899,8 @@ public class EditorFrame extends JFrame {
     private void updatePlayerTab() {
         playerName.setText(player.getName());
         playerLocation.setSelectedItem(player.getLocation());
-        player.getInventory().forEach(playerItemsListModel::addElement);
+        player.getInventory().stream().forEach(playerItemsListModel::addElement);
+
         playerDescriptionArea.setText(player.getDescription());
         player.getScripts().keySet().stream().filter(scriptName -> !scriptName.startsWith("_on")).forEach(playerScriptListModel::addElement);
     }
@@ -1829,7 +2035,7 @@ public class EditorFrame extends JFrame {
             locationScriptListModel.removeAllElements();
             //selected.getScripts().keySet().forEach(locationScriptListModel::addElement);
             selected.getScripts().keySet().forEach(locationScriptListModel::addElement);
-            selected.getInventory().forEach(locationItemsListModel::addElement);
+            selected.getInventory().stream().forEach(locationItemsListModel::addElement);
             northEnabledBox.setSelected(selected.isNorthOpened());
             southEnabledBox.setSelected(selected.isSouthOpened());
             eastEnabledBox.setSelected(selected.isEastOpened());

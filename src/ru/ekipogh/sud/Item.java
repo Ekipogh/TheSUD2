@@ -23,7 +23,6 @@ public class Item implements Serializable, Comparable {
     private boolean locked;
     private Inventory inventory;
     private boolean isContainer;
-    private boolean stackable;
 
     public boolean isLocked() {
         return locked;
@@ -37,25 +36,17 @@ public class Item implements Serializable, Comparable {
         return inventory;
     }
 
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
-    }
-
     public boolean isContainer() {
         return isContainer;
     }
 
     public void setContainer(boolean container) {
-        if (container) {
-            inventory = new Inventory();
-            inventory = null;
-        }
+        inventory = container ? new Inventory() : null;
         isContainer = container;
     }
 
     public Item(String name) {
         this.isContainer = false;
-        this.stackable = false;
         this.locked = false;
         this.name = name;
         this.type = ItemTypes.GENERIC;
@@ -137,18 +128,17 @@ public class Item implements Serializable, Comparable {
         this.categories.remove(category);
     }
 
-    public void setCategories(List<ItemCategory> categories) {
-        this.categories = categories;
-    }
-
+    @SuppressWarnings("unused")
     public void setValue(String valueName, Object value) {
         this.values.put(valueName, value);
     }
 
+    @SuppressWarnings("unused")
     public Object getValue(String valueName) {
         return values.get(valueName);
     }
 
+    @SuppressWarnings("unused")
     public Map getValues() {
         return values;
     }
@@ -180,19 +170,7 @@ public class Item implements Serializable, Comparable {
     }
 
     public void addItem(Item item) {
-        inventory.add(item);
-    }
-
-    public void removeItem(Item item) {
-        inventory.remove(item);
-    }
-
-    public boolean isStackable() {
-        return stackable;
-    }
-
-    public void setStackable(boolean stackable) {
-        this.stackable = stackable;
+        addItem(item, 1);
     }
 
     @Override
@@ -203,6 +181,14 @@ public class Item implements Serializable, Comparable {
 
     @Override
     public boolean equals(Object obj) {
-        return this.id == ((Item) obj).id;
+        return obj.getClass() == Item.class && this.id == ((Item) obj).id;
+    }
+
+    public void removeItem(Item item, int count) {
+        inventory.remove(item, count);
+    }
+
+    public void addItem(Item item, int amount) {
+        inventory.add(item, amount);
     }
 }

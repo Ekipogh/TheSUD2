@@ -202,11 +202,11 @@ public class Location implements Serializable {
         addItem(item, 1);
     }
 
-    private void addItem(Item item, int amount) {
+    public void addItem(Item item, int amount) {
         this.inventory.add(item, amount);
     }
 
-    private void removeItem(Item item, int amount) {
+    public void removeItem(Item item, int amount) {
         this.inventory.remove(item, amount);
     }
 

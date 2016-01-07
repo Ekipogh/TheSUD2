@@ -5,6 +5,7 @@ package ru.ekipogh.sud;
  */
 public class SudPair<L, R> {
     private L key;
+    private R value;
 
     public void setValue(R value) {
         this.value = value;
@@ -13,8 +14,6 @@ public class SudPair<L, R> {
     public void setKey(L key) {
         this.key = key;
     }
-
-    private R value;
 
     public SudPair(L left, R right) {
         this.key = left;
@@ -40,5 +39,10 @@ public class SudPair<L, R> {
         SudPair pairo = (SudPair) o;
         return this.key.equals(pairo.getKey()) &&
                 this.value.equals(pairo.getValue());
+    }
+
+    @Override
+    public String toString() {
+        return key + "(" + value + ")";
     }
 }

@@ -70,8 +70,8 @@ public class GameCharacter implements Serializable {
 
     }
 
-    public void addToInventory(Item item) {
-        inventory.add(item);
+    public void addItem(Item item) {
+        addItem(item, 1);
     }
 
     public void equip(Item item) {
@@ -154,5 +154,13 @@ public class GameCharacter implements Serializable {
 
     public void removeScript(String scriptName) {
         this.scripts.remove(scriptName);
+    }
+
+    public void addItem(Item item, int count) {
+        inventory.add(item, count);
+    }
+
+    public void removeItem(Item item, int count) {
+        inventory.remove(item, count);
     }
 }
