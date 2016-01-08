@@ -49,13 +49,14 @@ public class Equipment implements Serializable {
         return slots.get(slot);
     }
 
-    public void equip(Item item) {
+    public boolean equip(Item item) {
         String slot = item.getEquipmentSlot();
         if (slots.get(slot) != null) {
             JOptionPane.showMessageDialog(null, "Сначала снимите предмет со слота " + slot);
-            return;
+            return false;
         }
         slots.put(slot, item);
+        return true;
     }
 
     public static String getImage(String slot) {

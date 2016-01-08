@@ -182,7 +182,6 @@ public class EditorFrame extends JFrame {
     private JList<String> commonScriptsList;
     private RSyntaxTextArea commonScriptText;
     private JButton saveCommonScriptButton;
-    private JCheckBox stackableBox;
     private JButton deleteSomeItemsFromItemButton;
     private JButton addSomeItemsToItemButton;
     private JButton addSomeItemsToLocationButton;
@@ -760,8 +759,6 @@ public class EditorFrame extends JFrame {
         //листенеры чекбоксов
         isContainerBox.addActionListener(e -> setContainer());
         isLockedBox.addActionListener(e -> setLocked());
-        stackableBox.addActionListener(e -> setStackable());
-
         //test area
     }
 
@@ -861,14 +858,6 @@ public class EditorFrame extends JFrame {
         }
     }
 
-    private void setStackable() {
-        int indexI = itemsList.getSelectedIndex();
-        if (indexI >= 0) {
-            Item item = itemsListModel.get(indexI);
-            item.setStackable(stackableBox.isSelected());
-        }
-    }
-
     private void saveCommonScript() {
         int indexS = commonScriptsList.getSelectedIndex();
         if (indexS >= 0) {
@@ -931,7 +920,8 @@ public class EditorFrame extends JFrame {
             if (selected.isContainer()) {
                 if (selected.getInventory().contains(toAdd)) {
                     int newAmount = selected.getInventory().getAmount(toAdd) + count;
-                    itemItemsListModel.get(indexI2).setValue(newAmount);
+                    int index = itemItemsListModel.indexOf(selected.getInventory().getPair(toAdd));
+                    itemItemsListModel.get(index).setValue(newAmount);
                     itemItemsList.updateUI();
                 } else {
                     itemItemsListModel.addElement(new SudPair<>(toAdd, count));
@@ -1448,7 +1438,8 @@ public class EditorFrame extends JFrame {
             Item item = itemsListModel.getElementAt(indexI);
             if (player.getInventory().contains(item)) {
                 int newAmount = player.getInventory().getAmount(item) + count;
-                playerItemsListModel.get(indexI).setValue(newAmount);
+                int index = playerItemsListModel.indexOf(player.getInventory().getPair(item));
+                playerItemsListModel.get(index).setValue(newAmount);
             } else {
                 playerItemsListModel.addElement(new SudPair<>(item, count));
             }
@@ -1490,7 +1481,8 @@ public class EditorFrame extends JFrame {
             Item item = itemsListModel.getElementAt(indexI);
             if (character.getInventory().contains(item)) {
                 int newAmount = character.getInventory().getAmount(item) + count;
-                characterItemsListModel.get(indexI).setValue(newAmount);
+                int index = characterItemsListModel.indexOf(character.getInventory().getPair(item));
+                characterItemsListModel.get(index).setValue(newAmount);
             } else {
                 characterItemsListModel.addElement(new SudPair<>(item, count));
             }
@@ -1777,7 +1769,8 @@ public class EditorFrame extends JFrame {
             Item item = itemsListModel.getElementAt(indexItem);
             if (location.getInventory().contains(item)) {
                 int newAmount = location.getInventory().getAmount(item) + count;
-                locationItemsListModel.get(indexItem).setValue(newAmount);
+                int index = locationItemsListModel.indexOf(location.getInventory().getPair(item));
+                locationItemsListModel.get(index).setValue(newAmount);
             } else {
                 locationItemsListModel.addElement(new SudPair<>(item, count));
             }
@@ -1800,10 +1793,17 @@ public class EditorFrame extends JFrame {
             selected.getScripts().keySet().forEach(itemScriptListModel::addElement);
             itemDescription.setText(selected.getDescription());
             itemTabbedPane.setEnabledAt(itemTabbedPane.getTabCount() - 1, selected.isContainer());
+            if (selected.isContainer()) {
+                itemItemsListModel.clear();
+                selected.getInventory().forEach(pair -> itemItemsListModel.addElement((SudPair<Item, Integer>) pair));
+            } else {
+                if (itemTabbedPane.getSelectedIndex() == 3) {
+                    itemTabbedPane.setSelectedIndex(0);
+                }
+            }
             isLockedBox.setEnabled(selected.isContainer());
             isLockedBox.setSelected(selected.isLocked());
             isContainerBox.setSelected(selected.isContainer());
-            stackableBox.setSelected(selected.isStackable());
         }
     }
 

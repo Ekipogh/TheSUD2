@@ -74,8 +74,8 @@ public class GameCharacter implements Serializable {
         addItem(item, 1);
     }
 
-    public void equip(Item item) {
-        equipment.equip(item);
+    public boolean equip(Item item) {
+        return equipment.equip(item);
     }
 
     public Item getEquipedItem(String slot) {

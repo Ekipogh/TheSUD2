@@ -35,6 +35,6 @@ public class SudTreeNode extends DefaultMutableTreeNode {
     }
 
     public String toString() {
-        return text;
+        return count > 1 ? text + " (" + count + ")" : text;
     }
 }

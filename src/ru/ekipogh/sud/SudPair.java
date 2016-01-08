@@ -1,9 +1,11 @@
 package ru.ekipogh.sud;
 
+import java.io.Serializable;
+
 /**
  * Created by dedov_d on 22.12.2015.
  */
-public class SudPair<L, R> {
+public class SudPair<L, R> implements Serializable {
     private L key;
     private R value;
 

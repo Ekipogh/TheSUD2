@@ -59,6 +59,7 @@ public class Item implements Serializable, Comparable {
         this.scripts.put("_onUse", new Script("", true));
         this.scripts.put("_onUnequip", new Script("", true));
         this.scripts.put("_onUnlock", new Script("caller.setLocked(false);", true));
+        this.scripts.put("_onStash", new Script("", true));
         this.values = new HashMap<>();
         this.categories = new ArrayList<>();
     }

@@ -1,14 +1,16 @@
 package ru.ekipogh.sud;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
  * Created by dedov_d on 22.12.2015.
  */
-public class Inventory implements Iterable {
+public class Inventory implements Iterable, Serializable {
     private List<SudPair<Item, Integer>> items;
 
     public Inventory() {
@@ -69,7 +71,7 @@ public class Inventory implements Iterable {
     }
 
     public boolean contains(Item item) {
-        for (SudPair pair : items) {
+        for (SudPair<Item, Integer> pair : items) {
             if (pair.getKey().equals(item)) {
                 return true;
             }
@@ -80,6 +82,11 @@ public class Inventory implements Iterable {
     @Override
     public Iterator iterator() {
         return items.iterator();
+    }
+
+    @Override
+    public void forEach(Consumer action) {
+        items.forEach(action);
     }
 
     public int getAmount(Item item) {
@@ -98,5 +105,14 @@ public class Inventory implements Iterable {
                 return;
             }
         }
+    }
+
+    public SudPair<Item, Integer> getPair(Item item) {
+        for (SudPair<Item, Integer> pair : items) {
+            if (pair.getKey().equals(item)) {
+                return pair;
+            }
+        }
+        return null;
     }
 }
