@@ -564,32 +564,11 @@ public class PlayerFrame extends JFrame {
     }
 
     //заполняем дерево предметов
-    public void fillItemsTree(DefaultMutableTreeNode node, Inventory inventory, boolean container) {
-        /*DefaultMutableTreeNode node; //куда добавляем строки
-        if (!container) {
-            node = (DefaultMutableTreeNode) itemsTreeModel.getRoot(); //в начало
-        } else {
-            DefaultMutableTreeNode root = ((DefaultMutableTreeNode) itemsTreeModel.getRoot());
-            node = (DefaultMutableTreeNode) itemsTreeModel.getChild(root, itemsTreeModel.getChildCount(root) - 1); //в ноду предмета
-        }*/
-        //for (Item item : items)
-        //inventory.sort(Item::compareTo);
-        //items.stream().sorted().forEach(item -> {
+    public void fillItemsTree(DefaultMutableTreeNode node, Inventory inventory) {
         for (int i = 0; i < inventory.size(); i++) {
             Item item = inventory.get(i); //предмет для добавления
             String itemName = item.getName(); //название предмета
             int amount = inventory.amount(i); //количество предметов
-//            int count = 1;
-            /*if (item.isStackable()) {
-                for (int j = i + 1; j < inventory.size(); j++) {
-                    if (inventory.get(j).equals(item)) {
-                        count++;
-                    } else {
-                        break;
-                    }
-                }
-                i += count - 1;
-            }*/
             SudTreeNode itemNode = new SudTreeNode(item, null); //нода предмета
             //текст ноды
             itemNode.setText(itemName); //имя предмета
@@ -633,15 +612,15 @@ public class PlayerFrame extends JFrame {
             }
             if (item.isContainer()) {
                 if (!item.isLocked()) {
-                    fillItemsTree(itemNode, item.getInventory(), true);
+                    fillItemsTree(itemNode, item.getInventory());
                 } else {
                     itemsTreeModel.insertNodeInto(new SudTreeNode("Отпереть", l -> unlockContainer(item)), itemNode, itemNode.getChildCount());
                 }
             }
             //если влокации есть контейенры, для каждого добавить опцию положить в ...
-            if (!container) {
-                inventory.stream().filter(itemC -> itemC.getKey().isContainer() && !itemC.getKey().isLocked() && !itemC.getKey().equals(item) && !itemC.getKey().getInventory().contains(item)).forEach(itemContained -> itemsTreeModel.insertNodeInto(new SudTreeNode("Положить в " + itemContained.getKey().getName(), l -> stashItem(itemContained.getKey(), item)), itemNode, itemNode.getChildCount()));
-            }
+
+            inventory.stream().filter(itemC -> itemC.getKey().isContainer() && !itemC.getKey().isLocked() && !itemC.getKey().equals(item) && !itemC.getKey().getInventory().contains(item)).forEach(itemContained -> itemsTreeModel.insertNodeInto(new SudTreeNode("Положить в " + itemContained.getKey().getName(), l -> stashItem(itemContained.getKey(), inventory, item)), itemNode, itemNode.getChildCount()));
+
         }
     }
 
@@ -659,11 +638,11 @@ public class PlayerFrame extends JFrame {
 
     //кладем предмет в выбранный контейнер
 
-    private void stashItem(Item container, Item item) {
-        Script.run(item.getScript("_onStash").getText(), new Object[]{item, container});
-        Script.run(commonScripts.get("_onPlayerStashesItem").getText(), new Object[]{item, container});
-        container.addItem(item);
-        currentLocation.removeItem(item);
+    private void stashItem(Item to, Inventory from, Item item) {
+        Script.run(item.getScript("_onStash").getText(), new Object[]{item, to});
+        Script.run(commonScripts.get("_onPlayerStashesItem").getText(), new Object[]{item, to});
+        to.addItem(item);
+        from.remove(item);
         updateItems();
     }
 
@@ -685,7 +664,7 @@ public class PlayerFrame extends JFrame {
     public void updateItems() {
         ((DefaultMutableTreeNode) itemsTreeModel.getRoot()).removeAllChildren();
         itemsTreeModel.reload();
-        fillItemsTree((DefaultMutableTreeNode) itemsTreeModel.getRoot(), currentLocation.getInventory(), false);
+        fillItemsTree((DefaultMutableTreeNode) itemsTreeModel.getRoot(), currentLocation.getInventory());
 
         expandAllNodes(itemsTree);
     }

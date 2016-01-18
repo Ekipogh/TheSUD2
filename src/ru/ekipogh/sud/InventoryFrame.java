@@ -106,8 +106,7 @@ class InventoryFrame extends JFrame {
     private void updateItemsTree() {
         ((DefaultMutableTreeNode) itemsTreeModel.getRoot()).removeAllChildren();
         itemsTreeModel.reload();
-        fillItemsTree(player.getInventory(), false);
-
+        fillItemsTree((DefaultMutableTreeNode) itemsTreeModel.getRoot(), player.getInventory());
         expandAllNodes(itemsTree);
     }
 
@@ -117,39 +116,74 @@ class InventoryFrame extends JFrame {
         }
     }
 
-    private void fillItemsTree(Inventory inventory, boolean container) {
-        DefaultMutableTreeNode node;
-        if (!container) {
-            node = (DefaultMutableTreeNode) itemsTreeModel.getRoot();
-        } else {
-            DefaultMutableTreeNode root = ((DefaultMutableTreeNode) itemsTreeModel.getRoot());
-            node = (DefaultMutableTreeNode) itemsTreeModel.getChild(root, itemsTreeModel.getChildCount(root) - 1);
-        }
-        //for (Item item : inventory) {
-        inventory.stream().forEach(item -> {
-            DefaultMutableTreeNode itemNode = new DefaultMutableTreeNode(item);
-            itemsTreeModel.insertNodeInto(itemNode, node, node.getChildCount());
-            item.getKey().getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> itemsTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), item.getKey())), itemNode, itemNode.getChildCount()));
-            for (ItemCategory category : item.getKey().getCategories())
-                category.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> itemsTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), item.getKey())), itemNode, itemNode.getChildCount()));
-            if (item.getKey().getType() == ItemTypes.EQUIPPABLE)
-                itemsTreeModel.insertNodeInto(new SudTreeNode("Экипировать", l -> equipItem(item.getKey(), inventory)), itemNode, itemNode.getChildCount());
-            if (item.getKey().getType() == ItemTypes.EQUIPPABLE || item.getKey().getType() == ItemTypes.STORABLE)
-                itemsTreeModel.insertNodeInto(new SudTreeNode("Бросить", l -> dropItem(item.getKey(), inventory)), itemNode, itemNode.getChildCount());
-            if (item.getKey().getType() == ItemTypes.CONSUMABLE)
-                itemsTreeModel.insertNodeInto(new SudTreeNode("Использовать", l -> useItem(item.getKey(), inventory)), itemNode, itemNode.getChildCount());
-            if (item.getKey().isContainer()) {
-                if (!item.getKey().isLocked()) {
-                    fillItemsTree(item.getKey().getInventory(), true);
+    public void fillItemsTree(DefaultMutableTreeNode node, Inventory inventory) {
+        for (int i = 0; i < inventory.size(); i++) {
+            Item item = inventory.get(i); //предмет для добавления
+            String itemName = item.getName(); //название предмета
+            int amount = inventory.amount(i); //количество предметов
+            SudTreeNode itemNode = new SudTreeNode(item, null); //нода предмета
+            //текст ноды
+            itemNode.setText(itemName); //имя предмета
+            itemNode.setCount(amount); //колчисество предмета
+            itemsTreeModel.insertNodeInto(itemNode, node, node.getChildCount()); //вставляем ноду предмета в выбранную выше ноду
+
+            //далее скрипты и действия
+
+            //скрипты
+            item.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> itemsTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), item)), itemNode, itemNode.getChildCount()));
+            for (ItemCategory category : item.getCategories()) {
+                category.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> itemsTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), item)), itemNode, itemNode.getChildCount()));
+            }
+            //действия
+            switch (item.getType()) {
+                case EQUIPPABLE:
+                    itemsTreeModel.insertNodeInto(new SudTreeNode("Экипировать", l -> equipItem(item, inventory)), itemNode, itemNode.getChildCount());
+                    if (amount > 1) { //если предметов больше одного
+                        itemsTreeModel.insertNodeInto(new SudTreeNode("Бросить...", l -> dropSomeItems(item, inventory, amount)), itemNode, itemNode.getChildCount());
+                    } else {
+                        itemsTreeModel.insertNodeInto(new SudTreeNode("Бросить", l -> dropItem(item, inventory)), itemNode, itemNode.getChildCount());
+                    }
+                    break;
+                case STORABLE:
+                    if (amount > 1) { //если предметов больше одного
+                        itemsTreeModel.insertNodeInto(new SudTreeNode("Бросить...", l -> dropSomeItems(item, inventory, 13)), itemNode, itemNode.getChildCount());
+                    } else {
+                        itemsTreeModel.insertNodeInto(new SudTreeNode("Бросить", l -> dropItem(item, inventory)), itemNode, itemNode.getChildCount());
+                    }
+                    break;
+                case CONSUMABLE:
+                    itemsTreeModel.insertNodeInto(new SudTreeNode("Использовать", l -> useItem(item, inventory)), itemNode, itemNode.getChildCount());
+                    if (amount > 1) { //если предметов больше одного
+                        itemsTreeModel.insertNodeInto(new SudTreeNode("Бросить...", l -> dropSomeItems(item, inventory, 13)), itemNode, itemNode.getChildCount());
+                    } else {
+                        itemsTreeModel.insertNodeInto(new SudTreeNode("Бросить", l -> dropItem(item, inventory)), itemNode, itemNode.getChildCount());
+                    }
+                    break;
+            }
+            if (item.isContainer()) {
+                if (!item.isLocked()) {
+                    fillItemsTree(itemNode, item.getInventory());
                 } else {
-                    itemsTreeModel.insertNodeInto(new SudTreeNode("Отпереть", l -> unlockContainer(item.getKey())), itemNode, itemNode.getChildCount());
+                    itemsTreeModel.insertNodeInto(new SudTreeNode("Отпереть", l -> unlockContainer(item)), itemNode, itemNode.getChildCount());
                 }
             }
             //если влокации есть контейенры, для каждого добавить опцию положить в ...
-            if (!container) {
-                inventory.stream().filter(i -> i.getKey().isContainer() && !i.getKey().isLocked() && !i.getKey().equals(item.getKey()) && !i.getKey().getInventory().contains(item.getKey())).forEach(i -> itemsTreeModel.insertNodeInto(new SudTreeNode("Положить в " + i.getKey().getName(), l -> stashItem(i.getKey(), item.getKey())), itemNode, itemNode.getChildCount()));
+
+            inventory.stream().filter(itemC -> itemC.getKey().isContainer() && !itemC.getKey().isLocked() && !itemC.getKey().equals(item) && !itemC.getKey().getInventory().contains(item)).forEach(itemContained -> itemsTreeModel.insertNodeInto(new SudTreeNode("Положить в " + itemContained.getKey().getName(), l -> stashItem(itemContained.getKey(), item)), itemNode, itemNode.getChildCount()));
+
+        }
+    }
+
+    private void dropSomeItems(Item item, Inventory inventory, int count) {
+        SpinnerNumberModel sModel = new SpinnerNumberModel(1, 1, count, 1);
+        JSpinner spinner = new JSpinner(sModel);
+        int option = JOptionPane.showOptionDialog(null, spinner, "Enter valid number", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+        if (option == JOptionPane.OK_OPTION) {
+            int amount = (int) spinner.getModel().getValue();
+            for (int i = 0; i < amount; i++) {
+                dropItem(item, inventory);
             }
-        });
+        }
     }
 
     private void stashItem(Item item, Item container) {
@@ -222,13 +256,14 @@ class InventoryFrame extends JFrame {
     }
 
     private void equipItem(Item item, Inventory inventory) {
-        player.equip(item);
-        inventory.remove(item);
-        Script.run(item.getScript(ONEQUIP).getText(), item);
-        for (ItemCategory category : item.getCategories())
-            Script.run(category.getScript(ONEQUIP).getText(), item);
-        Script.run(playerFrame.getCommonScripts().get("_onPlayerEquipsItem").getText(), item);
-        updateItemsTree();
-        updateEquipmentTable();
+        if (player.equip(item)) {
+            inventory.remove(item); //убираем предмет из инвенторя откуда он был экирирован
+            Script.run(item.getScript(ONEQUIP).getText(), item); //выполняем скрипты связаные с экипировкой предмета
+            for (ItemCategory category : item.getCategories())
+                Script.run(category.getScript(ONEQUIP).getText(), item);
+            Script.run(playerFrame.getCommonScripts().get("_onPlayerEquipsItem").getText(), item);
+            updateItemsTree();
+            updateEquipmentTable();
+        }
     }
 }
