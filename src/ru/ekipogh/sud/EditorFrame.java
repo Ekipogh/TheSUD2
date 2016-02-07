@@ -27,7 +27,7 @@ public class EditorFrame extends JFrame {
     private final DefaultComboBoxModel<String> slotNamesModel;
     private final DefaultComboBoxModel<Location> characterLocationModel;
     private final DefaultListModel<GameCharacter> charactersListModel;
-    private final DefaultListModel<Item> itemsListModel;
+    public final DefaultListModel<Item> itemsListModel;
     private final DefaultListModel<SudPair<Item, Integer>> locationItemsListModel;
     private final DefaultListModel<SudPair<Item, Integer>> characterItemsListModel;
     private final DefaultListModel<SudPair<Item, Integer>> playerItemsListModel;
@@ -63,7 +63,7 @@ public class EditorFrame extends JFrame {
     private JButton savePlayerButton;
     private JTextField gameName;
     private JTextArea gameStartMessage;
-    private JList<Item> itemsList;
+    public JList<Item> itemsList;
     private JButton addItemButton;
     private JButton deleteItemButton;
     private JTextField itemName;
@@ -173,24 +173,17 @@ public class EditorFrame extends JFrame {
     private JButton addCategoryToItemButton;
     private JButton deleteCategoryFromItemButton;
     private JCheckBox isContainerBox;
-    private JList<Item> allItemsList;
-    private JList<SudPair<Item, Integer>> itemItemsList;
-    private JButton addItemToItemButton;
-    private JButton deleteItemFromItemButton;
     private JCheckBox isLockedBox;
     private JTabbedPane itemTabbedPane;
     private JList<String> commonScriptsList;
     private RSyntaxTextArea commonScriptText;
     private JButton saveCommonScriptButton;
-    private JButton deleteSomeItemsFromItemButton;
-    private JButton addSomeItemsToItemButton;
     private JButton addSomeItemsToLocationButton;
     private JButton deleteSomeItemsFromLocationButton;
     private JButton addSomeItemsToCharacterButton;
     private JButton deleteSomeItemsFromCharacterButton;
     private JButton addSomeItemsToPlayerButton;
     private JButton deleteSomeItemsFromPlayerButton;
-    private JCheckBox instantiateBox;
     private JButton containerButton;
     private final DefaultListModel<CharacterCategory> characterCategoryListModel;
     private final DefaultListModel<LocationCategory> locationCategoryListModel;
@@ -293,10 +286,8 @@ public class EditorFrame extends JFrame {
         locationTabItemsList.setModel(itemsListModel);
         characterTabItemsList.setModel(itemsListModel);
         playerTabItemsList.setModel(itemsListModel);
-        allItemsList.setModel(itemsListModel);
 
         itemItemsListModel = new DefaultListModel<>();
-        itemItemsList.setModel(itemItemsListModel);
 
         commonScriptsListModel = new DefaultListModel<>();
         commonScriptsList.setModel(commonScriptsListModel);
@@ -416,6 +407,8 @@ public class EditorFrame extends JFrame {
 
         //листенеры
         //листенеры конопок
+        containerButton.addActionListener(e -> showContainerFrame());
+
         addSomeItemsToPlayerButton.addActionListener(e -> addSomeItemsToPlayer());
 
         deleteSomeItemsFromPlayerButton.addActionListener(e -> deleteSomeItemsFromPlayer());
@@ -428,17 +421,10 @@ public class EditorFrame extends JFrame {
 
         deleteSomeItemsFromLocationButton.addActionListener(e -> deleteSomeItemsFromLocation());
 
-        addSomeItemsToItemButton.addActionListener(e -> addSomeItemsToItem());
-
-        deleteSomeItemsFromItemButton.addActionListener(e -> deleteSomeItemsFromItem());
 
         saveCommonScriptButton.addActionListener(e -> saveCommonScript());
 
         saveCommonScriptButton.setMnemonic(KeyEvent.VK_ENTER);
-
-        deleteItemFromItemButton.addActionListener(e -> deleteItemFromItem());
-
-        addItemToItemButton.addActionListener(e -> addItemToItem());
 
         addCharacterButton.addActionListener(e -> addNewCharacter());
 
@@ -608,11 +594,15 @@ public class EditorFrame extends JFrame {
             @Override
             public void focusGained(FocusEvent e) {
                 super.focusGained(e);
-                if (((JList) e.getSource()).getSelectedIndex() >= 0) {
+                int indexI = ((JList) e.getSource()).getSelectedIndex();
+                if (indexI >= 0) {
+                    Item selected = itemsListModel.elementAt(indexI);
                     deleteItemFromLocButton.setEnabled(false);
-                    deleteSomeItemsFromLocationButton.setEnabled(false);
                     addItemToLocationButton.setEnabled(true);
-                    addSomeItemsToLocationButton.setEnabled(true);
+                    if (!selected.isContainer()) {
+                        deleteSomeItemsFromLocationButton.setEnabled(false);
+                        addSomeItemsToLocationButton.setEnabled(true);
+                    }
                 }
             }
         });
@@ -621,37 +611,16 @@ public class EditorFrame extends JFrame {
             @Override
             public void focusGained(FocusEvent e) {
                 super.focusGained(e);
-                if (((JList) e.getSource()).getSelectedIndex() >= 0) {
+                int indexI = ((JList) e.getSource()).getSelectedIndex();
+                if (indexI >= 0) {
+                    Item selected = locationItemsListModel.elementAt(indexI).getKey();
                     deleteItemFromLocButton.setEnabled(true);
-                    deleteSomeItemsFromLocationButton.setEnabled(true);
                     addItemToLocationButton.setEnabled(false);
-                    addSomeItemsToLocationButton.setEnabled(false);
-                }
-            }
-        });
-
-        allItemsList.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                super.focusGained(e);
-                if (((JList) e.getSource()).getSelectedIndex() >= 0) {
-                    deleteItemFromItemButton.setEnabled(false);
-                    deleteSomeItemsFromItemButton.setEnabled(false);
-                    addItemToItemButton.setEnabled(true);
-                    addSomeItemsToItemButton.setEnabled(true);
-                }
-            }
-        });
-
-        itemItemsList.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                super.focusGained(e);
-                if (((JList) e.getSource()).getSelectedIndex() >= 0) {
-                    deleteItemFromItemButton.setEnabled(true);
-                    deleteSomeItemsFromItemButton.setEnabled(true);
-                    addItemToItemButton.setEnabled(false);
-                    addSomeItemsToItemButton.setEnabled(false);
+                    if (!selected.isContainer()) {
+                        deleteSomeItemsFromLocationButton.setEnabled(true);
+                        addSomeItemsToLocationButton.setEnabled(false);
+                    }
+                    containerButton.setEnabled(selected.isContainer());
                 }
             }
         });
@@ -740,7 +709,6 @@ public class EditorFrame extends JFrame {
         downComboBox.addActionListener(e -> {
             if (downComboBox.getSelectedItem() != null) downEnabledBox.setSelected(true);
         });
-        instantiateBox.addActionListener(e -> setInstantiate());
 
         //листенеры текстфилдов
         locationCategoryNameFiled.addActionListener(e -> saveLocationCategoryName());
@@ -765,35 +733,11 @@ public class EditorFrame extends JFrame {
         //test area
     }
 
-    private void setInstantiate() {
-        int index = itemsList.getSelectedIndex();
-        if (index >= 0) {
-            Item item = itemsListModel.get(index);
-            item.setInstantiate(instantiateBox.isSelected());
-        }
-    }
-
-    private void deleteSomeItemsFromItem() {
-        int index = itemItemsList.getSelectedIndex();
-        if (index >= 0) {
-            int count = itemItemsListModel.get(index).getValue();
-            SpinnerNumberModel sModel = new SpinnerNumberModel(1, 1, count, 1);
-            JSpinner spinner = new JSpinner(sModel);
-            int option = JOptionPane.showOptionDialog(null, spinner, "Введите количество", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-            if (option == JOptionPane.OK_OPTION) {
-                int amount = (int) spinner.getModel().getValue();
-                deleteItemFromItem(amount);
-            }
-        }
-    }
-
-    private void addSomeItemsToItem() {
-        SpinnerNumberModel sModel = new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1);
-        JSpinner spinner = new JSpinner(sModel);
-        int option = JOptionPane.showOptionDialog(null, spinner, "Введите количество", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-        if (option == JOptionPane.OK_OPTION) {
-            int amount = (int) spinner.getModel().getValue();
-            addItemToItem(amount);
+    private void showContainerFrame() {
+        int indexI = locationItemsList.getSelectedIndex();
+        if (indexI >= 0) {
+            Item item = locationItemsListModel.get(indexI).getKey();
+            new ContainerFrame(this, item);
         }
     }
 
@@ -895,53 +839,6 @@ public class EditorFrame extends JFrame {
         }
     }
 
-    private void deleteItemFromItem() {
-        deleteItemFromItem(1);
-    }
-
-    private void deleteItemFromItem(int count) {
-        int indexI1 = itemsList.getSelectedIndex();
-        int indexI2 = itemItemsList.getSelectedIndex();
-        if (indexI1 >= 0 && indexI2 >= 0) {
-            Item selected = itemsListModel.getElementAt(indexI1);
-            Item toDelete = itemItemsListModel.getElementAt(indexI2).getKey();
-
-            int newAmount = itemItemsListModel.getElementAt(indexI2).getValue() - count;
-
-            if (newAmount != 0) {
-                itemItemsListModel.getElementAt(indexI2).setValue(newAmount);
-                itemItemsList.updateUI();
-            } else {
-                itemItemsListModel.removeElementAt(indexI2);
-            }
-            selected.removeItem(toDelete, count);
-        }
-    }
-
-    private void addItemToItem() {
-        addItemToItem(1);
-    }
-
-    private void addItemToItem(int count) {
-        int indexI1 = itemsList.getSelectedIndex();
-        int indexI2 = allItemsList.getSelectedIndex();
-        if (indexI1 >= 0 && indexI2 >= 0) {
-            Item selected = itemsListModel.get(indexI1);
-            Item toAdd = itemsListModel.elementAt(indexI2);
-            if (selected.isContainer()) {
-                if (selected.getInventory().contains(toAdd)) {
-                    int newAmount = selected.getInventory().getAmount(toAdd) + count;
-                    int index = itemItemsListModel.indexOf(selected.getInventory().getPair(toAdd));
-                    itemItemsListModel.get(index).setValue(newAmount);
-                    itemItemsList.updateUI();
-                } else {
-                    itemItemsListModel.addElement(new SudPair<>(toAdd, count));
-                }
-                selected.addItem(toAdd, count);
-            }
-        }
-    }
-
     private void setContainer() {
         int indexI = itemsList.getSelectedIndex();
         if (indexI >= 0) {
@@ -949,7 +846,6 @@ public class EditorFrame extends JFrame {
             boolean container = isContainerBox.isSelected();
             item.setContainer(container);
 
-            itemTabbedPane.setEnabledAt(itemTabbedPane.getTabCount() - 1, container);
             isLockedBox.setEnabled(container);
 
         }
@@ -1778,14 +1674,24 @@ public class EditorFrame extends JFrame {
         if (indexLoc >= 0 && indexItem >= 0) {
             Location location = locationsListModel.getElementAt(indexLoc);
             Item item = itemsListModel.getElementAt(indexItem);
-            if (location.getInventory().contains(item)) {
-                int newAmount = location.getInventory().getAmount(item) + count;
-                int index = locationItemsListModel.indexOf(location.getInventory().getPair(item));
-                locationItemsListModel.get(index).setValue(newAmount);
+            if (item.isContainer()) {
+                try {
+                    Item container = (Item) item.clone();
+                    location.addItem(container, count);
+                    locationItemsListModel.addElement(new SudPair<>(container, count));
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
             } else {
-                locationItemsListModel.addElement(new SudPair<>(item, count));
+                if (location.getInventory().contains(item)) {
+                    int newAmount = location.getInventory().getAmount(item) + count;
+                    int index = locationItemsListModel.indexOf(location.getInventory().getPair(item));
+                    locationItemsListModel.get(index).setValue(newAmount);
+                } else {
+                    locationItemsListModel.addElement(new SudPair<>(item, count));
+                }
+                location.addItem(item, count);
             }
-            location.addItem(item, count);
         }
     }
 
@@ -1803,19 +1709,9 @@ public class EditorFrame extends JFrame {
             selected.getCategories().forEach(itemCategoriesListModel::addElement);
             selected.getScripts().keySet().forEach(itemScriptListModel::addElement);
             itemDescription.setText(selected.getDescription());
-            itemTabbedPane.setEnabledAt(itemTabbedPane.getTabCount() - 1, selected.isContainer());
-            if (selected.isContainer()) {
-                itemItemsListModel.clear();
-                selected.getInventory().forEach(pair -> itemItemsListModel.addElement((SudPair<Item, Integer>) pair));
-            } else {
-                if (itemTabbedPane.getSelectedIndex() == 3) {
-                    itemTabbedPane.setSelectedIndex(0);
-                }
-            }
             isLockedBox.setEnabled(selected.isContainer());
             isLockedBox.setSelected(selected.isLocked());
             isContainerBox.setSelected(selected.isContainer());
-            instantiateBox.setSelected(selected.isInstantiate());
         }
     }
 

@@ -1,15 +1,13 @@
 package ru.ekipogh.sud;
 
+import java.io.Closeable;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Дмитрий on 04.05.2015.
  */
-public class Item implements Serializable, Comparable {
+public class Item implements Serializable, Comparable, Cloneable {
     public static final long serialVersionUID = 1L;
     private int id;
     private ItemTypes type;
@@ -23,8 +21,6 @@ public class Item implements Serializable, Comparable {
     private boolean locked;
     private Inventory inventory;
     private boolean isContainer;
-    private boolean instantiate;
-    private int insId;
 
     public boolean isLocked() {
         return locked;
@@ -43,7 +39,6 @@ public class Item implements Serializable, Comparable {
     }
 
     public void setContainer(boolean container) {
-        inventory = container ? new Inventory() : null;
         isContainer = container;
     }
 
@@ -64,7 +59,6 @@ public class Item implements Serializable, Comparable {
         this.scripts.put("_onStash", new Script("", true));
         this.values = new HashMap<>();
         this.categories = new ArrayList<>();
-        this.instantiate = true;
     }
 
     public static void setItemCategories(List<ItemCategory> categories) {
@@ -196,11 +190,11 @@ public class Item implements Serializable, Comparable {
         inventory.add(item, amount);
     }
 
-    public void setInstantiate(boolean instantiate) {
-        this.instantiate = instantiate;
-    }
-
-    public boolean isInstantiate() {
-        return instantiate;
+    @Override //used to instantiate new containers
+    protected Object clone() throws CloneNotSupportedException {
+        Object toReturn = super.clone();
+        ((Item) toReturn).id = Sequencer.getNewID();
+        ((Item) toReturn).inventory = new Inventory();
+        return toReturn;
     }
 }
