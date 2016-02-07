@@ -190,6 +190,8 @@ public class EditorFrame extends JFrame {
     private JButton deleteSomeItemsFromCharacterButton;
     private JButton addSomeItemsToPlayerButton;
     private JButton deleteSomeItemsFromPlayerButton;
+    private JCheckBox instantiateBox;
+    private JButton containerButton;
     private final DefaultListModel<CharacterCategory> characterCategoryListModel;
     private final DefaultListModel<LocationCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
@@ -738,6 +740,7 @@ public class EditorFrame extends JFrame {
         downComboBox.addActionListener(e -> {
             if (downComboBox.getSelectedItem() != null) downEnabledBox.setSelected(true);
         });
+        instantiateBox.addActionListener(e -> setInstantiate());
 
         //листенеры текстфилдов
         locationCategoryNameFiled.addActionListener(e -> saveLocationCategoryName());
@@ -760,6 +763,14 @@ public class EditorFrame extends JFrame {
         isContainerBox.addActionListener(e -> setContainer());
         isLockedBox.addActionListener(e -> setLocked());
         //test area
+    }
+
+    private void setInstantiate() {
+        int index = itemsList.getSelectedIndex();
+        if (index >= 0) {
+            Item item = itemsListModel.get(index);
+            item.setInstantiate(instantiateBox.isSelected());
+        }
     }
 
     private void deleteSomeItemsFromItem() {
@@ -1804,6 +1815,7 @@ public class EditorFrame extends JFrame {
             isLockedBox.setEnabled(selected.isContainer());
             isLockedBox.setSelected(selected.isLocked());
             isContainerBox.setSelected(selected.isContainer());
+            instantiateBox.setSelected(selected.isInstantiate());
         }
     }
 

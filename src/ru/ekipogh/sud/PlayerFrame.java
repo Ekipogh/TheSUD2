@@ -488,6 +488,7 @@ public class PlayerFrame extends JFrame {
         Script.run(initScript, null);
     }
 
+    @SuppressWarnings("unused")
     public void update() {
         updateItems();
         updateCharacters();

@@ -23,6 +23,8 @@ public class Item implements Serializable, Comparable {
     private boolean locked;
     private Inventory inventory;
     private boolean isContainer;
+    private boolean instantiate;
+    private int insId;
 
     public boolean isLocked() {
         return locked;
@@ -62,6 +64,7 @@ public class Item implements Serializable, Comparable {
         this.scripts.put("_onStash", new Script("", true));
         this.values = new HashMap<>();
         this.categories = new ArrayList<>();
+        this.instantiate = true;
     }
 
     public static void setItemCategories(List<ItemCategory> categories) {
@@ -191,5 +194,13 @@ public class Item implements Serializable, Comparable {
 
     public void addItem(Item item, int amount) {
         inventory.add(item, amount);
+    }
+
+    public void setInstantiate(boolean instantiate) {
+        this.instantiate = instantiate;
+    }
+
+    public boolean isInstantiate() {
+        return instantiate;
     }
 }
