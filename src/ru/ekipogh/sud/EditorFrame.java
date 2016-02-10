@@ -17,6 +17,9 @@ import java.util.Map;
  * Created by dedov_d on 23.04.2015.
  */
 public class EditorFrame extends JFrame {
+    private static final int LOCATION = 0;
+    private static final int CHARACTER = 1;
+    private static final int PLAYER = 2;
     private final DefaultComboBoxModel<Location> northModel;
     private final DefaultComboBoxModel<Location> southModel;
     private final DefaultComboBoxModel<Location> eastModel;
@@ -184,7 +187,9 @@ public class EditorFrame extends JFrame {
     private JButton deleteSomeItemsFromCharacterButton;
     private JButton addSomeItemsToPlayerButton;
     private JButton deleteSomeItemsFromPlayerButton;
-    private JButton containerButton;
+    private JButton locationContainerButton;
+    private JButton characterContainerButton;
+    private JButton playerContainerButton;
     private final DefaultListModel<CharacterCategory> characterCategoryListModel;
     private final DefaultListModel<LocationCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
@@ -407,7 +412,11 @@ public class EditorFrame extends JFrame {
 
         //листенеры
         //листенеры конопок
-        containerButton.addActionListener(e -> showContainerFrame());
+        locationContainerButton.addActionListener(e -> showContainerFrame(LOCATION));
+
+        characterContainerButton.addActionListener(e -> showContainerFrame(CHARACTER));
+
+        playerContainerButton.addActionListener(e -> showContainerFrame(PLAYER));
 
         addSomeItemsToPlayerButton.addActionListener(e -> addSomeItemsToPlayer());
 
@@ -620,7 +629,7 @@ public class EditorFrame extends JFrame {
                         deleteSomeItemsFromLocationButton.setEnabled(true);
                         addSomeItemsToLocationButton.setEnabled(false);
                     }
-                    containerButton.setEnabled(selected.isContainer());
+                    locationContainerButton.setEnabled(selected.isContainer());
                 }
             }
         });
@@ -650,11 +659,16 @@ public class EditorFrame extends JFrame {
             @Override
             public void focusGained(FocusEvent e) {
                 super.focusGained(e);
-                if (((JList) e.getSource()).getSelectedIndex() >= 0) {
+                int indexI = ((JList) e.getSource()).getSelectedIndex();
+                if (indexI >= 0) {
+                    Item selected = characterItemsListModel.elementAt(indexI).getKey();
+                    if (!selected.isContainer()) {
+                        deleteSomeItemsFromCharacterButton.setEnabled(true);
+                        addSomeItemsToLocationButton.setEnabled(false);
+                    }
+                    characterContainerButton.setEnabled(selected.isContainer());
                     deleteItemFromCharButton.setEnabled(true);
-                    deleteSomeItemsFromCharacterButton.setEnabled(true);
                     addItemToLocationButton.setEnabled(false);
-                    addSomeItemsToLocationButton.setEnabled(false);
                 }
             }
         });
@@ -675,11 +689,16 @@ public class EditorFrame extends JFrame {
             @Override
             public void focusGained(FocusEvent e) {
                 super.focusGained(e);
-                if (((JList) e.getSource()).getSelectedIndex() >= 0) {
+                int indexI = ((JList) e.getSource()).getSelectedIndex();
+                if (indexI >= 0) {
+                    Item selected = playerItemsListModel.elementAt(indexI).getKey();
+                    if (!selected.isContainer()) {
+                        deleteSomeItemsFromPlayerButton.setEnabled(true);
+                        addSomeItemsToPlayerButton.setEnabled(false);
+                    }
+                    playerContainerButton.setEnabled(selected.isContainer());
                     deleteItemFromPlayerButton.setEnabled(true);
-                    deleteSomeItemsFromPlayerButton.setEnabled(true);
                     addItemToPlayerButton.setEnabled(false);
-                    addSomeItemsToPlayerButton.setEnabled(false);
                 }
             }
         });
@@ -733,12 +752,30 @@ public class EditorFrame extends JFrame {
         //test area
     }
 
-    private void showContainerFrame() {
-        int indexI = locationItemsList.getSelectedIndex();
-        if (indexI >= 0) {
-            Item item = locationItemsListModel.get(indexI).getKey();
-            new ContainerFrame(this, item);
+    private void showContainerFrame(int gameObject) {
+        Item item = null;
+        int indexI;
+        switch (gameObject) {
+            case LOCATION:
+                indexI = locationItemsList.getSelectedIndex();
+                if (indexI >= 0) {
+                    item = locationItemsListModel.get(indexI).getKey();
+                }
+                break;
+            case CHARACTER:
+                indexI = characterItemsList.getSelectedIndex();
+                if (indexI >= 0) {
+                    item = characterItemsListModel.get(indexI).getKey();
+                }
+                break;
+            case PLAYER:
+                indexI = playerItemsList.getSelectedIndex();
+                if (indexI >= 0) {
+                    item = playerItemsListModel.get(indexI).getKey();
+                }
+                break;
         }
+        new ContainerFrame(this, item);
     }
 
     private void deleteSomeItemsFromLocation() {
@@ -1343,14 +1380,24 @@ public class EditorFrame extends JFrame {
         int indexI = playerTabItemsList.getSelectedIndex();
         if (indexI >= 0) {
             Item item = itemsListModel.getElementAt(indexI);
-            if (player.getInventory().contains(item)) {
-                int newAmount = player.getInventory().getAmount(item) + count;
-                int index = playerItemsListModel.indexOf(player.getInventory().getPair(item));
-                playerItemsListModel.get(index).setValue(newAmount);
+            if (item.isContainer()) {
+                try {
+                    Item container = (Item) item.clone();
+                    player.addItem(container, count);
+                    playerItemsListModel.addElement(new SudPair<>(container, count));
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
             } else {
-                playerItemsListModel.addElement(new SudPair<>(item, count));
+                if (player.getInventory().contains(item)) {
+                    int newAmount = player.getInventory().getAmount(item) + count;
+                    int index = playerItemsListModel.indexOf(player.getInventory().getPair(item));
+                    playerItemsListModel.get(index).setValue(newAmount);
+                } else {
+                    playerItemsListModel.addElement(new SudPair<>(item, count));
+                }
+                player.addItem(item, count);
             }
-            player.addItem(item, count);
         }
     }
 
@@ -1386,14 +1433,24 @@ public class EditorFrame extends JFrame {
         if (indexC >= 0 && indexI >= 0) {
             GameCharacter character = charactersListModel.getElementAt(indexC);
             Item item = itemsListModel.getElementAt(indexI);
-            if (character.getInventory().contains(item)) {
-                int newAmount = character.getInventory().getAmount(item) + count;
-                int index = characterItemsListModel.indexOf(character.getInventory().getPair(item));
-                characterItemsListModel.get(index).setValue(newAmount);
+            if (item.isContainer()) {
+                try {
+                    Item container = (Item) item.clone();
+                    character.addItem(container, count);
+                    characterItemsListModel.addElement(new SudPair<>(container, count));
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
             } else {
-                characterItemsListModel.addElement(new SudPair<>(item, count));
+                if (character.getInventory().contains(item)) {
+                    int newAmount = character.getInventory().getAmount(item) + count;
+                    int index = characterItemsListModel.indexOf(character.getInventory().getPair(item));
+                    characterItemsListModel.get(index).setValue(newAmount);
+                } else {
+                    characterItemsListModel.addElement(new SudPair<>(item, count));
+                }
+                character.addItem(item, count);
             }
-            character.addItem(item, count);
         }
     }
 
