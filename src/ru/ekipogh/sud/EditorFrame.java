@@ -1019,7 +1019,7 @@ public class EditorFrame extends JFrame {
             equipTableModel.addRow(new Object[]{icon, new ImageIcon(icon), slotName});
         });
         Utils.updateRowHeights(equipTable);
-
+        slotNamesModel.removeAllElements();
         Equipment.getSlotNames().forEach(slotNamesModel::addElement);
     }
 
@@ -1052,6 +1052,21 @@ public class EditorFrame extends JFrame {
         charactersCategoriesListModel.clear();
         initScriptText.setText("");
         playerDescriptionArea.setText("");
+        commonScripts = new HashMap<>();
+        commonScripts.put("_onPlayerMoves", new Script("", true));
+        commonScripts.put("_onPlayerMovesNorth", new Script("", true));
+        commonScripts.put("_onPlayerMovesSouth", new Script("", true));
+        commonScripts.put("_onPlayerMovesEast", new Script("", true));
+        commonScripts.put("_onPlayerMovesWest", new Script("", true));
+        commonScripts.put("_onPlayerMovesUp", new Script("", true));
+        commonScripts.put("_onPlayerMovesDown", new Script("", true));
+        commonScripts.put("_onPlayerTakesItem", new Script("", true));
+        commonScripts.put("_onPlayerUsesItem", new Script("", true));
+        commonScripts.put("_onPlayerDropsItem", new Script("", true));
+        commonScripts.put("_onPlayerEquipsItem", new Script("", true));
+        commonScripts.put("_onPlayerUnequipsItem", new Script("", true));
+        commonScripts.put("_onPlayerUnlocksItem", new Script("", true));
+        commonScripts.put("_onPlayerStashesItem", new Script("", true));
     }
 
     private void saveCharCategoryScript() {
@@ -2022,6 +2037,8 @@ public class EditorFrame extends JFrame {
         southModel.addElement(newLocation);
         eastModel.addElement(newLocation);
         westModel.addElement(newLocation);
+        upModel.addElement(newLocation);
+        downModel.addElement(newLocation);
         playerLocationModel.addElement(newLocation);
         characterLocationModel.addElement(newLocation);
     }

@@ -408,13 +408,17 @@
                         <constraints>
                           <grid row="4" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
-                        <properties/>
+                        <properties>
+                          <enabled value="false"/>
+                        </properties>
                       </component>
                       <component id="cee2" class="javax.swing.JCheckBox" binding="upEnabledBox">
                         <constraints>
                           <grid row="4" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
+                          <enabled value="false"/>
+                          <selected value="true"/>
                           <text value=""/>
                         </properties>
                       </component>
@@ -430,13 +434,17 @@
                         <constraints>
                           <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
-                        <properties/>
+                        <properties>
+                          <enabled value="false"/>
+                        </properties>
                       </component>
                       <component id="71081" class="javax.swing.JCheckBox" binding="downEnabledBox">
                         <constraints>
                           <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
+                          <enabled value="false"/>
+                          <selected value="true"/>
                           <text value=""/>
                         </properties>
                       </component>
