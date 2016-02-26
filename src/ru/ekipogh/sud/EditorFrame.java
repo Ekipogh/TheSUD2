@@ -1,12 +1,20 @@
 package ru.ekipogh.sud;
 
+import org.fife.rsta.ac.LanguageSupport;
+import org.fife.rsta.ac.js.JavaScriptLanguageSupport;
+import org.fife.rsta.ui.CollapsibleSectionPanel;
+import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.DefaultCompletionProvider;
+import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,7 +55,6 @@ public class EditorFrame extends JFrame {
     private final DefaultListModel<String> characterScriptListModel;
     private final DefaultListModel<String> itemScriptListModel;
     private final DefaultTableModel equipTableModel;
-    private final DefaultListModel<SudPair<Item, Integer>> itemItemsListModel;
     private final DefaultListModel<String> commonScriptsListModel;
     private JPanel rootPanel;
     private JList<Location> locationsList;
@@ -177,7 +184,6 @@ public class EditorFrame extends JFrame {
     private JButton deleteCategoryFromItemButton;
     private JCheckBox isContainerBox;
     private JCheckBox isLockedBox;
-    private JTabbedPane itemTabbedPane;
     private JList<String> commonScriptsList;
     private RSyntaxTextArea commonScriptText;
     private JButton saveCommonScriptButton;
@@ -190,6 +196,10 @@ public class EditorFrame extends JFrame {
     private JButton locationContainerButton;
     private JButton characterContainerButton;
     private JButton playerContainerButton;
+    private CollapsibleSectionPanel collapsibleSectionPanel1;
+    private RTextScrollPane rTextScrollPane1;
+    private RSyntaxTextArea rTextArea1;
+    private JPanel testAreaPanel;
     private final DefaultListModel<CharacterCategory> characterCategoryListModel;
     private final DefaultListModel<LocationCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
@@ -292,8 +302,6 @@ public class EditorFrame extends JFrame {
         characterTabItemsList.setModel(itemsListModel);
         playerTabItemsList.setModel(itemsListModel);
 
-        itemItemsListModel = new DefaultListModel<>();
-
         commonScriptsListModel = new DefaultListModel<>();
         commonScriptsList.setModel(commonScriptsListModel);
         //Заполняем commonScriptsList
@@ -326,6 +334,10 @@ public class EditorFrame extends JFrame {
 
         commonScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         commonScriptText.setCodeFoldingEnabled(true);
+        commonScriptText.setMarkOccurrences(true);
+
+        AutoCompletion ac = new AutoCompletion(new DefaultCompletionProvider());
+        ac.install(commonScriptText);
 
         //модели комбобоксов
         itemTypeCombo.setModel(new DefaultComboBoxModel<>(ItemTypes.values()));
@@ -750,6 +762,15 @@ public class EditorFrame extends JFrame {
         isContainerBox.addActionListener(e -> setContainer());
         isLockedBox.addActionListener(e -> setLocked());
         //test area
+        rTextArea1.setSyntaxEditingStyle(RSyntaxTextArea.SYNTAX_STYLE_JAVASCRIPT);
+        rTextArea1.setMarkOccurrences(true);
+        rTextArea1.setCodeFoldingEnabled(true);
+        AutoCompletion acTest = new AutoCompletion(new DefaultCompletionProvider());
+        acTest.install(rTextArea1);
+        LanguageSupport ls = new JavaScriptLanguageSupport();
+        ls.install(rTextArea1);
+        ErrorStrip es = new ErrorStrip(rTextArea1);
+        testAreaPanel.add(es, BorderLayout.LINE_END);
     }
 
     private void showContainerFrame(int gameObject) {
