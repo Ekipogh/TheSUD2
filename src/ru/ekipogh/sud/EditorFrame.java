@@ -2,13 +2,11 @@ package ru.ekipogh.sud;
 
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.js.JavaScriptLanguageSupport;
-import org.fife.rsta.ui.CollapsibleSectionPanel;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -196,17 +194,14 @@ public class EditorFrame extends JFrame {
     private JButton locationContainerButton;
     private JButton characterContainerButton;
     private JButton playerContainerButton;
-    private CollapsibleSectionPanel collapsibleSectionPanel1;
-    private RTextScrollPane rTextScrollPane1;
-    private RSyntaxTextArea rTextArea1;
-    private JPanel testAreaPanel;
+    private JPanel initScriptPanel;
     private final DefaultListModel<CharacterCategory> characterCategoryListModel;
     private final DefaultListModel<LocationCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
 
     private GameCharacter player;
     private String gamePath;
-
+    private RSyntaxTextArea selectedRSyntaxArea; //для поиска
 
     public EditorFrame(String gamePath) {
         super("Редактор");
@@ -329,15 +324,18 @@ public class EditorFrame extends JFrame {
         itemCategoryScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         itemCategoryScriptText.setCodeFoldingEnabled(true);
 
+        AutoCompletion acInit = new AutoCompletion(new DefaultCompletionProvider());
+        LanguageSupport lsInit = new JavaScriptLanguageSupport();
         initScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         initScriptText.setCodeFoldingEnabled(true);
+        initScriptText.setMarkOccurrences(true);
+        acInit.install(initScriptText);
+        lsInit.install(initScriptText);
+        initScriptPanel.add(new ErrorStrip(initScriptText), BorderLayout.LINE_END);
 
         commonScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         commonScriptText.setCodeFoldingEnabled(true);
         commonScriptText.setMarkOccurrences(true);
-
-        AutoCompletion ac = new AutoCompletion(new DefaultCompletionProvider());
-        ac.install(commonScriptText);
 
         //модели комбобоксов
         itemTypeCombo.setModel(new DefaultComboBoxModel<>(ItemTypes.values()));
@@ -404,6 +402,7 @@ public class EditorFrame extends JFrame {
         fillEquipmentTable();
 
         //меню окна
+        //Файл
         JMenuBar menuBar = new JMenuBar();
         JMenu menuFile = new JMenu("Файл");
         JMenuItem newGameMenu = new JMenuItem("Новая");
@@ -417,6 +416,7 @@ public class EditorFrame extends JFrame {
         menuFile.add(saveAsMenu);
         menuFile.add(startGameMenu);
         menuBar.add(menuFile);
+        //Поиск
 
         setJMenuBar(menuBar);
 
@@ -762,15 +762,14 @@ public class EditorFrame extends JFrame {
         isContainerBox.addActionListener(e -> setContainer());
         isLockedBox.addActionListener(e -> setLocked());
         //test area
-        rTextArea1.setSyntaxEditingStyle(RSyntaxTextArea.SYNTAX_STYLE_JAVASCRIPT);
-        rTextArea1.setMarkOccurrences(true);
-        rTextArea1.setCodeFoldingEnabled(true);
-        AutoCompletion acTest = new AutoCompletion(new DefaultCompletionProvider());
-        acTest.install(rTextArea1);
-        LanguageSupport ls = new JavaScriptLanguageSupport();
-        ls.install(rTextArea1);
-        ErrorStrip es = new ErrorStrip(rTextArea1);
-        testAreaPanel.add(es, BorderLayout.LINE_END);
+
+        initScriptText.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                selectedRSyntaxArea = initScriptText;
+            }
+        });
     }
 
     private void showContainerFrame(int gameObject) {

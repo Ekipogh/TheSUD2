@@ -5,7 +5,6 @@
       <root url="jar://$PROJECT_DIR$/../../RSyn/rsyntaxtextarea-2.5.8.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../RSyn/autocomplete-2.5.8.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../RSyn/languagesupport-2.5.8.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../RSyn/rstaui-2.5.7.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
