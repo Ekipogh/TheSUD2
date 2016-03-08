@@ -7,6 +7,7 @@ import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -195,6 +196,14 @@ public class EditorFrame extends JFrame {
     private JButton characterContainerButton;
     private JButton playerContainerButton;
     private JPanel initScriptPanel;
+    private JPanel characterScriptPanel;
+    private JPanel locationScriptPanel;
+    private JPanel itemScriptPanel;
+    private JPanel playerScriptPanel;
+    private JPanel locationCategoryScriptPanel;
+    private JPanel itemCategoryScriptPanel;
+    private JPanel characterCategoryScriptPanel;
+    private JPanel commonScriptPanel;
     private final DefaultListModel<CharacterCategory> characterCategoryListModel;
     private final DefaultListModel<LocationCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
@@ -202,6 +211,8 @@ public class EditorFrame extends JFrame {
     private GameCharacter player;
     private String gamePath;
     private RSyntaxTextArea selectedRSyntaxArea; //для поиска
+    private FindDialog findDialog;
+    private ReplaceDialog replaceDialog;
 
     public EditorFrame(String gamePath) {
         super("Редактор");
@@ -303,26 +314,68 @@ public class EditorFrame extends JFrame {
         commonScripts.keySet().forEach(commonScriptsListModel::addElement);
 
         //поля скриптов
+        AutoCompletion acChar = new AutoCompletion(new DefaultCompletionProvider());
+        LanguageSupport lsChar = new JavaScriptLanguageSupport();
         characterScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         characterScriptText.setCodeFoldingEnabled(true);
+        characterScriptText.setMarkOccurrences(true);
+        acChar.install(characterScriptText);
+        lsChar.install(characterScriptText);
+        characterScriptPanel.add(new ErrorStrip(characterScriptText), BorderLayout.LINE_END);
 
+        AutoCompletion acCharCat = new AutoCompletion(new DefaultCompletionProvider());
+        LanguageSupport lsCharCat = new JavaScriptLanguageSupport();
         charCategoryScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         charCategoryScriptText.setCodeFoldingEnabled(true);
+        charCategoryScriptText.setMarkOccurrences(true);
+        acCharCat.install(charCategoryScriptText);
+        lsCharCat.install(charCategoryScriptText);
+        characterCategoryScriptPanel.add(new ErrorStrip(charCategoryScriptText), BorderLayout.LINE_END);
 
+        AutoCompletion acPl = new AutoCompletion(new DefaultCompletionProvider());
+        LanguageSupport lsPl = new JavaScriptLanguageSupport();
         playerScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         playerScriptText.setCodeFoldingEnabled(true);
+        playerScriptText.setMarkOccurrences(true);
+        acPl.install(playerScriptText);
+        lsPl.install(playerScriptText);
+        playerScriptPanel.add(new ErrorStrip(playerScriptText), BorderLayout.LINE_END);
 
+        AutoCompletion acLoc = new AutoCompletion(new DefaultCompletionProvider());
+        LanguageSupport lsLoc = new JavaScriptLanguageSupport();
         locationScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         locationScriptText.setCodeFoldingEnabled(true);
+        locationScriptText.setMarkOccurrences(true);
+        acLoc.install(locationScriptText);
+        lsLoc.install(locationScriptText);
+        locationScriptPanel.add(new ErrorStrip(locationScriptText), BorderLayout.LINE_END);
 
+        AutoCompletion acLocCat = new AutoCompletion(new DefaultCompletionProvider());
+        LanguageSupport lsLocCat = new JavaScriptLanguageSupport();
         locationCategoryScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         locationCategoryScriptText.setCodeFoldingEnabled(true);
+        locationCategoryScriptText.setMarkOccurrences(true);
+        acLocCat.install(locationCategoryScriptText);
+        lsLocCat.install(locationCategoryScriptText);
+        locationCategoryScriptPanel.add(new ErrorStrip(locationCategoryScriptText), BorderLayout.LINE_END);
 
+        AutoCompletion acItem = new AutoCompletion(new DefaultCompletionProvider());
+        LanguageSupport lsItem = new JavaScriptLanguageSupport();
         itemScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         itemScriptText.setCodeFoldingEnabled(true);
+        itemScriptText.setMarkOccurrences(true);
+        acItem.install(itemScriptText);
+        lsItem.install(itemScriptText);
+        itemScriptPanel.add(new ErrorStrip(itemScriptText), BorderLayout.LINE_END);
 
+        AutoCompletion acItemCat = new AutoCompletion(new DefaultCompletionProvider());
+        LanguageSupport lsItemCat = new JavaScriptLanguageSupport();
         itemCategoryScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         itemCategoryScriptText.setCodeFoldingEnabled(true);
+        itemCategoryScriptText.setMarkOccurrences(true);
+        acItemCat.install(itemCategoryScriptText);
+        lsItemCat.install(itemCategoryScriptText);
+        itemCategoryScriptPanel.add(new ErrorStrip(itemCategoryScriptText), BorderLayout.LINE_END);
 
         AutoCompletion acInit = new AutoCompletion(new DefaultCompletionProvider());
         LanguageSupport lsInit = new JavaScriptLanguageSupport();
@@ -333,9 +386,15 @@ public class EditorFrame extends JFrame {
         lsInit.install(initScriptText);
         initScriptPanel.add(new ErrorStrip(initScriptText), BorderLayout.LINE_END);
 
+        AutoCompletion acCommon = new AutoCompletion(new DefaultCompletionProvider());
+        LanguageSupport lsCommon = new JavaScriptLanguageSupport();
         commonScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         commonScriptText.setCodeFoldingEnabled(true);
         commonScriptText.setMarkOccurrences(true);
+        commonScriptText.setMarkOccurrences(true);
+        acCommon.install(commonScriptText);
+        lsCommon.install(commonScriptText);
+        commonScriptPanel.add(new ErrorStrip(commonScriptText), BorderLayout.LINE_END);
 
         //модели комбобоксов
         itemTypeCombo.setModel(new DefaultComboBoxModel<>(ItemTypes.values()));
@@ -417,6 +476,16 @@ public class EditorFrame extends JFrame {
         menuFile.add(startGameMenu);
         menuBar.add(menuFile);
         //Поиск
+        findDialog = new FindDialog();
+
+        JMenu menuSearch = new JMenu("Поиск");
+        JMenuItem findMenu = new JMenuItem("Найти");
+        JMenuItem replaceMenu = new JMenuItem("Заменить");
+        JMenuItem nextMenu = new JMenuItem("Найти далее", KeyEvent.VK_F3);
+        menuSearch.add(findMenu);
+        menuSearch.add(replaceMenu);
+        menuSearch.add(nextMenu);
+        menuBar.add(menuSearch);
 
         setJMenuBar(menuBar);
 
@@ -587,6 +656,14 @@ public class EditorFrame extends JFrame {
 
         saveAsMenu.addActionListener(e -> saveAs());
         saveAsMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK + InputEvent.SHIFT_MASK));
+
+        findMenu.addActionListener(e -> find());
+        findMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_MASK));
+
+        replaceMenu.addActionListener(e -> replace());
+        replaceMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_MASK));
+
+        nextMenu.addActionListener(e -> findNext());
 
         //листенеры листов
         commonScriptsList.addListSelectionListener(e -> selectCommonScript());
@@ -770,6 +847,80 @@ public class EditorFrame extends JFrame {
                 selectedRSyntaxArea = initScriptText;
             }
         });
+        commonScriptText.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                selectedRSyntaxArea = commonScriptText;
+            }
+        });
+        locationScriptText.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                selectedRSyntaxArea = locationScriptText;
+            }
+        });
+        characterScriptText.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                selectedRSyntaxArea = characterScriptText;
+            }
+        });
+        itemScriptText.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                selectedRSyntaxArea = itemScriptText;
+            }
+        });
+        playerScriptText.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                selectedRSyntaxArea = playerScriptText;
+            }
+        });
+        locationCategoryScriptText.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                selectedRSyntaxArea = locationCategoryScriptText;
+            }
+        });
+        charCategoryScriptText.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                selectedRSyntaxArea = charCategoryScriptText;
+            }
+        });
+        itemCategoryScriptText.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                selectedRSyntaxArea = itemCategoryScriptText;
+            }
+        });
+    }
+
+    private void findNext() {
+        findDialog.findNext();
+    }
+
+    private void replace() {
+        if (!replaceDialog.isVisible() && selectedRSyntaxArea != null) {
+            replaceDialog.setVisible(true);
+            replaceDialog.setArea(selectedRSyntaxArea);
+        }
+    }
+
+    private void find() {
+        if (!findDialog.isVisible() && selectedRSyntaxArea != null) {
+            findDialog.setVisible(true);
+            findDialog.setArea(selectedRSyntaxArea);
+        }
     }
 
     private void showContainerFrame(int gameObject) {
