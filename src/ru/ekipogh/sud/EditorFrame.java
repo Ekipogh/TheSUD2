@@ -7,7 +7,6 @@ import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -221,11 +220,6 @@ public class EditorFrame extends JFrame {
         this.gamePath = gamePath;
 
         setContentPane(rootPanel);
-        pack();
-        setLocationRelativeTo(null);
-
-        setVisible(true);
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         commonScripts = new HashMap<>();
         commonScripts.put("_onPlayerMoves", new Script("", true));
@@ -477,6 +471,7 @@ public class EditorFrame extends JFrame {
         menuBar.add(menuFile);
         //Поиск
         findDialog = new FindDialog();
+        replaceDialog = new ReplaceDialog();
 
         JMenu menuSearch = new JMenu("Поиск");
         JMenuItem findMenu = new JMenuItem("Найти");
@@ -903,6 +898,12 @@ public class EditorFrame extends JFrame {
                 selectedRSyntaxArea = itemCategoryScriptText;
             }
         });
+
+        pack();
+        setLocationRelativeTo(null);
+
+        setVisible(true);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     private void findNext() {

@@ -170,7 +170,8 @@ public class PlayerFrame extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                Main.launcher.setVisible(true);
+                if (!Main.editor.isVisible())
+                    Main.launcher.setVisible(true);
                 super.windowClosing(e);
             }
         });

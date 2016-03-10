@@ -3,7 +3,9 @@ package ru.ekipogh.sud;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class ReplaceDialog extends JDialog {
     private boolean caseSensitive;
@@ -19,7 +21,10 @@ public class ReplaceDialog extends JDialog {
 
     public ReplaceDialog() {
         setContentPane(contentPane);
-        setModal(true);
+        setAlwaysOnTop(true);
+        setResizable(false);
+        setLocationRelativeTo(null);
+        setModalityType(ModalityType.MODELESS);
         getRootPane().setDefaultButton(findButton);
         pack();
 
