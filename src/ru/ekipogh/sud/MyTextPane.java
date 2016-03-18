@@ -28,6 +28,8 @@ public class MyTextPane extends JTextPane {
 
     public void println(String str) {
         //<img src = "file:/D:/Tomato/IdeaProjects/TheSUD2/photo.jpg">
+        if (str == null)
+            str = "";
         String s = (String) Script.run("magic()", str);
         String temp = this.getText();
         int breakIndex = temp.lastIndexOf("</body>");

@@ -1692,10 +1692,13 @@ public class EditorFrame extends JFrame {
     }
 
     private void startGame() {
-        if (!gamePath.isEmpty())
+        if (!gamePath.isEmpty()) {
+            saveGame();
             new PlayerFrame(gamePath);
-        else
+        } else {
             saveAs();
+            new PlayerFrame(gamePath);
+        }
     }
 
     private void saveCharScript() {

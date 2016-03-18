@@ -178,13 +178,17 @@
                             <constraints>
                               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                             </constraints>
-                            <properties/>
+                            <properties>
+                              <horizontalScrollBarPolicy value="31"/>
+                            </properties>
                             <border type="none"/>
                             <children>
                               <component id="3942c" class="javax.swing.JTextArea" binding="playerDescriptionArea">
                                 <constraints/>
                                 <properties>
                                   <editable value="false"/>
+                                  <lineWrap value="true"/>
+                                  <wrapStyleWord value="true"/>
                                 </properties>
                               </component>
                             </children>

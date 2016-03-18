@@ -9,6 +9,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.event.*;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +62,8 @@ public class PlayerFrame extends JFrame {
     private String savePath;
     private boolean paused = false;
     private HashMap<String, Script> commonScripts;
+    private List<String> commandsList;
+    private int consoleIterator;
 
     private PlayerFrame() {
         super("The SUD2");
@@ -68,6 +71,8 @@ public class PlayerFrame extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        commandsList = new ArrayList<>();
 
         charactersTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode("Персонажы"));
         charactersTree.setModel(charactersTreeModel);
@@ -177,6 +182,27 @@ public class PlayerFrame extends JFrame {
         });
 
         jsInputField.addActionListener(e -> runScript());
+
+        jsInputField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_UP:
+                        jsInputField.setText(commandsList.get(consoleIterator));
+                        if (consoleIterator > 0) {
+                            consoleIterator--;
+                        }
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        jsInputField.setText(commandsList.get(consoleIterator));
+                        if (consoleIterator < commandsList.size() - 1) {
+                            consoleIterator++;
+                        }
+                }
+            }
+        });
+
     }
 
     //снимаем игру с паузы
@@ -278,7 +304,7 @@ public class PlayerFrame extends JFrame {
             }
             if (!player.getDescription().isEmpty()) {
                 menuItem = new JMenuItem("Описание");
-                menuItem.addActionListener(ev -> parseDescription(player.getDescription()));
+                menuItem.addActionListener(ev -> output.println(parseDescription(player.getDescription())));
                 popupMenu.add(menuItem);
             }
             popupMenu.show(playerName, e.getX(), e.getY());
@@ -286,13 +312,16 @@ public class PlayerFrame extends JFrame {
     }
 
     private void runScript() {
-        //todo: implement proper console
-        Script.run(jsInputField.getText(), player);
+        String command = jsInputField.getText();
+        commandsList.add(command);
+        consoleIterator = commandsList.size() - 1;
+        jsInputField.setText("");
+        Script.run(command, player);
     }
 
     //отображаем описание персонажа
     private void showCharDescription(GameCharacter character) {
-        parseDescription(character.getDescription());
+        output.println(parseDescription(character.getDescription()));
     }
 
     //меню локации todo: нужно бы переделать
@@ -328,7 +357,7 @@ public class PlayerFrame extends JFrame {
 
     //отображаем описание локации
     private void showLocationDescription() {
-        parseDescription(currentLocation.getDescription());
+        output.println(parseDescription(currentLocation.getDescription()));
     }
 
     //вызываем окна инвенторя
@@ -338,7 +367,7 @@ public class PlayerFrame extends JFrame {
 
     //отображаем описание предмета
     private void showItemDescription(Item item) {
-        parseDescription(item.getDescription());
+        output.println(parseDescription(item.getDescription()));
     }
 
     //используем предмет
@@ -375,7 +404,7 @@ public class PlayerFrame extends JFrame {
     }
 
     //передвижение игрока
-    private void move(int direction) {
+    public void move(int direction) {
         Location playerLocation = null;
         String scripName = null;
         switch (direction) {
@@ -464,13 +493,14 @@ public class PlayerFrame extends JFrame {
         characters = gameFile.getCharacters();
         items = gameFile.getItems();
         currentLocation = player.getLocation();
-        playerName.setText(player.getName());
         Map<String, String> slotNames = gameFile.getSlotNames();
         Equipment.setSlotNames(slotNames);
         gamePath = gameFile.getPath();
         initJS(gameFile.getInitScript());
         output.println("<b>" + gameFile.getGameName() + "</b>");
         output.println(gameFile.getGameStartMessage());
+        playerName.setText(player.getName());
+        playerDescriptionArea.setText(parseDescription(player.getDescription()));
     }
 
     //инициализируем JavaScript
@@ -500,7 +530,7 @@ public class PlayerFrame extends JFrame {
     public void proceed() {
         output.println("<b>" + currentLocation.getName() + "</b>");
         if (!currentLocation.getDescription().isEmpty())
-            parseDescription(currentLocation.getDescription());
+            output.println(parseDescription(currentLocation.getDescription()));
 
         //изменяем рисунок локации
         if (currentLocation.getPicturePath() == null || currentLocation.getPicturePath().isEmpty())
@@ -513,9 +543,10 @@ public class PlayerFrame extends JFrame {
         //Заполняем список персонажей в локации
         updateCharacters();
 
+        updatePlayer();
+
         //Дизаблим не используемые кнопки передвижения
         updateButtons();
-        parseDescription(player.getDescription());
         //отоброжаем выходы
         String exits = "<font color=\"DarkGrey\"><b>Выходы: ";
         Location north = currentLocation.getNorth();
@@ -561,8 +592,13 @@ public class PlayerFrame extends JFrame {
             if (!c.getDescription().isEmpty())
                 charactersTreeModel.insertNodeInto(new SudTreeNode("Описание", l -> showCharDescription(c)), characterNode, characterNode.getChildCount());
         });
-
+        updatePlayer();
         expandAllNodes(charactersTree);
+    }
+
+    public void updatePlayer() {
+        playerName.setText(player.getName());
+        playerDescriptionArea.setText(parseDescription(player.getDescription()));
     }
 
     //заполняем дерево предметов
@@ -677,13 +713,11 @@ public class PlayerFrame extends JFrame {
         }
     }
 
-    private void parseDescription(String description) {
+    private String parseDescription(String description) {
         description = description.replace("\"", "\\\"");
         description = description.replace("\n", "");
         description = (String) Script.run("parser(\"" + description + "\");", null);
-        if (!"undefined".equals(description)) {
-            output.println(description);
-        }
+        return !description.equals("undefined") ? description : "";
         //Script.run("parser(\"" + description + "\");", null);
     }
 
