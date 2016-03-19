@@ -14,10 +14,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by dedov_d on 23.04.2015.
@@ -54,6 +52,8 @@ public class EditorFrame extends JFrame {
     private final DefaultListModel<String> itemScriptListModel;
     private final DefaultTableModel equipTableModel;
     private final DefaultListModel<String> commonScriptsListModel;
+    private final DefaultTableModel playerEquipmentTableModel;
+    private final DefaultTableModel characterEquipmentTableModel;
     private JPanel rootPanel;
     private JList<Location> locationsList;
     private JTextField locName;
@@ -203,6 +203,10 @@ public class EditorFrame extends JFrame {
     private JPanel itemCategoryScriptPanel;
     private JPanel characterCategoryScriptPanel;
     private JPanel commonScriptPanel;
+    private JTable playerEquipmentTable;
+    private JList<Item> playerInventoryList;
+    private JList characterInventoryList;
+    private JTable characterEquipmentTable;
     private final DefaultListModel<CharacterCategory> characterCategoryListModel;
     private final DefaultListModel<LocationCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
@@ -830,6 +834,70 @@ public class EditorFrame extends JFrame {
         if (!gamePath.isEmpty())
             loadGame();
 
+        //Экипировка игрока и персонажей
+        playerEquipmentTableModel = new DefaultTableModel();
+        playerEquipmentTableModel.addColumn("Слот");
+        playerEquipmentTableModel.addColumn("Предмет");
+        fillPlayerEquipmentTable();
+        playerEquipmentTable.setModel(playerEquipmentTableModel);
+        playerInventoryList.setModel(itemsListModel);
+        playerInventoryList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (e.getClickCount() == 2) {
+                    equipItemToPlayer();
+                    fillPlayerEquipmentTable();
+                }
+            }
+        });
+        playerEquipmentTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                JTable table = (JTable) e.getSource();
+                if (e.getClickCount() == 2) {
+                    int column = table.columnAtPoint(e.getPoint());
+                    int row = table.rowAtPoint(e.getPoint());
+                    if (column == 1) {
+                        unequipItemFromPlayer(row);
+                        fillPlayerEquipmentTable();
+                    }
+                }
+            }
+        });
+        characterEquipmentTableModel = new DefaultTableModel();
+        characterEquipmentTableModel.addColumn("Слот");
+        characterEquipmentTableModel.addColumn("Предмет");
+        fillCharacterEquipmentTable();
+        characterEquipmentTable.setModel(characterEquipmentTableModel);
+        characterInventoryList.setModel(itemsListModel);
+        characterInventoryList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (e.getClickCount() == 2) {
+                    equipItemToCharacter();
+                    fillCharacterEquipmentTable();
+                }
+            }
+        });
+        characterEquipmentTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                JTable table = (JTable) e.getSource();
+                if (e.getClickCount() == 2) {
+                    int column = table.columnAtPoint(e.getPoint());
+                    int row = table.rowAtPoint(e.getPoint());
+                    if (column == 1) {
+                        unequipItemFromCharacter(row);
+                        fillCharacterEquipmentTable();
+                    }
+                }
+            }
+        });
+
         //листенеры чекбоксов
         isContainerBox.addActionListener(e -> setContainer());
         isLockedBox.addActionListener(e -> setLocked());
@@ -904,6 +972,62 @@ public class EditorFrame extends JFrame {
 
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    }
+
+    private void unequipItemFromCharacter(int row) {
+        String slotName = (String) characterEquipmentTableModel.getValueAt(row, 0);
+        int indexC = charactersList.getSelectedIndex();
+        if (indexC >= 0) {
+            GameCharacter character = charactersListModel.get(indexC);
+            Item item = character.getEquipedItem(slotName);
+            character.unequip(item);
+        }
+    }
+
+    private void equipItemToCharacter() {
+        int indexI = playerInventoryList.getSelectedIndex();
+        int indexC = charactersList.getSelectedIndex();
+        if (indexI >= 0 && indexC >= 0) {
+            GameCharacter character = charactersListModel.get(indexC);
+            Item item = itemsListModel.get(indexI);
+            if (item.getType() == ItemTypes.EQUIPPABLE) {
+                character.equip(item);
+            }
+        }
+    }
+
+    private void fillCharacterEquipmentTable() {
+        int indexC = charactersList.getSelectedIndex();
+        if (indexC >= 0) {
+            GameCharacter character = charactersListModel.get(indexC);
+            characterEquipmentTableModel.setRowCount(0);
+            Equipment.getSlotMap().entrySet().forEach(entry -> {
+                characterEquipmentTableModel.addRow(new Object[]{entry.getKey(), character.getEquipedItem(entry.getKey())});
+            });
+        }
+    }
+
+    private void fillPlayerEquipmentTable() {
+        playerEquipmentTableModel.setRowCount(0);
+        Equipment.getSlotMap().entrySet().forEach(entry -> {
+            playerEquipmentTableModel.addRow(new Object[]{entry.getKey(), player.getEquipedItem(entry.getKey())});
+        });
+    }
+
+    private void unequipItemFromPlayer(int row) {
+        String slotName = (String) playerEquipmentTableModel.getValueAt(row, 0);
+        Item item = player.getEquipedItem(slotName);
+        player.unequip(item);
+    }
+
+    private void equipItemToPlayer() {
+        int indexI = playerInventoryList.getSelectedIndex();
+        if (indexI >= 0) {
+            Item item = itemsListModel.get(indexI);
+            if (item.getType() == ItemTypes.EQUIPPABLE) {
+                player.equip(item);
+            }
+        }
     }
 
     private void findNext() {

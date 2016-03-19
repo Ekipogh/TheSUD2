@@ -179,6 +179,7 @@ public class Item implements Serializable, Comparable, Cloneable {
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == null) return false;
         return obj.getClass() == Item.class && this.id == ((Item) obj).id;
     }
 
