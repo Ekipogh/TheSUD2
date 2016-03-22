@@ -17,6 +17,7 @@ public class Script implements Serializable {
     private static Context context;
     private static Scriptable scope;
     private String scriptText;
+    public static final long serialVersionUID = -5573809983647994548L;
 
     public static Scriptable getScope() {
         return scope;
@@ -71,5 +72,9 @@ public class Script implements Serializable {
         for (Map.Entry<String, Object> e : scopeObjects.entrySet()) {
             setProperty(e.getKey(), e.getValue());
         }
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

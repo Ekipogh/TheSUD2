@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by dedov_d on 07.05.2015.
  */
-public class Equipment implements Serializable {
+class Equipment implements Serializable {
     private Map<String, Item> slots;
 
     public static void setSlotNames(Map<String, String> slotNames) {

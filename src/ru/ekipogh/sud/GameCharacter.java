@@ -65,7 +65,6 @@ public class GameCharacter implements Serializable {
     }
 
     public void setName(String name) {
-        if (name.length() < 21)
             this.name = name;
 
     }

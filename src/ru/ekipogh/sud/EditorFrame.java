@@ -14,8 +14,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by dedov_d on 23.04.2015.
@@ -71,7 +73,7 @@ public class EditorFrame extends JFrame {
     private JButton savePlayerButton;
     private JTextField gameName;
     private JTextArea gameStartMessage;
-    public JList<Item> itemsList;
+    private JList<Item> itemsList;
     private JButton addItemButton;
     private JButton deleteItemButton;
     private JTextField itemName;
@@ -205,7 +207,7 @@ public class EditorFrame extends JFrame {
     private JPanel commonScriptPanel;
     private JTable playerEquipmentTable;
     private JList<Item> playerInventoryList;
-    private JList characterInventoryList;
+    private JList<Item> characterInventoryList;
     private JTable characterEquipmentTable;
     private final DefaultListModel<CharacterCategory> characterCategoryListModel;
     private final DefaultListModel<LocationCategory> locationCategoryListModel;
@@ -214,8 +216,8 @@ public class EditorFrame extends JFrame {
     private GameCharacter player;
     private String gamePath;
     private RSyntaxTextArea selectedRSyntaxArea; //для поиска
-    private FindDialog findDialog;
-    private ReplaceDialog replaceDialog;
+    private final FindDialog findDialog;
+    private final ReplaceDialog replaceDialog;
 
     public EditorFrame(String gamePath) {
         super("Редактор");
@@ -1890,7 +1892,8 @@ public class EditorFrame extends JFrame {
     private void saveSelectedCharacter() {
         int index = charactersList.getSelectedIndex();
         GameCharacter selected = charactersListModel.getElementAt(index);
-        selected.setName(charNameFiled.getText());
+        String name = charNameFiled.getText();
+        selected.setName(name);
         selected.setLocation((Location) characterLocationModel.getSelectedItem());
         selected.setDescription(charDescriptionArea.getText());
         List<CharacterCategory> categories = new ArrayList<>();

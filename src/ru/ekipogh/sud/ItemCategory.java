@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Created by dedov_d on 03.08.2015.
  */
-public class ItemCategory implements Serializable {
+class ItemCategory implements Serializable {
     private String name;
     private Map<String, Script> scripts;
 

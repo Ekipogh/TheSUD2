@@ -116,7 +116,7 @@ class InventoryFrame extends JFrame {
         }
     }
 
-    public void fillItemsTree(DefaultMutableTreeNode node, Inventory inventory) {
+    private void fillItemsTree(DefaultMutableTreeNode node, Inventory inventory) {
         for (int i = 0; i < inventory.size(); i++) {
             Item item = inventory.get(i); //предмет для добавления
             String itemName = item.getName(); //название предмета
