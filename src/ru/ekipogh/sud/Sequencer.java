@@ -3,7 +3,7 @@ package ru.ekipogh.sud;
 /**
  * Created by dedov_d on 27.05.2015.
  */
-class Sequencer {
+public class Sequencer {
     private static int id = 0;
 
     public static int getNewID() {

@@ -665,6 +665,7 @@ public class EditorFrame extends JFrame {
         replaceMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_MASK));
 
         nextMenu.addActionListener(e -> findNext());
+        nextMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
 
         //листенеры листов
         commonScriptsList.addListSelectionListener(e -> selectCommonScript());
@@ -987,7 +988,7 @@ public class EditorFrame extends JFrame {
     }
 
     private void equipItemToCharacter() {
-        int indexI = playerInventoryList.getSelectedIndex();
+        int indexI = characterInventoryList.getSelectedIndex();
         int indexC = charactersList.getSelectedIndex();
         if (indexI >= 0 && indexC >= 0) {
             GameCharacter character = charactersListModel.get(indexC);
@@ -1914,6 +1915,7 @@ public class EditorFrame extends JFrame {
             charDescriptionArea.setText(selected.getDescription());
             characterCategoryListModel.removeAllElements();
             selected.getCategories().forEach(characterCategoryListModel::addElement);
+            fillCharacterEquipmentTable();
         }
     }
 

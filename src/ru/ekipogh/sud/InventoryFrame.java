@@ -222,6 +222,7 @@ class InventoryFrame extends JFrame {
             Script.run(category.getScript(ONUNEQUIP).getText(), item);
         Script.run(playerFrame.getCommonScripts().get("_onPlayerUnequipsItem").getText(), item);
         updateItemsTree();
+        playerFrame.updatePlayer();
     }
 
     private void updateEquipmentTable() {  //Заполнение таблицы экипировки
@@ -264,6 +265,7 @@ class InventoryFrame extends JFrame {
             Script.run(playerFrame.getCommonScripts().get("_onPlayerEquipsItem").getText(), item);
             updateItemsTree();
             updateEquipmentTable();
+            playerFrame.updatePlayer();
         }
     }
 }

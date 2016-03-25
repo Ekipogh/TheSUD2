@@ -58,7 +58,9 @@ public class Script implements Serializable {
     }
 
     public static Object run(String script, Object caller) {
-        setProperty("caller", caller);
+        if (caller != null) {
+            setProperty("caller", caller);
+        }
         if (!script.isEmpty())
             return context.evaluateString(scope, script, "<cmd>", 1, null);
         return null;

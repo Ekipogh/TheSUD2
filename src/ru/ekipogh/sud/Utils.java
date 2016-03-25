@@ -6,7 +6,7 @@ import java.awt.*;
 /**
  * Created by dedov_d on 12.05.2015.
  */
-class Utils {
+public class Utils {
     public static void updateRowHeights(JTable table) {
         for (int row = 0; row < table.getRowCount(); row++) {
             int rowHeight = table.getRowHeight();

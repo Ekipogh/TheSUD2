@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Created by dedov_d on 27.04.2015.
  */
-class PlayerFrame extends JFrame {
+public class PlayerFrame extends JFrame {
     private static final int UP = 4;
     private static final int DOWN = 5;
     private static final int NORTH = 0;
@@ -85,7 +85,7 @@ class PlayerFrame extends JFrame {
 
         popupMenu = new JPopupMenu();
 
-        Action northAction = new AbstractAction("Север") {
+        /*Action northAction = new AbstractAction("Север") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 move(NORTH);
@@ -121,8 +121,10 @@ class PlayerFrame extends JFrame {
                 move(DOWN);
             }
         };
-        northButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD8, 0), "northAction");
-        northButton.getActionMap().put("northAction", northAction);
+        *//*northButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD8, 0), "northAction");
+        northButton.getActionMap().put("northAction", northAction);*//*
+        northAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD8, 0));
+        northButton.setAction(northAction);
         southButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD2, 0), "southAction");
         southButton.getActionMap().put("southAction", southAction);
         westButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD4, 0), "westAction");
@@ -132,7 +134,41 @@ class PlayerFrame extends JFrame {
         upButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD7, 0), "upAction");
         upButton.getActionMap().put("upAction", upAction);
         downButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD1, 0), "downAction");
-        downButton.getActionMap().put("downAction", downAction);
+        downButton.getActionMap().put("downAction", downAction);*/
+
+        northButton.addActionListener(e -> move(NORTH));
+        eastButton.addActionListener(e -> move(EAST));
+        southButton.addActionListener(e -> move(SOUTH));
+        westButton.addActionListener(e -> move(WEST));
+        upButton.addActionListener(e -> move(UP));
+        downButton.addActionListener(e -> move(DOWN));
+
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_NUMPAD8:
+                        move(NORTH);
+                        break;
+                    case KeyEvent.VK_NUMPAD2:
+                        move(SOUTH);
+                        break;
+                    case KeyEvent.VK_NUMPAD4:
+                        move(WEST);
+                        break;
+                    case KeyEvent.VK_NUMPAD6:
+                        move(EAST);
+                        break;
+                    case KeyEvent.VK_NUMPAD7:
+                        move(UP);
+                        break;
+                    case KeyEvent.VK_NUMPAD1:
+                        move(DOWN);
+                        break;
+                }
+            }
+        });
 
         proceedButton.addActionListener(e -> unPause());
 
@@ -666,6 +702,7 @@ class PlayerFrame extends JFrame {
         ((DefaultMutableTreeNode) charactersTreeModel.getRoot()).removeAllChildren();
         charactersTreeModel.reload();
         characters.stream().filter(c -> currentLocation.equals(c.getLocation())).forEach(c -> {
+            System.out.println(c);
             DefaultMutableTreeNode characterNode = new DefaultMutableTreeNode(c);
             DefaultMutableTreeNode top = (DefaultMutableTreeNode) charactersTreeModel.getRoot();
             charactersTreeModel.insertNodeInto(characterNode, top, top.getChildCount());

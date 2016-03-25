@@ -10,6 +10,7 @@ import java.util.Map;
  * Created by dedov_d on 23.04.2015.
  */
 public class Location implements Serializable {
+    private static final long serialVersionUID = 7769140675276936514L;
     private String name; //required location Name
     private int id;  //required location ID
     private String description;  //optional location Description
