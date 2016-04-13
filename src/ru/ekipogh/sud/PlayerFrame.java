@@ -9,10 +9,8 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.event.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.FileNotFoundException;
+import java.util.*;
 
 /**
  * Created by dedov_d on 27.04.2015.
@@ -55,6 +53,7 @@ public class PlayerFrame extends JFrame {
     private final String ONLEAVE = "_onLeave";
     private final String ONPLAYERARRIVE = "_onPlayerArrive";
     private final String ONPLAYERLEAVE = "_onPlayerLeave";
+    public String gameFolder;
 
     public Location getCurrentLocation() {
         return currentLocation;
@@ -613,6 +612,7 @@ public class PlayerFrame extends JFrame {
         Map<String, String> slotNames = gameFile.getSlotNames();
         Equipment.setSlotNames(slotNames);
         gamePath = gameFile.getPath();
+        gameFolder = new File(gamePath).getParentFile().getAbsolutePath();
         initJS(gameFile.getInitScript());
         output.println("<b>" + gameFile.getGameName() + "</b>");
         output.println(gameFile.getGameStartMessage());
@@ -631,9 +631,31 @@ public class PlayerFrame extends JFrame {
         Script.setProperty("characters", characters);
         Script.setProperty("currentLocation", currentLocation);
         Script.setProperty("game", this);
-        Script.setProperty("gameDir", new File(gamePath).getParent());
+        Script.setProperty("gameDir", gameFolder);
         Script.initFunctions();
         Script.run(initScript, null);
+        String scriptFolderPath = gameFolder + "\\scripts";
+        File scriptFolder = new File(scriptFolderPath);
+        if (scriptFolder.exists() && scriptFolder.isDirectory()) {
+            File[] files = scriptFolder.listFiles();
+            if (files != null) {
+                for (File script : files) {
+                    int dot = script.getName().lastIndexOf(".");
+                    String ext = script.getName().substring(dot + 1);
+                    String fileName = script.getName();
+                    System.out.println("Script loaded: " + fileName);
+                    if (ext.equals("js")) {
+                        try {
+                            String scriptText = new Scanner(script).useDelimiter("\\Z").next();
+                            Script.addScriptFile(fileName, scriptText);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     @SuppressWarnings("unused")
@@ -702,7 +724,6 @@ public class PlayerFrame extends JFrame {
         ((DefaultMutableTreeNode) charactersTreeModel.getRoot()).removeAllChildren();
         charactersTreeModel.reload();
         characters.stream().filter(c -> currentLocation.equals(c.getLocation())).forEach(c -> {
-            System.out.println(c);
             DefaultMutableTreeNode characterNode = new DefaultMutableTreeNode(c);
             DefaultMutableTreeNode top = (DefaultMutableTreeNode) charactersTreeModel.getRoot();
             charactersTreeModel.insertNodeInto(characterNode, top, top.getChildCount());

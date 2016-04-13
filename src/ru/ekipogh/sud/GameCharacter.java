@@ -10,6 +10,7 @@ import java.util.Map;
  * Created by dedov_d on 03.07.2015.
  */
 public class GameCharacter implements Serializable {
+    public static final long serialVersionUID = 5151657683640298947L;
     private String name;
     private Location location;
     private Inventory inventory;
@@ -65,7 +66,7 @@ public class GameCharacter implements Serializable {
     }
 
     public void setName(String name) {
-            this.name = name;
+        this.name = name;
 
     }
 
@@ -161,5 +162,9 @@ public class GameCharacter implements Serializable {
 
     public void removeItem(Item item, int count) {
         inventory.remove(item, count);
+    }
+
+    public void setEquipedItem(String slot, Item item) {
+        equipment.setItemAtSlot(slot, item);
     }
 }

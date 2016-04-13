@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
+import java.util.prefs.Preferences;
 
 /**
  * Created by dedov_d on 23.04.2015.
@@ -47,12 +48,16 @@ public class LauncherFrame extends JFrame {
     }
 
     private void chooseGameFile() {
-        JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
+        Preferences pref = Preferences.userRoot().node("TheSUD2");
+        String lastPath = pref.get("lastDir", System.getProperty("user.dir"));
+        JFileChooser fc = new JFileChooser(lastPath);
         FileFilter ff = new FileNameExtensionFilter("TheSUD game", "sud");
         fc.setFileFilter(ff);
         int response = fc.showOpenDialog(openFileButton);
         if (response == JFileChooser.APPROVE_OPTION) {
-            gamePathField.setText(fc.getSelectedFile().getPath());
+            String path = fc.getSelectedFile().getPath();
+            gamePathField.setText(path);
+            pref.put("lastDir", path);
         }
     }
 }

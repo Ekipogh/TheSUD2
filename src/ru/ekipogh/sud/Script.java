@@ -7,6 +7,7 @@ import org.mozilla.javascript.ScriptableObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -17,6 +18,7 @@ public class Script implements Serializable {
     private static Context context;
     private static Scriptable scope;
     private String scriptText;
+    private static HashMap<String, String> fileScipts;
     public static final long serialVersionUID = -5573809983647994548L;
 
     public static Scriptable getScope() {
@@ -46,6 +48,7 @@ public class Script implements Serializable {
     public static void init() {
         context = Context.enter();
         scope = context.initStandardObjects();
+        fileScipts = new HashMap<>();
     }
 
     public static void initFunctions() {
@@ -61,6 +64,12 @@ public class Script implements Serializable {
         if (caller != null) {
             setProperty("caller", caller);
         }
+        //run file
+        if (script.startsWith("file:")) {
+            String scriptName = script.substring(script.indexOf(":") + 1);
+            return context.evaluateString(scope, fileScipts.get(scriptName), scriptName, 1, null);
+        }
+        //run string
         if (!script.isEmpty())
             return context.evaluateString(scope, script, "<cmd>", 1, null);
         return null;
@@ -78,5 +87,9 @@ public class Script implements Serializable {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public static void addScriptFile(String scriptName, String scriptText) {
+        fileScipts.put(scriptName, scriptText);
     }
 }

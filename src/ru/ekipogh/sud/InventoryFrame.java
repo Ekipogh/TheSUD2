@@ -229,7 +229,8 @@ class InventoryFrame extends JFrame {
         equipmentTableModel.setRowCount(0);
         for (String s : Equipment.getSlotNames()) {
             Item item = player.getEquipedItem(s);
-            equipmentTableModel.addRow(new Object[]{new ImageIcon(Equipment.getImage(s)), item != null ? item : "Пусто"});
+            String imagePath = playerFrame.gameFolder + "\\" + Equipment.getImage(s);
+            equipmentTableModel.addRow(new Object[]{new ImageIcon(imagePath), item != null ? item : "Пусто"});
         }
 
         Utils.updateRowHeights(equipmentTable); //обновление высоты ячеек
