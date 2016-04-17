@@ -14,8 +14,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by dedov_d on 23.04.2015.
@@ -54,6 +57,7 @@ public class EditorFrame extends JFrame {
     private final DefaultListModel<String> commonScriptsListModel;
     private final DefaultTableModel playerEquipmentTableModel;
     private final DefaultTableModel characterEquipmentTableModel;
+    private String gameFolder;
     private JPanel rootPanel;
     private JList<Location> locationsList;
     private JTextField locName;
@@ -71,7 +75,7 @@ public class EditorFrame extends JFrame {
     private JButton savePlayerButton;
     private JTextField gameName;
     private JTextArea gameStartMessage;
-    public JList<Item> itemsList;
+    private JList<Item> itemsList;
     private JButton addItemButton;
     private JButton deleteItemButton;
     private JTextField itemName;
@@ -205,7 +209,7 @@ public class EditorFrame extends JFrame {
     private JPanel commonScriptPanel;
     private JTable playerEquipmentTable;
     private JList<Item> playerInventoryList;
-    private JList characterInventoryList;
+    private JList<Item> characterInventoryList;
     private JTable characterEquipmentTable;
     private final DefaultListModel<CharacterCategory> characterCategoryListModel;
     private final DefaultListModel<LocationCategory> locationCategoryListModel;
@@ -214,14 +218,18 @@ public class EditorFrame extends JFrame {
     private GameCharacter player;
     private String gamePath;
     private RSyntaxTextArea selectedRSyntaxArea; //для поиска
-    private FindDialog findDialog;
-    private ReplaceDialog replaceDialog;
+    private final FindDialog findDialog;
+    private final ReplaceDialog replaceDialog;
 
     public EditorFrame(String gamePath) {
         super("Редактор");
         player = new GameCharacter("Безымянный");
 
         this.gamePath = gamePath;
+        if (!this.gamePath.isEmpty()) {
+            this.gameFolder = new File(this.gamePath).getParentFile().getAbsolutePath();
+            ;
+        }
 
         setContentPane(rootPanel);
 
@@ -663,6 +671,7 @@ public class EditorFrame extends JFrame {
         replaceMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_MASK));
 
         nextMenu.addActionListener(e -> findNext());
+        nextMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
 
         //листенеры листов
         commonScriptsList.addListSelectionListener(e -> selectCommonScript());
@@ -831,8 +840,24 @@ public class EditorFrame extends JFrame {
         });
 
         Sequencer.reset();
-        if (!gamePath.isEmpty())
+        if (!this.gamePath.isEmpty()) {
             loadGame();
+        } else {
+            JOptionPane.showMessageDialog(this, "Для начала выберите корневую папку игры");
+            JFileChooser fc = new JFileChooser(gameFolder);
+            fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            fc.setAcceptAllFileFilterUsed(false);
+            int option;
+            boolean fileIsValid = false;
+            do {
+                option = fc.showOpenDialog(this); //or save?
+                if (option == JFileChooser.APPROVE_OPTION) {
+                    fileIsValid = fc.getSelectedFile().isDirectory();
+                } else {
+                    System.exit(0);
+                }
+            } while (!fileIsValid);
+        }
 
         //Экипировка игрока и персонажей
         playerEquipmentTableModel = new DefaultTableModel();
@@ -985,7 +1010,7 @@ public class EditorFrame extends JFrame {
     }
 
     private void equipItemToCharacter() {
-        int indexI = playerInventoryList.getSelectedIndex();
+        int indexI = characterInventoryList.getSelectedIndex();
         int indexC = charactersList.getSelectedIndex();
         if (indexI >= 0 && indexC >= 0) {
             GameCharacter character = charactersListModel.get(indexC);
@@ -1294,14 +1319,17 @@ public class EditorFrame extends JFrame {
     }
 
     private void saveAs() {
-        JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
+        JFileChooser fc = new JFileChooser(gameFolder);
         FileFilter ff = new FileNameExtensionFilter("TheSUD game", "sud");
         fc.setFileFilter(ff);
         int response = fc.showSaveDialog(this);
         if (response == JFileChooser.APPROVE_OPTION) {
-            gamePath = fc.getSelectedFile().getPath();
-            if (!gamePath.endsWith(".sud"))
-                gamePath += ".sud";
+            this.gamePath = fc.getSelectedFile().getPath();
+            if (!this.gamePath.endsWith(".sud")) {
+                this.gamePath += ".sud";
+            }
+            this.gameFolder = new File(this.gamePath).getParentFile().getAbsolutePath();
+            ;
         } else {
             return;
         }
@@ -1309,10 +1337,12 @@ public class EditorFrame extends JFrame {
     }
 
     private void fillEquipmentTable() {
+        equipTableModel.setRowCount(0);
         Equipment.getSlotMap().entrySet().forEach((entry) -> {
             String slotName = entry.getKey();
+            String iconPath = gameFolder + "\\" + entry.getValue();
             String icon = entry.getValue();
-            equipTableModel.addRow(new Object[]{icon, new ImageIcon(icon), slotName});
+            equipTableModel.addRow(new Object[]{icon, new ImageIcon(iconPath), slotName});
         });
         Utils.updateRowHeights(equipTable);
         slotNamesModel.removeAllElements();
@@ -1816,12 +1846,12 @@ public class EditorFrame extends JFrame {
     }
 
     private void startGame() {
-        if (!gamePath.isEmpty()) {
+        if (!this.gamePath.isEmpty()) {
             saveGame();
-            new PlayerFrame(gamePath);
+            new PlayerFrame(this.gamePath);
         } else {
             saveAs();
-            new PlayerFrame(gamePath);
+            new PlayerFrame(this.gamePath);
         }
     }
 
@@ -1890,7 +1920,8 @@ public class EditorFrame extends JFrame {
     private void saveSelectedCharacter() {
         int index = charactersList.getSelectedIndex();
         GameCharacter selected = charactersListModel.getElementAt(index);
-        selected.setName(charNameFiled.getText());
+        String name = charNameFiled.getText();
+        selected.setName(name);
         selected.setLocation((Location) characterLocationModel.getSelectedItem());
         selected.setDescription(charDescriptionArea.getText());
         List<CharacterCategory> categories = new ArrayList<>();
@@ -1911,6 +1942,7 @@ public class EditorFrame extends JFrame {
             charDescriptionArea.setText(selected.getDescription());
             characterCategoryListModel.removeAllElements();
             selected.getCategories().forEach(characterCategoryListModel::addElement);
+            fillCharacterEquipmentTable();
         }
     }
 
@@ -2110,19 +2142,20 @@ public class EditorFrame extends JFrame {
     }
 
     private void openGame() {
-        JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
+        JFileChooser fc = new JFileChooser(gameFolder);
         FileFilter ff = new FileNameExtensionFilter("TheSUD game", "sud");
         fc.setFileFilter(ff);
         int response = fc.showOpenDialog(this);
         if (response == JFileChooser.APPROVE_OPTION) {
-            gamePath = fc.getSelectedFile().getPath();
+            this.gamePath = fc.getSelectedFile().getPath();
+            this.gameFolder = new File(this.gamePath).getParentFile().getAbsolutePath();
             loadGame();
         }
     }
 
     private void loadGame() {
-        System.out.println("Opening file " + gamePath);
-        GameFile gameFile = GameFile.open(gamePath);
+        System.out.println("Opening file " + this.gamePath);
+        GameFile gameFile = GameFile.open(this.gamePath);
         assert gameFile != null;
         player = gameFile.getPlayer();
 
@@ -2149,13 +2182,14 @@ public class EditorFrame extends JFrame {
 
         Map<String, String> slotNames = gameFile.getSlotNames();
         Equipment.setSlotNames(slotNames);
-        equipTableModel.setRowCount(0);
+        /*equipTableModel.setRowCount(0);
         slotNamesModel.removeAllElements();
         for (Map.Entry<String, String> slotsEntry : slotNames.entrySet()) {
             equipTableModel.addRow(new Object[]{slotsEntry.getValue(), new ImageIcon(slotsEntry.getValue()), slotsEntry.getKey()});
             slotNamesModel.addElement(slotsEntry.getKey());
         }
-        Utils.updateRowHeights(equipTable);
+        Utils.updateRowHeights(equipTable);*/
+        fillEquipmentTable();
 
         gameFile.getCharacterCategories().forEach(charactersCategoriesListModel::addElement);
         gameFile.getCharacterCategories().forEach(GameCharacter::addCharacterCategory);
@@ -2186,15 +2220,18 @@ public class EditorFrame extends JFrame {
 
 
     private void menuSaveGame() {
-        if (gamePath.isEmpty()) {
-            JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
+        if (this.gamePath.isEmpty()) {
+            JFileChooser fc = new JFileChooser(gameFolder);
             FileFilter ff = new FileNameExtensionFilter("TheSUD game", "sud");
             fc.setFileFilter(ff);
             int response = fc.showSaveDialog(this);
             if (response == JFileChooser.APPROVE_OPTION) {
-                gamePath = fc.getSelectedFile().getPath();
-                if (!gamePath.endsWith(".sud"))
-                    gamePath += ".sud";
+                this.gamePath = fc.getSelectedFile().getPath();
+                if (!this.gamePath.endsWith(".sud")) {
+                    this.gamePath += ".sud";
+                }
+                this.gameFolder = new File(this.gamePath).getParentFile().getAbsolutePath();
+                ;
             } else {
                 return;
             }
@@ -2204,7 +2241,7 @@ public class EditorFrame extends JFrame {
 
     private void saveGame() {
         if (player.getLocation() != null) {
-            System.out.println("Saving to " + gamePath);
+            System.out.println("Saving to " + this.gamePath);
             GameFile gameFile = new GameFile();
             gameFile.setPlayer(player);
             gameFile.setSequencerID(Sequencer.getCurrentId());
@@ -2236,7 +2273,7 @@ public class EditorFrame extends JFrame {
             gameFile.setLocationCategories(Location.getLocationCategories());
             gameFile.setSlotNames(slotsNames);
             gameFile.setInitScript(initScriptText.getText());
-            gameFile.save(gamePath);
+            gameFile.save(this.gamePath);
         } else
             JOptionPane.showMessageDialog(this, "Выберите стартовую локацию игрока!");
     }

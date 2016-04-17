@@ -60,8 +60,7 @@ public class SaveFile implements Serializable { //Version .1
         try {
             FileInputStream fis = new FileInputStream(savePath);
             ObjectInputStream oin = new ObjectInputStream(fis);
-            SaveFile result = (SaveFile) oin.readObject();
-            return result;
+            return (SaveFile) oin.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

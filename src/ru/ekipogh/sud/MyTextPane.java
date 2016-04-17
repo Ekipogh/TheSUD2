@@ -30,18 +30,24 @@ public class MyTextPane extends JTextPane {
         //<img src = "file:/D:/Tomato/IdeaProjects/TheSUD2/photo.jpg">
         if (str == null)
             str = "";
-        String s = (String) Script.run("magic()", str);
+        if (str.contains("img")) {
+            str = (String) Script.run("magic('" + str + "')", null);
+        }
         String temp = this.getText();
         int breakIndex = temp.lastIndexOf("</body>");
-        temp = temp.substring(0, breakIndex) + "<br>" + s + temp.substring(breakIndex);
+        temp = temp.substring(0, breakIndex) + "<br>" + str + temp.substring(breakIndex);
         this.setText(temp);
     }
 
     public void print(String str) {
-        String s = (String) Script.run("magic()", str);
+        if (str == null)
+            str = "";
+        if (str.contains("img")) {
+            str = (String) Script.run("magic('" + str + "')", null);
+        }
         String temp = this.getText();
         int breakIndex = temp.lastIndexOf("</body>");
-        temp = temp.substring(0, breakIndex) + s + temp.substring(breakIndex);
+        temp = temp.substring(0, breakIndex) + str + temp.substring(breakIndex);
         this.setText(temp);
     }
 

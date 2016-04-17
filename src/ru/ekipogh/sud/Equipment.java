@@ -10,6 +10,7 @@ import java.util.Map;
  * Created by dedov_d on 07.05.2015.
  */
 public class Equipment implements Serializable {
+    public static final long serialVersionUID = -2326044250617708954L;
     private Map<String, Item> slots;
 
     public static void setSlotNames(Map<String, String> slotNames) {
@@ -69,9 +70,13 @@ public class Equipment implements Serializable {
     }
 
     public static void clearSlots() {
-        slotNames.put("голова", "data/head.png");
-        slotNames.put("торс", "data/torso.png");
-        slotNames.put("ноги", "data/legs.png");
-        slotNames.put("рука", "data/hand.png");
+        slotNames.put("голова", "data\\head.png");
+        slotNames.put("торс", "data\\torso.png");
+        slotNames.put("ноги", "data\\legs.png");
+        slotNames.put("рука", "data\\hand.png");
+    }
+
+    public void setItemAtSlot(String slot, Item item) {
+        slots.put(slot, item);
     }
 }

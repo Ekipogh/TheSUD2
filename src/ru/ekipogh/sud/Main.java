@@ -2,7 +2,7 @@ package ru.ekipogh.sud;
 
 import javax.swing.*;
 
-class Main {
+public class Main {
     public static LauncherFrame launcher;
     public static EditorFrame editor;
 

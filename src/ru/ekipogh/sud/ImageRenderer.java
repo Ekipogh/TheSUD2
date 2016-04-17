@@ -7,7 +7,7 @@ import java.awt.*;
 /**
  * Created by dedov_d on 12.05.2015.
  */
-class ImageRenderer extends DefaultTableCellRenderer {
+public class ImageRenderer extends DefaultTableCellRenderer {
     private JLabel lbl = new JLabel();
 
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,

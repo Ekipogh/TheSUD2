@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class ReplaceDialog extends JDialog {
+class ReplaceDialog extends JDialog {
     private boolean caseSensitive;
     private JPanel contentPane;
     private JButton findButton;
@@ -83,7 +83,6 @@ public class ReplaceDialog extends JDialog {
     }
 
     private void onCancel() {
-// add your code here if necessary
         dispose();
     }
 

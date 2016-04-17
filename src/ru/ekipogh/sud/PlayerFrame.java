@@ -9,10 +9,8 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.event.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.FileNotFoundException;
+import java.util.*;
 
 /**
  * Created by dedov_d on 27.04.2015.
@@ -55,8 +53,13 @@ public class PlayerFrame extends JFrame {
     private final String ONLEAVE = "_onLeave";
     private final String ONPLAYERARRIVE = "_onPlayerArrive";
     private final String ONPLAYERLEAVE = "_onPlayerLeave";
+    public String gameFolder;
 
-    private static Location currentLocation;
+    public Location getCurrentLocation() {
+        return currentLocation;
+    }
+
+    private Location currentLocation;
     private List<Item> items;
     private String gamePath;
     private String savePath;
@@ -68,9 +71,6 @@ public class PlayerFrame extends JFrame {
     private PlayerFrame() {
         super("The SUD2");
         setContentPane(rootPanel);
-        pack();
-        setLocationRelativeTo(null);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         commandsList = new ArrayList<>();
 
@@ -84,12 +84,90 @@ public class PlayerFrame extends JFrame {
 
         popupMenu = new JPopupMenu();
 
+        /*Action northAction = new AbstractAction("Север") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                move(NORTH);
+            }
+        };
+        Action southAction = new AbstractAction("Юг") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                move(SOUTH);
+            }
+        };
+        Action westAction = new AbstractAction("Запад") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                move(WEST);
+            }
+        };
+        Action eastAction = new AbstractAction("Восток") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                move(EAST);
+            }
+        };
+        Action upAction = new AbstractAction("Вверх") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                move(UP);
+            }
+        };
+        Action downAction = new AbstractAction("Вниз") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                move(DOWN);
+            }
+        };
+        *//*northButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD8, 0), "northAction");
+        northButton.getActionMap().put("northAction", northAction);*//*
+        northAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD8, 0));
+        northButton.setAction(northAction);
+        southButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD2, 0), "southAction");
+        southButton.getActionMap().put("southAction", southAction);
+        westButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD4, 0), "westAction");
+        westButton.getActionMap().put("westAction", westAction);
+        eastButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD6, 0), "eastAction");
+        eastButton.getActionMap().put("eastAction", eastAction);
+        upButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD7, 0), "upAction");
+        upButton.getActionMap().put("upAction", upAction);
+        downButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD1, 0), "downAction");
+        downButton.getActionMap().put("downAction", downAction);*/
+
         northButton.addActionListener(e -> move(NORTH));
+        eastButton.addActionListener(e -> move(EAST));
         southButton.addActionListener(e -> move(SOUTH));
         westButton.addActionListener(e -> move(WEST));
-        eastButton.addActionListener(e -> move(EAST));
         upButton.addActionListener(e -> move(UP));
         downButton.addActionListener(e -> move(DOWN));
+
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_NUMPAD8:
+                        move(NORTH);
+                        break;
+                    case KeyEvent.VK_NUMPAD2:
+                        move(SOUTH);
+                        break;
+                    case KeyEvent.VK_NUMPAD4:
+                        move(WEST);
+                        break;
+                    case KeyEvent.VK_NUMPAD6:
+                        move(EAST);
+                        break;
+                    case KeyEvent.VK_NUMPAD7:
+                        move(UP);
+                        break;
+                    case KeyEvent.VK_NUMPAD1:
+                        move(DOWN);
+                        break;
+                }
+            }
+        });
 
         proceedButton.addActionListener(e -> unPause());
 
@@ -102,7 +180,6 @@ public class PlayerFrame extends JFrame {
                 }
             }
         });
-
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Файл");
         JMenuItem newGame = new JMenuItem("Заново");
@@ -175,7 +252,7 @@ public class PlayerFrame extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if (!Main.editor.isVisible())
+                if (Main.editor == null || !Main.editor.isVisible())
                     Main.launcher.setVisible(true);
                 super.windowClosing(e);
             }
@@ -202,6 +279,10 @@ public class PlayerFrame extends JFrame {
                 }
             }
         });
+
+        pack();
+        setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
     }
 
@@ -404,33 +485,34 @@ public class PlayerFrame extends JFrame {
     }
 
     //передвижение игрока
+    @SuppressWarnings("WeakerAccess")
     public void move(int direction) {
         Location playerLocation = null;
-        String scripName = null;
+        String scriptName = null;
         switch (direction) {
             case NORTH:
                 playerLocation = player.getLocation().getNorth(); //Север
-                scripName = "_onPlayerMovesNorth";
+                scriptName = "_onPlayerMovesNorth";
                 break;
             case SOUTH:
                 playerLocation = player.getLocation().getSouth(); //Юг
-                scripName = "_onPlayerMovesSouth";
+                scriptName = "_onPlayerMovesSouth";
                 break;
             case EAST:
                 playerLocation = player.getLocation().getEast(); //Восток
-                scripName = "_onPlayerMovesEast";
+                scriptName = "_onPlayerMovesEast";
                 break;
             case WEST:
                 playerLocation = player.getLocation().getWest(); //Запад
-                scripName = "_onPlayerMovesWest";
+                scriptName = "_onPlayerMovesWest";
                 break;
             case UP:
                 playerLocation = player.getLocation().getUp(); //Вверх
-                scripName = "_onPlayerMovesUp";
+                scriptName = "_onPlayerMovesUp";
                 break;
             case DOWN:
                 playerLocation = player.getLocation().getDown(); //Вниз
-                scripName = "_onPlayerMovesDown";
+                scriptName = "_onPlayerMovesDown";
                 break;
         }
         //Скрипты локаций
@@ -450,9 +532,7 @@ public class PlayerFrame extends JFrame {
 
         //common scripts
         Script.run(commonScripts.get("_onPlayerMoves").getText(), playerLocation);
-        Script.run(commonScripts.get(scripName).getText(), playerLocation);
-
-        updateCharacters();
+        Script.run(commonScripts.get(scriptName).getText(), playerLocation);
 
         characters.stream().filter(c -> currentLocation.equals(c.getLocation())).forEach(c -> {
             for (CharacterCategory characterCategory : c.getCategories()) {
@@ -467,6 +547,42 @@ public class PlayerFrame extends JFrame {
 
         proceed(); //продолжить, выполнить сценарии и игровую логику
 
+    }
+
+    public void moveTo(int locationId, boolean runScripts) {
+        Location location = null;
+        for (Location loc : locations) {
+            if (loc.getId() == locationId) {
+                location = loc;
+            }
+        }
+        if (runScripts) {
+            Script.run(currentLocation.getScript(ONLEAVE).getText(), currentLocation);
+            for (LocationCategory category : currentLocation.getCategories())
+                Script.run(category.getScript(ONLEAVE).getText(), currentLocation);
+            characters.stream().filter(c -> currentLocation.equals(c.getLocation())).forEach(c -> {
+                for (CharacterCategory characterCategory : c.getCategories()) {
+                    Script.run(characterCategory.getScript(ONPLAYERLEAVE).getText(), c);
+                }
+                Script.run(c.getScript(ONPLAYERLEAVE).getText(), c);
+            });
+            Script.run(commonScripts.get("_onPlayerMoves").getText(), location);
+        }
+        currentLocation = location != null ? location : currentLocation;
+        player.setLocation(currentLocation);
+        if (runScripts) {
+            characters.stream().filter(c -> currentLocation.equals(c.getLocation())).forEach(c -> {
+                for (CharacterCategory characterCategory : c.getCategories()) {
+                    Script.run(characterCategory.getScript(ONPLAYERARRIVE).getText(), c);
+                }
+                Script.run(c.getScript(ONPLAYERARRIVE).getText(), c);
+            });
+
+            Script.run(currentLocation.getScript(ONENTER).getText(), currentLocation);
+            for (LocationCategory category : currentLocation.getCategories())
+                Script.run(category.getScript(ONENTER).getText(), currentLocation);
+        }
+        proceed();
     }
 
     public PlayerFrame(String pathToGame) {
@@ -496,6 +612,7 @@ public class PlayerFrame extends JFrame {
         Map<String, String> slotNames = gameFile.getSlotNames();
         Equipment.setSlotNames(slotNames);
         gamePath = gameFile.getPath();
+        gameFolder = new File(gamePath).getParentFile().getAbsolutePath();
         initJS(gameFile.getInitScript());
         output.println("<b>" + gameFile.getGameName() + "</b>");
         output.println(gameFile.getGameStartMessage());
@@ -514,9 +631,31 @@ public class PlayerFrame extends JFrame {
         Script.setProperty("characters", characters);
         Script.setProperty("currentLocation", currentLocation);
         Script.setProperty("game", this);
-        Script.setProperty("gameDir", new File(gamePath).getParent());
+        Script.setProperty("gameDir", gameFolder);
         Script.initFunctions();
         Script.run(initScript, null);
+        String scriptFolderPath = gameFolder + "\\scripts";
+        File scriptFolder = new File(scriptFolderPath);
+        if (scriptFolder.exists() && scriptFolder.isDirectory()) {
+            File[] files = scriptFolder.listFiles();
+            if (files != null) {
+                for (File script : files) {
+                    int dot = script.getName().lastIndexOf(".");
+                    String ext = script.getName().substring(dot + 1);
+                    String fileName = script.getName();
+                    System.out.println("Script loaded: " + fileName);
+                    if (ext.equals("js")) {
+                        try {
+                            String scriptText = new Scanner(script).useDelimiter("\\Z").next();
+                            Script.addScriptFile(fileName, scriptText);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     @SuppressWarnings("unused")
@@ -527,16 +666,11 @@ public class PlayerFrame extends JFrame {
     }
 
     //выполнение сценариев и игровой логики
+    @SuppressWarnings("WeakerAccess")
     public void proceed() {
         output.println("<b>" + currentLocation.getName() + "</b>");
         if (!currentLocation.getDescription().isEmpty())
             output.println(parseDescription(currentLocation.getDescription()));
-
-        //изменяем рисунок локации
-        if (currentLocation.getPicturePath() == null || currentLocation.getPicturePath().isEmpty())
-            locationPic.setText(currentLocation.getName());
-        else
-            locationPic.setIcon(new ImageIcon(currentLocation.getPicturePath()));
 
         //Заполняем список предметов в локации
         updateItems();
@@ -557,27 +691,35 @@ public class PlayerFrame extends JFrame {
         Location down = currentLocation.getDown();
         if (north != null && currentLocation.isNorthOpened()) {
             exits += "c ";
+            northButton.setToolTipText(north.getName());
         }
         if (south != null && currentLocation.isSouthOpened()) {
             exits += "ю ";
+            southButton.setToolTipText(south.getName());
         }
         if (east != null && currentLocation.isEastOpened()) {
             exits += "в ";
+            eastButton.setToolTipText(east.getName());
         }
         if (west != null && currentLocation.isWestOpened()) {
             exits += "з ";
+            westButton.setToolTipText(west.getName());
         }
         if (up != null && currentLocation.isUpOpened()) {
             exits += "вв ";
+            upButton.setToolTipText(up.getName());
         }
         if (down != null && currentLocation.isDownOpened()) {
             exits += "вн ";
+            downButton.setToolTipText(down.getName());
         }
         exits += "</b></font>";
         output.println(exits);
+        //тултипы к кнопкам
     }
 
     //обновляем дерево персонажей
+    @SuppressWarnings("WeakerAccess")
     public void updateCharacters() {
         ((DefaultMutableTreeNode) charactersTreeModel.getRoot()).removeAllChildren();
         charactersTreeModel.reload();
@@ -596,13 +738,14 @@ public class PlayerFrame extends JFrame {
         expandAllNodes(charactersTree);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void updatePlayer() {
         playerName.setText(player.getName());
         playerDescriptionArea.setText(parseDescription(player.getDescription()));
     }
 
     //заполняем дерево предметов
-    public void fillItemsTree(DefaultMutableTreeNode node, Inventory inventory) {
+    private void fillItemsTree(DefaultMutableTreeNode node, Inventory inventory) {
         for (int i = 0; i < inventory.size(); i++) {
             Item item = inventory.get(i); //предмет для добавления
             String itemName = item.getName(); //название предмета
@@ -760,6 +903,7 @@ public class PlayerFrame extends JFrame {
         JOptionPane.showMessageDialog(this, text);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public String prompt(String title, String def) {
         return JOptionPane.showInputDialog(this, title, def);
     }

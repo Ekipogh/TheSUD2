@@ -11,6 +11,7 @@ import java.util.stream.Stream;
  * Created by dedov_d on 22.12.2015.
  */
 public class Inventory implements Iterable, Serializable {
+    public static final long serialVersionUID = 1886721393547784543L;
     private List<SudPair<Item, Integer>> items;
 
     public Inventory() {
@@ -114,5 +115,14 @@ public class Inventory implements Iterable, Serializable {
             }
         }
         return null;
+    }
+
+    public boolean hasItem(Item item) {
+        for (SudPair pair : items) {
+            if (pair.getKey().equals(item)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

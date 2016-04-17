@@ -116,7 +116,7 @@ class InventoryFrame extends JFrame {
         }
     }
 
-    public void fillItemsTree(DefaultMutableTreeNode node, Inventory inventory) {
+    private void fillItemsTree(DefaultMutableTreeNode node, Inventory inventory) {
         for (int i = 0; i < inventory.size(); i++) {
             Item item = inventory.get(i); //предмет для добавления
             String itemName = item.getName(); //название предмета
@@ -222,13 +222,15 @@ class InventoryFrame extends JFrame {
             Script.run(category.getScript(ONUNEQUIP).getText(), item);
         Script.run(playerFrame.getCommonScripts().get("_onPlayerUnequipsItem").getText(), item);
         updateItemsTree();
+        playerFrame.updatePlayer();
     }
 
     private void updateEquipmentTable() {  //Заполнение таблицы экипировки
         equipmentTableModel.setRowCount(0);
         for (String s : Equipment.getSlotNames()) {
             Item item = player.getEquipedItem(s);
-            equipmentTableModel.addRow(new Object[]{new ImageIcon(Equipment.getImage(s)), item != null ? item : "Пусто"});
+            String imagePath = playerFrame.gameFolder + "\\" + Equipment.getImage(s);
+            equipmentTableModel.addRow(new Object[]{new ImageIcon(imagePath), item != null ? item : "Пусто"});
         }
 
         Utils.updateRowHeights(equipmentTable); //обновление высоты ячеек
@@ -264,6 +266,7 @@ class InventoryFrame extends JFrame {
             Script.run(playerFrame.getCommonScripts().get("_onPlayerEquipsItem").getText(), item);
             updateItemsTree();
             updateEquipmentTable();
+            playerFrame.updatePlayer();
         }
     }
 }

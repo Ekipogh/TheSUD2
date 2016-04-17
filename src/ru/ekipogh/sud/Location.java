@@ -10,6 +10,7 @@ import java.util.Map;
  * Created by dedov_d on 23.04.2015.
  */
 public class Location implements Serializable {
+    private static final long serialVersionUID = 7769140675276936514L;
     private String name; //required location Name
     private int id;  //required location ID
     private String description;  //optional location Description
@@ -17,8 +18,6 @@ public class Location implements Serializable {
     private boolean[] exitsOpened; //is direction available
     //private List<Item> inventory; //stores items
     private Inventory inventory;
-    @Deprecated
-    private String picturePath; //picture of location
     private static List<LocationCategory> locationCategories = new ArrayList<>(); //categories of locations
     private Map<String, Object> values; //values and names of custom variables
     private Map<String, Script> scripts; //
@@ -30,14 +29,6 @@ public class Location implements Serializable {
 
     public static void setLocationCategories(List<LocationCategory> categories) {
         Location.locationCategories = categories;
-    }
-
-    public String getPicturePath() {
-        return picturePath;
-    }
-
-    public void setPicturePath(String picturePath) {
-        this.picturePath = picturePath;
     }
 
     public Inventory getInventory() {
@@ -59,7 +50,6 @@ public class Location implements Serializable {
         this.scripts = new HashMap<>();
         this.scripts.put("_onEnter", new Script("", true));
         this.scripts.put("_onLeave", new Script("", true));
-        this.scripts.put("_onStash", new Script("", true));
         this.categories = new ArrayList<>();
     }
 
