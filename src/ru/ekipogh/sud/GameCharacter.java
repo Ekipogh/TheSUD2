@@ -167,4 +167,19 @@ public class GameCharacter implements Serializable {
     public void setEquipedItem(String slot, Item item) {
         equipment.setItemAtSlot(slot, item);
     }
+
+    public void setScriptEnabled(String scriptName, boolean enabled) {
+        Script script;
+        if ((script = getScript(scriptName)) != null) {
+            script.setEnabled(enabled);
+            return;
+        } else {
+            for (CharacterCategory characterCategory : categories) {
+                if ((script = characterCategory.getScript(scriptName)) != null) {
+                    script.setEnabled(enabled);
+                    return;
+                }
+            }
+        }
+    }
 }
