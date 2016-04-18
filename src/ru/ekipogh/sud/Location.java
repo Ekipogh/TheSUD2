@@ -257,4 +257,19 @@ public class Location implements Serializable {
     public void setCategories(List<LocationCategory> categories) {
         this.categories = categories;
     }
+
+    public void setScriptEnabled(String scriptName, boolean enabled) {
+        Script script;
+        if ((script = getScript(scriptName)) != null) {
+            script.setEnabled(enabled);
+            return;
+        } else {
+            for (LocationCategory locationCategory : categories) {
+                if ((script = locationCategory.getScript(scriptName)) != null) {
+                    script.setEnabled(enabled);
+                    return;
+                }
+            }
+        }
+    }
 }

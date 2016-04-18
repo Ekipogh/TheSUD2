@@ -1,8 +1,10 @@
 package ru.ekipogh.sud;
 
-import java.io.Closeable;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Дмитрий on 04.05.2015.
@@ -197,5 +199,20 @@ public class Item implements Serializable, Comparable, Cloneable {
         ((Item) toReturn).id = Sequencer.getNewID();
         ((Item) toReturn).inventory = new Inventory();
         return toReturn;
+    }
+
+    public void setScriptEnabled(String scriptName, boolean enabled) {
+        Script script;
+        if ((script = getScript(scriptName)) != null) {
+            script.setEnabled(enabled);
+            return;
+        } else {
+            for (ItemCategory itemCategory : categories) {
+                if ((script = itemCategory.getScript(scriptName)) != null) {
+                    script.setEnabled(enabled);
+                    return;
+                }
+            }
+        }
     }
 }
