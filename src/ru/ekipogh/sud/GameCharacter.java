@@ -181,5 +181,15 @@ public class GameCharacter implements Serializable {
                 }
             }
         }
+        System.out.println("Не нашел такого " + scriptName);
+    }
+
+    public CharacterCategory getCategory(String categoryName) {
+        for (CharacterCategory characterCategory : categories) {
+            if (characterCategory.getName().equals(categoryName)) {
+                return characterCategory;
+            }
+        }
+        return null;
     }
 }
