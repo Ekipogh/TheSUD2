@@ -7,7 +7,9 @@ import java.util.Map;
 /**
  * Created by dedov_d on 03.08.2015.
  */
-public class CharacterCategory implements Serializable {
+public class CharacterCategory implements Serializable, Cloneable {
+
+    public static final long serialVersionUID = -6814041336950848981L;
     private String name;
     private Map<String, Script> scripts;
 
@@ -45,5 +47,14 @@ public class CharacterCategory implements Serializable {
 
     public void removeScript(String scriptName) {
         this.scripts.remove(scriptName);
+    }
+
+    public Object clone() throws CloneNotSupportedException { //aint an option (
+        Object toReturn = super.clone();
+//       ((CharacterCategory) toReturn).scripts = new HashMap<>();
+        for (Map.Entry<String, Script> entry : scripts.entrySet()) {
+            ((CharacterCategory) toReturn).setScript(entry.getKey(), new Script(entry.getValue().getText(), entry.getValue().isEnabled()));
+        }
+        return toReturn;
     }
 }

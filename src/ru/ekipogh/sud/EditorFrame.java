@@ -1275,8 +1275,14 @@ public class EditorFrame extends JFrame {
             GameCharacter character = charactersListModel.getElementAt(indexCh);
             CharacterCategory category = charactersCategoriesListModel.getElementAt(indexCC);
             if (!character.getCategories().contains(category)) {
-                character.addCategory(category);
-                characterCategoryListModel.addElement(category);
+                CharacterCategory toAdd = null;
+                try {
+                    toAdd = (CharacterCategory) category.clone();
+                    character.addCategory(toAdd);
+                    characterCategoryListModel.addElement(toAdd);
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -1329,7 +1335,6 @@ public class EditorFrame extends JFrame {
                 this.gamePath += ".sud";
             }
             this.gameFolder = new File(this.gamePath).getParentFile().getAbsolutePath();
-            ;
         } else {
             return;
         }
@@ -1954,6 +1959,7 @@ public class EditorFrame extends JFrame {
         characterLocationCombo.setEnabled(enabled);
         charSaveButton.setEnabled(enabled);
         addCharacterButton.setEnabled(enabled);
+        deleteCharButton.setEnabled(enabled);
         charDescriptionArea.setEnabled(enabled);
     }
 

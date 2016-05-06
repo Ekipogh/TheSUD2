@@ -23,6 +23,7 @@ public class Item implements Serializable, Comparable, Cloneable {
     private boolean locked;
     private Inventory inventory;
     private boolean isContainer;
+    private int baseId;
 
     public boolean isLocked() {
         return locked;
@@ -182,7 +183,7 @@ public class Item implements Serializable, Comparable, Cloneable {
     @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
-        return obj.getClass() == Item.class && this.id == ((Item) obj).id;
+        return obj.getClass() == Item.class && this.id == ((Item) obj).id || this.baseId == ((Item) obj).id;
     }
 
     public void removeItem(Item item, int count) {
@@ -196,6 +197,7 @@ public class Item implements Serializable, Comparable, Cloneable {
     @Override //used to instantiate new containers
     protected Object clone() throws CloneNotSupportedException {
         Object toReturn = super.clone();
+        ((Item) toReturn).baseId = id;
         ((Item) toReturn).id = Sequencer.getNewID();
         ((Item) toReturn).inventory = new Inventory();
         return toReturn;
