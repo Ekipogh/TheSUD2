@@ -4,28 +4,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by dedov_d on 03.07.2015.
  */
-public class GameCharacter implements Serializable {
+public class GameCharacter extends GameObject implements Serializable {
     public static final long serialVersionUID = 5151657683640298947L;
-    private String name;
-    private Location location;
-    private Inventory inventory;
     private static List<CharacterCategory> characterCategories = new ArrayList<>();
-    private Map<String, Object> values;
-    private int id;
-
-    private Map<String, Script> scripts;
+    private Location location;
+    private Equipment equipment;
     private List<CharacterCategory> categories;
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    private String description;
 
     public static void setCharacterCategories(List<CharacterCategory> characterCategories) {
         GameCharacter.characterCategories = characterCategories;
@@ -35,7 +24,13 @@ public class GameCharacter implements Serializable {
         return characterCategories;
     }
 
-    private Equipment equipment;
+    public static void addCharacterCategory(CharacterCategory characterCategory) {
+        characterCategories.add(characterCategory);
+    }
+
+    public static void deleteCategory(CharacterCategory characterCategory) {
+        characterCategories.remove(characterCategory);
+    }
 
     public GameCharacter(String name) {
         this.name = name;
@@ -49,29 +44,12 @@ public class GameCharacter implements Serializable {
         this.categories = new ArrayList<>();
     }
 
-    public Inventory getInventory() {
-        return inventory;
-    }
-
     public void setLocation(Location location) {
         this.location = location;
     }
 
     public Location getLocation() {
         return location;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-
-    }
-
-    public void addItem(Item item) {
-        addItem(item, 1);
     }
 
     public boolean equip(Item item) {
@@ -87,18 +65,6 @@ public class GameCharacter implements Serializable {
         equipment.uneqip(item);
     }
 
-    public String toString() {
-        return this.name;
-    }
-
-    public static void addCharacterCategory(CharacterCategory characterCategory) {
-        characterCategories.add(characterCategory);
-    }
-
-    public static void deleteCategory(CharacterCategory characterCategory) {
-        characterCategories.remove(characterCategory);
-    }
-
     public List<CharacterCategory> getCategories() {
         return categories;
     }
@@ -111,26 +77,6 @@ public class GameCharacter implements Serializable {
         characterCategories = new ArrayList<>();
     }
 
-    public void setValue(String valueName, Object value) {
-        this.values.put(valueName, value);
-    }
-
-    public Object getValue(String valueName) {
-        return values.get(valueName);
-    }
-
-    public Map getValues() {
-        return values;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
     public void setCategories(List<CharacterCategory> categories) {
         this.categories = categories;
     }
@@ -138,30 +84,6 @@ public class GameCharacter implements Serializable {
     public void addCategory(CharacterCategory category) {
         if (!categories.contains(category))
             categories.add(category);
-    }
-
-    public Map<String, Script> getScripts() {
-        return scripts;
-    }
-
-    public Script getScript(String scriptName) {
-        return scripts.get(scriptName);
-    }
-
-    public void setScript(String scriptName, Script script) {
-        scripts.put(scriptName, script);
-    }
-
-    public void removeScript(String scriptName) {
-        this.scripts.remove(scriptName);
-    }
-
-    public void addItem(Item item, int count) {
-        inventory.add(item, count);
-    }
-
-    public void removeItem(Item item, int count) {
-        inventory.remove(item, count);
     }
 
     public void setEquipedItem(String slot, Item item) {
@@ -175,13 +97,32 @@ public class GameCharacter implements Serializable {
             return;
         } else {
             for (CharacterCategory characterCategory : categories) {
-                if ((script = characterCategory.getScript(scriptName)) != null) {
-                    script.setEnabled(enabled);
+                if (characterCategory.getScript(scriptName) != null) {
+                    scriptsEnabled.put(scriptName, enabled);
                     return;
                 }
             }
         }
         System.out.println("Не нашел такого " + scriptName);
+    }
+
+    public boolean isScriptEnabled(String scriptName) {
+        Script script = scripts.get(scriptName);
+        if (script != null) {
+            return script.isEnabled();
+        }
+        for (CharacterCategory characterCategory : categories) {
+            script = characterCategory.getScript(scriptName);
+            if (script != null) {
+                Boolean toReturn = scriptsEnabled.get(scriptName);
+                if (toReturn != null) {
+                    return toReturn;
+                } else {
+                    return script.isEnabled();
+                }
+            }
+        }
+        return false;
     }
 
     public CharacterCategory getCategory(String categoryName) {

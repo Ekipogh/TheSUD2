@@ -228,7 +228,6 @@ public class EditorFrame extends JFrame {
         this.gamePath = gamePath;
         if (!this.gamePath.isEmpty()) {
             this.gameFolder = new File(this.gamePath).getParentFile().getAbsolutePath();
-            ;
         }
 
         setContentPane(rootPanel);
@@ -1026,17 +1025,13 @@ public class EditorFrame extends JFrame {
         if (indexC >= 0) {
             GameCharacter character = charactersListModel.get(indexC);
             characterEquipmentTableModel.setRowCount(0);
-            Equipment.getSlotMap().entrySet().forEach(entry -> {
-                characterEquipmentTableModel.addRow(new Object[]{entry.getKey(), character.getEquipedItem(entry.getKey())});
-            });
+            Equipment.getSlotMap().entrySet().forEach(entry -> characterEquipmentTableModel.addRow(new Object[]{entry.getKey(), character.getEquipedItem(entry.getKey())}));
         }
     }
 
     private void fillPlayerEquipmentTable() {
         playerEquipmentTableModel.setRowCount(0);
-        Equipment.getSlotMap().entrySet().forEach(entry -> {
-            playerEquipmentTableModel.addRow(new Object[]{entry.getKey(), player.getEquipedItem(entry.getKey())});
-        });
+        Equipment.getSlotMap().entrySet().forEach(entry -> playerEquipmentTableModel.addRow(new Object[]{entry.getKey(), player.getEquipedItem(entry.getKey())}));
     }
 
     private void unequipItemFromPlayer(int row) {
@@ -1275,7 +1270,7 @@ public class EditorFrame extends JFrame {
             GameCharacter character = charactersListModel.getElementAt(indexCh);
             CharacterCategory category = charactersCategoriesListModel.getElementAt(indexCC);
             if (!character.getCategories().contains(category)) {
-                CharacterCategory toAdd = null;
+                CharacterCategory toAdd;
                 try {
                     toAdd = (CharacterCategory) category.clone();
                     character.addCategory(toAdd);
@@ -2237,7 +2232,6 @@ public class EditorFrame extends JFrame {
                     this.gamePath += ".sud";
                 }
                 this.gameFolder = new File(this.gamePath).getParentFile().getAbsolutePath();
-                ;
             } else {
                 return;
             }

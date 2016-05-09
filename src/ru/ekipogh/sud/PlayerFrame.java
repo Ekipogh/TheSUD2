@@ -633,7 +633,6 @@ public class PlayerFrame extends JFrame {
         Script.setProperty("game", this);
         Script.setProperty("gameDir", gameFolder);
         Script.initFunctions();
-        Script.run(initScript, null);
         String scriptFolderPath = gameFolder + "\\scripts";
         File scriptFolder = new File(scriptFolderPath);
         if (scriptFolder.exists() && scriptFolder.isDirectory()) {
@@ -655,7 +654,7 @@ public class PlayerFrame extends JFrame {
                 }
             }
         }
-
+        Script.run(initScript, null);
     }
 
     @SuppressWarnings("unused")
@@ -729,7 +728,7 @@ public class PlayerFrame extends JFrame {
             charactersTreeModel.insertNodeInto(characterNode, top, top.getChildCount());
             c.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> charactersTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), c)), characterNode, characterNode.getChildCount()));
             for (CharacterCategory characterCategory : c.getCategories()) {
-                characterCategory.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> charactersTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), c)), characterNode, characterNode.getChildCount()));
+                characterCategory.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && c.isScriptEnabled(entry.getKey())).forEach(entry -> charactersTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), c)), characterNode, characterNode.getChildCount()));
             }
             if (!c.getDescription().isEmpty())
                 charactersTreeModel.insertNodeInto(new SudTreeNode("Описание", l -> showCharDescription(c)), characterNode, characterNode.getChildCount());

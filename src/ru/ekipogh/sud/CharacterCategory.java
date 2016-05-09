@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Created by dedov_d on 03.08.2015.
  */
-public class CharacterCategory implements Serializable, Cloneable {
+public class CharacterCategory extends GameObjectCategory implements Serializable, Cloneable {
 
     public static final long serialVersionUID = -6814041336950848981L;
     private String name;

@@ -4,24 +4,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Дмитрий on 04.05.2015.
  */
-public class Item implements Serializable, Comparable, Cloneable {
+public class Item extends GameObject implements Serializable, Comparable, Cloneable {
     public static final long serialVersionUID = 1L;
-    private int id;
     private ItemTypes type;
-    private String name;
-    private String description;
     private String equipmentSlot;
     private static List<ItemCategory> itemCategories = new ArrayList<>();
     private List<ItemCategory> categories;
-    private Map<String, Object> values;
-    private Map<String, Script> scripts;
     private boolean locked;
-    private Inventory inventory;
     private boolean isContainer;
     private int baseId;
 
@@ -31,10 +24,6 @@ public class Item implements Serializable, Comparable, Cloneable {
 
     public void setLocked(boolean locked) {
         this.locked = locked;
-    }
-
-    public Inventory getInventory() {
-        return inventory;
     }
 
     public boolean isContainer() {
@@ -80,37 +69,12 @@ public class Item implements Serializable, Comparable, Cloneable {
         this.type = type;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
-
     public String getEquipmentSlot() {
         return equipmentSlot;
     }
 
     public void setEquipmentSlot(String equipmentSlot) {
         Equipment.getSlotNames().stream().filter(s -> s.equals(equipmentSlot)).forEach(s -> this.equipmentSlot = equipmentSlot);
-    }
-
-    public int getId() {
-        return id;
     }
 
     public static void addItemCategory(ItemCategory itemCategory) {
@@ -129,39 +93,8 @@ public class Item implements Serializable, Comparable, Cloneable {
         this.categories.remove(category);
     }
 
-    @SuppressWarnings("unused")
-    public void setValue(String valueName, Object value) {
-        this.values.put(valueName, value);
-    }
-
-    @SuppressWarnings("unused")
-    public Object getValue(String valueName) {
-        return values.get(valueName);
-    }
-
-    @SuppressWarnings("unused")
-    public Map getValues() {
-        return values;
-    }
-
     public static void clearItemsCategories() {
         Item.itemCategories = new ArrayList<>();
-    }
-
-    public Map<String, Script> getScripts() {
-        return scripts;
-    }
-
-    public Script getScript(String scriptName) {
-        return scripts.get(scriptName);
-    }
-
-    public void setScript(String scriptName, Script script) {
-        scripts.put(scriptName, script);
-    }
-
-    public void removeScript(String scriptName) {
-        this.scripts.remove(scriptName);
     }
 
     public void addCategory(ItemCategory category) {
@@ -169,11 +102,6 @@ public class Item implements Serializable, Comparable, Cloneable {
             categories.add(category);
         }
     }
-
-    public void addItem(Item item) {
-        addItem(item, 1);
-    }
-
     @Override
     public int compareTo(Object i) {
         if (this.id == ((Item) i).getId()) return 0;
@@ -185,15 +113,6 @@ public class Item implements Serializable, Comparable, Cloneable {
         if (obj == null) return false;
         return obj.getClass() == Item.class && this.id == ((Item) obj).id || this.baseId == ((Item) obj).id;
     }
-
-    public void removeItem(Item item, int count) {
-        inventory.remove(item, count);
-    }
-
-    public void addItem(Item item, int amount) {
-        inventory.add(item, amount);
-    }
-
     @Override //used to instantiate new containers
     protected Object clone() throws CloneNotSupportedException {
         Object toReturn = super.clone();

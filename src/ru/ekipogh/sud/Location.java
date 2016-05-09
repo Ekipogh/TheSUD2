@@ -4,23 +4,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by dedov_d on 23.04.2015.
  */
-public class Location implements Serializable {
+public class Location extends GameObject implements Serializable {
     private static final long serialVersionUID = 7769140675276936514L;
-    private String name; //required location Name
-    private int id;  //required location ID
-    private String description;  //optional location Description
     private Location[] exits;  //items can be null 0 = north 1 = south 2 = east 3 = west 4 = up 5 = down
     private boolean[] exitsOpened; //is direction available
     //private List<Item> inventory; //stores items
-    private Inventory inventory;
     private static List<LocationCategory> locationCategories = new ArrayList<>(); //categories of locations
-    private Map<String, Object> values; //values and names of custom variables
-    private Map<String, Script> scripts; //
     private List<LocationCategory> categories;
 
     public static List<LocationCategory> getLocationCategories() {
@@ -29,14 +22,6 @@ public class Location implements Serializable {
 
     public static void setLocationCategories(List<LocationCategory> categories) {
         Location.locationCategories = categories;
-    }
-
-    public Inventory getInventory() {
-        return inventory;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public Location(String name) {
@@ -53,33 +38,6 @@ public class Location implements Serializable {
         this.categories = new ArrayList<>();
     }
 
-    public void setValue(String valueName, Object value) {
-        this.values.put(valueName, value);
-    }
-
-    public Object getValue(String valueName) {
-        return values.get(valueName);
-    }
-
-    public Map getValues() {
-        return values;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public void setNorth(Location north) {
         exits[0] = north;
@@ -188,25 +146,6 @@ public class Location implements Serializable {
         }
     }
 
-    public void addItem(Item item) {
-        addItem(item, 1);
-    }
-
-    public void addItem(Item item, int amount) {
-        this.inventory.add(item, amount);
-    }
-
-    public void removeItem(Item item, int amount) {
-        this.inventory.remove(item, amount);
-    }
-
-    public void removeItem(Item item) {
-        removeItem(item, 1);
-    }
-
-    public String toString() {
-        return name;
-    }
 
     public boolean equals(Location location) {
         return location != null && this.id == location.id;
@@ -236,22 +175,6 @@ public class Location implements Serializable {
 
     public static void clearLocationsCategories() {
         locationCategories = new ArrayList<>();
-    }
-
-    public Map<String, Script> getScripts() {
-        return scripts;
-    }
-
-    public Script getScript(String scriptName) {
-        return scripts.get(scriptName);
-    }
-
-    public void setScript(String scriptName, Script script) {
-        scripts.put(scriptName, script);
-    }
-
-    public void removeScript(String scriptName) {
-        this.scripts.remove(scriptName);
     }
 
     public void setCategories(List<LocationCategory> categories) {
