@@ -12,7 +12,8 @@ import java.util.Map;
 import java.util.Scanner;
 
 /**
- * Created by dedov_d on 22.05.2015.
+ * Created by ekipogh on 22.05.2015.
+ licensed under WTFPL
  */
 public class Script implements Serializable {
     private static Context context;

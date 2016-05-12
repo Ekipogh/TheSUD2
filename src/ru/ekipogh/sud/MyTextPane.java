@@ -1,10 +1,13 @@
 package ru.ekipogh.sud;
 
+import ru.ekipogh.sud.frames.PlayerFrame;
+
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 
 /**
- * Created by dedov_d on 07.05.2015.
+ * Created by ekipogh on 07.05.2015.
+ licensed under WTFPL
  */
 public class MyTextPane extends JTextPane {
     private boolean enabled = true;

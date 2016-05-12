@@ -1,7 +1,8 @@
 package ru.ekipogh.sud;
 
 /**
- * Created by dedov_d on 27.05.2015.
+ * Created by ekipogh on 27.05.2015.
+ licensed under WTFPL
  */
 public class Sequencer {
     private static int id = 0;

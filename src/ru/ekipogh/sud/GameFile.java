@@ -1,12 +1,15 @@
 package ru.ekipogh.sud;
 
+import ru.ekipogh.sud.objects.*;
+
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Created by dedov_d on 27.04.2015.
+ * Created by ekipogh on 27.04.2015.
+ licensed under WTFPL
  */
 public class GameFile implements Serializable {
     private GameCharacter player;

@@ -1,5 +1,8 @@
 package ru.ekipogh.sud;
 
+import ru.ekipogh.sud.frames.EditorFrame;
+import ru.ekipogh.sud.frames.LauncherFrame;
+
 import javax.swing.*;
 
 public class Main {

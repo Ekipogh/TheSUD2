@@ -5,7 +5,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 
 /**
- * Created by dedov_d on 12.05.2015.
+ * Created by ekipogh on 12.05.2015.
+ licensed under WTFPL
  */
 public class ImageRenderer extends DefaultTableCellRenderer {
     private JLabel lbl = new JLabel();

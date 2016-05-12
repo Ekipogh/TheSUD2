@@ -4,7 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created by dedov_d on 12.05.2015.
+ * Created by ekipogh on 12.05.2015.
+ licensed under WTFPL
  */
 public class Utils {
     public static void updateRowHeights(JTable table) {

@@ -3,6 +3,9 @@ package ru.ekipogh.sud;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
+import ru.ekipogh.sud.objects.GameCharacter;
+import ru.ekipogh.sud.objects.Item;
+import ru.ekipogh.sud.objects.Location;
 
 import java.io.*;
 import java.util.HashMap;
@@ -10,7 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by dedov_d on 23.09.2015.
+ * Created by ekipogh on 23.09.2015.
+ licensed under WTFPL
  */
 public class SaveFile implements Serializable { //Version .1
     private List<Location> locations;
