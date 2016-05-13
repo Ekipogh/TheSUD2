@@ -9,6 +9,7 @@ import java.io.Serializable;
  * licensed under WTFPL
  */
 public class ItemCategory extends GameObjectCategory implements Serializable {
+    public static final long serialVersionUID = 1L;
     public ItemCategory(String name) {
         super(name);
         this.scripts.put("_onTake", new Script("", true));

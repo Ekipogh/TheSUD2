@@ -17,7 +17,7 @@ import java.util.*;
 
 /**
  * Created by ekipogh on 27.04.2015.
- licensed under WTFPL
+ * licensed under WTFPL
  */
 public class PlayerFrame extends JFrame {
     private static final int UP = 4;
@@ -250,7 +250,7 @@ public class PlayerFrame extends JFrame {
 
     //метод меню Сохранить как
     private void saveSaveAs() {
-        JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
+        JFileChooser fc = new JFileChooser(System.getProperty("user.dir") + "/saves");
         FileFilter ff = new FileNameExtensionFilter("TheSUD game save", "sudsav");
         fc.setFileFilter(ff);
         int response = fc.showSaveDialog(this);

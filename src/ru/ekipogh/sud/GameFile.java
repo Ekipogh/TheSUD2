@@ -12,6 +12,7 @@ import java.util.Map;
  licensed under WTFPL
  */
 public class GameFile implements Serializable {
+    public static final long serialVersionUID = 1L;
     private GameCharacter player;
     private List<Location> locations;
     private String gameName;

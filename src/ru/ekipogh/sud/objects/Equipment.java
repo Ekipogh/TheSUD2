@@ -11,7 +11,7 @@ import java.util.Map;
  licensed under WTFPL
  */
 public class Equipment implements Serializable {
-    public static final long serialVersionUID = -2326044250617708954L;
+    public static final long serialVersionUID = 1L;
     private Map<String, Item> slots;
 
     public static void setSlotNames(Map<String, String> slotNames) {

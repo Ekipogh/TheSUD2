@@ -9,6 +9,7 @@ import java.io.Serializable;
  * licensed under WTFPL
  */
 public class LocationCategory extends GameObjectCategory implements Serializable {
+    public static final long serialVersionUID = 1L;
     public LocationCategory(String name) {
         super(name);
         this.scripts.put("_onEnter", new Script("", true));

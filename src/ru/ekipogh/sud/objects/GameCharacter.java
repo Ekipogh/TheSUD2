@@ -11,7 +11,7 @@ import java.util.List;
  * licensed under WTFPL
  */
 public class GameCharacter extends GameObject implements Serializable {
-    public static final long serialVersionUID = 5151657683640298947L;
+    public static final long serialVersionUID = 1L;
     private static List<CharacterCategory> characterCategories = new ArrayList<>();
     private Location location;
     private Equipment equipment;
