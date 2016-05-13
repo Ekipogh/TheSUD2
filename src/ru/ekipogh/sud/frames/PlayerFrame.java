@@ -26,7 +26,6 @@ public class PlayerFrame extends JFrame {
     private static final int SOUTH = 1;
     private static final int EAST = 2;
     private static final int WEST = 3;
-
     private static GameCharacter player;
     private static List<Location> locations;
     private static List<GameCharacter> characters;
@@ -58,11 +57,6 @@ public class PlayerFrame extends JFrame {
     private static final String ONPLAYERARRIVE = "_onPlayerArrive";
     private static final String ONPLAYERLEAVE = "_onPlayerLeave";
     public String gameFolder;
-
-    public Location getCurrentLocation() {
-        return currentLocation;
-    }
-
     private Location currentLocation;
     private List<Item> items;
     private String gamePath;
@@ -87,57 +81,6 @@ public class PlayerFrame extends JFrame {
         itemsTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
         popupMenu = new JPopupMenu();
-
-        /*Action northAction = new AbstractAction("Север") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                move(NORTH);
-            }
-        };
-        Action southAction = new AbstractAction("Юг") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                move(SOUTH);
-            }
-        };
-        Action westAction = new AbstractAction("Запад") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                move(WEST);
-            }
-        };
-        Action eastAction = new AbstractAction("Восток") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                move(EAST);
-            }
-        };
-        Action upAction = new AbstractAction("Вверх") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                move(UP);
-            }
-        };
-        Action downAction = new AbstractAction("Вниз") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                move(DOWN);
-            }
-        };
-        *//*northButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD8, 0), "northAction");
-        northButton.getActionMap().put("northAction", northAction);*//*
-        northAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD8, 0));
-        northButton.setAction(northAction);
-        southButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD2, 0), "southAction");
-        southButton.getActionMap().put("southAction", southAction);
-        westButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD4, 0), "westAction");
-        westButton.getActionMap().put("westAction", westAction);
-        eastButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD6, 0), "eastAction");
-        eastButton.getActionMap().put("eastAction", eastAction);
-        upButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD7, 0), "upAction");
-        upButton.getActionMap().put("upAction", upAction);
-        downButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD1, 0), "downAction");
-        downButton.getActionMap().put("downAction", downAction);*/
 
         northButton.addActionListener(e -> move(NORTH));
         eastButton.addActionListener(e -> move(EAST));
@@ -288,6 +231,10 @@ public class PlayerFrame extends JFrame {
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
+    }
+
+    public Location getCurrentLocation() {
+        return currentLocation;
     }
 
     //снимаем игру с паузы
@@ -865,7 +812,6 @@ public class PlayerFrame extends JFrame {
         description = description.replace("\n", "");
         description = (String) Script.run("parser(\"" + description + "\");", null);
         return !"undefined".equals(description) ? description : "";
-        //Script.run("parser(\"" + description + "\");", null);
     }
 
     //Дизаблим кнопки передвижения соответствующие null выходам и выходам, у которых заблокирован доступ

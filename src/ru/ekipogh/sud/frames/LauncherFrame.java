@@ -29,10 +29,10 @@ public class LauncherFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         editorButton.addActionListener(e -> startEditor());
-
-        setVisible(true);
         openFileButton.addActionListener(e -> chooseGameFile());
         playerButton.addActionListener(e -> startGame());
+
+        setVisible(true);
     }
 
     private void startEditor() {

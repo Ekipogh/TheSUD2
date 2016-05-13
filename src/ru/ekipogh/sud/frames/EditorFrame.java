@@ -24,7 +24,7 @@ import java.util.Map;
 
 /**
  * Created by ekipogh on 23.04.2015.
- licensed under WTFPL
+ * licensed under WTFPL
  */
 public class EditorFrame extends JFrame {
     private static final int LOCATION = 0;
@@ -40,7 +40,7 @@ public class EditorFrame extends JFrame {
     private final DefaultComboBoxModel<String> slotNamesModel;
     private final DefaultComboBoxModel<Location> characterLocationModel;
     private final DefaultListModel<GameCharacter> charactersListModel;
-    public final DefaultListModel<Item> itemsListModel;
+    final DefaultListModel<Item> itemsListModel;
     private final DefaultListModel<SudPair<Item, Integer>> locationItemsListModel;
     private final DefaultListModel<SudPair<Item, Integer>> characterItemsListModel;
     private final DefaultListModel<SudPair<Item, Integer>> playerItemsListModel;
@@ -217,7 +217,6 @@ public class EditorFrame extends JFrame {
     private DefaultListModel<GameObjectCategory> characterCategoryListModel;
     private DefaultListModel<GameObjectCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
-
     private GameCharacter player;
     private String gamePath;
     private RSyntaxTextArea selectedRSyntaxArea; //для поиска
@@ -229,9 +228,6 @@ public class EditorFrame extends JFrame {
         player = new GameCharacter("Безымянный");
 
         this.gamePath = gamePath;
-        if (!this.gamePath.isEmpty()) {
-            this.gameFolder = new File(this.gamePath).getParentFile().getAbsolutePath();
-        }
 
         setContentPane(rootPanel);
 
@@ -498,8 +494,6 @@ public class EditorFrame extends JFrame {
 
         setJMenuBar(menuBar);
 
-        //String key = "Save Object";
-
         //листенеры
         //листенеры конопок
         locationContainerButton.addActionListener(e -> showContainerFrame(LOCATION));
@@ -519,7 +513,6 @@ public class EditorFrame extends JFrame {
         addSomeItemsToLocationButton.addActionListener(e -> addSomeItemsToLocation());
 
         deleteSomeItemsFromLocationButton.addActionListener(e -> deleteSomeItemsFromLocation());
-
 
         saveCommonScriptButton.addActionListener(e -> saveCommonScript());
 
@@ -559,6 +552,7 @@ public class EditorFrame extends JFrame {
         addPlayerScriptButton.addActionListener(e -> addPlayerScript());
 
         saveCharacterCategoryScriptButton.addActionListener(e -> saveCharCategoryScript());
+
         saveCharacterCategoryScriptButton.setMnemonic(KeyEvent.VK_ENTER);
 
         deleteCharCategoryScriptButton.addActionListener(e -> deleteCharCategoryScript());
@@ -576,15 +570,6 @@ public class EditorFrame extends JFrame {
 
         saveLocButton.addActionListener(e -> saveSelectedLocation());
         saveLocButton.setMnemonic(KeyEvent.VK_ENTER);
-        /*Action saveLocButtonAction = new AbstractAction("Сохранить локацию") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                saveSelectedLocation();
-            }
-        };
-        saveLocButton.setAction(saveLocButtonAction);
-        saveLocButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.SHIFT_MASK), key);
-        saveLocButton.getActionMap().put(key, saveLocButtonAction);*/
 
         deleteLocButton.addActionListener(e -> deleteSelectedLocation());
 
@@ -843,22 +828,10 @@ public class EditorFrame extends JFrame {
 
         Sequencer.reset();
         if (!this.gamePath.isEmpty()) {
+            this.gameFolder = new File(this.gamePath).getParentFile().getAbsolutePath();
             loadGame();
         } else {
-            JOptionPane.showMessageDialog(this, "Для начала выберите корневую папку игры");
-            JFileChooser fc = new JFileChooser(gameFolder);
-            fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            fc.setAcceptAllFileFilterUsed(false);
-            int option;
-            boolean fileIsValid = false;
-            do {
-                option = fc.showOpenDialog(this); //or save?
-                if (option == JFileChooser.APPROVE_OPTION) {
-                    fileIsValid = fc.getSelectedFile().isDirectory();
-                } else {
-                    System.exit(0);
-                }
-            } while (!fileIsValid);
+            new NewProjectDialog(this);
         }
 
         //Экипировка игрока и персонажей
@@ -1009,6 +982,14 @@ public class EditorFrame extends JFrame {
             Item item = character.getEquipedItem(slotName);
             character.unequip(item);
         }
+    }
+
+    public void setGamePath(String gamePath) {
+        this.gamePath = gamePath;
+    }
+
+    public void setGameFolder(String gameFolder) {
+        this.gameFolder = gameFolder;
     }
 
     private void equipItemToCharacter() {
