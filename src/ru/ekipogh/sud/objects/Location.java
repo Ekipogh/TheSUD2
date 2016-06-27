@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Created by ekipogh on 23.04.2015.
- licensed under WTFPL
+ * licensed under WTFPL
  */
 public class Location extends GameObject implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -35,6 +35,15 @@ public class Location extends GameObject implements Serializable {
 
     public static void clearLocationsCategories() {
         locationCategories = new ArrayList<>();
+    }
+
+    public static LocationCategory getLocationCategory(String categoryName) {
+        for (LocationCategory c : locationCategories) {
+            if (c.getName().equals(categoryName)) {
+                return c;
+            }
+        }
+        return null;
     }
 
     public Location(String name) {

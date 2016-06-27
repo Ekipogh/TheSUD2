@@ -33,6 +33,14 @@ public class GameCharacter extends GameObject implements Serializable {
         characterCategories.remove(characterCategory);
     }
 
+    public static CharacterCategory getCharacterCategory(String categoryMame) {
+        for (CharacterCategory c : characterCategories) {
+            if (c.getName().equals(categoryMame))
+                return c;
+        }
+        return null;
+    }
+
     public static void clearCharactersCategories() {
         characterCategories = new ArrayList<>();
     }
