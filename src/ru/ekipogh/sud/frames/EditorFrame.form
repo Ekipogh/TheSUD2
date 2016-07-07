@@ -1894,7 +1894,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <grid id="d7d9c" layout-manager="GridLayoutManager" row-count="4" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="d7d9c" layout-manager="GridLayoutManager" row-count="3" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <tabbedpane title="Локации"/>
@@ -1904,7 +1904,7 @@
                     <children>
                       <component id="bbb5e" class="javax.swing.JButton" binding="addLocationCategoryButton">
                         <constraints>
-                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <text value="Добавить"/>
@@ -1912,7 +1912,7 @@
                       </component>
                       <component id="cd812" class="javax.swing.JButton" binding="deleteLocationCategoryButton">
                         <constraints>
-                          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="6" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="6" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <text value="Удалить"/>
@@ -1920,7 +1920,7 @@
                       </component>
                       <scrollpane id="adc74">
                         <constraints>
-                          <grid row="0" column="0" row-span="3" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <grid row="0" column="0" row-span="2" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties/>
                         <border type="none"/>
@@ -1934,27 +1934,9 @@
                           </component>
                         </children>
                       </scrollpane>
-                      <scrollpane id="a9ed3">
-                        <constraints>
-                          <grid row="1" column="2" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                            <preferred-size width="150" height="-1"/>
-                          </grid>
-                        </constraints>
-                        <properties/>
-                        <border type="none"/>
-                        <children>
-                          <component id="28c5a" class="javax.swing.JList" binding="locationCategoryScriptsList">
-                            <constraints/>
-                            <properties>
-                              <layoutOrientation value="1"/>
-                              <selectionMode value="0"/>
-                            </properties>
-                          </component>
-                        </children>
-                      </scrollpane>
                       <component id="3f0de" class="javax.swing.JLabel">
                         <constraints>
-                          <grid row="0" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <text value="Название"/>
@@ -1962,7 +1944,7 @@
                       </component>
                       <component id="4ca90" class="javax.swing.JTextField" binding="locationCategoryNameFiled">
                         <constraints>
-                          <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                          <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="-1"/>
                           </grid>
                         </constraints>
@@ -1970,70 +1952,131 @@
                       </component>
                       <component id="39e76" class="javax.swing.JLabel">
                         <constraints>
-                          <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <text value="Нажмите &quot;ENTER&quot;"/>
                         </properties>
                       </component>
-                      <component id="2193b" class="javax.swing.JButton" binding="saveLocationCategoryScriptButton">
+                      <grid id="92651" layout-manager="GridLayoutManager" row-count="2" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
                         <constraints>
-                          <grid row="3" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Сохранить"/>
-                        </properties>
-                      </component>
-                      <component id="a196d" class="javax.swing.JButton" binding="addLocationCategoryScriptButton">
-                        <constraints>
-                          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="+"/>
-                        </properties>
-                      </component>
-                      <component id="d941e" class="javax.swing.JButton" binding="deleteLocationCategoryScriptButton">
-                        <constraints>
-                          <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="-"/>
-                        </properties>
-                      </component>
-                      <component id="2b97a" class="javax.swing.JCheckBox" binding="locationCategoryScriptEnabledBox">
-                        <constraints>
-                          <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <selected value="true"/>
-                          <text value="Доступен"/>
-                        </properties>
-                      </component>
-                      <grid id="6b3a3" binding="locationCategoryScriptPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
-                        <constraints>
-                          <grid row="1" column="4" row-span="2" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <grid row="1" column="2" row-span="2" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties/>
-                        <border type="none"/>
+                        <border type="line" title="Скрипты"/>
                         <children>
-                          <scrollpane id="196b4" class="org.fife.ui.rtextarea.RTextScrollPane" default-binding="true">
-                            <constraints border-constraint="Center"/>
+                          <component id="2193b" class="javax.swing.JButton" binding="saveLocationCategoryScriptButton">
+                            <constraints>
+                              <grid row="1" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
                             <properties>
-                              <verticalScrollBarPolicy value="20"/>
+                              <text value="Сохранить"/>
+                            </properties>
+                          </component>
+                          <component id="2b97a" class="javax.swing.JCheckBox" binding="locationCategoryScriptEnabledBox">
+                            <constraints>
+                              <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <selected value="true"/>
+                              <text value="Доступен"/>
+                            </properties>
+                          </component>
+                          <component id="a196d" class="javax.swing.JButton" binding="addLocationCategoryScriptButton">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="+"/>
+                            </properties>
+                          </component>
+                          <component id="bb709" class="javax.swing.JButton" binding="addLocationCategoriesFolderButton">
+                            <constraints>
+                              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Папка"/>
+                            </properties>
+                          </component>
+                          <splitpane id="b8cc3">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="7" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                                <preferred-size width="200" height="200"/>
+                              </grid>
+                            </constraints>
+                            <properties>
+                              <dividerLocation value="150"/>
+                              <resizeWeight value="0.25"/>
                             </properties>
                             <border type="none"/>
                             <children>
-                              <component id="da4c3" class="org.fife.ui.rsyntaxtextarea.RSyntaxTextArea" binding="locationCategoryScriptText">
-                                <constraints/>
+                              <scrollpane id="a9ed3">
+                                <constraints>
+                                  <splitpane position="left"/>
+                                </constraints>
                                 <properties/>
-                              </component>
+                                <border type="none"/>
+                                <children>
+                                  <component id="28c5a" class="javax.swing.JList" binding="locationCategoryScriptsList">
+                                    <constraints/>
+                                    <properties>
+                                      <layoutOrientation value="0"/>
+                                      <selectionMode value="0"/>
+                                    </properties>
+                                  </component>
+                                </children>
+                              </scrollpane>
+                              <grid id="6b3a3" binding="locationCategoryScriptPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+                                <constraints>
+                                  <splitpane position="right"/>
+                                </constraints>
+                                <properties/>
+                                <border type="none"/>
+                                <children>
+                                  <scrollpane id="196b4" class="org.fife.ui.rtextarea.RTextScrollPane" default-binding="true">
+                                    <constraints border-constraint="Center"/>
+                                    <properties>
+                                      <verticalScrollBarPolicy value="20"/>
+                                    </properties>
+                                    <border type="none"/>
+                                    <children>
+                                      <component id="da4c3" class="org.fife.ui.rsyntaxtextarea.RSyntaxTextArea" binding="locationCategoryScriptText">
+                                        <constraints/>
+                                        <properties/>
+                                      </component>
+                                    </children>
+                                  </scrollpane>
+                                </children>
+                              </grid>
                             </children>
-                          </scrollpane>
+                          </splitpane>
+                          <component id="d941e" class="javax.swing.JButton" binding="deleteLocationCategoryScriptButton">
+                            <constraints>
+                              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="-"/>
+                            </properties>
+                          </component>
+                          <hspacer id="8557a">
+                            <constraints>
+                              <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                          </hspacer>
+                          <component id="a02dd" class="javax.swing.JButton" binding="renameLocationCategoryScriptButton">
+                            <constraints>
+                              <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Переименовать"/>
+                            </properties>
+                          </component>
                         </children>
                       </grid>
                     </children>
                   </grid>
-                  <grid id="82027" layout-manager="GridLayoutManager" row-count="4" column-count="8" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="82027" layout-manager="GridLayoutManager" row-count="3" column-count="8" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <tabbedpane title="Предметы"/>
@@ -2043,7 +2086,7 @@
                     <children>
                       <component id="ee851" class="javax.swing.JButton" binding="addItemCategoryButton">
                         <constraints>
-                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <text value="Добавить"/>
@@ -2051,7 +2094,7 @@
                       </component>
                       <component id="13a89" class="javax.swing.JButton" binding="deleteItemCategoryButton">
                         <constraints>
-                          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="6" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="6" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <text value="Удалить"/>
@@ -2059,30 +2102,12 @@
                       </component>
                       <scrollpane id="dd1e2">
                         <constraints>
-                          <grid row="0" column="0" row-span="3" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <grid row="0" column="0" row-span="2" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties/>
                         <border type="none"/>
                         <children>
                           <component id="2b3e8" class="javax.swing.JList" binding="itemsCategoriesList">
-                            <constraints/>
-                            <properties>
-                              <layoutOrientation value="1"/>
-                              <selectionMode value="0"/>
-                            </properties>
-                          </component>
-                        </children>
-                      </scrollpane>
-                      <scrollpane id="9c907">
-                        <constraints>
-                          <grid row="1" column="2" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                            <preferred-size width="150" height="-1"/>
-                          </grid>
-                        </constraints>
-                        <properties/>
-                        <border type="none"/>
-                        <children>
-                          <component id="f2d82" class="javax.swing.JList" binding="itemCategoryScriptsList">
                             <constraints/>
                             <properties>
                               <layoutOrientation value="1"/>
@@ -2108,14 +2133,6 @@
                         </constraints>
                         <properties/>
                       </component>
-                      <component id="a0e75" class="javax.swing.JButton" binding="saveItemCategoryScriptButton">
-                        <constraints>
-                          <grid row="3" column="6" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Сохранить"/>
-                        </properties>
-                      </component>
                       <component id="2345b" class="javax.swing.JLabel">
                         <constraints>
                           <grid row="0" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -2124,61 +2141,124 @@
                           <text value="Нажмите ENTER"/>
                         </properties>
                       </component>
-                      <component id="e7d4f" class="javax.swing.JButton" binding="addItemCategoryScriptButton">
+                      <grid id="ef143" layout-manager="GridLayoutManager" row-count="2" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
                         <constraints>
-                          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="+"/>
-                        </properties>
-                      </component>
-                      <component id="331b2" class="javax.swing.JButton" binding="deleteItemCategoryScriptButton">
-                        <constraints>
-                          <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="-"/>
-                        </properties>
-                      </component>
-                      <component id="f8f2f" class="javax.swing.JCheckBox" binding="itemCategoryScriptEnabledBox">
-                        <constraints>
-                          <grid row="3" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <selected value="true"/>
-                          <text value="Доступен"/>
-                        </properties>
-                      </component>
-                      <hspacer id="957ae">
-                        <constraints>
-                          <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                      </hspacer>
-                      <grid id="4bafc" binding="itemCategoryScriptPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
-                        <constraints>
-                          <grid row="1" column="4" row-span="2" col-span="4" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <grid row="1" column="2" row-span="2" col-span="6" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties/>
-                        <border type="none"/>
+                        <border type="line" title="Скрипты"/>
                         <children>
-                          <scrollpane id="338c0" class="org.fife.ui.rtextarea.RTextScrollPane" default-binding="true">
-                            <constraints border-constraint="Center"/>
+                          <component id="a0e75" class="javax.swing.JButton" binding="saveItemCategoryScriptButton">
+                            <constraints>
+                              <grid row="1" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
                             <properties>
-                              <verticalScrollBarPolicy value="20"/>
+                              <text value="Сохранить"/>
+                            </properties>
+                          </component>
+                          <component id="f8f2f" class="javax.swing.JCheckBox" binding="itemCategoryScriptEnabledBox">
+                            <constraints>
+                              <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <selected value="true"/>
+                              <text value="Доступен"/>
+                            </properties>
+                          </component>
+                          <hspacer id="957ae">
+                            <constraints>
+                              <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                          </hspacer>
+                          <component id="e7d4f" class="javax.swing.JButton" binding="addItemCategoryScriptButton">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="+"/>
+                            </properties>
+                          </component>
+                          <component id="331b2" class="javax.swing.JButton" binding="deleteItemCategoryScriptButton">
+                            <constraints>
+                              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="-"/>
+                            </properties>
+                          </component>
+                          <splitpane id="9b7e0">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="7" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                                <preferred-size width="200" height="200"/>
+                              </grid>
+                            </constraints>
+                            <properties>
+                              <dividerLocation value="150"/>
                             </properties>
                             <border type="none"/>
                             <children>
-                              <component id="af950" class="org.fife.ui.rsyntaxtextarea.RSyntaxTextArea" binding="itemCategoryScriptText">
-                                <constraints/>
+                              <scrollpane id="9c907">
+                                <constraints>
+                                  <splitpane position="left"/>
+                                </constraints>
                                 <properties/>
-                              </component>
+                                <border type="none"/>
+                                <children>
+                                  <component id="f2d82" class="javax.swing.JList" binding="itemCategoryScriptsList">
+                                    <constraints/>
+                                    <properties>
+                                      <layoutOrientation value="0"/>
+                                      <selectionMode value="0"/>
+                                    </properties>
+                                  </component>
+                                </children>
+                              </scrollpane>
+                              <grid id="4bafc" binding="itemCategoryScriptPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+                                <constraints>
+                                  <splitpane position="right"/>
+                                </constraints>
+                                <properties/>
+                                <border type="none"/>
+                                <children>
+                                  <scrollpane id="338c0" class="org.fife.ui.rtextarea.RTextScrollPane" default-binding="true">
+                                    <constraints border-constraint="Center"/>
+                                    <properties>
+                                      <verticalScrollBarPolicy value="20"/>
+                                    </properties>
+                                    <border type="none"/>
+                                    <children>
+                                      <component id="af950" class="org.fife.ui.rsyntaxtextarea.RSyntaxTextArea" binding="itemCategoryScriptText">
+                                        <constraints/>
+                                        <properties/>
+                                      </component>
+                                    </children>
+                                  </scrollpane>
+                                </children>
+                              </grid>
                             </children>
-                          </scrollpane>
+                          </splitpane>
+                          <component id="34b5e" class="javax.swing.JButton" binding="addItemCategoriesFolderButton">
+                            <constraints>
+                              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Папка"/>
+                            </properties>
+                          </component>
+                          <component id="d9c64" class="javax.swing.JButton" binding="renameItemCategoryScriptButton">
+                            <constraints>
+                              <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Переименовать"/>
+                            </properties>
+                          </component>
                         </children>
                       </grid>
                     </children>
                   </grid>
-                  <grid id="cd4c5" layout-manager="GridLayoutManager" row-count="4" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="cd4c5" layout-manager="GridLayoutManager" row-count="3" column-count="9" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <tabbedpane title="Персонажи"/>
@@ -2188,7 +2268,7 @@
                     <children>
                       <component id="1d7b4" class="javax.swing.JButton" binding="addCharacterCategoryButton">
                         <constraints>
-                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <text value="Добавить"/>
@@ -2196,7 +2276,7 @@
                       </component>
                       <component id="d5307" class="javax.swing.JButton" binding="deleteCharCategoryButton">
                         <constraints>
-                          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="6" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="6" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <text value="Удалить"/>
@@ -2204,7 +2284,7 @@
                       </component>
                       <scrollpane id="44b92">
                         <constraints>
-                          <grid row="0" column="0" row-span="3" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <grid row="0" column="0" row-span="2" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties/>
                         <border type="none"/>
@@ -2218,24 +2298,9 @@
                           </component>
                         </children>
                       </scrollpane>
-                      <scrollpane id="2f7a4">
-                        <constraints>
-                          <grid row="1" column="2" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties/>
-                        <border type="none"/>
-                        <children>
-                          <component id="4aea5" class="javax.swing.JList" binding="charCategoryScriptsList">
-                            <constraints/>
-                            <properties>
-                              <selectionMode value="0"/>
-                            </properties>
-                          </component>
-                        </children>
-                      </scrollpane>
                       <component id="2ac3b" class="javax.swing.JLabel">
                         <constraints>
-                          <grid row="0" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="0" column="2" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <text value="Название"/>
@@ -2243,70 +2308,124 @@
                       </component>
                       <component id="8c95b" class="javax.swing.JTextField" binding="charCategoryNameField">
                         <constraints>
-                          <grid row="0" column="4" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                          <grid row="0" column="6" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="-1"/>
                           </grid>
                         </constraints>
                         <properties/>
                       </component>
-                      <component id="39c5d" class="javax.swing.JButton" binding="saveCharacterCategoryScriptButton">
+                      <grid id="7f335" layout-manager="GridLayoutManager" row-count="2" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
                         <constraints>
-                          <grid row="3" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Сохранить"/>
-                        </properties>
-                      </component>
-                      <component id="9f6bb" class="javax.swing.JButton" binding="addCharacterCategoryScriptButton">
-                        <constraints>
-                          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="+"/>
-                        </properties>
-                      </component>
-                      <component id="213a4" class="javax.swing.JButton" binding="deleteCharCategoryScriptButton">
-                        <constraints>
-                          <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="-"/>
-                        </properties>
-                      </component>
-                      <component id="98f8d" class="javax.swing.JCheckBox" binding="characterCategoryScriptEnabledBox">
-                        <constraints>
-                          <grid row="3" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <selected value="true"/>
-                          <text value="Доступен"/>
-                        </properties>
-                      </component>
-                      <hspacer id="8a68f">
-                        <constraints>
-                          <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                      </hspacer>
-                      <grid id="3715c" binding="characterCategoryScriptPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
-                        <constraints>
-                          <grid row="1" column="4" row-span="2" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <grid row="1" column="2" row-span="2" col-span="7" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties/>
-                        <border type="none"/>
+                        <border type="line" title="Скрипты"/>
                         <children>
-                          <scrollpane id="3ea21" class="org.fife.ui.rtextarea.RTextScrollPane" default-binding="true">
-                            <constraints border-constraint="Center"/>
+                          <component id="39c5d" class="javax.swing.JButton" binding="saveCharacterCategoryScriptButton">
+                            <constraints>
+                              <grid row="1" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
                             <properties>
-                              <verticalScrollBarPolicy value="20"/>
+                              <text value="Сохранить"/>
+                            </properties>
+                          </component>
+                          <component id="98f8d" class="javax.swing.JCheckBox" binding="characterCategoryScriptEnabledBox">
+                            <constraints>
+                              <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <selected value="true"/>
+                              <text value="Доступен"/>
+                            </properties>
+                          </component>
+                          <hspacer id="8a68f">
+                            <constraints>
+                              <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                          </hspacer>
+                          <component id="9f6bb" class="javax.swing.JButton" binding="addCharacterCategoryScriptButton">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="+"/>
+                            </properties>
+                          </component>
+                          <component id="213a4" class="javax.swing.JButton" binding="deleteCharCategoryScriptButton">
+                            <constraints>
+                              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="-"/>
+                            </properties>
+                          </component>
+                          <component id="df388" class="javax.swing.JButton" binding="addCharacterCategoriesFolderButton">
+                            <constraints>
+                              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Папка"/>
+                            </properties>
+                          </component>
+                          <component id="7d444" class="javax.swing.JButton" binding="renameCharacterCategoryScriptButton">
+                            <constraints>
+                              <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Переименовать"/>
+                            </properties>
+                          </component>
+                          <splitpane id="e50a8">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="7" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                                <preferred-size width="200" height="200"/>
+                              </grid>
+                            </constraints>
+                            <properties>
+                              <dividerLocation value="150"/>
                             </properties>
                             <border type="none"/>
                             <children>
-                              <component id="2b7b0" class="org.fife.ui.rsyntaxtextarea.RSyntaxTextArea" binding="charCategoryScriptText">
-                                <constraints/>
+                              <scrollpane id="2f7a4">
+                                <constraints>
+                                  <splitpane position="left"/>
+                                </constraints>
                                 <properties/>
-                              </component>
+                                <border type="none"/>
+                                <children>
+                                  <component id="4aea5" class="javax.swing.JList" binding="charCategoryScriptsList">
+                                    <constraints/>
+                                    <properties>
+                                      <selectionMode value="0"/>
+                                    </properties>
+                                  </component>
+                                </children>
+                              </scrollpane>
+                              <grid id="3715c" binding="characterCategoryScriptPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+                                <constraints>
+                                  <splitpane position="right"/>
+                                </constraints>
+                                <properties/>
+                                <border type="none"/>
+                                <children>
+                                  <scrollpane id="3ea21" class="org.fife.ui.rtextarea.RTextScrollPane" default-binding="true">
+                                    <constraints border-constraint="Center"/>
+                                    <properties>
+                                      <verticalScrollBarPolicy value="20"/>
+                                    </properties>
+                                    <border type="none"/>
+                                    <children>
+                                      <component id="2b7b0" class="org.fife.ui.rsyntaxtextarea.RSyntaxTextArea" binding="charCategoryScriptText">
+                                        <constraints/>
+                                        <properties/>
+                                      </component>
+                                    </children>
+                                  </scrollpane>
+                                </children>
+                              </grid>
                             </children>
-                          </scrollpane>
+                          </splitpane>
                         </children>
                       </grid>
                     </children>

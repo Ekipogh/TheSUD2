@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * Created by ekipogh on 09.05.2016.
- licensed under WTFPL
+ * licensed under WTFPL
  */
 public class GameObjectCategory implements Serializable {
     public static final long serialVersionUID = 1L;
@@ -42,5 +42,11 @@ public class GameObjectCategory implements Serializable {
 
     public void removeScript(String scriptName) {
         this.scripts.remove(scriptName);
+    }
+
+    public void setScriptName(String newScriptName, String oldScriptName) {
+        Script script = scripts.get(oldScriptName);
+        scripts.remove(oldScriptName);
+        scripts.put(newScriptName, script);
     }
 }

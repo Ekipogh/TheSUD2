@@ -214,6 +214,12 @@ public class EditorFrame extends JFrame {
     private JList<Item> playerInventoryList;
     private JList<Item> characterInventoryList;
     private JTable characterEquipmentTable;
+    private JButton addLocationCategoriesFolderButton;
+    private JButton renameLocationCategoryScriptButton;
+    private JButton addItemCategoriesFolderButton;
+    private JButton renameItemCategoryScriptButton;
+    private JButton addCharacterCategoriesFolderButton;
+    private JButton renameCharacterCategoryScriptButton;
     private DefaultListModel<GameObjectCategory> characterCategoryListModel;
     private DefaultListModel<GameObjectCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
@@ -496,6 +502,18 @@ public class EditorFrame extends JFrame {
 
         //листенеры
         //листенеры конопок
+        renameLocationCategoryScriptButton.addActionListener(e -> renameLocationCategoryScript());
+
+        renameItemCategoryScriptButton.addActionListener(e -> renameItemCategoryScript());
+
+        renameCharacterCategoryScriptButton.addActionListener(e -> renameCharacterCategoryScript());
+
+        addLocationCategoriesFolderButton.addActionListener(e -> addCategoriesFolder(1));
+
+        addItemCategoriesFolderButton.addActionListener(e -> addCategoriesFolder(2));
+
+        addCharacterCategoriesFolderButton.addActionListener(e -> addCategoriesFolder(3));
+
         locationContainerButton.addActionListener(e -> showContainerFrame(LOCATION));
 
         characterContainerButton.addActionListener(e -> showContainerFrame(CHARACTER));
@@ -972,6 +990,121 @@ public class EditorFrame extends JFrame {
 
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    }
+
+    private void renameCharacterCategoryScript() {
+        String newName = JOptionPane.showInputDialog(null);
+        if (!newName.isEmpty()) {
+            int indexIC = charactersCategoriesList.getSelectedIndex();
+            int indexS = charCategoryScriptsList.getSelectedIndex();
+            if (indexIC >= 0 && indexS >= 0) {
+                GameObjectCategory category = charactersCategoriesListModel.get(indexIC);
+                String oldScriptName = charCategoryScriptsListModel.get(indexS);
+                category.setScriptName(newName, oldScriptName);
+                charCategoryScriptsListModel.removeElement(oldScriptName);
+                charCategoryScriptsListModel.addElement(newName);
+            }
+        }
+    }
+
+    private void renameItemCategoryScript() {
+        String newName = JOptionPane.showInputDialog(null);
+        if (!newName.isEmpty()) {
+            int indexIC = itemsCategoriesList.getSelectedIndex();
+            int indexS = itemCategoryScriptsList.getSelectedIndex();
+            if (indexIC >= 0 && indexS >= 0) {
+                GameObjectCategory category = itemsCategoriesListModel.get(indexIC);
+                String oldScriptName = itemCategoryScriptsListModel.get(indexS);
+                category.setScriptName(newName, oldScriptName);
+                itemCategoryScriptsListModel.removeElement(oldScriptName);
+                itemCategoryScriptsListModel.addElement(newName);
+            }
+        }
+    }
+
+    private void renameLocationCategoryScript() {
+        String newName = JOptionPane.showInputDialog(null);
+        if (!newName.isEmpty()) {
+            int indexLC = locationsCategoriesList.getSelectedIndex();
+            int indexS = locationCategoryScriptsList.getSelectedIndex();
+            if (indexLC >= 0 && indexS >= 0) {
+                GameObjectCategory category = locationsCategoriesListModel.get(indexLC);
+                String oldScriptName = locationCategoryScriptsListModel.get(indexS);
+                category.setScriptName(newName, oldScriptName);
+                locationCategoryScriptsListModel.removeElement(oldScriptName);
+                locationCategoryScriptsListModel.addElement(newName);
+            }
+        }
+    }
+
+    private void addCategoriesFolder(int objectType) { //TODO: одна функция для фсех категорий
+        File folder = chooseFolder(); //выбираем папку со скриптами
+        if (folder != null) {
+            int indexC = -1;
+            switch (objectType) {
+                case 1:
+                    indexC = locationsCategoriesList.getSelectedIndex();
+                    break;
+                case 2:
+                    indexC = itemsCategoriesList.getSelectedIndex();
+                    break;
+                case 3:
+                    indexC = charactersCategoriesList.getSelectedIndex();
+                    break;
+            }
+            if (indexC >= 0) {
+                GameObjectCategory category = null;
+                switch (objectType) {
+                    case 1:
+                        category = locationsCategoriesListModel.get(indexC);
+                        break;
+                    case 2:
+                        category = itemsCategoriesListModel.get(indexC);
+                        break;
+                    case 3:
+                        category = charactersCategoriesListModel.get(indexC);
+                        break;
+                }
+
+                if (folder.list().length > 0) {
+                    //читаем все файлы в папку и добавляем в выбранную категория скрипты (название файла без разрешения, file: название файла, обрезаное после scripts/)
+                    for (File scriptFile : folder.listFiles()) {
+                        String scriptFileName = scriptFile.getName();
+                        if (scriptFileName.substring(scriptFileName.lastIndexOf(".") + 1).equals("js")) { //проверка то, что это javascript файл
+                            String scriptFileAbsPath = scriptFile.getAbsolutePath();
+                            String scriptName = scriptFileName.substring(0, scriptFileName.lastIndexOf("."));
+                            String scriptRelPath = scriptFileAbsPath.substring(scriptFileAbsPath.lastIndexOf("scripts\\") + 8);
+                            Script script = new Script("file:" + scriptRelPath, true);
+                            category.setScript(scriptName, script);
+                            switch (objectType) {
+                                case 1:
+                                    locationCategoryScriptsListModel.addElement(scriptName);
+                                    break;
+                                case 2:
+                                    itemCategoryScriptsListModel.addElement(scriptName);
+                                    break;
+                                case 3:
+                                    charCategoryScriptsListModel.addElement(scriptName);
+                                    break;
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private File chooseFolder() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(gameFolder + "/scripts"));
+        fileChooser.setDialogTitle("Выберите папку со скриптами");
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            return fileChooser.getSelectedFile();
+        }
+        return null;
     }
 
     private void unequipItemFromCharacter(int row) {
