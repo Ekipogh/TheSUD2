@@ -183,13 +183,9 @@
                             </properties>
                             <border type="none"/>
                             <children>
-                              <component id="3942c" class="javax.swing.JTextArea" binding="playerDescriptionArea">
+                              <component id="60bf0" class="ru.ekipogh.sud.MyTextPane" binding="playerDescriptionPane">
                                 <constraints/>
-                                <properties>
-                                  <editable value="false"/>
-                                  <lineWrap value="true"/>
-                                  <wrapStyleWord value="true"/>
-                                </properties>
+                                <properties/>
                               </component>
                             </children>
                           </scrollpane>

@@ -42,12 +42,12 @@ public class PlayerFrame extends JFrame {
     private JLabel locationNameLabel;
     private JPanel locationPicPanel;
     private JTextField jsInputField;
-    private JTextArea playerDescriptionArea;
     private JTree charactersTree;
     private JTree itemsTree;
     private JButton upButton;
     private JButton downButton;
     private JButton proceedButton;
+    private MyTextPane playerDescriptionPane;
     private JPopupMenu popupMenu;
     private static final String ONTAKE = "_onTake";
     private static final String ONEQUIP = "_onEquip";
@@ -568,7 +568,7 @@ public class PlayerFrame extends JFrame {
         output.println("<b>" + gameFile.getGameName() + "</b>");
         output.println(gameFile.getGameStartMessage());
         playerName.setText(player.getName());
-        playerDescriptionArea.setText(parseDescription(player.getDescription()));
+        playerDescriptionPane.println(parseDescription(player.getDescription()));
     }
 
     //инициализируем JavaScript
@@ -586,26 +586,33 @@ public class PlayerFrame extends JFrame {
         Script.initFunctions();
         String scriptFolderPath = gameFolder + "\\scripts";
         File scriptFolder = new File(scriptFolderPath);
-        if (scriptFolder.exists() && scriptFolder.isDirectory()) {
-            File[] files = scriptFolder.listFiles();
-            if (files != null) {
-                for (File script : files) {
-                    int dot = script.getName().lastIndexOf(".");
-                    String ext = script.getName().substring(dot + 1);
-                    String fileName = script.getName();
-                    System.out.println("Script loaded: " + fileName);
-                    if (ext.equals("js")) {
-                        try {
-                            String scriptText = new Scanner(script).useDelimiter("\\Z").next();
-                            Script.addScriptFile(fileName, scriptText);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
+        //list all files in folder and subfolders, check if file is js and addScriptFile
+        try {
+            addFiles(scriptFolder);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
         Script.run(initScript, null);
+    }
+
+    private void addFiles(File scriptFolder) throws FileNotFoundException {
+        File[] fLiist = scriptFolder.listFiles();
+        for (File f : fLiist) {
+            //елси это js файл добавляем
+            if (f.isFile()) {
+                //проверяем разрешение
+                String extension = f.getName().substring(f.getName().lastIndexOf(".") + 1);
+                if (extension.equals("js")) {
+                    String scriptText = new Scanner(f).useDelimiter("\\Z").next();
+                    String scriptFolderPath = gameFolder + "\\scripts\\";
+                    String fileName = f.getAbsolutePath().replace(scriptFolderPath, "");
+                    System.out.println("Script loaded: " + fileName);
+                    Script.addScriptFile(fileName, scriptText);
+                }
+            } else if (f.isDirectory()) {
+                addFiles(f);
+            }
+        }
     }
 
     @SuppressWarnings("unused")
@@ -692,7 +699,8 @@ public class PlayerFrame extends JFrame {
     @SuppressWarnings("WeakerAccess")
     public void updatePlayer() {
         playerName.setText(player.getName());
-        playerDescriptionArea.setText(parseDescription(player.getDescription()));
+        playerDescriptionPane.clear();
+        playerDescriptionPane.print(parseDescription(player.getDescription()));
     }
 
     //заполняем дерево предметов
