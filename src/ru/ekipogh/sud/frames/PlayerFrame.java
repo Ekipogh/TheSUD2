@@ -595,6 +595,12 @@ public class PlayerFrame extends JFrame {
         Script.run(initScript, null);
     }
 
+    public void makePlayer(GameCharacter character) {
+        characters.add(player);
+        characters.remove(character);
+        player = character;
+    }
+
     private void addFiles(File scriptFolder) throws FileNotFoundException {
         File[] fLiist = scriptFolder.listFiles();
         for (File f : fLiist) {
