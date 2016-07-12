@@ -599,6 +599,7 @@ public class PlayerFrame extends JFrame {
         characters.add(player);
         characters.remove(character);
         player = character;
+        update();
     }
 
     private void addFiles(File scriptFolder) throws FileNotFoundException {

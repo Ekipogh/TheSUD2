@@ -135,6 +135,10 @@ public class GameObject implements Serializable {
         for (GameObjectCategory category : categories) {
             for (Map.Entry<String, Script> entry : category.scripts.entrySet()) {
                 if (entry.getKey().equals(scriptName)) {
+                    Boolean enabled = scriptsEnabled.get(scriptName);
+                    if (enabled == null) {
+                        scriptsEnabled.put(scriptName, category.getScript(scriptName).isEnabled());
+                    }
                     return scriptsEnabled.get(scriptName);
                 }
             }

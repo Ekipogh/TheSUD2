@@ -9,14 +9,17 @@
     </artifacts-to-build>
   </component>
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" description="Test area" line="1274" />
+    <bookmark url="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" description="Test area" line="1308" />
     <bookmark url="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/Inventory.java" line="42" />
-    <bookmark url="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" description="Листенеры кнопок" line="525" />
+    <bookmark url="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" description="Листенеры кнопок" line="540" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1715910a-1d59-4a6d-8358-7ca5565b5008" name="Default" comment="huge bugfix and playerDescriptionArea replaced">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java" />
     </list>
     <ignored path="TheSUD2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -42,41 +45,18 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="PlayerFrame.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java">
+      <file leaf-file-name="EditorFrame.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="816" column="0" selection-start-line="816" selection-start-column="0" selection-end-line="816" selection-end-column="0" />
+            <state relative-caret-position="292">
+              <caret line="1013" column="37" selection-start-line="1013" selection-start-column="37" selection-end-line="1013" selection-end-column="37" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Script.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/Script.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="429">
-              <caret line="92" column="32" selection-start-line="92" selection-start-column="32" selection-end-line="92" selection-end-column="32" />
-              <folding>
-                <element signature="e#2682#2683#0" expanded="true" />
-                <element signature="e#2736#2737#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="InventoryFrame.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/InventoryFrame.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="231" column="27" selection-start-line="231" selection-start-column="27" selection-end-line="231" selection-end-column="27" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PlayerFrame.form" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.form">
+      <file leaf-file-name="EditorFrame.form" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form">
           <provider selected="true" editor-type-id="ui-designer">
             <state />
           </provider>
@@ -144,7 +124,6 @@
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/InventoryFrame.form" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/LauncherFrame.form" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/InventoryFrame.java" />
-        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/CharacterCategory.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/ContainerFrame.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/NewProjectDialog.form" />
@@ -162,10 +141,11 @@
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/Location.java" />
         <option value="$USER_HOME$/Documents/MEGA/Nuezura/scripts/init.js" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObjectCategory.java" />
-        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form" />
-        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.form" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java" />
+        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java" />
+        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form" />
+        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" />
       </list>
     </option>
   </component>
@@ -538,13 +518,6 @@
       <option name="presentableId" value="Default" />
       <updated>1429275309648</updated>
     </task>
-    <task id="LOCAL-00008" summary="Эмлементация скриптов в процессе, убрал некоторые ворнинги">
-      <created>1432218796100</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1432218796100</updated>
-    </task>
     <task id="LOCAL-00009" summary="уезжаю домой">
       <created>1432304366174</created>
       <option name="number" value="00009" />
@@ -881,7 +854,14 @@
       <option name="project" value="LOCAL" />
       <updated>1467981504399</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="huge bugfix and playerDescriptionArea replaced">
+      <created>1468307409150</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1468307409150</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TodoView">
@@ -902,10 +882,10 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33556297" sideWeight="0.46162048" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32241014" sideWeight="0.56145835" order="11" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3139535" sideWeight="0.63958335" order="11" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32441473" sideWeight="0.42110875" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32241014" sideWeight="0.43854168" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32241014" sideWeight="0.43854168" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296875" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3277592" sideWeight="0.48081023" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -917,7 +897,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="519" y="148" width="881" height="743" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15031983" sideWeight="0.50647247" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3139535" sideWeight="0.36197916" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3139535" sideWeight="0.36041668" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -972,19 +952,17 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java</url>
-          <line>604</line>
+          <url>file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java</url>
+          <line>1497</line>
           <properties />
-          <option name="timeStamp" value="249" />
+          <option name="timeStamp" value="250" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="250" />
+      <option name="time" value="254" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
-        <watch expression="charactersListModel" language="JAVA" custom="" />
-        <watch expression="0 = {CharacterCategory@4169} &quot;CC:sexable&quot;" />
-        <watch expression="categories = {ArrayList@4175}  size = 1" />
+        <watch expression="scriptsEnabled.get(&quot;makePlayer&quot;)" language="JAVA" custom="" />
       </configuration>
     </watches-manager>
   </component>
@@ -994,13 +972,6 @@
   </component>
   <component name="editorHistoryManager">
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_31/src.zip!/java/awt/image/ImageObserver.java" />
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/Sequencer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="7" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/SudPair.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -1201,33 +1172,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/Location.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="42" column="25" selection-start-line="42" selection-start-column="25" selection-end-line="42" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/Item.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="476">
           <caret line="43" column="31" selection-start-line="43" selection-start-column="31" selection-end-line="43" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameCharacter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="36" column="5" selection-start-line="36" selection-start-column="5" selection-end-line="41" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="587">
-          <caret line="117" column="32" selection-start-line="117" selection-start-column="32" selection-end-line="117" selection-end-column="32" />
           <folding />
         </state>
       </provider>
@@ -1264,25 +1212,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="ui-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8534">
-          <caret line="525" column="0" selection-start-line="525" selection-start-column="0" selection-end-line="525" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/InventoryFrame.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="207">
@@ -1312,10 +1241,61 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameCharacter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="48" column="9" selection-start-line="48" selection-start-column="9" selection-end-line="48" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/Sequencer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="10" column="16" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/Location.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="49" column="10" selection-start-line="49" selection-start-column="10" selection-end-line="49" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="816" column="0" selection-start-line="816" selection-start-column="0" selection-end-line="816" selection-end-column="0" />
+        <state relative-caret-position="207">
+          <caret line="696" column="0" selection-start-line="696" selection-start-column="0" selection-end-line="696" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="129" column="0" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="ui-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="292">
+          <caret line="1013" column="37" selection-start-line="1013" selection-start-column="37" selection-end-line="1013" selection-end-column="37" />
           <folding />
         </state>
       </provider>

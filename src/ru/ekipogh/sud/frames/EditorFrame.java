@@ -52,6 +52,7 @@ public class EditorFrame extends JFrame {
     private final DefaultListModel<String> charCategoryScriptsListModel;
     private final DefaultListModel<String> playerScriptListModel;
     private final DefaultListModel<GameObjectCategory> itemCategoriesListModel;
+    private final DefaultListModel<GameObjectCategory> playerCateogriesListModel;
     private final DefaultListModel<Location> locationsListModel;
     private final DefaultListModel<String> locationScriptListModel;
     private final DefaultListModel<String> characterScriptListModel;
@@ -220,6 +221,10 @@ public class EditorFrame extends JFrame {
     private JButton renameItemCategoryScriptButton;
     private JButton addCharacterCategoriesFolderButton;
     private JButton renameCharacterCategoryScriptButton;
+    private JList<CharacterCategory> playerAllCategoriesList;
+    private JList<GameObjectCategory> playerCategoriesList;
+    private JButton addCategoryToPlayerButton;
+    private JButton deleteCategoryFromPlayerButton;
     private DefaultListModel<GameObjectCategory> characterCategoryListModel;
     private DefaultListModel<GameObjectCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
@@ -231,6 +236,8 @@ public class EditorFrame extends JFrame {
 
     public EditorFrame(String gamePath) {
         super("Редактор");
+
+        Sequencer.reset();
         player = new GameCharacter("Безымянный");
 
         this.gamePath = gamePath;
@@ -266,6 +273,10 @@ public class EditorFrame extends JFrame {
         charactersCategoriesListModel = new DefaultListModel<>();
         charactersCategoriesList.setModel(charactersCategoriesListModel);
         characterAllCategoriesList.setModel(charactersCategoriesListModel);
+
+        playerAllCategoriesList.setModel(charactersCategoriesListModel);
+        playerCateogriesListModel = new DefaultListModel<>();
+        playerCategoriesList.setModel(playerCateogriesListModel);
 
         characterCategoryListModel = new DefaultListModel<>();
         characterCategoryList.setModel(characterCategoryListModel);
@@ -502,6 +513,10 @@ public class EditorFrame extends JFrame {
 
         //листенеры
         //листенеры конопок
+        deleteCategoryFromPlayerButton.addActionListener(e -> deleteCategoryFromPlayer());
+
+        addCategoryToPlayerButton.addActionListener(e -> addCategoryToPlayer());
+
         renameLocationCategoryScriptButton.addActionListener(e -> renameLocationCategoryScript());
 
         renameItemCategoryScriptButton.addActionListener(e -> renameItemCategoryScript());
@@ -844,7 +859,6 @@ public class EditorFrame extends JFrame {
             }
         });
 
-        Sequencer.reset();
         if (!this.gamePath.isEmpty()) {
             this.gameFolder = new File(this.gamePath).getParentFile().getAbsolutePath();
             loadGame();
@@ -990,6 +1004,26 @@ public class EditorFrame extends JFrame {
 
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    }
+
+    private void deleteCategoryFromPlayer() {
+        int indexCC = playerCategoriesList.getSelectedIndex();
+        if (indexCC >= 0) {
+            GameObjectCategory category = playerCateogriesListModel.getElementAt(indexCC);
+            player.removeCategory(category);
+            playerCateogriesListModel.removeElement(category);
+        }
+    }
+
+    private void addCategoryToPlayer() {
+        int indexCC = playerAllCategoriesList.getSelectedIndex();
+        if (indexCC >= 0) {
+            CharacterCategory category = charactersCategoriesListModel.getElementAt(indexCC);
+            if (!player.getCategories().contains(category)) {
+                player.addCategory(category);
+                playerCateogriesListModel.addElement(category);
+            }
+        }
     }
 
     private void renameCharacterCategoryScript() {
