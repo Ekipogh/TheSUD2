@@ -169,6 +169,20 @@ public class PlayerFrame extends JFrame {
                 }
             }
         });
+        charactersTree.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    TreePath treePath = charactersTree.getSelectionPath();
+                    if (treePath != null) {
+                        DefaultMutableTreeNode selected = (DefaultMutableTreeNode) treePath.getLastPathComponent();
+                        if (selected != null && selected instanceof SudTreeNode && selected.isLeaf())
+                            ((SudTreeNode) selected).invoke();
+                    }
+                }
+            }
+        });
 
         //меню предметов
         itemsTree.addMouseListener(new MouseAdapter() {
@@ -180,6 +194,21 @@ public class PlayerFrame extends JFrame {
                     DefaultMutableTreeNode selected = (DefaultMutableTreeNode) treePath.getLastPathComponent();
                     if (selected != null && selected instanceof SudTreeNode && e.getClickCount() == 2 && selected.isLeaf())
                         ((SudTreeNode) selected).invoke();
+                }
+            }
+        });
+
+        itemsTree.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    TreePath treePath = itemsTree.getSelectionPath();
+                    if (treePath != null) {
+                        DefaultMutableTreeNode selected = (DefaultMutableTreeNode) treePath.getLastPathComponent();
+                        if (selected != null && selected instanceof SudTreeNode && selected.isLeaf())
+                            ((SudTreeNode) selected).invoke();
+                    }
                 }
             }
         });
@@ -613,7 +642,6 @@ public class PlayerFrame extends JFrame {
                     String scriptText = new Scanner(f).useDelimiter("\\Z").next();
                     String scriptFolderPath = gameFolder + "\\scripts\\";
                     String fileName = f.getAbsolutePath().replace(scriptFolderPath, "");
-                    System.out.println("Script loaded: " + fileName);
                     Script.addScriptFile(fileName, scriptText);
                 }
             } else if (f.isDirectory()) {

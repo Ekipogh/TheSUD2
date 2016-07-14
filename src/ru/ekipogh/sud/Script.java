@@ -13,11 +13,11 @@ import java.util.Scanner;
 
 /**
  * Created by ekipogh on 22.05.2015.
- licensed under WTFPL
+ * licensed under WTFPL
  */
 public class Script implements Serializable {
     private static Context context;
-    private static Scriptable scope;
+    private static ScriptableObject scope;
     private String scriptText;
     private static HashMap<String, String> fileScipts;
     public static final long serialVersionUID = -5573809983647994548L;

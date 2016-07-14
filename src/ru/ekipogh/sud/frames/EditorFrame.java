@@ -465,7 +465,9 @@ public class EditorFrame extends JFrame {
             public void setValueAt(Object aValue, int row, int column) {
                 super.setValueAt(aValue, row, column);
                 if (column == 0) {
-                    equipTableModel.setValueAt(new ImageIcon(String.valueOf(aValue)), row, 1);
+                    String iconPath = gameFolder + "\\" + aValue;
+                    ImageIcon icon = new ImageIcon(iconPath);
+                    equipTableModel.setValueAt(icon, row, 1);
                     Utils.updateRowHeights(equipTable);
                 }
             }
@@ -933,6 +935,9 @@ public class EditorFrame extends JFrame {
         //листенеры чекбоксов
         isContainerBox.addActionListener(e -> setContainer());
         isLockedBox.addActionListener(e -> setLocked());
+        characterCategoryScriptEnabledBox.addActionListener(e -> setCharacterCategoryScriptEnabled());
+        itemCategoryScriptEnabledBox.addActionListener(e -> setItemCategoryScriptEnabled());
+        locationCategoryScriptEnabledBox.addActionListener(e -> setLocationCategoryScriptEnabled());
         //test area
 
         initScriptText.addFocusListener(new FocusAdapter() {
@@ -1004,6 +1009,42 @@ public class EditorFrame extends JFrame {
 
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    }
+
+    private void setLocationCategoryScriptEnabled() {
+        int indexCat = locationCategoriesList.getSelectedIndex();
+        int indexS = locationCategoryScriptsList.getSelectedIndex();
+        if (indexCat >= 0 && indexS >= 0) {
+            GameObjectCategory locationCategory = locationsCategoriesListModel.elementAt(indexCat);
+            String scriptName = locationCategoryScriptsListModel.elementAt(indexS);
+            if (!scriptName.startsWith("_on")) {
+                locationCategory.getScript(scriptName).setEnabled(locationCategoryScriptEnabledBox.isSelected());
+            }
+        }
+    }
+
+    private void setItemCategoryScriptEnabled() {
+        int indexCat = itemsCategoriesList.getSelectedIndex();
+        int indexS = itemCategoryScriptsList.getSelectedIndex();
+        if (indexCat >= 0 && indexS >= 0) {
+            GameObjectCategory itemCategory = itemsCategoriesListModel.elementAt(indexCat);
+            String scriptName = itemCategoryScriptsListModel.elementAt(indexS);
+            if (!scriptName.startsWith("_on")) {
+                itemCategory.getScript(scriptName).setEnabled(itemCategoryScriptEnabledBox.isSelected());
+            }
+        }
+    }
+
+    private void setCharacterCategoryScriptEnabled() {
+        int indexCat = charactersCategoriesList.getSelectedIndex();
+        int indexS = charCategoryScriptsList.getSelectedIndex();
+        if (indexCat >= 0 && indexS >= 0) {
+            CharacterCategory characterCategory = charactersCategoriesListModel.elementAt(indexCat);
+            String scriptName = charCategoryScriptsListModel.elementAt(indexS);
+            if (!scriptName.startsWith("_on")) {
+                characterCategory.getScript(scriptName).setEnabled(characterCategoryScriptEnabledBox.isSelected());
+            }
+        }
     }
 
     private void deleteCategoryFromPlayer() {
@@ -1490,6 +1531,10 @@ public class EditorFrame extends JFrame {
             equipTableModel.addRow(new Object[]{icon, new ImageIcon(iconPath), slotName});
         });
         Utils.updateRowHeights(equipTable);
+        fillSlotCombo();
+    }
+
+    private void fillSlotCombo() {
         slotNamesModel.removeAllElements();
         Equipment.getSlotNames().forEach(slotNamesModel::addElement);
     }
@@ -2165,10 +2210,12 @@ public class EditorFrame extends JFrame {
             slotNamesModel.addElement(slotName);
         }
         Equipment.setSlotNames(slots);
+        fillSlotCombo();
     }
 
     private void addSlot() {
         equipTableModel.addRow(new Object[]{"/path/to/file", new ImageIcon(), "название"});
+        fillSlotCombo();
         Utils.updateRowHeights(equipTable);
     }
 

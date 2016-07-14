@@ -9,16 +9,19 @@
     </artifacts-to-build>
   </component>
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" description="Test area" line="1308" />
+    <bookmark url="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" description="Test area" line="1349" />
     <bookmark url="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/Inventory.java" line="42" />
-    <bookmark url="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" description="Листенеры кнопок" line="540" />
+    <bookmark url="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" description="Листенеры кнопок" line="542" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1715910a-1d59-4a6d-8358-7ca5565b5008" name="Default" comment="huge bugfix and playerDescriptionArea replaced">
+    <list default="true" id="1715910a-1d59-4a6d-8358-7ca5565b5008" name="Default" comment="categoriable player and bigfaxes">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/TheSUD2/ru/ekipogh/sud/Script.class" afterPath="$PROJECT_DIR$/out/production/TheSUD2/ru/ekipogh/sud/Script.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/Script.java" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/Script.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.form" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.form" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameCharacter.java" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameCharacter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java" />
     </list>
     <ignored path="TheSUD2.iws" />
@@ -45,12 +48,83 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="EditorFrame.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="EditorFrame.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="292">
-              <caret line="1013" column="37" selection-start-line="1013" selection-start-column="37" selection-end-line="1013" selection-end-column="37" />
+            <state relative-caret-position="316">
+              <caret line="2054" column="27" selection-start-line="2054" selection-start-column="27" selection-end-line="2054" selection-end-column="27" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PlayerFrame.form" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.form">
+          <provider selected="true" editor-type-id="ui-designer">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GameObject.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="133">
+              <caret line="164" column="32" selection-start-line="164" selection-start-column="16" selection-end-line="164" selection-end-column="32" />
+              <folding>
+                <element signature="e#2207#2208#0" expanded="true" />
+                <element signature="e#2256#2257#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="functions.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/functions.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="867">
+              <caret line="51" column="26" selection-start-line="51" selection-start-column="26" selection-end-line="51" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GameCharacter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameCharacter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="434">
+              <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+              <folding>
+                <element signature="e#1355#1356#0" expanded="true" />
+                <element signature="e#1403#1404#0" expanded="true" />
+                <element signature="e#1542#1543#0" expanded="true" />
+                <element signature="e#1565#1566#0" expanded="true" />
+                <element signature="e#1900#1901#0" expanded="true" />
+                <element signature="e#1940#1941#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PlayerFrame.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="553">
+              <caret line="208" column="80" selection-start-line="208" selection-start-column="80" selection-end-line="208" selection-end-column="80" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Script.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/Script.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="207">
+              <caret line="70" column="0" selection-start-line="70" selection-start-column="0" selection-end-line="70" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#2690#2691#0" expanded="true" />
+                <element signature="e#2744#2745#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -95,7 +169,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/ReplaceDialog.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/Inventory.java" />
         <option value="$PROJECT_DIR$/scipts/test.js" />
         <option value="$PROJECT_DIR$/scripts/kiss.js" />
@@ -104,7 +177,6 @@
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/Equipment.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/LauncherFrame.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/EditorFrame.form" />
-        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/Script.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/GameCharacter.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/GameObjectCategory.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/ItemCategory.java" />
@@ -135,17 +207,19 @@
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/LocationCategory.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/SaveFile.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/GameFile.java" />
-        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameCharacter.java" />
-        <option value="$PROJECT_DIR$/lib/functions.js" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/Item.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/Location.java" />
         <option value="$USER_HOME$/Documents/MEGA/Nuezura/scripts/init.js" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObjectCategory.java" />
-        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.form" />
-        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java" />
-        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form" />
+        <option value="$PROJECT_DIR$/../js.jar!/org/mozilla/javascript/Scriptable.class" />
+        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/Script.java" />
+        <option value="$PROJECT_DIR$/lib/functions.js" />
+        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.form" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" />
+        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java" />
+        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameCharacter.java" />
+        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java" />
       </list>
     </option>
   </component>
@@ -518,13 +592,6 @@
       <option name="presentableId" value="Default" />
       <updated>1429275309648</updated>
     </task>
-    <task id="LOCAL-00009" summary="уезжаю домой">
-      <created>1432304366174</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1432304366174</updated>
-    </task>
     <task id="LOCAL-00010" summary="Скрипты локаций">
       <created>1432644318881</created>
       <option name="number" value="00010" />
@@ -861,7 +928,14 @@
       <option name="project" value="LOCAL" />
       <updated>1468307409150</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="categoriable player and bigfaxes">
+      <created>1468316070972</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1468316070972</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="TodoView">
@@ -879,7 +953,7 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32441473" sideWeight="0.48507464" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33556297" sideWeight="0.46162048" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33509514" sideWeight="0.46162048" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3139535" sideWeight="0.63958335" order="11" side_tool="true" content_ui="tabs" />
@@ -919,7 +993,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Изменения в интерфейсе" />
     <MESSAGE value="Script engine update" />
     <MESSAGE value="Скрипты игрока" />
     <MESSAGE value="Сохранения" />
@@ -944,7 +1017,8 @@
     <MESSAGE value="minor category update" />
     <MESSAGE value="add entire folder ui improovma nts" />
     <MESSAGE value="huge bugfix and playerDescriptionArea replaced" />
-    <option name="LAST_COMMIT_MESSAGE" value="huge bugfix and playerDescriptionArea replaced" />
+    <MESSAGE value="categoriable player and bigfaxes" />
+    <option name="LAST_COMMIT_MESSAGE" value="categoriable player and bigfaxes" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -953,16 +1027,16 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java</url>
-          <line>1497</line>
+          <line>1542</line>
           <properties />
           <option name="timeStamp" value="250" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="254" />
+      <option name="time" value="261" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
-        <watch expression="scriptsEnabled.get(&quot;makePlayer&quot;)" language="JAVA" custom="" />
+        <watch expression="iconPath" language="JAVA" custom="" />
       </configuration>
     </watches-manager>
   </component>
@@ -971,14 +1045,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_31/src.zip!/java/awt/image/ImageObserver.java" />
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/SudPair.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="35" selection-start-line="11" selection-start-column="35" selection-end-line="11" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/SudTreeNode.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -1180,14 +1246,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/functions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="29" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_91/src.zip!/java/awt/event/ActionListener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
@@ -1220,35 +1278,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/Script.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="429">
-          <caret line="92" column="32" selection-start-line="92" selection-start-column="32" selection-end-line="92" selection-end-column="32" />
-          <folding>
-            <element signature="e#2682#2683#0" expanded="true" />
-            <element signature="e#2736#2737#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.form">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="ui-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameCharacter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="48" column="9" selection-start-line="48" selection-start-column="9" selection-end-line="48" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/Sequencer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -1265,20 +1294,50 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java">
+    <entry file="jar://$PROJECT_DIR$/../js.jar!/org/mozilla/javascript/Scriptable.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="696" column="0" selection-start-line="696" selection-start-column="0" selection-end-line="696" selection-end-column="0" />
+        <state relative-caret-position="-120">
+          <caret line="12" column="26" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java">
+    <entry file="jar://$PROJECT_DIR$/../js.jar!/org/mozilla/javascript/ScriptableObject.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="129" column="0" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
+        <state relative-caret-position="188">
+          <caret line="2070" column="24" selection-start-line="2070" selection-start-column="16" selection-end-line="2070" selection-end-column="24" />
           <folding />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/Script.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="70" column="0" selection-start-line="70" selection-start-column="0" selection-end-line="70" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2690#2691#0" expanded="true" />
+            <element signature="e#2744#2745#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/functions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="867">
+          <caret line="51" column="26" selection-start-line="51" selection-start-column="26" selection-end-line="51" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.form">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="ui-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form">
@@ -1292,11 +1351,45 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameCharacter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="434">
+          <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+          <folding>
+            <element signature="e#1355#1356#0" expanded="true" />
+            <element signature="e#1403#1404#0" expanded="true" />
+            <element signature="e#1542#1543#0" expanded="true" />
+            <element signature="e#1565#1566#0" expanded="true" />
+            <element signature="e#1900#1901#0" expanded="true" />
+            <element signature="e#1940#1941#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="553">
+          <caret line="208" column="80" selection-start-line="208" selection-start-column="80" selection-end-line="208" selection-end-column="80" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
-          <caret line="1013" column="37" selection-start-line="1013" selection-start-column="37" selection-end-line="1013" selection-end-column="37" />
+        <state relative-caret-position="316">
+          <caret line="2054" column="27" selection-start-line="2054" selection-start-column="27" selection-end-line="2054" selection-end-column="27" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="164" column="32" selection-start-line="164" selection-start-column="16" selection-end-line="164" selection-end-column="32" />
+          <folding>
+            <element signature="e#2207#2208#0" expanded="true" />
+            <element signature="e#2256#2257#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

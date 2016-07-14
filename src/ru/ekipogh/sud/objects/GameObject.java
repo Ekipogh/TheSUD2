@@ -24,7 +24,18 @@ public class GameObject implements Serializable {
     private HashMap<String, Boolean> scriptsEnabled;
     private List<GameObjectCategory> categories;
 
-    GameObject(String name) {
+    public GameObject() {
+        this.name = "";
+        this.description = "";
+        this.inventory = new Inventory();
+        this.scripts = new HashMap<>();
+        this.values = new HashMap<>();
+        this.scriptsEnabled = new HashMap<>();
+        this.id = Sequencer.getNewID();
+        this.categories = new ArrayList<>();
+    }
+
+    public GameObject(String name) {
         this.name = name;
         this.description = "";
         this.inventory = new Inventory();
@@ -164,6 +175,16 @@ public class GameObject implements Serializable {
             }
         }
         System.out.println("Не нашел такого " + scriptName);
+    }
+
+    public void setAllScriptsEnabled(String categoryName, boolean enabled) {
+        GameObjectCategory category = null;
+        for (GameObjectCategory c : categories) {
+            category = c;
+        }
+        for (String scriptName : category.getScripts().keySet()) {
+            this.setScriptEnabled(scriptName, enabled);
+        }
     }
 
     public String toString() {
