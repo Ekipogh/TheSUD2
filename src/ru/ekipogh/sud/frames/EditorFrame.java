@@ -225,6 +225,9 @@ public class EditorFrame extends JFrame {
     private JList<GameObjectCategory> playerCategoriesList;
     private JButton addCategoryToPlayerButton;
     private JButton deleteCategoryFromPlayerButton;
+    private JTextField idFiled;
+    private JButton getButton;
+    private JButton setButton;
     private DefaultListModel<GameObjectCategory> characterCategoryListModel;
     private DefaultListModel<GameObjectCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
@@ -515,6 +518,14 @@ public class EditorFrame extends JFrame {
 
         //листенеры
         //листенеры конопок
+        getButton.addActionListener(e -> {
+            idFiled.setText(String.valueOf(Sequencer.getCurrentId()));
+        });
+
+        setButton.addActionListener(e -> {
+            Sequencer.setID(Integer.parseInt(idFiled.getText()));
+        });
+
         deleteCategoryFromPlayerButton.addActionListener(e -> deleteCategoryFromPlayer());
 
         addCategoryToPlayerButton.addActionListener(e -> addCategoryToPlayer());

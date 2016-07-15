@@ -365,7 +365,7 @@ public class PlayerFrame extends JFrame {
             }
             if (!player.getDescription().isEmpty()) {
                 menuItem = new JMenuItem("Описание");
-                menuItem.addActionListener(ev -> output.println(parseDescription(player.getDescription())));
+                menuItem.addActionListener(ev -> output.println(parseDescription(player.getDescription(), player)));
                 popupMenu.add(menuItem);
             }
             popupMenu.show(playerName, e.getX(), e.getY());
@@ -382,7 +382,7 @@ public class PlayerFrame extends JFrame {
 
     //отображаем описание персонажа
     private void showCharDescription(GameCharacter character) {
-        output.println(parseDescription(character.getDescription()));
+        output.println(parseDescription(character.getDescription(), character));
     }
 
     //меню локации todo: нужно бы переделать
@@ -418,7 +418,7 @@ public class PlayerFrame extends JFrame {
 
     //отображаем описание локации
     private void showLocationDescription() {
-        output.println(parseDescription(currentLocation.getDescription()));
+        output.println(parseDescription(currentLocation.getDescription(), currentLocation));
     }
 
     //вызываем окна инвенторя
@@ -428,7 +428,7 @@ public class PlayerFrame extends JFrame {
 
     //отображаем описание предмета
     private void showItemDescription(Item item) {
-        output.println(parseDescription(item.getDescription()));
+        output.println(parseDescription(item.getDescription(), item));
     }
 
     //используем предмет
@@ -597,7 +597,7 @@ public class PlayerFrame extends JFrame {
         output.println("<b>" + gameFile.getGameName() + "</b>");
         output.println(gameFile.getGameStartMessage());
         playerName.setText(player.getName());
-        playerDescriptionPane.println(parseDescription(player.getDescription()));
+        playerDescriptionPane.println(parseDescription(player.getDescription(), player));
     }
 
     //инициализируем JavaScript
@@ -663,7 +663,7 @@ public class PlayerFrame extends JFrame {
         output.println("<b>" + currentLocation.getName() + "</b>");
         locationNameLabel.setText(currentLocation.getName());
         if (!currentLocation.getDescription().isEmpty())
-            output.println(parseDescription(currentLocation.getDescription()));
+            output.println(parseDescription(currentLocation.getDescription(), currentLocation));
 
         //Заполняем список предметов в локации
         updateItems();
@@ -735,7 +735,7 @@ public class PlayerFrame extends JFrame {
     public void updatePlayer() {
         playerName.setText(player.getName());
         playerDescriptionPane.clear();
-        playerDescriptionPane.print(parseDescription(player.getDescription()));
+        playerDescriptionPane.print(parseDescription(player.getDescription(), player));
     }
 
     //заполняем дерево предметов
@@ -850,10 +850,10 @@ public class PlayerFrame extends JFrame {
         }
     }
 
-    private String parseDescription(String description) {
+    private String parseDescription(String description, GameObject gameObject) {
         description = description.replace("\"", "\\\"");
         description = description.replace("\n", "");
-        description = (String) Script.run("parser(\"" + description + "\");", null);
+        description = (String) Script.run("parser(\"" + description + "\");", gameObject);
         return !"undefined".equals(description) ? description : "";
     }
 
