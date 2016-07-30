@@ -701,7 +701,7 @@
                   <component id="a40be" class="javax.swing.JList" binding="locationsList">
                     <constraints/>
                     <properties>
-                      <layoutOrientation value="1"/>
+                      <layoutOrientation value="0"/>
                       <selectionMode value="0"/>
                     </properties>
                   </component>
@@ -1045,7 +1045,7 @@
                   <component id="17d7f" class="javax.swing.JList" binding="itemsList">
                     <constraints/>
                     <properties>
-                      <layoutOrientation value="1"/>
+                      <layoutOrientation value="0"/>
                       <selectionMode value="0"/>
                     </properties>
                   </component>
@@ -1469,7 +1469,7 @@
                   <component id="44fd8" class="javax.swing.JList" binding="charactersList">
                     <constraints/>
                     <properties>
-                      <layoutOrientation value="1"/>
+                      <layoutOrientation value="0"/>
                       <selectionMode value="0"/>
                     </properties>
                   </component>
