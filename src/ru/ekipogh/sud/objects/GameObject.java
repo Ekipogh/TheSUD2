@@ -180,7 +180,9 @@ public class GameObject implements Serializable {
     public void setAllScriptsEnabled(String categoryName, boolean enabled) {
         GameObjectCategory category = null;
         for (GameObjectCategory c : categories) {
-            category = c;
+            if (c.getName().equals(categoryName)) {
+                category = c;
+            }
         }
         for (String scriptName : category.getScripts().keySet()) {
             this.setScriptEnabled(scriptName, enabled);

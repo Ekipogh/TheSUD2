@@ -65,6 +65,7 @@ public class PlayerFrame extends JFrame {
     private HashMap<String, Script> commonScripts;
     private List<String> commandsList;
     private int consoleIterator;
+    private GameObject focusedGameObject;
 
     private PlayerFrame() {
         super("The SUD2");
@@ -655,6 +656,7 @@ public class PlayerFrame extends JFrame {
         updateItems();
         updateCharacters();
         updateButtons();
+        updatePlayer();
     }
 
     //выполнение сценариев и игровой логики
@@ -717,17 +719,31 @@ public class PlayerFrame extends JFrame {
         ((DefaultMutableTreeNode) charactersTreeModel.getRoot()).removeAllChildren();
         charactersTreeModel.reload();
         characters.stream().filter(c -> currentLocation.equals(c.getLocation())).forEach(c -> {
-            DefaultMutableTreeNode characterNode = new DefaultMutableTreeNode(c);
-            DefaultMutableTreeNode top = (DefaultMutableTreeNode) charactersTreeModel.getRoot();
-            charactersTreeModel.insertNodeInto(characterNode, top, top.getChildCount());
-            c.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> charactersTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), c)), characterNode, characterNode.getChildCount()));
-            for (GameObjectCategory characterCategory : c.getCategories()) {
-                characterCategory.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && c.isScriptEnabled(entry.getKey())).forEach(entry -> charactersTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), c)), characterNode, characterNode.getChildCount()));
+            if (focusedGameObject == null) { //todo my brain aint working
+                DefaultMutableTreeNode characterNode = new DefaultMutableTreeNode(c);
+                DefaultMutableTreeNode top = (DefaultMutableTreeNode) charactersTreeModel.getRoot();
+                charactersTreeModel.insertNodeInto(characterNode, top, top.getChildCount());
+                c.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> charactersTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), c)), characterNode, characterNode.getChildCount()));
+                for (GameObjectCategory characterCategory : c.getCategories()) {
+                    characterCategory.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && c.isScriptEnabled(entry.getKey())).forEach(entry -> charactersTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), c)), characterNode, characterNode.getChildCount()));
+                }
+                if (!c.getDescription().isEmpty())
+                    charactersTreeModel.insertNodeInto(new SudTreeNode("Описание", l -> showCharDescription(c)), characterNode, characterNode.getChildCount());
+            } else {
+                if (c.equals(focusedGameObject)) {
+                    DefaultMutableTreeNode characterNode = new DefaultMutableTreeNode(c);
+                    DefaultMutableTreeNode top = (DefaultMutableTreeNode) charactersTreeModel.getRoot();
+                    charactersTreeModel.insertNodeInto(characterNode, top, top.getChildCount());
+                    c.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && entry.getValue().isEnabled()).forEach(entry -> charactersTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), c)), characterNode, characterNode.getChildCount()));
+                    for (GameObjectCategory characterCategory : c.getCategories()) {
+                        characterCategory.getScripts().entrySet().stream().filter(entry -> !entry.getKey().startsWith("_on") && c.isScriptEnabled(entry.getKey())).forEach(entry -> charactersTreeModel.insertNodeInto(new SudTreeNode(entry.getKey(), l -> Script.run(entry.getValue().getText(), c)), characterNode, characterNode.getChildCount()));
+                    }
+                    if (!c.getDescription().isEmpty())
+                        charactersTreeModel.insertNodeInto(new SudTreeNode("Описание", l -> showCharDescription(c)), characterNode, characterNode.getChildCount());
+                }
             }
-            if (!c.getDescription().isEmpty())
-                charactersTreeModel.insertNodeInto(new SudTreeNode("Описание", l -> showCharDescription(c)), characterNode, characterNode.getChildCount());
         });
-        updatePlayer();
+        //updatePlayer();
         expandAllNodes(charactersTree);
     }
 
@@ -736,6 +752,16 @@ public class PlayerFrame extends JFrame {
         playerName.setText(player.getName());
         playerDescriptionPane.clear();
         playerDescriptionPane.print(parseDescription(player.getDescription(), player));
+    }
+
+    public void focus(GameObject gameObject) {
+        this.focusedGameObject = gameObject;
+        update();
+    }
+
+    public void unfocus() {
+        focus(null);
+        update();
     }
 
     //заполняем дерево предметов
