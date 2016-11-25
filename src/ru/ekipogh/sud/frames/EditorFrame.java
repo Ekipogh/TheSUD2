@@ -228,6 +228,7 @@ public class EditorFrame extends JFrame {
     private JTextField idFiled;
     private JButton getButton;
     private JButton setButton;
+    private JButton clearInvenoryButton;
     private DefaultListModel<GameObjectCategory> characterCategoryListModel;
     private DefaultListModel<GameObjectCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
@@ -880,7 +881,12 @@ public class EditorFrame extends JFrame {
         }
 
         //Экипировка игрока и персонажей
-        playerEquipmentTableModel = new DefaultTableModel();
+        playerEquipmentTableModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         playerEquipmentTableModel.addColumn("Слот");
         playerEquipmentTableModel.addColumn("Предмет");
         fillPlayerEquipmentTable();
@@ -911,7 +917,12 @@ public class EditorFrame extends JFrame {
                 }
             }
         });
-        characterEquipmentTableModel = new DefaultTableModel();
+        characterEquipmentTableModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         characterEquipmentTableModel.addColumn("Слот");
         characterEquipmentTableModel.addColumn("Предмет");
         fillCharacterEquipmentTable();
@@ -1020,6 +1031,12 @@ public class EditorFrame extends JFrame {
 
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        clearInvenoryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                player.getInventory().clear();
+            }
+        });
     }
 
     private void setLocationCategoryScriptEnabled() {
@@ -1199,7 +1216,9 @@ public class EditorFrame extends JFrame {
         if (indexC >= 0) {
             GameCharacter character = charactersListModel.get(indexC);
             Item item = character.getEquipedItem(slotName);
-            character.unequip(item);
+            if (item != null) {
+                character.unequip(item);
+            }
         }
     }
 
@@ -1240,7 +1259,9 @@ public class EditorFrame extends JFrame {
     private void unequipItemFromPlayer(int row) {
         String slotName = (String) playerEquipmentTableModel.getValueAt(row, 0);
         Item item = player.getEquipedItem(slotName);
-        player.unequip(item);
+        if (item != null) {
+            player.unequip(item);
+        }
     }
 
     private void equipItemToPlayer() {
@@ -2154,7 +2175,6 @@ public class EditorFrame extends JFrame {
         characterItemsList.setEnabled(enabled);
         characterLocationCombo.setEnabled(enabled);
         charSaveButton.setEnabled(enabled);
-        addCharacterButton.setEnabled(enabled);
         deleteCharButton.setEnabled(enabled);
         charDescriptionArea.setEnabled(enabled);
     }
@@ -2222,12 +2242,24 @@ public class EditorFrame extends JFrame {
         }
         Equipment.setSlotNames(slots);
         fillSlotCombo();
+        fillPlayerEquipmentTable();
     }
 
     private void addSlot() {
-        equipTableModel.addRow(new Object[]{"/path/to/file", new ImageIcon(), "название"});
+        System.out.println("addslot");
+        equipTableModel.addRow(new Object[]{"\\path\\to\\file", new ImageIcon(), "название"});
+        updateEquipmentSlots();
         fillSlotCombo();
+        fillPlayerEquipmentTable();
+        //fillEquipmentTable();
         Utils.updateRowHeights(equipTable);
+    }
+
+    private void updateEquipmentSlots() {
+        Equipment.clearSlots();
+        for (int row = 0; row < equipTableModel.getRowCount(); row++) {
+            Equipment.addSlotName(equipTableModel.getValueAt(row, 0).toString(), equipTableModel.getValueAt(row, 2).toString());
+        }
     }
 
     private void showSlotField() {

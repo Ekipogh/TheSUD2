@@ -85,4 +85,8 @@ public class GameCharacter extends GameObject implements Serializable {
     public void setEquipedItem(String slot, Item item) {
         equipment.setItemAtSlot(slot, item);
     }
+
+    public Equipment getEquipment() {
+        return equipment;
+    }
 }

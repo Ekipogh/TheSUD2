@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * Created by ekipogh on 07.05.2015.
- licensed under WTFPL
+ * licensed under WTFPL
  */
 public class Equipment implements Serializable {
     public static final long serialVersionUID = 1L;
@@ -71,10 +71,15 @@ public class Equipment implements Serializable {
     }
 
     public static void clearSlots() {
-        slotNames.put("голова", "data\\head.png");
+        /*slotNames.put("голова", "data\\head.png");
         slotNames.put("торс", "data\\torso.png");
         slotNames.put("ноги", "data\\legs.png");
-        slotNames.put("рука", "data\\hand.png");
+        slotNames.put("рука", "data\\hand.png");*/
+        slotNames.clear();
+    }
+
+    public void clear() {
+        slots.clear();
     }
 
     public void setItemAtSlot(String slot, Item item) {
