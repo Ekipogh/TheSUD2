@@ -4,10 +4,7 @@ import ru.ekipogh.sud.Script;
 import ru.ekipogh.sud.Sequencer;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by ekipogh on 09.05.2016.
@@ -186,6 +183,13 @@ public class GameObject implements Serializable {
         }
         for (String scriptName : category.getScripts().keySet()) {
             this.setScriptEnabled(scriptName, enabled);
+        }
+    }
+
+    public void removeCategoryByName(String categoryName) {
+        GameObjectCategory category = this.getCategory(categoryName);
+        if(category!=null){
+            categories.remove(category);
         }
     }
 

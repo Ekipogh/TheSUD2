@@ -629,6 +629,7 @@ public class PlayerFrame extends JFrame {
         characters.add(player);
         characters.remove(character);
         player = character;
+        Script.setProperty("player", player);
         update();
     }
 
@@ -657,6 +658,7 @@ public class PlayerFrame extends JFrame {
         updateCharacters();
         updateButtons();
         updatePlayer();
+        updateButtons();
     }
 
     //выполнение сценариев и игровой логики

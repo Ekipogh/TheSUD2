@@ -842,22 +842,34 @@ public class EditorFrame extends JFrame {
         //листенеры комбобоксов
         itemTypeCombo.addActionListener(e -> showSlotField());
         northComboBox.addActionListener(e -> {
-            if (northComboBox.getSelectedItem() != null) northEnabledBox.setSelected(true);
+            if (northComboBox.getSelectedItem() != null) {
+                northEnabledBox.setSelected(true);
+            }
         });
         southComboBox.addActionListener(e -> {
-            if (southComboBox.getSelectedItem() != null) southEnabledBox.setSelected(true);
+            if (southComboBox.getSelectedItem() != null) {
+                southEnabledBox.setSelected(true);
+            }
         });
         eastComboBox.addActionListener(e -> {
-            if (eastComboBox.getSelectedItem() != null) eastEnabledBox.setSelected(true);
+            if (eastComboBox.getSelectedItem() != null) {
+                eastEnabledBox.setSelected(true);
+            }
         });
         westComboBox.addActionListener(e -> {
-            if (westComboBox.getSelectedItem() != null) westEnabledBox.setSelected(true);
+            if (westComboBox.getSelectedItem() != null) {
+                westEnabledBox.setSelected(true);
+            }
         });
         upComboBox.addActionListener(e -> {
-            if (upComboBox.getSelectedItem() != null) upEnabledBox.setSelected(true);
+            if (upComboBox.getSelectedItem() != null) {
+                upEnabledBox.setSelected(true);
+            }
         });
         downComboBox.addActionListener(e -> {
-            if (downComboBox.getSelectedItem() != null) downEnabledBox.setSelected(true);
+            if (downComboBox.getSelectedItem() != null) {
+                downEnabledBox.setSelected(true);
+            }
         });
 
         //листенеры текстфилдов
@@ -1031,12 +1043,7 @@ public class EditorFrame extends JFrame {
 
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        clearInvenoryButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                player.getInventory().clear();
-            }
-        });
+        clearInvenoryButton.addActionListener(e -> player.getInventory().clear());
     }
 
     private void setLocationCategoryScriptEnabled() {
