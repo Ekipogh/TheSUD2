@@ -509,6 +509,7 @@ public class PlayerFrame extends JFrame {
         });
 
         currentLocation = playerLocation != null ? playerLocation : currentLocation;
+        Script.setProperty("currentLocation", currentLocation);
         player.setLocation(currentLocation);
 
         //common scripts
@@ -550,6 +551,7 @@ public class PlayerFrame extends JFrame {
             Script.run(commonScripts.get("_onPlayerMoves").getText(), location);
         }
         currentLocation = location != null ? location : currentLocation;
+        Script.setProperty("currentLocation", currentLocation);
         player.setLocation(currentLocation);
         if (runScripts) {
             characters.stream().filter(c -> currentLocation.equals(c.getLocation())).forEach(c -> {
