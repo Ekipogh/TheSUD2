@@ -61,6 +61,7 @@ public class EditorFrame extends JFrame {
     private final DefaultListModel<String> commonScriptsListModel;
     private final DefaultTableModel playerEquipmentTableModel;
     private final DefaultTableModel characterEquipmentTableModel;
+    private final DefaultListModel<SudTimer> timersListModel;
     private String gameFolder;
     private JPanel rootPanel;
     private JList<Location> locationsList;
@@ -229,6 +230,14 @@ public class EditorFrame extends JFrame {
     private JButton getButton;
     private JButton setButton;
     private JButton clearInvenoryButton;
+    private JList timersList;
+    private JTextField timerNameField;
+    private JTextField timerStepField;
+    private RSyntaxTextArea timerScriptText;
+    private JPanel timerScriptPanel;
+    private JButton saveTimerButton;
+    private JButton addTimerButton;
+    private JButton removeTimerButton;
     private DefaultListModel<GameObjectCategory> characterCategoryListModel;
     private DefaultListModel<GameObjectCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
@@ -335,6 +344,9 @@ public class EditorFrame extends JFrame {
 
         commonScriptsListModel = new DefaultListModel<>();
         commonScriptsList.setModel(commonScriptsListModel);
+
+        timersListModel = new DefaultListModel<>();
+        timersList.setModel(timersListModel);
         //Заполняем commonScriptsList
         commonScripts.keySet().forEach(commonScriptsListModel::addElement);
 
@@ -420,6 +432,16 @@ public class EditorFrame extends JFrame {
         acCommon.install(commonScriptText);
         lsCommon.install(commonScriptText);
         commonScriptPanel.add(new ErrorStrip(commonScriptText), BorderLayout.LINE_END);
+
+        AutoCompletion acTimer = new AutoCompletion(new DefaultCompletionProvider());
+        LanguageSupport lsTimer = new JavaScriptLanguageSupport();
+        timerScriptText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+        timerScriptText.setCodeFoldingEnabled(true);
+        timerScriptText.setMarkOccurrences(true);
+        timerScriptText.setMarkOccurrences(true);
+        acTimer.install(timerScriptText);
+        lsTimer.install(timerScriptText);
+        timerScriptPanel.add(new ErrorStrip(timerScriptText), BorderLayout.LINE_END);
 
         //модели комбобоксов
         itemTypeCombo.setModel(new DefaultComboBoxModel<>(ItemTypes.values()));
@@ -519,13 +541,13 @@ public class EditorFrame extends JFrame {
 
         //листенеры
         //листенеры конопок
-        getButton.addActionListener(e -> {
-            idFiled.setText(String.valueOf(Sequencer.getCurrentId()));
-        });
+        addTimerButton.addActionListener(e -> addTimer());
 
-        setButton.addActionListener(e -> {
-            Sequencer.setID(Integer.parseInt(idFiled.getText()));
-        });
+        removeTimerButton.addActionListener(e -> removeTimer());
+
+        getButton.addActionListener(e -> idFiled.setText(String.valueOf(Sequencer.getCurrentId())));
+
+        setButton.addActionListener(e -> Sequencer.setID(Integer.parseInt(idFiled.getText())));
 
         deleteCategoryFromPlayerButton.addActionListener(e -> deleteCategoryFromPlayer());
 
@@ -552,6 +574,8 @@ public class EditorFrame extends JFrame {
         addSomeItemsToPlayerButton.addActionListener(e -> addSomeItemsToPlayer());
 
         deleteSomeItemsFromPlayerButton.addActionListener(e -> deleteSomeItemsFromPlayer());
+
+        saveTimerButton.addActionListener(e -> saveTimer());
 
         addSomeItemsToCharacterButton.addActionListener(e -> addSomeItemsToCharacter());
 
@@ -836,6 +860,8 @@ public class EditorFrame extends JFrame {
 
         playerScriptList.addListSelectionListener(e -> selectPlayerScript());
 
+        timersList.addListSelectionListener(e -> selectTimer());
+
         locationsCategoriesList.addListSelectionListener(e -> selectLocationCategory());
         locationCategoryScriptsList.addListSelectionListener(e -> selectLocationCategoryScript());
 
@@ -1038,12 +1064,55 @@ public class EditorFrame extends JFrame {
             }
         });
 
+        timerScriptText.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                selectedRSyntaxArea = timerScriptText;
+            }
+        });
+
         pack();
         setLocationRelativeTo(null);
 
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         clearInvenoryButton.addActionListener(e -> player.getInventory().clear());
+    }
+
+    private void saveTimer() {
+        int indexT = timersList.getSelectedIndex();
+        if (indexT != -1) {
+            SudTimer sudTimer = timersListModel.elementAt(indexT);
+            sudTimer.setName(timerNameField.getText());
+            sudTimer.setStep(Integer.parseInt(timerStepField.getText()));
+            sudTimer.setScript(timerScriptText.getText());
+            timersList.updateUI();
+        }
+    }
+
+    private void selectTimer() {
+        int indexT = timersList.getSelectedIndex();
+        if (indexT != -1) {
+            SudTimer sudTimer = timersListModel.get(indexT);
+            timerNameField.setText(sudTimer.getName());
+            timerStepField.setText(String.valueOf(sudTimer.getStep()));
+            timerScriptText.setText(sudTimer.getScript().getText());
+        }
+    }
+
+    private void removeTimer() {
+        int indexT = timersList.getSelectedIndex();
+        if (indexT >= 0) {
+            timersListModel.removeElementAt(indexT);
+        }
+    }
+
+    private void addTimer() {
+        SudTimer sudTimer = new SudTimer();
+        sudTimer.setName("Новый таймер");
+        sudTimer.setStep(1);
+        timersListModel.addElement(sudTimer);
     }
 
     private void setLocationCategoryScriptEnabled() {
