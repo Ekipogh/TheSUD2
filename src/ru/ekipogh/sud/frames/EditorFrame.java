@@ -230,7 +230,7 @@ public class EditorFrame extends JFrame {
     private JButton getButton;
     private JButton setButton;
     private JButton clearInvenoryButton;
-    private JList timersList;
+    private JList<SudTimer> timersList;
     private JTextField timerNameField;
     private JTextField timerStepField;
     private RSyntaxTextArea timerScriptText;
@@ -1084,7 +1084,7 @@ public class EditorFrame extends JFrame {
         int indexT = timersList.getSelectedIndex();
         if (indexT != -1) {
             SudTimer sudTimer = timersListModel.elementAt(indexT);
-            sudTimer.setName(timerNameField.getText());
+            sudTimer.setTimerName(timerNameField.getText());
             sudTimer.setStep(Integer.parseInt(timerStepField.getText()));
             sudTimer.setScript(timerScriptText.getText());
             timersList.updateUI();
@@ -1095,9 +1095,9 @@ public class EditorFrame extends JFrame {
         int indexT = timersList.getSelectedIndex();
         if (indexT != -1) {
             SudTimer sudTimer = timersListModel.get(indexT);
-            timerNameField.setText(sudTimer.getName());
+            timerNameField.setText(sudTimer.getTimerName());
             timerStepField.setText(String.valueOf(sudTimer.getStep()));
-            timerScriptText.setText(sudTimer.getScript().getText());
+            timerScriptText.setText(sudTimer.getScript());
         }
     }
 
@@ -1110,7 +1110,7 @@ public class EditorFrame extends JFrame {
 
     private void addTimer() {
         SudTimer sudTimer = new SudTimer();
-        sudTimer.setName("Новый таймер");
+        sudTimer.setTimerName("Новый таймер");
         sudTimer.setStep(1);
         timersListModel.addElement(sudTimer);
     }
@@ -2510,6 +2510,9 @@ public class EditorFrame extends JFrame {
         gameFile.getLocationCategories().forEach(locationsCategoriesListModel::addElement);
         gameFile.getLocationCategories().forEach(Location::addLocationCategory);
 
+        timersListModel.clear();
+        gameFile.getTimers().forEach(timersListModel::addElement);
+
         gameName.setText(gameFile.getGameName());
         gameStartMessage.setText(gameFile.getGameStartMessage());
 
@@ -2584,6 +2587,11 @@ public class EditorFrame extends JFrame {
             gameFile.setLocationCategories(Location.getLocationCategories());
             gameFile.setSlotNames(slotsNames);
             gameFile.setInitScript(initScriptText.getText());
+            ArrayList<SudTimer> timers = new ArrayList<>();
+            for (int i = 0; i < timersListModel.size(); i++) {
+                timers.add(timersListModel.get(i));
+            }
+            gameFile.setTimers(timers);
             gameFile.save(this.gamePath);
         } else
             JOptionPane.showMessageDialog(this, "Выберите стартовую локацию игрока!");

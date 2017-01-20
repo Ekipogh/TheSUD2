@@ -6,24 +6,32 @@ import java.io.Serializable;
  * Created by dedov on 16.01.2017.
  * licensed under WTFPL
  */
-public class SudTimer implements Runnable, Serializable {
+public class SudTimer extends Thread implements Serializable {
     public static final long serialVersionUID = 1L;
-    private String name;
+    private String timerName;
     private int step;
-    private Script script;
+    private String script;
     private boolean isRunning;
 
-    public SudTimer() {
-        script = new Script("", true);
-        isRunning = false;
+    @Override
+    public void run() {
+        super.run();
+        while (isRunning) {
+            try {
+                Script.run(this.script, null);
+                sleep(step * 1000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public String getName() {
-        return name;
+    public String getTimerName() {
+        return timerName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTimerName(String timerName) {
+        this.timerName = timerName;
     }
 
     public int getStep() {
@@ -34,37 +42,16 @@ public class SudTimer implements Runnable, Serializable {
         this.step = step;
     }
 
-    public Script getScript() {
+    public String getScript() {
         return script;
     }
 
-    public void setScript(String scriptText) {
-        this.script = new Script(scriptText, true);
-    }
-
-    public void start() {
-        this.isRunning = true;
-        this.run();
-    }
-
-    public void stop() {
-        this.isRunning = false;
-    }
-
-    @Override
-    public void run() {
-        try {
-            while (isRunning) {
-                Script.run(this.script.getText(), null);
-                wait(step * 1000);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public void setScript(String script) {
+        this.script = script;
     }
 
     @Override
     public String toString() {
-        return name;
+        return "Timer[ " + getTimerName() + " ]";
     }
 }

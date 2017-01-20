@@ -3,6 +3,7 @@ package ru.ekipogh.sud;
 import ru.ekipogh.sud.objects.*;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,12 @@ public class GameFile implements Serializable {
     private String initScript;
     private String path;
     private HashMap<String, Script> commonScripts;
+
+    public ArrayList<SudTimer> getTimers() {
+        return timers;
+    }
+
+    private ArrayList<SudTimer> timers;
 
     public String getInitScript() {
         return initScript;
@@ -160,5 +167,9 @@ public class GameFile implements Serializable {
 
     public HashMap<String, Script> getCommonScripts() {
         return commonScripts;
+    }
+
+    public void setTimers(ArrayList<SudTimer> timers) {
+        this.timers = timers;
     }
 }

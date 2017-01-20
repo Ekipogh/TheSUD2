@@ -66,6 +66,7 @@ public class PlayerFrame extends JFrame {
     private List<String> commandsList;
     private int consoleIterator;
     private GameObject focusedGameObject;
+    private ArrayList<SudTimer> timers;
 
     private PlayerFrame() {
         super("The SUD2");
@@ -315,6 +316,7 @@ public class PlayerFrame extends JFrame {
         saveFile.setCharacters(characters);
         saveFile.setLocations(locations);
         saveFile.setItems(items);
+        saveFile.setTimers(timers);
 
         //костыль,это не нужно сохранять, сделать костыл попроще
         Script.setProperty("game", null);
@@ -343,6 +345,7 @@ public class PlayerFrame extends JFrame {
             player = saveFile.getPlayer();
             characters = saveFile.getCharacters();
             locations = saveFile.getLocations();
+            timers = saveFile.getTimers();
             currentLocation = player.getLocation();
             items = saveFile.getItems();
             System.out.println("Loading gamestate from " + savePath);
@@ -463,6 +466,15 @@ public class PlayerFrame extends JFrame {
             Script.run(category.getScript(ONTAKE).getText(), item);
         Script.run(commonScripts.get("_onPlayerTakesItem").getText(), item);
         updateItems();
+    }
+
+    public SudTimer getTimer(String timerName) {
+        for (SudTimer timer : timers) {
+            if (timer.getName().equals(timerName)) {
+                return timer;
+            }
+        }
+        return null;
     }
 
     //передвижение игрока
@@ -591,6 +603,7 @@ public class PlayerFrame extends JFrame {
         locations = gameFile.getLocations();
         characters = gameFile.getCharacters();
         items = gameFile.getItems();
+        timers = gameFile.getTimers();
         currentLocation = player.getLocation();
         Map<String, String> slotNames = gameFile.getSlotNames();
         Equipment.setSlotNames(slotNames);

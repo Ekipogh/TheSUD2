@@ -8,6 +8,7 @@ import ru.ekipogh.sud.objects.Item;
 import ru.ekipogh.sud.objects.Location;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,15 @@ public class SaveFile implements Serializable { //Version .1
     private List<Item> items;
     private static Scriptable scope;
     private Map<String, Object> scopeObjects;
+    private ArrayList<SudTimer> timers;
+
+    public ArrayList<SudTimer> getTimers() {
+        return timers;
+    }
+
+    public void setTimers(ArrayList<SudTimer> timers) {
+        this.timers = timers;
+    }
 
     public List<Location> getLocations() {
         return locations;
