@@ -16,6 +16,7 @@ public class SudTimer extends Thread implements Serializable {
     @Override
     public void run() {
         super.run();
+        isRunning = true;
         while (isRunning) {
             try {
                 Script.run(this.script, null);

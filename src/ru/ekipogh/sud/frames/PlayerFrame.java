@@ -470,7 +470,7 @@ public class PlayerFrame extends JFrame {
 
     public SudTimer getTimer(String timerName) {
         for (SudTimer timer : timers) {
-            if (timer.getName().equals(timerName)) {
+            if (timer.getTimerName().equals(timerName)) {
                 return timer;
             }
         }

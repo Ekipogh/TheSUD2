@@ -16,7 +16,7 @@ import java.util.Scanner;
  * licensed under WTFPL
  */
 public class Script implements Serializable {
-    private static Context context;
+    //private static Context context;
     private static ScriptableObject scope;
     private String scriptText;
     private static HashMap<String, String> fileScipts;
@@ -26,9 +26,10 @@ public class Script implements Serializable {
         return scope;
     }
 
-    public static Context getContext() {
+   /* public static Context getContext() {
         return context;
     }
+    */
 
     public boolean isEnabled() {
         return enabled;
@@ -47,32 +48,38 @@ public class Script implements Serializable {
     }
 
     public static void init() {
-        context = Context.enter();
+        Context context = Context.enter();
         scope = context.initStandardObjects();
         fileScipts = new HashMap<>();
+        Context.exit();
     }
 
     public static void initFunctions() {
+        Context context = Context.enter();
         try {
             String functions = new Scanner(new File("lib/functions.js")).useDelimiter("\\Z").next();
             context.evaluateString(scope, functions, "functions.js", 1, null);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        Context.exit();
     }
 
     public static Object run(String script, Object caller) {
+        Context cx = Context.enter();
         if (caller != null) {
             setProperty("caller", caller);
         }
         //run file
         if (script.startsWith("file:")) {
             String scriptName = script.substring(script.indexOf(":") + 1);
-            return context.evaluateString(scope, fileScipts.get(scriptName), scriptName, 1, null);
+            return cx.evaluateString(scope, fileScipts.get(scriptName), scriptName, 1, null);
         }
         //run string
         if (!script.isEmpty())
-            return context.evaluateString(scope, script, "<cmd>", 1, null);
+            return cx.evaluateString(scope, script, "<cmd>", 1, null);
+
+        Context.exit();
         return null;
     }
 
