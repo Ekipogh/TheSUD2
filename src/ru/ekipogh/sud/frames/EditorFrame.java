@@ -52,7 +52,7 @@ public class EditorFrame extends JFrame {
     private final DefaultListModel<String> charCategoryScriptsListModel;
     private final DefaultListModel<String> playerScriptListModel;
     private final DefaultListModel<GameObjectCategory> itemCategoriesListModel;
-    private final DefaultListModel<GameObjectCategory> playerCateogriesListModel;
+    private final DefaultListModel<GameObjectCategory> playerCategoriesListModel;
     private final DefaultListModel<Location> locationsListModel;
     private final DefaultListModel<String> locationScriptListModel;
     private final DefaultListModel<String> characterScriptListModel;
@@ -288,8 +288,8 @@ public class EditorFrame extends JFrame {
         characterAllCategoriesList.setModel(charactersCategoriesListModel);
 
         playerAllCategoriesList.setModel(charactersCategoriesListModel);
-        playerCateogriesListModel = new DefaultListModel<>();
-        playerCategoriesList.setModel(playerCateogriesListModel);
+        playerCategoriesListModel = new DefaultListModel<>();
+        playerCategoriesList.setModel(playerCategoriesListModel);
 
         characterCategoryListModel = new DefaultListModel<>();
         characterCategoryList.setModel(characterCategoryListModel);
@@ -1154,9 +1154,9 @@ public class EditorFrame extends JFrame {
     private void deleteCategoryFromPlayer() {
         int indexCC = playerCategoriesList.getSelectedIndex();
         if (indexCC >= 0) {
-            GameObjectCategory category = playerCateogriesListModel.getElementAt(indexCC);
+            GameObjectCategory category = playerCategoriesListModel.getElementAt(indexCC);
             player.removeCategory(category);
-            playerCateogriesListModel.removeElement(category);
+            playerCategoriesListModel.removeElement(category);
         }
     }
 
@@ -1166,7 +1166,7 @@ public class EditorFrame extends JFrame {
             CharacterCategory category = charactersCategoriesListModel.getElementAt(indexCC);
             if (!player.getCategories().contains(category)) {
                 player.addCategory(category);
-                playerCateogriesListModel.addElement(category);
+                playerCategoriesListModel.addElement(category);
             }
         }
     }
@@ -2323,7 +2323,7 @@ public class EditorFrame extends JFrame {
 
     private void addSlot() {
         System.out.println("addslot");
-        equipTableModel.addRow(new Object[]{"\\path\\to\\file", new ImageIcon(), "название"});
+        equipTableModel.addRow(new Object[]{"/path/to/file", new ImageIcon(), "название"});
         updateEquipmentSlots();
         fillSlotCombo();
         fillPlayerEquipmentTable();
@@ -2503,12 +2503,18 @@ public class EditorFrame extends JFrame {
         Utils.updateRowHeights(equipTable);*/
         fillEquipmentTable();
 
+        characterCategoryListModel.clear();
+        itemCategoriesListModel.clear();
+        locationCategoryListModel.clear();
+        playerCategoriesListModel.clear();
+
         gameFile.getCharacterCategories().forEach(charactersCategoriesListModel::addElement);
         gameFile.getCharacterCategories().forEach(GameCharacter::addCharacterCategory);
         gameFile.getItemCategories().forEach(itemsCategoriesListModel::addElement);
         gameFile.getItemCategories().forEach(Item::addItemCategory);
         gameFile.getLocationCategories().forEach(locationsCategoriesListModel::addElement);
         gameFile.getLocationCategories().forEach(Location::addLocationCategory);
+        gameFile.getPlayer().getCategories().forEach(playerCategoriesListModel::addElement);
 
         timersListModel.clear();
         gameFile.getTimers().forEach(timersListModel::addElement);

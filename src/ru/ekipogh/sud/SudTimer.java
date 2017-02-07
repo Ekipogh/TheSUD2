@@ -27,6 +27,10 @@ public class SudTimer extends Thread implements Serializable {
         }
     }
 
+    public void setRunning(boolean running) {
+        isRunning = running;
+    }
+
     public String getTimerName() {
         return timerName;
     }

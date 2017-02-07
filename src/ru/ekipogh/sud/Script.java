@@ -51,7 +51,6 @@ public class Script implements Serializable {
         Context context = Context.enter();
         scope = context.initStandardObjects();
         fileScipts = new HashMap<>();
-        Context.exit();
     }
 
     public static void initFunctions() {

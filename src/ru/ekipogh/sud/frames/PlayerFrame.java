@@ -232,6 +232,7 @@ public class PlayerFrame extends JFrame {
             public void windowClosing(WindowEvent e) {
                 if (Main.editor == null || !Main.editor.isVisible())
                     Main.launcher.setVisible(true);
+                stopTimers();
                 super.windowClosing(e);
             }
         });
@@ -262,6 +263,12 @@ public class PlayerFrame extends JFrame {
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
+    }
+
+    private void stopTimers() {
+        for (SudTimer timer : timers) {
+            timer.setRunning(false);
+        }
     }
 
     public Location getCurrentLocation() {
