@@ -4,7 +4,10 @@ import ru.ekipogh.sud.Script;
 import ru.ekipogh.sud.Sequencer;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ekipogh on 09.05.2016.
@@ -14,7 +17,7 @@ public class GameObject implements Serializable {
     public static final long serialVersionUID = 1L;
     protected String name;
     Inventory inventory;
-    private Map<String, Object> values;
+    private HashMap<String, Object> values;
     protected int id;
     Map<String, Script> scripts;
     private String description;
@@ -84,8 +87,12 @@ public class GameObject implements Serializable {
         return values.get(valueName);
     }
 
-    public Map getValues() {
+    public HashMap<String, Object> getValues() {
         return values;
+    }
+
+    public void removeValue(String valueName) {
+        this.values.remove(valueName);
     }
 
     public int getId() {
@@ -188,7 +195,7 @@ public class GameObject implements Serializable {
 
     public void removeCategoryByName(String categoryName) {
         GameObjectCategory category = this.getCategory(categoryName);
-        if(category!=null){
+        if (category != null) {
             categories.remove(category);
         }
     }

@@ -62,6 +62,10 @@ public class EditorFrame extends JFrame {
     private final DefaultTableModel playerEquipmentTableModel;
     private final DefaultTableModel characterEquipmentTableModel;
     private final DefaultListModel<SudTimer> timersListModel;
+    private final DefaultTableModel itemValuesTableModel;
+    private final DefaultTableModel locationValuesTableModel;
+    private final DefaultTableModel characterValuesTableModel;
+    private final DefaultTableModel playerValuesTableModel;
     private String gameFolder;
     private JPanel rootPanel;
     private JList<Location> locationsList;
@@ -238,6 +242,22 @@ public class EditorFrame extends JFrame {
     private JButton saveTimerButton;
     private JButton addTimerButton;
     private JButton removeTimerButton;
+    private JTable itemValuesTable;
+    private JButton addItemValueButton;
+    private JButton deleteItemValueButton;
+    private JButton saveItemValuesButton;
+    private JTable locationValuesTable;
+    private JButton saveLocationValuesButton;
+    private JButton addLocationValueButton;
+    private JButton deleteLocationValueButton;
+    private JTable characterValuesTable;
+    private JButton saveCharacterValuesButton;
+    private JButton addCharacterValueButton;
+    private JButton deleteCharacterValueButton;
+    private JTable playerValuesTable;
+    private JButton savePlayerValuesButton;
+    private JButton addPlayerValueButton;
+    private JButton deletePlayerValueButton;
     private DefaultListModel<GameObjectCategory> characterCategoryListModel;
     private DefaultListModel<GameObjectCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
@@ -506,6 +526,30 @@ public class EditorFrame extends JFrame {
 
         equipTable.getColumnModel().getColumn(1).setCellRenderer(new ImageRenderer());
 
+        itemValuesTableModel = new DefaultTableModel();
+        itemValuesTable.setModel(itemValuesTableModel);
+        itemValuesTableModel.addColumn("Название");
+        itemValuesTableModel.addColumn("Значение");
+        itemValuesTable.setShowGrid(true);
+
+        locationValuesTableModel = new DefaultTableModel();
+        locationValuesTable.setModel(locationValuesTableModel);
+        locationValuesTableModel.addColumn("Название");
+        locationValuesTableModel.addColumn("Значение");
+        locationValuesTable.setShowGrid(true);
+
+        characterValuesTableModel = new DefaultTableModel();
+        characterValuesTable.setModel(characterValuesTableModel);
+        characterValuesTableModel.addColumn("Название");
+        characterValuesTableModel.addColumn("Значение");
+        characterValuesTable.setShowGrid(true);
+
+        playerValuesTableModel = new DefaultTableModel();
+        playerValuesTable.setModel(playerValuesTableModel);
+        playerValuesTableModel.addColumn("Название");
+        playerValuesTableModel.addColumn("Значение");
+        playerValuesTable.setShowGrid(true);
+
         //заполнение таблицы экипировки
         fillEquipmentTable();
 
@@ -541,6 +585,30 @@ public class EditorFrame extends JFrame {
 
         //листенеры
         //листенеры конопок
+        addItemValueButton.addActionListener(e -> addItemValue());
+
+        deleteItemValueButton.addActionListener(e -> deleteItemValue());
+
+        saveItemValuesButton.addActionListener(e -> saveItemValues());
+
+        addLocationValueButton.addActionListener(e -> addLocationValue());
+
+        deleteLocationValueButton.addActionListener(e -> deleteLocationValue());
+
+        saveLocationValuesButton.addActionListener(e -> saveLocationValues());
+
+        addCharacterValueButton.addActionListener(e -> addCharacterValue());
+
+        deleteCharacterValueButton.addActionListener(e -> deleteCharacterValue());
+
+        saveCharacterValuesButton.addActionListener(e -> saveCharacterValues());
+
+        addPlayerValueButton.addActionListener(e -> addPlayerValue());
+
+        deletePlayerValueButton.addActionListener(e -> deletePlayerValue());
+
+        savePlayerValuesButton.addActionListener(e -> savePlayerValues());
+
         addTimerButton.addActionListener(e -> addTimer());
 
         removeTimerButton.addActionListener(e -> removeTimer());
@@ -791,7 +859,7 @@ public class EditorFrame extends JFrame {
 
         charactersList.addListSelectionListener(e -> {
             setCharsFromItemsEnabled();
-            selectChar();
+            selectCharacter();
         });
 
         characterScriptList.addListSelectionListener(e -> selectCharScript());
@@ -1079,6 +1147,135 @@ public class EditorFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         clearInvenoryButton.addActionListener(e -> player.getInventory().clear());
     }
+
+    private void saveItemValues() {
+        int indexI = itemsList.getSelectedIndex();
+        if (indexI >= 0) {
+            Item item = itemsListModel.get(indexI);
+            for (int r = 0; r < itemValuesTable.getRowCount(); r++) {
+                String valueName = (String) itemValuesTableModel.getValueAt(r, 0);
+                String value = (String) itemValuesTableModel.getValueAt(r, 1);
+                item.setValue(valueName, value);
+            }
+        }
+    }
+
+    private void deleteItemValue() {
+        int indexI = itemsList.getSelectedIndex();
+        if (indexI >= 0) {
+            Item item = itemsListModel.get(indexI);
+            int row = itemValuesTable.getSelectedRow();
+            String valueName = (String) itemValuesTableModel.getValueAt(row, 0);
+            item.removeValue(valueName);
+            itemValuesTableModel.removeRow(row);
+        }
+    }
+
+    private void addItemValue() {
+        String valueName = JOptionPane.showInputDialog(this, "Название параметра");
+        if (!valueName.isEmpty()) {
+            int indexI = itemsList.getSelectedIndex();
+            if (indexI >= 0) {
+                Item item = itemsListModel.get(indexI);
+                item.setValue(valueName, "");
+                itemValuesTableModel.addRow(new Object[]{valueName, ""});
+            }
+        }
+    }
+
+    private void saveLocationValues() {
+        int indexI = locationsList.getSelectedIndex();
+        if (indexI >= 0) {
+            Location location = locationsListModel.get(indexI);
+            for (int r = 0; r < locationValuesTable.getRowCount(); r++) {
+                String valueName = (String) locationValuesTableModel.getValueAt(r, 0);
+                String value = (String) locationValuesTableModel.getValueAt(r, 1);
+                location.setValue(valueName, value);
+            }
+        }
+    }
+
+    private void deleteLocationValue() {
+        int indexI = locationsList.getSelectedIndex();
+        if (indexI >= 0) {
+            Location location = locationsListModel.get(indexI);
+            int row = locationValuesTable.getSelectedRow();
+            String valueName = (String) locationValuesTableModel.getValueAt(row, 0);
+            location.removeValue(valueName);
+            locationValuesTableModel.removeRow(row);
+        }
+    }
+
+    private void addLocationValue() {
+        String valueName = JOptionPane.showInputDialog(this, "Название параметра");
+        if (!valueName.isEmpty()) {
+            int indexI = locationsList.getSelectedIndex();
+            if (indexI >= 0) {
+                Location location = locationsListModel.get(indexI);
+                location.setValue(valueName, "");
+                locationValuesTableModel.addRow(new Object[]{valueName, ""});
+            }
+        }
+    }
+
+    private void saveCharacterValues() {
+        int indexI = charactersList.getSelectedIndex();
+        if (indexI >= 0) {
+            GameCharacter character = charactersListModel.get(indexI);
+            for (int r = 0; r < characterValuesTable.getRowCount(); r++) {
+                String valueName = (String) characterValuesTableModel.getValueAt(r, 0);
+                String value = (String) characterValuesTableModel.getValueAt(r, 1);
+                character.setValue(valueName, value);
+            }
+        }
+    }
+
+    private void deleteCharacterValue() {
+        int indexI = charactersList.getSelectedIndex();
+        if (indexI >= 0) {
+            GameCharacter character = charactersListModel.get(indexI);
+            int row = characterValuesTable.getSelectedRow();
+            String valueName = (String) characterValuesTableModel.getValueAt(row, 0);
+            character.removeValue(valueName);
+            characterValuesTableModel.removeRow(row);
+        }
+    }
+
+    private void addCharacterValue() {
+        String valueName = JOptionPane.showInputDialog(this, "Название параметра");
+        if (!valueName.isEmpty()) {
+            int indexI = charactersList.getSelectedIndex();
+            if (indexI >= 0) {
+                GameCharacter character = charactersListModel.get(indexI);
+                character.setValue(valueName, "");
+                characterValuesTableModel.addRow(new Object[]{valueName, ""});
+            }
+        }
+    }
+
+    private void savePlayerValues() {
+        for (int r = 0; r < playerValuesTable.getRowCount(); r++) {
+            String valueName = (String) playerValuesTableModel.getValueAt(r, 0);
+            String value = (String) playerValuesTableModel.getValueAt(r, 1);
+            player.setValue(valueName, value);
+        }
+    }
+
+    private void deletePlayerValue() {
+        int row = playerValuesTable.getSelectedRow();
+        String valueName = (String) playerValuesTableModel.getValueAt(row, 0);
+        player.removeValue(valueName);
+        playerValuesTableModel.removeRow(row);
+    }
+
+    private void addPlayerValue() {
+        String valueName = JOptionPane.showInputDialog(this, "Название параметра");
+        if (!valueName.isEmpty()) {
+            player.setValue(valueName, "");
+            playerValuesTableModel.addRow(new Object[]{valueName, ""});
+        }
+    }
+
 
     private void saveTimer() {
         int indexT = timersList.getSelectedIndex();
@@ -2228,7 +2425,7 @@ public class EditorFrame extends JFrame {
         selected.setCategories(categories);
     }
 
-    private void selectChar() {
+    private void selectCharacter() {
         int index = charactersList.getSelectedIndex();
         if (index != -1) {
             GameCharacter selected = charactersListModel.getElementAt(index);
@@ -2241,6 +2438,10 @@ public class EditorFrame extends JFrame {
             characterCategoryListModel.removeAllElements();
             selected.getCategories().forEach(characterCategoryListModel::addElement);
             fillCharacterEquipmentTable();
+            characterValuesTableModel.setRowCount(0);
+            for (Map.Entry<String, Object> entry : selected.getValues().entrySet()) {
+                characterValuesTableModel.addRow(new Object[]{entry.getKey(), entry.getValue()});
+            }
         }
     }
 
@@ -2427,6 +2628,10 @@ public class EditorFrame extends JFrame {
             isLockedBox.setEnabled(selected.isContainer());
             isLockedBox.setSelected(selected.isLocked());
             isContainerBox.setSelected(selected.isContainer());
+            itemValuesTableModel.setRowCount(0);
+            for (Map.Entry<String, Object> entry : selected.getValues().entrySet()) {
+                itemValuesTableModel.addRow(new Object[]{entry.getKey(), entry.getValue()});
+            }
         }
     }
 
@@ -2685,6 +2890,10 @@ public class EditorFrame extends JFrame {
             downEnabledBox.setSelected(selected.isDownOpened());
             locationCategoryListModel.removeAllElements();
             selected.getCategories().forEach(locationCategoryListModel::addElement);
+            locationValuesTableModel.setRowCount(0);
+            for (Map.Entry<String, Object> entry : selected.getValues().entrySet()) {
+                locationValuesTableModel.addRow(new Object[]{entry.getKey(), entry.getValue()});
+            }
         }
     }
 
