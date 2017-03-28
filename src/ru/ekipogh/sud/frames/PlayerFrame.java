@@ -648,6 +648,7 @@ public class PlayerFrame extends JFrame {
     }
 
     public void makePlayer(GameCharacter character) {
+        Script.run(commonScripts.get("_onMakePlayer").getText(), character);
         characters.add(player);
         characters.remove(character);
         player = character;

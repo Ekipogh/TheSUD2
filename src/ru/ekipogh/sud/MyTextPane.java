@@ -7,7 +7,7 @@ import javax.swing.event.HyperlinkEvent;
 
 /**
  * Created by ekipogh on 07.05.2015.
- licensed under WTFPL
+ * licensed under WTFPL
  */
 public class MyTextPane extends JTextPane {
     private boolean enabled = true;
@@ -40,6 +40,7 @@ public class MyTextPane extends JTextPane {
         int breakIndex = temp.lastIndexOf("</body>");
         temp = temp.substring(0, breakIndex) + "<br>" + str + temp.substring(breakIndex);
         this.setText(temp);
+        this.setCaretPosition(getDocument().getLength());
     }
 
     public void print(String str) {
@@ -52,6 +53,7 @@ public class MyTextPane extends JTextPane {
         int breakIndex = temp.lastIndexOf("</body>");
         temp = temp.substring(0, breakIndex) + str + temp.substring(breakIndex);
         this.setText(temp);
+        this.setCaretPosition(getDocument().getLength());
     }
 
     public void clear() {

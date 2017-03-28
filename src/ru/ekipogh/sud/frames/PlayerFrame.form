@@ -47,7 +47,9 @@
                     <constraints>
                       <splitpane position="left"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <autoscrolls value="true"/>
+                    </properties>
                     <border type="none"/>
                     <children>
                       <component id="9f2ad" class="ru.ekipogh.sud.MyTextPane" binding="output">

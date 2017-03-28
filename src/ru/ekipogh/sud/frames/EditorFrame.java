@@ -292,6 +292,7 @@ public class EditorFrame extends JFrame {
         commonScripts.put("_onPlayerUnequipsItem", new Script("", true));
         commonScripts.put("_onPlayerUnlocksItem", new Script("", true));
         commonScripts.put("_onPlayerStashesItem", new Script("", true));
+        commonScripts.put("_onMakePlayer", new Script("", true));
 
         //модели листов
         charactersListModel = new DefaultListModel<>();
