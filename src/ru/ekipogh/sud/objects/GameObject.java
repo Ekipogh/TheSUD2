@@ -2,6 +2,8 @@ package ru.ekipogh.sud.objects;
 
 import ru.ekipogh.sud.Script;
 import ru.ekipogh.sud.Sequencer;
+import ru.ekipogh.sud.behavior.BehaviorTree;
+import ru.ekipogh.sud.behavior.Selector;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,16 +25,10 @@ public class GameObject implements Serializable {
     private String description;
     private HashMap<String, Boolean> scriptsEnabled;
     private List<GameObjectCategory> categories;
+    private BehaviorTree btree;
 
     public GameObject() {
-        this.name = "";
-        this.description = "";
-        this.inventory = new Inventory();
-        this.scripts = new HashMap<>();
-        this.values = new HashMap<>();
-        this.scriptsEnabled = new HashMap<>();
-        this.id = Sequencer.getNewID();
-        this.categories = new ArrayList<>();
+        this("");
     }
 
     public GameObject(String name) {
@@ -44,6 +40,8 @@ public class GameObject implements Serializable {
         this.scriptsEnabled = new HashMap<>();
         this.id = Sequencer.getNewID();
         this.categories = new ArrayList<>();
+        this.btree = new BehaviorTree();
+        btree.addChild(new Selector());
     }
 
     public void setDescription(String description) {
@@ -198,6 +196,10 @@ public class GameObject implements Serializable {
         if (category != null) {
             categories.remove(category);
         }
+    }
+
+    public BehaviorTree getBtree() {
+        return btree;
     }
 
     public String toString() {

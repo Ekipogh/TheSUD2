@@ -14,6 +14,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -258,6 +260,9 @@ public class EditorFrame extends JFrame {
     private JButton savePlayerValuesButton;
     private JButton addPlayerValueButton;
     private JButton deletePlayerValueButton;
+    private JTree characterBehaviorTree;
+    private JButton addCharacterBehaviorTreeNode;
+    private JButton removeCharaterBehaviorTreeNode;
     private DefaultListModel<GameObjectCategory> characterCategoryListModel;
     private DefaultListModel<GameObjectCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
@@ -583,6 +588,9 @@ public class EditorFrame extends JFrame {
         menuBar.add(menuSearch);
 
         setJMenuBar(menuBar);
+
+        //модели деревьев
+        characterBehaviorTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
         //листенеры
         //листенеры конопок
@@ -2443,6 +2451,8 @@ public class EditorFrame extends JFrame {
             for (Map.Entry<String, Object> entry : selected.getValues().entrySet()) {
                 characterValuesTableModel.addRow(new Object[]{entry.getKey(), entry.getValue()});
             }
+            DefaultTreeModel treeModel = new DefaultTreeModel(selected.getBtree());
+            characterBehaviorTree.setModel(treeModel);
         }
     }
 
