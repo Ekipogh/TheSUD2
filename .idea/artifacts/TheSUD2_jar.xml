@@ -2,6 +2,9 @@
   <artifact type="jar" name="TheSUD2:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/TheSUD2_jar</output-path>
     <root id="archive" name="TheSUD2.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
       <element id="module-output" name="TheSUD2" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/autocomplete-2.5.8.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/js.jar" path-in-jar="/" />
