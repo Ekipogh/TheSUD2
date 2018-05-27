@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_thesud2" default="compile.module.thesud2">
+  <dirname property="module.thesud2.basedir" file="${ant.file.module_thesud2}"/>
+  
+  <property name="module.jdk.home.thesud2" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.thesud2" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.thesud2" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.thesud2" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
+  
+  <property name="thesud2.output.dir" value="${module.thesud2.basedir}/out/production/TheSUD2"/>
+  <property name="thesud2.testoutput.dir" value="${module.thesud2.basedir}/out/test/TheSUD2"/>
+  
+  <path id="thesud2.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="thesud2.module.production.classpath">
+    <path refid="${module.jdk.classpath.thesud2}"/>
+    <path refid="library.lib.classpath"/>
+  </path>
+  
+  <path id="thesud2.runtime.production.module.classpath">
+    <pathelement location="${thesud2.output.dir}"/>
+    <path refid="library.lib.classpath"/>
+  </path>
+  
+  <path id="thesud2.module.classpath">
+    <path refid="${module.jdk.classpath.thesud2}"/>
+    <pathelement location="${thesud2.output.dir}"/>
+    <path refid="library.lib.classpath"/>
+  </path>
+  
+  <path id="thesud2.runtime.module.classpath">
+    <pathelement location="${thesud2.testoutput.dir}"/>
+    <pathelement location="${thesud2.output.dir}"/>
+    <path refid="library.lib.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.thesud2">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.thesud2">
+    <patternset refid="excluded.from.module.thesud2"/>
+  </patternset>
+  
+  <path id="thesud2.module.sourcepath">
+    <dirset dir="${module.thesud2.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.thesud2" depends="compile.module.thesud2.production,compile.module.thesud2.tests" description="Compile module TheSUD2"/>
+  
+  <target name="compile.module.thesud2.production" depends="register.custom.compilers" description="Compile module TheSUD2; production classes">
+    <mkdir dir="${thesud2.output.dir}"/>
+    <javac2 destdir="${thesud2.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.thesud2}/javac">
+      <compilerarg line="${compiler.args.thesud2}"/>
+      <bootclasspath refid="thesud2.module.bootclasspath"/>
+      <classpath refid="thesud2.module.production.classpath"/>
+      <src refid="thesud2.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.thesud2"/>
+    </javac2>
+    
+    <copy todir="${thesud2.output.dir}">
+      <fileset dir="${module.thesud2.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.thesud2.tests" depends="register.custom.compilers,compile.module.thesud2.production" description="compile module TheSUD2; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.thesud2" description="cleanup module">
+    <delete dir="${thesud2.output.dir}"/>
+    <delete dir="${thesud2.testoutput.dir}"/>
+  </target>
+</project>
