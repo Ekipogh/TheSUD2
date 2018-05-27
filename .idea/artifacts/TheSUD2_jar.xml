@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="TheSUD2:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/TheSUD2_jar</output-path>
+    <root id="archive" name="TheSUD2.jar">
+      <element id="module-output" name="TheSUD2" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/autocomplete-2.5.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/js.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/languagesupport-2.5.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/rsyntaxtextarea-2.5.8.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
