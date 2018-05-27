@@ -1,15 +1,13 @@
 package ru.ekipogh.sud.behavior;
 
-
-import javax.swing.tree.TreeNode;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
+import java.io.Serializable;
 
 /**
  * Created by Ektril Pogh on 04.03.2018.
  */
-public class BehaviorTree extends BTreeNode {
+public class BehaviorTree extends BTreeNode implements Serializable {
+    public static final long serialVersionUID = 1L;
+
     @Override
     public int update() {
         return children.get(0).update();
@@ -23,5 +21,10 @@ public class BehaviorTree extends BTreeNode {
         }
         children.add(child);
 
+    }
+
+    @Override
+    public String toString() {
+        return "Behavior Root";
     }
 }

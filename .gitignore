@@ -7,6 +7,7 @@
 .idea/uiDesigner.xml
 .idea/vcs.xml
 .idea/workspace.xml
+.idea/*
 TheSUD2.iml
 production/TheSUD2/META-INF/MANIFEST.MF
 production/TheSUD2/com/intellij/uiDesigner/core/AbstractLayout.class
@@ -95,3 +96,5 @@ production/TheSUD2/ru/ekipogh/sud/objects/ItemTypes.class
 production/TheSUD2/ru/ekipogh/sud/objects/Location.class
 production/TheSUD2/ru/ekipogh/sud/objects/LocationCategory.class
 production/TheSUD2/ru/ekipogh/sud/objects/SudType.class
+.idea
+out

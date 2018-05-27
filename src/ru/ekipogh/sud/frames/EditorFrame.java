@@ -8,6 +8,10 @@ import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import ru.ekipogh.sud.*;
+import ru.ekipogh.sud.behavior.BTreeNode;
+import ru.ekipogh.sud.behavior.Selector;
+import ru.ekipogh.sud.behavior.Sequence;
+import ru.ekipogh.sud.behavior.TaskNode;
 import ru.ekipogh.sud.objects.*;
 
 import javax.swing.*;
@@ -32,6 +36,12 @@ public class EditorFrame extends JFrame {
     private static final int LOCATION = 0;
     private static final int CHARACTER = 1;
     private static final int PLAYER = 2;
+
+    private enum BehaviorTypes {
+        SELECTOR, SEQUNCE, TASK
+    }
+
+    ;
     private final DefaultComboBoxModel<Location> northModel;
     private final DefaultComboBoxModel<Location> southModel;
     private final DefaultComboBoxModel<Location> eastModel;
@@ -261,8 +271,13 @@ public class EditorFrame extends JFrame {
     private JButton addPlayerValueButton;
     private JButton deletePlayerValueButton;
     private JTree characterBehaviorTree;
-    private JButton addCharacterBehaviorTreeNode;
-    private JButton removeCharaterBehaviorTreeNode;
+    private JButton addCharacterBehaviorTreeButton;
+    private JButton removeCharacterBehaviorTreeButton;
+    private JTabbedPane mainTabbedPain;
+    private JTree playerBehaviorTree;
+    private JTree characterCategoryBehaviorTree;
+    private RSyntaxTextArea characterBehaviorScript;
+    private JPanel characterBehaviorPanel;
     private DefaultListModel<GameObjectCategory> characterCategoryListModel;
     private DefaultListModel<GameObjectCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
@@ -469,6 +484,16 @@ public class EditorFrame extends JFrame {
         lsTimer.install(timerScriptText);
         timerScriptPanel.add(new ErrorStrip(timerScriptText), BorderLayout.LINE_END);
 
+        AutoCompletion acCharBeh = new AutoCompletion(new DefaultCompletionProvider());
+        LanguageSupport lsCharBeh = new JavaScriptLanguageSupport();
+        characterBehaviorScript.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+        characterBehaviorScript.setCodeFoldingEnabled(true);
+        characterBehaviorScript.setMarkOccurrences(true);
+        characterBehaviorScript.setMarkOccurrences(true);
+        acCharBeh.install(characterBehaviorScript);
+        lsCharBeh.install(characterBehaviorScript);
+        characterBehaviorPanel.add(new ErrorStrip(characterBehaviorScript), BorderLayout.LINE_END);
+
         //модели комбобоксов
         itemTypeCombo.setModel(new DefaultComboBoxModel<>(ItemTypes.values()));
 
@@ -574,6 +599,19 @@ public class EditorFrame extends JFrame {
         menuFile.add(saveAsMenu);
         menuFile.add(startGameMenu);
         menuBar.add(menuFile);
+
+        JPopupMenu addBTreeMenu = new JPopupMenu();
+        JMenuItem selectorItem = new JMenuItem("Selector");
+        selectorItem.addActionListener(e -> addBehavior(BehaviorTypes.SELECTOR));
+        addBTreeMenu.add(selectorItem);
+        JMenuItem sequencerItem = new JMenuItem("Sequencer");
+        addBTreeMenu.add(sequencerItem);
+        sequencerItem.addActionListener(e -> addBehavior(BehaviorTypes.SEQUNCE));
+        JMenuItem leafItem = new JMenuItem("Task");
+        addBTreeMenu.add(leafItem);
+        leafItem.addActionListener(e -> addBehavior(BehaviorTypes.TASK));
+        addCharacterBehaviorTreeButton.setComponentPopupMenu(addBTreeMenu);
+
         //Поиск
         findDialog = new FindDialog();
         replaceDialog = new ReplaceDialog();
@@ -594,6 +632,10 @@ public class EditorFrame extends JFrame {
 
         //листенеры
         //листенеры конопок
+        //addCharacterBehaviorTreeButton.addActionListener(e -> addCharacterBehaviorTree());
+
+//        removeCharacterBehaviorTreeButton.addActionListener(e -> removeCharaterBehaviorTree());
+
         addItemValueButton.addActionListener(e -> addItemValue());
 
         deleteItemValueButton.addActionListener(e -> deleteItemValue());
@@ -1155,6 +1197,48 @@ public class EditorFrame extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         clearInvenoryButton.addActionListener(e -> player.getInventory().clear());
+    }
+
+    private void addBehavior(BehaviorTypes bType) {
+        //characters, player, character categories
+        JTree tree = null;
+        int tabIndex = mainTabbedPain.getSelectedIndex();
+        switch (tabIndex) {
+            case 3:
+                int indexC = charactersList.getSelectedIndex();
+                if (indexC >= 0) {
+                    tree = characterBehaviorTree;
+                }
+                break;
+            case 4:
+                tree = playerBehaviorTree;
+                break;
+            case 6:
+                tree = characterCategoryBehaviorTree;
+                break;
+        }
+        try {
+            if (tree != null) {
+                BTreeNode node = (BTreeNode) tree.getLastSelectedPathComponent();
+                if (node.getClass() != TaskNode.class && node != null) {
+                    switch (bType) {
+                        case SELECTOR:
+                            node.addChild(new Selector());
+                            break;
+                        case SEQUNCE:
+                            node.addChild(new Sequence());
+                            break;
+                        case TASK:
+                            node.addChild(new TaskNode());
+                            break;
+                    }
+
+                }
+                tree.updateUI();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void saveItemValues() {

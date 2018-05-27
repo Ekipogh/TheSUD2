@@ -1,6 +1,7 @@
 package ru.ekipogh.sud.behavior;
 
 import javax.swing.tree.TreeNode;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -8,9 +9,11 @@ import java.util.Enumeration;
 /**
  * Created by Ektril Pogh on 24.03.2018.
  */
-public abstract class BTreeNode implements TreeNode {
+public abstract class BTreeNode implements TreeNode, Serializable {
+    public static final long serialVersionUID = 1L;
     ArrayList<BTreeNode> children = new ArrayList<>();
-    BTreeNode parent = null;
+    private BTreeNode parent = null;
+    String name;
 
     int SUCCESS = 0;
     int RUNNING = 2;
@@ -19,6 +22,7 @@ public abstract class BTreeNode implements TreeNode {
     abstract int update();
 
     public void addChild(BTreeNode child) {
+        child.parent = this;
         children.add(child);
     }
 
@@ -30,8 +34,7 @@ public abstract class BTreeNode implements TreeNode {
 
     @Override
     public int getChildCount() {
-        //return children.size();
-        return 1;
+        return children.size();
     }
 
     @Override
@@ -51,7 +54,7 @@ public abstract class BTreeNode implements TreeNode {
 
     @Override
     public boolean isLeaf() {
-        return false;
+        return children.size() == 0;
     }
 
     @Override
