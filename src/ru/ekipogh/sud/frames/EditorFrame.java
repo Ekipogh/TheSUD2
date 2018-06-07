@@ -1917,7 +1917,7 @@ public class EditorFrame extends JFrame {
         } else {
             return;
         }
-        saveGame();
+        saveGame(this.gamePath);
     }
 
     private void fillEquipmentTable() {
@@ -2435,8 +2435,8 @@ public class EditorFrame extends JFrame {
 
     private void startGame() {
         if (!this.gamePath.isEmpty()) {
-            saveGame();
-            new PlayerFrame(this.gamePath);
+            saveGame(this.gamePath + ".temp");
+            new PlayerFrame(this.gamePath + ".temp");
         } else {
             saveAs();
             new PlayerFrame(this.gamePath);
@@ -2856,12 +2856,12 @@ public class EditorFrame extends JFrame {
                 return;
             }
         }
-        saveGame();
+        saveGame(this.gamePath);
     }
 
-    private void saveGame() {
+    private void saveGame(String filePath) {
         if (player.getLocation() != null) {
-            System.out.println("Saving to " + this.gamePath);
+            System.out.println("Saving to " + filePath);
             GameFile gameFile = new GameFile();
             gameFile.setPlayer(player);
             gameFile.setSequencerID(Sequencer.getCurrentId());
@@ -2898,7 +2898,7 @@ public class EditorFrame extends JFrame {
                 timers.add(timersListModel.get(i));
             }
             gameFile.setTimers(timers);
-            gameFile.save(this.gamePath);
+            gameFile.save(filePath);
         } else
             JOptionPane.showMessageDialog(this, "Выберите стартовую локацию игрока!");
     }
