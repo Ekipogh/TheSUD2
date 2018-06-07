@@ -19,7 +19,6 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -37,11 +36,8 @@ public class EditorFrame extends JFrame {
     private static final int CHARACTER = 1;
     private static final int PLAYER = 2;
 
-    private enum BehaviorTypes {
-        SELECTOR, SEQUNCE, TASK
-    }
+    private final FindDialog findDialog;
 
-    ;
     private final DefaultComboBoxModel<Location> northModel;
     private final DefaultComboBoxModel<Location> southModel;
     private final DefaultComboBoxModel<Location> eastModel;
@@ -278,15 +274,17 @@ public class EditorFrame extends JFrame {
     private JTree characterCategoryBehaviorTree;
     private RSyntaxTextArea characterBehaviorScript;
     private JPanel characterBehaviorPanel;
+    private final ReplaceDialog replaceDialog;
+    private RSyntaxTextArea characterCategoryBehaviorScriptArea;
+    private RSyntaxTextArea playerBehaviorScriptArea;
+    private JPanel playerBehaviorScriptPanel;
+    private JPanel characterCategoryBehaviorScriptPanel;
     private DefaultListModel<GameObjectCategory> characterCategoryListModel;
     private DefaultListModel<GameObjectCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
     private GameCharacter player;
     private String gamePath;
     private RSyntaxTextArea selectedRSyntaxArea; //для поиска
-    private final FindDialog findDialog;
-    private final ReplaceDialog replaceDialog;
-
     public EditorFrame(String gamePath) {
         super("Редактор");
 
@@ -494,6 +492,26 @@ public class EditorFrame extends JFrame {
         lsCharBeh.install(characterBehaviorScript);
         characterBehaviorPanel.add(new ErrorStrip(characterBehaviorScript), BorderLayout.LINE_END);
 
+        AutoCompletion acPlayerBeh = new AutoCompletion(new DefaultCompletionProvider());
+        LanguageSupport lsPlayerBeh = new JavaScriptLanguageSupport();
+        playerBehaviorScriptArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+        playerBehaviorScriptArea.setCodeFoldingEnabled(true);
+        playerBehaviorScriptArea.setMarkOccurrences(true);
+        playerBehaviorScriptArea.setMarkOccurrences(true);
+        acPlayerBeh.install(playerBehaviorScriptArea);
+        lsPlayerBeh.install(playerBehaviorScriptArea);
+        playerBehaviorScriptPanel.add(new ErrorStrip(playerBehaviorScriptArea), BorderLayout.LINE_END);
+
+        AutoCompletion acCharCatBeh = new AutoCompletion(new DefaultCompletionProvider());
+        LanguageSupport lsCharCatBeh = new JavaScriptLanguageSupport();
+        characterCategoryBehaviorScriptArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+        characterCategoryBehaviorScriptArea.setCodeFoldingEnabled(true);
+        characterCategoryBehaviorScriptArea.setMarkOccurrences(true);
+        characterCategoryBehaviorScriptArea.setMarkOccurrences(true);
+        acCharCatBeh.install(characterCategoryBehaviorScriptArea);
+        lsCharCatBeh.install(characterCategoryBehaviorScriptArea);
+        characterCategoryBehaviorScriptPanel.add(new ErrorStrip(characterCategoryBehaviorScriptArea), BorderLayout.LINE_END);
+
         //модели комбобоксов
         itemTypeCombo.setModel(new DefaultComboBoxModel<>(ItemTypes.values()));
 
@@ -606,7 +624,7 @@ public class EditorFrame extends JFrame {
         addBTreeMenu.add(selectorItem);
         JMenuItem sequencerItem = new JMenuItem("Sequencer");
         addBTreeMenu.add(sequencerItem);
-        sequencerItem.addActionListener(e -> addBehavior(BehaviorTypes.SEQUNCE));
+        sequencerItem.addActionListener(e -> addBehavior(BehaviorTypes.SEQUENCE));
         JMenuItem leafItem = new JMenuItem("Task");
         addBTreeMenu.add(leafItem);
         leafItem.addActionListener(e -> addBehavior(BehaviorTypes.TASK));
@@ -628,8 +646,9 @@ public class EditorFrame extends JFrame {
         setJMenuBar(menuBar);
 
         //модели деревьев
-        characterBehaviorTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-
+        characterBehaviorTree.setModel(null);
+        characterCategoryBehaviorTree.setModel(null);
+        playerBehaviorTree.setModel(null);
         //листенеры
         //листенеры конопок
         //addCharacterBehaviorTreeButton.addActionListener(e -> addCharacterBehaviorTree());
@@ -1225,7 +1244,7 @@ public class EditorFrame extends JFrame {
                         case SELECTOR:
                             node.addChild(new Selector());
                             break;
-                        case SEQUNCE:
+                        case SEQUENCE:
                             node.addChild(new Sequence());
                             break;
                         case TASK:
@@ -1238,6 +1257,15 @@ public class EditorFrame extends JFrame {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void fillCharacterEquipmentTable() {
+        int indexC = charactersList.getSelectedIndex();
+        if (indexC >= 0) {
+            GameCharacter character = charactersListModel.get(indexC);
+            characterEquipmentTableModel.setRowCount(0);
+            Equipment.getSlotMap().forEach((key, value) -> characterEquipmentTableModel.addRow(new Object[]{key, character.getEquipedItem(key)}));
         }
     }
 
@@ -1608,18 +1636,19 @@ public class EditorFrame extends JFrame {
         }
     }
 
-    private void fillCharacterEquipmentTable() {
-        int indexC = charactersList.getSelectedIndex();
-        if (indexC >= 0) {
-            GameCharacter character = charactersListModel.get(indexC);
-            characterEquipmentTableModel.setRowCount(0);
-            Equipment.getSlotMap().entrySet().forEach(entry -> characterEquipmentTableModel.addRow(new Object[]{entry.getKey(), character.getEquipedItem(entry.getKey())}));
-        }
-    }
-
     private void fillPlayerEquipmentTable() {
         playerEquipmentTableModel.setRowCount(0);
-        Equipment.getSlotMap().entrySet().forEach(entry -> playerEquipmentTableModel.addRow(new Object[]{entry.getKey(), player.getEquipedItem(entry.getKey())}));
+        Equipment.getSlotMap().forEach((key, value) -> playerEquipmentTableModel.addRow(new Object[]{key, player.getEquipedItem(key)}));
+    }
+
+    private void fillEquipmentTable() {
+        equipTableModel.setRowCount(0);
+        Equipment.getSlotMap().forEach((slotName, icon) -> {
+            String iconPath = gameFolder + "\\" + icon;
+            equipTableModel.addRow(new Object[]{icon, new ImageIcon(iconPath), slotName});
+        });
+        Utils.updateRowHeights(equipTable);
+        fillSlotCombo();
     }
 
     private void unequipItemFromPlayer(int row) {
@@ -1920,16 +1949,8 @@ public class EditorFrame extends JFrame {
         saveGame(this.gamePath);
     }
 
-    private void fillEquipmentTable() {
-        equipTableModel.setRowCount(0);
-        Equipment.getSlotMap().entrySet().forEach((entry) -> {
-            String slotName = entry.getKey();
-            String iconPath = gameFolder + "\\" + entry.getValue();
-            String icon = entry.getValue();
-            equipTableModel.addRow(new Object[]{icon, new ImageIcon(iconPath), slotName});
-        });
-        Utils.updateRowHeights(equipTable);
-        fillSlotCombo();
+    private enum BehaviorTypes {
+        SELECTOR, SEQUENCE, TASK
     }
 
     private void fillSlotCombo() {
