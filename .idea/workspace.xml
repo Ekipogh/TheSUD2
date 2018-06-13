@@ -6,19 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4dbcf5c9-0fad-4356-9780-f46e2e5818d0" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/EditorController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/LauncherController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/PlayerController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/ScreenController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/editor.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/launcher.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/player.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/LauncherFrame.form" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/LauncherFrame.java" beforeDir="false" />
-    </list>
+    <list default="true" id="4dbcf5c9-0fad-4356-9780-f46e2e5818d0" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
