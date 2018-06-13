@@ -1,7 +1,8 @@
 package ru.ekipogh.sud.behavior;
 
+import org.mozilla.javascript.Undefined;
 import ru.ekipogh.sud.Script;
-import ru.ekipogh.sud.objects.GameCharacter;
+import ru.ekipogh.sud.objects.GameObject;
 
 import java.io.Serializable;
 
@@ -11,10 +12,12 @@ import java.io.Serializable;
 public class TaskNode extends BTreeNode implements Serializable {
     public static final long serialVersionUID = 1L;
     private Script script;
-    private GameCharacter character;
+    private GameObject character;
 
-    public TaskNode() {
-        this.script = new Script("", true);
+
+    public TaskNode(GameObject character) {
+        super();
+        this.character = character;
     }
 
     public Script getScript() {
@@ -27,8 +30,11 @@ public class TaskNode extends BTreeNode implements Serializable {
 
     @Override
     int update() {
-        System.out.println(Script.run(script.getText(), character));
-        return 0;
+        Object result = Script.run(script.getText(), character);
+        if (result.getClass() != Undefined.class) {
+            return ((Double) result).intValue();
+        }
+        return 1;
     }
 
     @Override

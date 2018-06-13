@@ -202,11 +202,19 @@ public class GameObject implements Serializable {
         return btree;
     }
 
-    public String toString() {
-        return this.name;
+    @SuppressWarnings("unused")
+    public void updateBehavior() {
+        this.btree.update();
+        for (GameObjectCategory category : categories) {
+            category.updateBehavior();
+        }
     }
 
     public void restoreBTree() {
         this.btree = new BehaviorTree();
+    }
+
+    public String toString() {
+        return this.name;
     }
 }

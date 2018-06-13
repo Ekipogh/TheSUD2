@@ -29,12 +29,11 @@ import java.util.Map;
  * licensed under WTFPL
  */
 public class EditorFrame extends JFrame {
-    private enum gameObjectTypes {
+    private enum OBJECTYPES {
         LOCATION, CHARACTER, PLAYER, ITEM, LOCATIONCATEGORY, CHARACTERCATEGORY, ITEMCATEGORY, PLAYERCATEGORY
     }
 
     private final FindDialog findDialog;
-
     private final DefaultComboBoxModel<Location> northModel;
     private final DefaultComboBoxModel<Location> southModel;
     private final DefaultComboBoxModel<Location> eastModel;
@@ -238,7 +237,7 @@ public class EditorFrame extends JFrame {
     private JTextField idFiled;
     private JButton getButton;
     private JButton setButton;
-    private JButton clearInvenoryButton;
+    private JButton clearInventoryButton;
     private JList<SudTimer> timersList;
     private JTextField timerNameField;
     private JTextField timerStepField;
@@ -264,8 +263,6 @@ public class EditorFrame extends JFrame {
     private JButton addPlayerValueButton;
     private JButton deletePlayerValueButton;
     private JTree characterBehaviorTree;
-    private JButton addCharacterBehaviorTreeButton;
-    private JButton removeCharacterBehaviorTreeButton;
     private JTabbedPane mainTabbedPain;
     private JTree playerBehaviorTree;
     private JTree characterCategoryBehaviorTree;
@@ -619,17 +616,6 @@ public class EditorFrame extends JFrame {
         menuFile.add(startGameMenu);
         menuBar.add(menuFile);
 
-        JPopupMenu addBTreeMenu = new JPopupMenu();
-        JMenuItem selectorItem = new JMenuItem("Selector");
-        selectorItem.addActionListener(e -> addBehavior(BehaviorTypes.SELECTOR));
-        addBTreeMenu.add(selectorItem);
-        JMenuItem sequencerItem = new JMenuItem("Sequencer");
-        addBTreeMenu.add(sequencerItem);
-        sequencerItem.addActionListener(e -> addBehavior(BehaviorTypes.SEQUENCE));
-        JMenuItem leafItem = new JMenuItem("Task");
-        addBTreeMenu.add(leafItem);
-        leafItem.addActionListener(e -> addBehavior(BehaviorTypes.TASK));
-
         //Поиск
         findDialog = new FindDialog();
         replaceDialog = new ReplaceDialog();
@@ -701,11 +687,11 @@ public class EditorFrame extends JFrame {
 
         addCharacterCategoriesFolderButton.addActionListener(e -> addCategoriesFolder(3));
 
-        locationContainerButton.addActionListener(e -> showContainerFrame(gameObjectTypes.LOCATION));
+        locationContainerButton.addActionListener(e -> showContainerFrame(OBJECTYPES.LOCATION));
 
-        characterContainerButton.addActionListener(e -> showContainerFrame(gameObjectTypes.CHARACTER));
+        characterContainerButton.addActionListener(e -> showContainerFrame(OBJECTYPES.CHARACTER));
 
-        playerContainerButton.addActionListener(e -> showContainerFrame(gameObjectTypes.PLAYER));
+        playerContainerButton.addActionListener(e -> showContainerFrame(OBJECTYPES.PLAYER));
 
         addSomeItemsToPlayerButton.addActionListener(e -> addSomeItemsToPlayer());
 
@@ -1257,7 +1243,7 @@ public class EditorFrame extends JFrame {
 
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        clearInvenoryButton.addActionListener(e -> player.getInventory().clear());
+        clearInventoryButton.addActionListener(e -> player.getInventory().clear());
     }
 
     private void saveCharacterCategoryBehaviorScript() {
@@ -1269,15 +1255,11 @@ public class EditorFrame extends JFrame {
 
     private void showBehaviorTreeMenu(MouseEvent event) {
         JPopupMenu addBTreeMenu = new JPopupMenu();
-        JMenuItem selectorItem = new JMenuItem("Selector");
-        selectorItem.addActionListener(e -> addBehavior(BehaviorTypes.SELECTOR));
-        addBTreeMenu.add(selectorItem);
-        JMenuItem sequencerItem = new JMenuItem("Sequencer");
-        addBTreeMenu.add(sequencerItem);
-        sequencerItem.addActionListener(e -> addBehavior(BehaviorTypes.SEQUENCE));
-        JMenuItem leafItem = new JMenuItem("Task");
-        addBTreeMenu.add(leafItem);
-        leafItem.addActionListener(e -> addBehavior(BehaviorTypes.TASK));
+        for (BehaviorTree.TYPES type : BehaviorTree.TYPES.values()) {
+            JMenuItem item = new JMenuItem(type.toString());
+            item.addActionListener(e -> addBehavior(type));
+            addBTreeMenu.add(item);
+        }
         JMenuItem removeItem = new JMenuItem(("Удалить"));
         removeItem.addActionListener(e -> removeBehaviorTreeNode());
         addBTreeMenu.add(removeItem);
@@ -1288,18 +1270,18 @@ public class EditorFrame extends JFrame {
         int tabIndex = mainTabbedPain.getSelectedIndex();
         switch (tabIndex) {
             case 3:
-                removeBehaviorTreeNode(gameObjectTypes.CHARACTER);
+                removeBehaviorTreeNode(OBJECTYPES.CHARACTER);
                 break;
             case 4:
-                removeBehaviorTreeNode(gameObjectTypes.PLAYER);
+                removeBehaviorTreeNode(OBJECTYPES.PLAYER);
                 break;
             case 6:
-                removeBehaviorTreeNode(gameObjectTypes.CHARACTERCATEGORY);
+                removeBehaviorTreeNode(OBJECTYPES.CHARACTERCATEGORY);
                 break;
         }
     }
 
-    private void removeBehaviorTreeNode(gameObjectTypes type) {
+    private void removeBehaviorTreeNode(OBJECTYPES type) {
         int index;
         Object object = null;
         JTree tree = null;
@@ -1325,7 +1307,7 @@ public class EditorFrame extends JFrame {
         if (object != null) {
             BTreeNode node = (BTreeNode) tree.getLastSelectedPathComponent();
             if (node.getClass() != BehaviorTree.class) { //can't remove root
-                if (type == gameObjectTypes.CHARACTER || type == gameObjectTypes.PLAYER) {
+                if (type == OBJECTYPES.CHARACTER || type == OBJECTYPES.PLAYER) {
                     ((GameObject) object).getBtree().removeRecurcivly(node);
                 } else {
                     ((CharacterCategory) object).getBtree().removeRecurcivly(node);
@@ -1335,19 +1317,22 @@ public class EditorFrame extends JFrame {
         tree.updateUI();
     }
 
-    private void addBehavior(BehaviorTypes bType) {
+    private void addBehavior(BehaviorTree.TYPES bType) {
         //characters, player, character categories
         JTree tree = null;
+        GameObject character = null;
         int tabIndex = mainTabbedPain.getSelectedIndex();
         switch (tabIndex) {
             case 3:
                 int indexC = charactersList.getSelectedIndex();
                 if (indexC >= 0) {
                     tree = characterBehaviorTree;
+                    character = charactersListModel.elementAt(indexC);
                 }
                 break;
             case 4:
                 tree = playerBehaviorTree;
+                character = player;
                 break;
             case 6:
                 tree = characterCategoryBehaviorTree;
@@ -1365,7 +1350,7 @@ public class EditorFrame extends JFrame {
                             node.addChild(new Sequence());
                             break;
                         case TASK:
-                            node.addChild(new TaskNode());
+                            node.addChild(new TaskNode(character));
                             break;
                     }
 
@@ -1804,7 +1789,7 @@ public class EditorFrame extends JFrame {
         }
     }
 
-    private void showContainerFrame(gameObjectTypes type) {
+    private void showContainerFrame(OBJECTYPES type) {
         Item item = null;
         int indexI;
         switch (type) {
@@ -2064,10 +2049,6 @@ public class EditorFrame extends JFrame {
             return;
         }
         saveGame(this.gamePath);
-    }
-
-    private enum BehaviorTypes {
-        SELECTOR, SEQUENCE, TASK
     }
 
     private void fillSlotCombo() {

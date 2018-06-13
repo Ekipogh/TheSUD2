@@ -41,16 +41,8 @@ public class GameCharacter extends GameObject implements Serializable {
         return null;
     }
 
-    public void setValue(String valueName, Object value) {
-        super.setValue(valueName, value);
-    }
-
     public static void clearCharactersCategories() {
         characterCategories = new ArrayList<>();
-    }
-
-    public GameCharacter() {
-        super();
     }
 
     public GameCharacter(String name) {

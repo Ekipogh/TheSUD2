@@ -10,8 +10,7 @@ public class Selector extends BTreeNode implements Serializable {
 
     @Override
     public int update() {
-        for (BTreeNode child :
-                children) {
+        for (BTreeNode child : children) {
             int status = child.update();
             if (status == RUNNING) {
                 return RUNNING;

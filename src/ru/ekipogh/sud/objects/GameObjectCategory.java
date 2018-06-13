@@ -59,4 +59,9 @@ public class GameObjectCategory implements Serializable {
     public void restoreBTree() {
         this.btree = new BehaviorTree();
     }
+
+    @SuppressWarnings("unused")
+    public void updateBehavior() {
+        this.btree.update();
+    }
 }

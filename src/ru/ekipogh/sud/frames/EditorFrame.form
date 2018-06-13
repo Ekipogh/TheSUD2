@@ -1762,7 +1762,9 @@
                             <preferred-size width="200" height="200"/>
                           </grid>
                         </constraints>
-                        <properties/>
+                        <properties>
+                          <resizeWeight value="0.05"/>
+                        </properties>
                         <border type="none"/>
                         <children>
                           <grid id="e2ec3" binding="characterBehaviorPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
@@ -2315,7 +2317,7 @@
                   </grid>
                 </children>
               </tabbedpane>
-              <component id="81012" class="javax.swing.JButton" binding="clearInvenoryButton" default-binding="true">
+              <component id="81012" class="javax.swing.JButton" binding="clearInventoryButton" default-binding="true">
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -2906,6 +2908,7 @@
                                     </constraints>
                                     <properties>
                                       <dividerLocation value="150"/>
+                                      <resizeWeight value="0.05"/>
                                     </properties>
                                     <border type="none"/>
                                     <children>
