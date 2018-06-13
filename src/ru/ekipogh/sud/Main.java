@@ -1,32 +1,35 @@
 package ru.ekipogh.sud;
 
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import ru.ekipogh.sud.controllers.ScreenController;
 import ru.ekipogh.sud.frames.EditorFrame;
-import ru.ekipogh.sud.frames.LauncherFrame;
 
-import javax.swing.*;
+public class Main extends Application {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Pane launcher = FXMLLoader.load(getClass().getResource("fxml/launcher.fxml"));
+        Pane editor = FXMLLoader.load(getClass().getResource("fxml/editor.fxml"));
+        Pane player = FXMLLoader.load(getClass().getResource("fxml/player.fxml"));
 
-public class Main {
-    public static LauncherFrame launcher;
-    public static EditorFrame editor;
+        Scene scene = new Scene(launcher);
+        ScreenController.setMain(scene);
+        ScreenController.addScreen("launcher", launcher);
+        ScreenController.addScreen("editor", editor);
+        ScreenController.addScreen("player", player);
+        primaryStage.setTitle("The SUD2");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
 
     public static void main(String[] args) {
-        /*Icon closed = new ImageIcon("data/closed.png");
-        Icon open = new ImageIcon("data/open.png");
-        Icon leaf = new ImageIcon("data/leaf.png");
-        UIManager.put("Tree.closedIcon", closed);
-        UIManager.put("Tree.openIcon", open);
-        UIManager.put("Tree.leafIcon", leaf);*/
-        try {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            // If Nimbus is not available, you can set the GUI to another look and feel.
-        }
-        launcher = new LauncherFrame();
-
+        launch(args);
     }
+
+    // TODO: remove this
+    public static EditorFrame editor;
+
 }

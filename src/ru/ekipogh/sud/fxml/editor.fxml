@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/2.2" fx:controller="ru.ekipogh.sud.controllers.EditorController">
+    <children>
+        <Label layoutX="259.0" layoutY="166.0" text="Oh, hi there!"/>
+    </children>
+</AnchorPane>
