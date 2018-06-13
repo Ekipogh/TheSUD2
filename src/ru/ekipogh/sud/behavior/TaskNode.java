@@ -21,9 +21,18 @@ public class TaskNode extends BTreeNode implements Serializable {
         return script;
     }
 
+    public void setScript(Script script) {
+        this.script = script;
+    }
+
     @Override
     int update() {
         System.out.println(Script.run(script.getText(), character));
         return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Task";
     }
 }

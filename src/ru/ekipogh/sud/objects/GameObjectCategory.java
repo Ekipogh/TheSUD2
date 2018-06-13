@@ -55,4 +55,8 @@ public class GameObjectCategory implements Serializable {
     public BehaviorTree getBtree() {
         return btree;
     }
+
+    public void restoreBTree() {
+        this.btree = new BehaviorTree();
+    }
 }

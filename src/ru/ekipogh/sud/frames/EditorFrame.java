@@ -53,7 +53,7 @@ public class EditorFrame extends JFrame {
     private final DefaultListModel<String> locationCategoryScriptsListModel;
     private final DefaultListModel<ItemCategory> itemsCategoriesListModel;
     private final DefaultListModel<String> itemCategoryScriptsListModel;
-    private final DefaultListModel<CharacterCategory> charactersCategoriesListModel;
+    private final DefaultListModel<CharacterCategory> characterCategoriesListModel;
     private final DefaultListModel<String> charCategoryScriptsListModel;
     private final DefaultListModel<String> playerScriptListModel;
     private final DefaultListModel<GameObjectCategory> itemCategoriesListModel;
@@ -148,7 +148,7 @@ public class EditorFrame extends JFrame {
     private JButton addItemCategoryButton;
     private JButton deleteItemCategoryButton;
     private JButton saveItemCategoryScriptButton;
-    private JList<CharacterCategory> charactersCategoriesList;
+    private JList<CharacterCategory> characterCategoriesList;
     private JList<String> charCategoryScriptsList;
     private RSyntaxTextArea charCategoryScriptText;
     private JButton addCharacterCategoryButton;
@@ -276,6 +276,9 @@ public class EditorFrame extends JFrame {
     private RSyntaxTextArea playerBehaviorScriptArea;
     private JPanel playerBehaviorScriptPanel;
     private JPanel characterCategoryBehaviorScriptPanel;
+    private JButton saveCharacterCategoryBehaviorScriptButton;
+    private JTabbedPane playerTab;
+    private JTabbedPane characterTab;
     private DefaultListModel<GameObjectCategory> characterCategoryListModel;
     private DefaultListModel<GameObjectCategory> locationCategoryListModel;
     private HashMap<String, Script> commonScripts;
@@ -320,11 +323,11 @@ public class EditorFrame extends JFrame {
         characterItemsListModel = new DefaultListModel<>();
         characterItemsList.setModel(characterItemsListModel);
 
-        charactersCategoriesListModel = new DefaultListModel<>();
-        charactersCategoriesList.setModel(charactersCategoriesListModel);
-        characterAllCategoriesList.setModel(charactersCategoriesListModel);
+        characterCategoriesListModel = new DefaultListModel<>();
+        characterCategoriesList.setModel(characterCategoriesListModel);
+        characterAllCategoriesList.setModel(characterCategoriesListModel);
 
-        playerAllCategoriesList.setModel(charactersCategoriesListModel);
+        playerAllCategoriesList.setModel(characterCategoriesListModel);
         playerCategoriesListModel = new DefaultListModel<>();
         playerCategoriesList.setModel(playerCategoriesListModel);
 
@@ -626,7 +629,6 @@ public class EditorFrame extends JFrame {
         JMenuItem leafItem = new JMenuItem("Task");
         addBTreeMenu.add(leafItem);
         leafItem.addActionListener(e -> addBehavior(BehaviorTypes.TASK));
-        addCharacterBehaviorTreeButton.setComponentPopupMenu(addBTreeMenu);
 
         //Поиск
         findDialog = new FindDialog();
@@ -649,8 +651,7 @@ public class EditorFrame extends JFrame {
         playerBehaviorTree.setModel(null);
         //листенеры
         //листенеры конопок
-
-        removeCharacterBehaviorTreeButton.addActionListener(e -> removeBehaviorTreeNode(gameObjectTypes.CHARACTER));
+        saveCharacterCategoryBehaviorScriptButton.addActionListener(e -> saveCharacterCategoryBehaviorScript());
 
         addItemValueButton.addActionListener(e -> addItemValue());
 
@@ -871,7 +872,7 @@ public class EditorFrame extends JFrame {
 
         charCategoryScriptsList.addListSelectionListener(e -> selectCharCategoryScript());
 
-        charactersCategoriesList.addListSelectionListener(e -> selectCharCategory());
+        characterCategoriesList.addListSelectionListener(e -> selectCharacterCategory());
 
         itemCategoryScriptsList.addListSelectionListener(e -> selectItemCategoryScript());
 
@@ -1000,34 +1001,49 @@ public class EditorFrame extends JFrame {
         locationsCategoriesList.addListSelectionListener(e -> selectLocationCategory());
         locationCategoryScriptsList.addListSelectionListener(e -> selectLocationCategoryScript());
 
-        // trees listeners
+        // tree listeners
+        MouseAdapter adapter = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    Object node = ((JTree) e.getSource()).getLastSelectedPathComponent();
+                    if (node != null) {
+                        showBehaviorTreeMenu(e);
+                    }
+                }
+            }
+        };
         characterBehaviorTree.addTreeSelectionListener(e -> {
             BTreeNode node = (BTreeNode) characterBehaviorTree.getLastSelectedPathComponent();
-            if (node.getClass() == TaskNode.class) {
+            if (node != null && node.getClass() == TaskNode.class) {
                 characterBehaviorScriptArea.setEnabled(true);
                 characterBehaviorScriptArea.setText(((TaskNode) node).getScript().getText());
             } else {
                 characterBehaviorScriptArea.setEnabled(false);
             }
         });
+        characterBehaviorTree.addMouseListener(adapter);
         playerBehaviorTree.addTreeSelectionListener(e -> {
             BTreeNode node = (BTreeNode) playerBehaviorTree.getLastSelectedPathComponent();
-            if (node.getClass() == TaskNode.class) {
+            if (node != null && node.getClass() == TaskNode.class) {
                 playerBehaviorScriptArea.setEnabled(true);
                 playerBehaviorScriptArea.setText(((TaskNode) node).getScript().getText());
             } else {
                 playerBehaviorScriptArea.setEnabled(false);
             }
         });
+        playerBehaviorTree.addMouseListener(adapter);
         characterCategoryBehaviorTree.addTreeSelectionListener(e -> {
-            BTreeNode node = (BTreeNode) characterBehaviorTree.getLastSelectedPathComponent();
-            if (node.getClass() == TaskNode.class) {
+            BTreeNode node = (BTreeNode) characterCategoryBehaviorTree.getLastSelectedPathComponent();
+            if (node != null && node.getClass() == TaskNode.class) {
                 characterCategoryBehaviorScriptArea.setEnabled(true);
                 characterCategoryBehaviorScriptArea.setText(((TaskNode) node).getScript().getText());
             } else {
                 characterCategoryBehaviorScriptArea.setEnabled(false);
             }
         });
+        characterCategoryBehaviorTree.addMouseListener(adapter);
 
         //листенеры комбобоксов
         itemTypeCombo.addActionListener(e -> showSlotField());
@@ -1244,6 +1260,45 @@ public class EditorFrame extends JFrame {
         clearInvenoryButton.addActionListener(e -> player.getInventory().clear());
     }
 
+    private void saveCharacterCategoryBehaviorScript() {
+        BTreeNode node = ((BTreeNode) characterCategoryBehaviorTree.getLastSelectedPathComponent());
+        if (node != null && node.getClass() == TaskNode.class) {
+            ((TaskNode) node).setScript(new Script(characterCategoryBehaviorScriptArea.getText(), true));
+        }
+    }
+
+    private void showBehaviorTreeMenu(MouseEvent event) {
+        JPopupMenu addBTreeMenu = new JPopupMenu();
+        JMenuItem selectorItem = new JMenuItem("Selector");
+        selectorItem.addActionListener(e -> addBehavior(BehaviorTypes.SELECTOR));
+        addBTreeMenu.add(selectorItem);
+        JMenuItem sequencerItem = new JMenuItem("Sequencer");
+        addBTreeMenu.add(sequencerItem);
+        sequencerItem.addActionListener(e -> addBehavior(BehaviorTypes.SEQUENCE));
+        JMenuItem leafItem = new JMenuItem("Task");
+        addBTreeMenu.add(leafItem);
+        leafItem.addActionListener(e -> addBehavior(BehaviorTypes.TASK));
+        JMenuItem removeItem = new JMenuItem(("Удалить"));
+        removeItem.addActionListener(e -> removeBehaviorTreeNode());
+        addBTreeMenu.add(removeItem);
+        addBTreeMenu.show((Component) event.getSource(), event.getX(), event.getY());
+    }
+
+    private void removeBehaviorTreeNode() {
+        int tabIndex = mainTabbedPain.getSelectedIndex();
+        switch (tabIndex) {
+            case 3:
+                removeBehaviorTreeNode(gameObjectTypes.CHARACTER);
+                break;
+            case 4:
+                removeBehaviorTreeNode(gameObjectTypes.PLAYER);
+                break;
+            case 6:
+                removeBehaviorTreeNode(gameObjectTypes.CHARACTERCATEGORY);
+                break;
+        }
+    }
+
     private void removeBehaviorTreeNode(gameObjectTypes type) {
         int index;
         Object object = null;
@@ -1261,9 +1316,9 @@ public class EditorFrame extends JFrame {
                 tree = playerBehaviorTree;
                 break;
             case CHARACTERCATEGORY:
-                index = characterCategoryList.getSelectedIndex();
+                index = characterCategoriesList.getSelectedIndex();
                 if (index >= 0) {
-                    object = characterCategoryListModel.getElementAt(index);
+                    object = characterCategoriesListModel.getElementAt(index);
                     tree = characterCategoryBehaviorTree;
                 }
         }
@@ -1520,10 +1575,10 @@ public class EditorFrame extends JFrame {
     }
 
     private void setCharacterCategoryScriptEnabled() {
-        int indexCat = charactersCategoriesList.getSelectedIndex();
+        int indexCat = characterCategoriesList.getSelectedIndex();
         int indexS = charCategoryScriptsList.getSelectedIndex();
         if (indexCat >= 0 && indexS >= 0) {
-            CharacterCategory characterCategory = charactersCategoriesListModel.elementAt(indexCat);
+            CharacterCategory characterCategory = characterCategoriesListModel.elementAt(indexCat);
             String scriptName = charCategoryScriptsListModel.elementAt(indexS);
             if (!scriptName.startsWith("_on")) {
                 characterCategory.getScript(scriptName).setEnabled(characterCategoryScriptEnabledBox.isSelected());
@@ -1543,7 +1598,7 @@ public class EditorFrame extends JFrame {
     private void addCategoryToPlayer() {
         int indexCC = playerAllCategoriesList.getSelectedIndex();
         if (indexCC >= 0) {
-            CharacterCategory category = charactersCategoriesListModel.getElementAt(indexCC);
+            CharacterCategory category = characterCategoriesListModel.getElementAt(indexCC);
             if (!player.getCategories().contains(category)) {
                 player.addCategory(category);
                 playerCategoriesListModel.addElement(category);
@@ -1554,10 +1609,10 @@ public class EditorFrame extends JFrame {
     private void renameCharacterCategoryScript() {
         String newName = JOptionPane.showInputDialog(null);
         if (!newName.isEmpty()) {
-            int indexIC = charactersCategoriesList.getSelectedIndex();
+            int indexIC = characterCategoriesList.getSelectedIndex();
             int indexS = charCategoryScriptsList.getSelectedIndex();
             if (indexIC >= 0 && indexS >= 0) {
-                GameObjectCategory category = charactersCategoriesListModel.get(indexIC);
+                GameObjectCategory category = characterCategoriesListModel.get(indexIC);
                 String oldScriptName = charCategoryScriptsListModel.get(indexS);
                 category.setScriptName(newName, oldScriptName);
                 charCategoryScriptsListModel.removeElement(oldScriptName);
@@ -1608,7 +1663,7 @@ public class EditorFrame extends JFrame {
                     indexC = itemsCategoriesList.getSelectedIndex();
                     break;
                 case 3:
-                    indexC = charactersCategoriesList.getSelectedIndex();
+                    indexC = characterCategoriesList.getSelectedIndex();
                     break;
             }
             if (indexC >= 0) {
@@ -1621,7 +1676,7 @@ public class EditorFrame extends JFrame {
                         category = itemsCategoriesListModel.get(indexC);
                         break;
                     case 3:
-                        category = charactersCategoriesListModel.get(indexC);
+                        category = characterCategoriesListModel.get(indexC);
                         break;
                 }
 
@@ -1949,7 +2004,7 @@ public class EditorFrame extends JFrame {
         int indexCC = characterAllCategoriesList.getSelectedIndex();
         if (indexCh >= 0 && indexCC >= 0) {
             GameCharacter character = charactersListModel.getElementAt(indexCh);
-            CharacterCategory category = charactersCategoriesListModel.getElementAt(indexCC);
+            CharacterCategory category = characterCategoriesListModel.getElementAt(indexCC);
             if (!character.getCategories().contains(category)) {
                 character.addCategory(category);
                 characterCategoryListModel.addElement(category);
@@ -2046,7 +2101,7 @@ public class EditorFrame extends JFrame {
         fillEquipmentTable();
         locationsCategoriesListModel.clear();
         itemsCategoriesListModel.clear();
-        charactersCategoriesListModel.clear();
+        characterCategoriesListModel.clear();
         initScriptText.setText("");
         playerDescriptionArea.setText("");
         commonScripts = new HashMap<>();
@@ -2067,10 +2122,10 @@ public class EditorFrame extends JFrame {
     }
 
     private void saveCharCategoryScript() {
-        int indexCat = charactersCategoriesList.getSelectedIndex();
+        int indexCat = characterCategoriesList.getSelectedIndex();
         int indexS = charCategoryScriptsList.getSelectedIndex();
         if (indexCat >= 0 && indexS >= 0) {
-            CharacterCategory characterCategory = charactersCategoriesListModel.elementAt(indexCat);
+            CharacterCategory characterCategory = characterCategoriesListModel.elementAt(indexCat);
             String scriptName = charCategoryScriptsListModel.elementAt(indexS);
             //characterCategory.setScript(scriptName, charCategoryScriptText.getText());
             characterCategory.setScript(scriptName, new Script(charCategoryScriptText.getText(), characterCategoryScriptEnabledBox.isSelected()));
@@ -2078,9 +2133,9 @@ public class EditorFrame extends JFrame {
     }
 
     private void saveCharCategoryName() {
-        int indexCat = charactersCategoriesList.getSelectedIndex();
+        int indexCat = characterCategoriesList.getSelectedIndex();
         if (indexCat >= 0) {
-            CharacterCategory characterCategory = charactersCategoriesListModel.elementAt(indexCat);
+            CharacterCategory characterCategory = characterCategoriesListModel.elementAt(indexCat);
             String name = charCategoryNameField.getText();
             for (CharacterCategory category : GameCharacter.getCharacterCategories()) {
                 if (category.getName().equals(name)) {
@@ -2089,15 +2144,15 @@ public class EditorFrame extends JFrame {
                 }
             }
             characterCategory.setName(name);
-            charactersCategoriesList.updateUI();
+            characterCategoriesList.updateUI();
         }
     }
 
     private void selectCharCategoryScript() {
-        int indexCat = charactersCategoriesList.getSelectedIndex();
+        int indexCat = characterCategoriesList.getSelectedIndex();
         int indexS = charCategoryScriptsList.getSelectedIndex();
         if (indexCat >= 0 && indexS >= 0) {
-            CharacterCategory characterCategory = charactersCategoriesListModel.elementAt(indexCat);
+            CharacterCategory characterCategory = characterCategoriesListModel.elementAt(indexCat);
             String scriptName = charCategoryScriptsListModel.elementAt(indexS);
             //charCategoryScriptText.setText(characterCategory.getScript(scriptName));
             Script script = characterCategory.getScript(scriptName);
@@ -2107,10 +2162,10 @@ public class EditorFrame extends JFrame {
     }
 
     private void deleteCharCategoryScript() {
-        int indexCat = charactersCategoriesList.getSelectedIndex();
+        int indexCat = characterCategoriesList.getSelectedIndex();
         int indexS = charCategoryScriptsList.getSelectedIndex();
         if (indexCat >= 0 && indexS >= 0) {
-            CharacterCategory characterCategory = charactersCategoriesListModel.elementAt(indexCat);
+            CharacterCategory characterCategory = characterCategoriesListModel.elementAt(indexCat);
             String scriptName = charCategoryScriptsListModel.elementAt(indexS);
             if (!scriptName.startsWith("_on")) {
                 characterCategory.removeScript(scriptName);
@@ -2120,9 +2175,9 @@ public class EditorFrame extends JFrame {
     }
 
     private void addCharCategoryScript() {
-        int index = charactersCategoriesList.getSelectedIndex();
+        int index = characterCategoriesList.getSelectedIndex();
         if (index >= 0) {
-            CharacterCategory characterCategory = charactersCategoriesListModel.elementAt(index);
+            CharacterCategory characterCategory = characterCategoriesListModel.elementAt(index);
             String scriptName = JOptionPane.showInputDialog(this, "Название скрипта");
             if (scriptName != null) {
                 Script script = new Script("", true);
@@ -2133,31 +2188,33 @@ public class EditorFrame extends JFrame {
     }
 
     private void deleteCharCategory() {
-        int indexCat = charactersCategoriesList.getSelectedIndex();
+        int indexCat = characterCategoriesList.getSelectedIndex();
         if (indexCat >= 0) {
-            CharacterCategory characterCategory = charactersCategoriesListModel.elementAt(indexCat);
+            CharacterCategory characterCategory = characterCategoriesListModel.elementAt(indexCat);
             GameCharacter.deleteCategory(characterCategory);
-            charactersCategoriesListModel.removeElement(characterCategory);
+            characterCategoriesListModel.removeElement(characterCategory);
             for (int i = 0; i < charactersListModel.size(); i++) {
                 charactersListModel.get(i).removeCategory(characterCategory);
             }
-            charactersCategoriesList.setSelectedIndex((indexCat > 0) ? indexCat - 1 : indexCat);
+            characterCategoriesList.setSelectedIndex((indexCat > 0) ? indexCat - 1 : indexCat);
         }
     }
 
     private void addCharCategory() {
         CharacterCategory characterCategory = new CharacterCategory("Название категории");
         GameCharacter.addCharacterCategory(characterCategory);
-        charactersCategoriesListModel.addElement(characterCategory);
+        characterCategoriesListModel.addElement(characterCategory);
     }
 
-    private void selectCharCategory() {
-        int indexCat = charactersCategoriesList.getSelectedIndex();
+    private void selectCharacterCategory() {
+        int indexCat = characterCategoriesList.getSelectedIndex();
         if (indexCat >= 0) {
-            CharacterCategory characterCategory = charactersCategoriesListModel.elementAt(indexCat);
+            CharacterCategory characterCategory = characterCategoriesListModel.elementAt(indexCat);
             charCategoryNameField.setText(characterCategory.getName());
             charCategoryScriptsListModel.clear();
             characterCategory.getScripts().keySet().forEach(charCategoryScriptsListModel::addElement);
+            DefaultTreeModel treeModel = new DefaultTreeModel(characterCategory.getBtree());
+            characterCategoryBehaviorTree.setModel(treeModel);
         }
     }
 
@@ -2599,6 +2656,13 @@ public class EditorFrame extends JFrame {
         for (int i = 0; i < characterCategoryListModel.size(); i++)
             categories.add(characterCategoryListModel.getElementAt(i));
         selected.setCategories(categories);
+        int tabIndex = characterTab.getSelectedIndex();
+        if (tabIndex == 6) {
+            BTreeNode node = ((BTreeNode) characterBehaviorTree.getLastSelectedPathComponent());
+            if (node != null && node.getClass() == TaskNode.class) {
+                ((TaskNode) node).setScript(new Script(characterBehaviorScriptArea.getText(), true));
+            }
+        }
     }
 
     private void selectCharacter() {
@@ -2891,7 +2955,7 @@ public class EditorFrame extends JFrame {
         locationCategoryListModel.clear();
         playerCategoriesListModel.clear();
 
-        gameFile.getCharacterCategories().forEach(charactersCategoriesListModel::addElement);
+        gameFile.getCharacterCategories().forEach(characterCategoriesListModel::addElement);
         gameFile.getCharacterCategories().forEach(GameCharacter::addCharacterCategory);
         gameFile.getItemCategories().forEach(itemsCategoriesListModel::addElement);
         gameFile.getItemCategories().forEach(Item::addItemCategory);
@@ -2910,6 +2974,23 @@ public class EditorFrame extends JFrame {
         Location.setLocationCategories(gameFile.getLocationCategories());
         Item.setItemCategories(gameFile.getItemCategories());
         GameCharacter.setCharacterCategories(gameFile.getCharacterCategories());
+        // btree workaround
+        for (int i = 0; i < charactersListModel.size(); i++) {
+            GameCharacter character = charactersListModel.elementAt(i);
+            if (character.getBtree() == null) {
+                character.restoreBTree();
+            }
+        }
+        for (int i = 0; i < characterCategoriesListModel.size(); i++) {
+            GameObjectCategory character = characterCategoriesListModel.elementAt(i);
+            if (character.getBtree() == null) {
+                character.restoreBTree();
+            }
+        }
+        if (player.getBtree() == null) {
+            player.restoreBTree();
+        }
+
         updatePlayerTab();
     }
 
@@ -2920,6 +3001,9 @@ public class EditorFrame extends JFrame {
 
         playerDescriptionArea.setText(player.getDescription());
         player.getScripts().keySet().stream().filter(scriptName -> !scriptName.startsWith("_on")).forEach(playerScriptListModel::addElement);
+
+        DefaultTreeModel treeModel = new DefaultTreeModel(player.getBtree());
+        playerBehaviorTree.setModel(treeModel);
     }
 
 
@@ -2991,6 +3075,13 @@ public class EditorFrame extends JFrame {
         Location pLocation = (Location) playerLocation.getSelectedItem();
         player.setLocation(pLocation);
         player.setDescription(playerDescriptionArea.getText());
+        int index = playerTab.getSelectedIndex();
+        if (index == 6) {
+            BTreeNode node = (BTreeNode) playerBehaviorTree.getLastSelectedPathComponent();
+            if (node != null && node.getClass() == TaskNode.class) {
+                ((TaskNode) node).setScript(new Script(playerBehaviorScriptArea.getText(), true));
+            }
+        }
     }
 
     private void deleteSelectedLocation() {

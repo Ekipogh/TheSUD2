@@ -7,11 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4dbcf5c9-0fad-4356-9780-f46e2e5818d0" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BTreeNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BTreeNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObjectCategory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObjectCategory.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -22,84 +21,71 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FavoritesManager">
+    <favorites_list name="TheSUD2" />
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="EditorFrame.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="534">
-              <caret line="1022" column="26" selection-start-line="1022" selection-start-column="22" selection-end-line="1022" selection-end-column="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TaskNode.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" selection-start-line="14" selection-end-line="14" />
+            <state relative-caret-position="376">
+              <caret line="1318" column="37" selection-start-line="1318" selection-start-column="37" selection-end-line="1318" selection-end-column="37" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#338#339#0" expanded="true" />
-                <element signature="e#367#368#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GameObject.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
-              <folding>
-                <element signature="e#5707#5708#0" expanded="true" />
-                <element signature="e#5735#5736#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GameObjectCategory.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObjectCategory.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="629">
-              <caret line="54" column="36" selection-start-line="54" selection-start-column="36" selection-end-line="54" selection-end-column="36" />
-              <folding>
-                <element signature="e#522#523#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CharacterCategory.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/CharacterCategory.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GameCharacter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameCharacter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="109">
-              <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BehaviorTree.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BehaviorTree.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-              <folding>
-                <element signature="e#274#275#0" expanded="true" />
-                <element signature="e#321#322#0" expanded="true" />
-                <element signature="e#591#592#0" expanded="true" />
-                <element signature="e#629#630#0" expanded="true" />
+                <element signature="e#46135#46572#0" expanded="true" />
+                <element signature="e#46571#46572#0" expanded="true" />
+                <element signature="e#49485#49695#0" expanded="true" />
+                <element signature="e#49694#49695#0" expanded="true" />
+                <element signature="e#49997#50163#0" expanded="true" />
+                <element signature="e#50162#50163#0" expanded="true" />
+                <element signature="e#50475#50786#0" expanded="true" />
+                <element signature="e#50785#50786#0" expanded="true" />
+                <element signature="e#50835#51407#0" expanded="true" />
+                <element signature="e#51406#51407#0" expanded="true" />
+                <element signature="e#51449#51615#0" expanded="true" />
+                <element signature="e#51614#51615#0" expanded="true" />
+                <element signature="e#51948#52265#0" expanded="true" />
+                <element signature="e#52264#52265#0" expanded="true" />
+                <element signature="e#52317#52895#0" expanded="true" />
+                <element signature="e#52894#52895#0" expanded="true" />
+                <element signature="e#53407#53617#0" expanded="true" />
+                <element signature="e#53616#53617#0" expanded="true" />
+                <element signature="e#53662#53874#0" expanded="true" />
+                <element signature="e#53873#53874#0" expanded="true" />
+                <element signature="e#53921#54135#0" expanded="true" />
+                <element signature="e#54134#54135#0" expanded="true" />
+                <element signature="e#54183#54398#0" expanded="true" />
+                <element signature="e#54397#54398#0" expanded="true" />
+                <element signature="e#54441#54651#0" expanded="true" />
+                <element signature="e#54650#54651#0" expanded="true" />
+                <element signature="e#54696#54908#0" expanded="true" />
+                <element signature="e#54907#54908#0" expanded="true" />
+                <element signature="e#54963#55185#0" expanded="true" />
+                <element signature="e#55184#55185#0" expanded="true" />
+                <element signature="e#55236#55454#0" expanded="true" />
+                <element signature="e#55453#55454#0" expanded="true" />
+                <element signature="e#55505#55723#0" expanded="true" />
+                <element signature="e#55722#55723#0" expanded="true" />
+                <element signature="e#55768#55979#0" expanded="true" />
+                <element signature="e#55978#55979#0" expanded="true" />
+                <element signature="e#75209#75210#0" expanded="true" />
+                <element signature="e#75249#75250#0" expanded="true" />
+                <element signature="e#75301#75302#0" expanded="true" />
+                <element signature="e#75345#75346#0" expanded="true" />
+                <element signature="e#77014#77015#0" expanded="true" />
+                <element signature="e#77051#77052#0" expanded="true" />
+                <element signature="e#105124#105125#0" expanded="true" />
+                <element signature="e#105163#105164#0" expanded="true" />
+                <element signature="e#105799#105800#0" expanded="true" />
+                <element signature="e#105833#105834#0" expanded="true" />
+                <element signature="e#106983#106984#0" expanded="true" />
+                <element signature="e#107025#107026#0" expanded="true" />
+                <element signature="e#107840#107841#0" expanded="true" />
+                <element signature="e#107877#107878#0" expanded="true" />
+                <element signature="e#120454#120455#0" expanded="true" />
+                <element signature="e#120495#120496#0" expanded="true" />
+                <element signature="e#121828#121829#0" expanded="true" />
+                <element signature="e#121864#121865#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -108,24 +94,26 @@
       <file leaf-file-name="BTreeNode.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BTreeNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="296">
-              <caret line="19" column="10" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="10" />
+            <state relative-caret-position="602">
+              <caret line="68" selection-start-line="68" selection-end-line="68" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#725#726#0" expanded="true" />
-                <element signature="e#772#773#0" expanded="true" />
-                <element signature="e#820#821#0" expanded="true" />
-                <element signature="e#858#859#0" expanded="true" />
-                <element signature="e#907#908#0" expanded="true" />
-                <element signature="e#936#937#0" expanded="true" />
-                <element signature="e#992#993#0" expanded="true" />
-                <element signature="e#1037#1038#0" expanded="true" />
-                <element signature="e#1093#1094#0" expanded="true" />
-                <element signature="e#1120#1121#0" expanded="true" />
-                <element signature="e#1165#1166#0" expanded="true" />
-                <element signature="e#1208#1209#0" expanded="true" />
-                <element signature="e#1259#1260#0" expanded="true" />
-                <element signature="e#1315#1316#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TaskNode.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="340">
+              <caret line="24" column="29" selection-start-line="24" selection-start-column="29" selection-end-line="24" selection-end-column="29" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#550#551#0" expanded="true" />
+                <element signature="e#586#587#0" expanded="true" />
+                <element signature="e#679#680#0" expanded="true" />
+                <element signature="e#703#704#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -136,11 +124,30 @@
           <provider selected="true" editor-type-id="ui-designer" />
         </entry>
       </file>
-      <file leaf-file-name="PlayerFrame.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java">
+      <file leaf-file-name="GameObjectCategory.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObjectCategory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1139">
-              <caret line="80" column="73" selection-start-line="80" selection-start-column="51" selection-end-line="80" selection-end-column="73" />
+            <state relative-caret-position="680">
+              <caret line="59" column="40" selection-start-line="59" selection-start-column="40" selection-end-line="59" selection-end-column="40" />
+              <folding>
+                <element signature="e#1391#1392#0" expanded="true" />
+                <element signature="e#1437#1438#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GameObject.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1095">
+              <caret line="209" column="40" selection-start-line="209" selection-start-column="40" selection-end-line="209" selection-end-column="40" />
+              <folding>
+                <element signature="e#5707#5708#0" expanded="true" />
+                <element signature="e#5735#5736#0" expanded="true" />
+                <element signature="e#5833#5834#0" expanded="true" />
+                <element signature="e#5879#5880#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -178,6 +185,11 @@
       <find>enum</find>
       <find>листенеры л</find>
       <find>листенеры де</find>
+      <find>tree</find>
+      <find>beha</find>
+      <find>Menu</find>
+      <find>add</find>
+      <find>behav</find>
     </findStrings>
     <replaceStrings>
       <replace>filePath</replace>
@@ -189,16 +201,16 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BehaviorTree.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/Sequence.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/Selector.java" />
         <option value="$PROJECT_DIR$/thesud2_Sun_May_27_19-49-23_MSK_2018.xml" />
-        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form" />
+        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObjectCategory.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BTreeNode.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java" />
+        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" />
       </list>
     </option>
@@ -282,6 +294,14 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="sud" type="462c0819:PsiDirectoryNode" />
               <item name="frames" type="462c0819:PsiDirectoryNode" />
+              <item name="EditorFrame" type="e9f4de52:FormNode" />
+            </path>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sud" type="462c0819:PsiDirectoryNode" />
+              <item name="frames" type="462c0819:PsiDirectoryNode" />
               <item name="PlayerFrame" type="e9f4de52:FormNode" />
             </path>
             <path>
@@ -300,19 +320,19 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="true" />
+    <property name="GenerateAntBuildDialog.enableUiFormCompile" value="true" />
+    <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
+    <property name="GenerateAntBuildDialog.generateSingleFile" value="true" />
+    <property name="GenerateAntBuildDialog.outputFileNameProperty" value="build.xml" />
+    <property name="Repository.Attach.JavaDocs" value="true" />
+    <property name="Repository.Attach.Sources" value="true" />
+    <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH" value="231" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/build.xml" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15136719" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="Downloaded.Files.Path.Enabled" value="true" />
-    <property name="Repository.Attach.JavaDocs" value="true" />
-    <property name="Repository.Attach.Sources" value="true" />
-    <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH" value="527" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
-    <property name="GenerateAntBuildDialog.enableUiFormCompile" value="true" />
-    <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
-    <property name="GenerateAntBuildDialog.outputFileNameProperty" value="build.xml" />
-    <property name="GenerateAntBuildDialog.generateSingleFile" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -470,14 +490,14 @@
       <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.49893898" weight="0.32968178" />
       <window_info id="Capture Tool" order="3" />
       <window_info id="Designer" order="4" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5426114" visible="true" weight="0.1308151" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5422627" visible="true" weight="0.1308151" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info auto_hide="true" id="Structure" order="1" sideWeight="0.45738858" side_tool="true" weight="0.1308151" />
+      <window_info auto_hide="true" id="Structure" order="1" sideWeight="0.45773733" side_tool="true" weight="0.1308151" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.24986738" />
       <window_info id="UI Designer" order="5" />
       <window_info anchor="right" id="Theme Preview" order="3" />
-      <window_info anchor="bottom" x="5760" y="34" width="2880" height="1526" id="Debug" order="2" sideWeight="0.49662027" visible="true" weight="0.39874902" />
-      <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info active="true" anchor="bottom" x="5760" y="34" width="2880" height="1526" id="Debug" order="2" sideWeight="0.49662027" visible="true" weight="0.39874902" />
+      <window_info id="Favorites" order="6" sideWeight="0.45773733" side_tool="true" weight="0.1308151" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24970178" />
       <window_info id="Nl-Palette" order="7" />
       <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
@@ -516,13 +536,16 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="13" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java</url>
+          <line>1305</line>
+          <properties />
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="18" />
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="Application">
-        <watch expression="node.getClass() != TaskNode.class" language="JAVA" />
-      </configuration>
-    </watches-manager>
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
@@ -617,6 +640,62 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="67725">
           <caret line="2709" lean-forward="true" selection-start-line="2709" selection-end-line="2709" />
+          <folding>
+            <element signature="e#46135#46572#0" expanded="true" />
+            <element signature="e#46571#46572#0" expanded="true" />
+            <element signature="e#49485#49695#0" expanded="true" />
+            <element signature="e#49694#49695#0" expanded="true" />
+            <element signature="e#49997#50163#0" expanded="true" />
+            <element signature="e#50162#50163#0" expanded="true" />
+            <element signature="e#50475#50786#0" expanded="true" />
+            <element signature="e#50785#50786#0" expanded="true" />
+            <element signature="e#50835#51407#0" expanded="true" />
+            <element signature="e#51406#51407#0" expanded="true" />
+            <element signature="e#51449#51615#0" expanded="true" />
+            <element signature="e#51614#51615#0" expanded="true" />
+            <element signature="e#51948#52265#0" expanded="true" />
+            <element signature="e#52264#52265#0" expanded="true" />
+            <element signature="e#52317#52895#0" expanded="true" />
+            <element signature="e#52894#52895#0" expanded="true" />
+            <element signature="e#53407#53617#0" expanded="true" />
+            <element signature="e#53616#53617#0" expanded="true" />
+            <element signature="e#53662#53874#0" expanded="true" />
+            <element signature="e#53873#53874#0" expanded="true" />
+            <element signature="e#53921#54135#0" expanded="true" />
+            <element signature="e#54134#54135#0" expanded="true" />
+            <element signature="e#54183#54398#0" expanded="true" />
+            <element signature="e#54397#54398#0" expanded="true" />
+            <element signature="e#54441#54651#0" expanded="true" />
+            <element signature="e#54650#54651#0" expanded="true" />
+            <element signature="e#54696#54908#0" expanded="true" />
+            <element signature="e#54907#54908#0" expanded="true" />
+            <element signature="e#54963#55185#0" expanded="true" />
+            <element signature="e#55184#55185#0" expanded="true" />
+            <element signature="e#55236#55454#0" expanded="true" />
+            <element signature="e#55453#55454#0" expanded="true" />
+            <element signature="e#55505#55723#0" expanded="true" />
+            <element signature="e#55722#55723#0" expanded="true" />
+            <element signature="e#55768#55979#0" expanded="true" />
+            <element signature="e#55978#55979#0" expanded="true" />
+            <element signature="e#75209#75210#0" expanded="true" />
+            <element signature="e#75249#75250#0" expanded="true" />
+            <element signature="e#75301#75302#0" expanded="true" />
+            <element signature="e#75345#75346#0" expanded="true" />
+            <element signature="e#77014#77015#0" expanded="true" />
+            <element signature="e#77051#77052#0" expanded="true" />
+            <element signature="e#105124#105125#0" expanded="true" />
+            <element signature="e#105163#105164#0" expanded="true" />
+            <element signature="e#105799#105800#0" expanded="true" />
+            <element signature="e#105833#105834#0" expanded="true" />
+            <element signature="e#106983#106984#0" expanded="true" />
+            <element signature="e#107025#107026#0" expanded="true" />
+            <element signature="e#107840#107841#0" expanded="true" />
+            <element signature="e#107877#107878#0" expanded="true" />
+            <element signature="e#120454#120455#0" expanded="true" />
+            <element signature="e#120495#120496#0" expanded="true" />
+            <element signature="e#121828#121829#0" expanded="true" />
+            <element signature="e#121864#121865#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -799,16 +878,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.form">
-      <provider selected="true" editor-type-id="ui-designer" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1139">
-          <caret line="80" column="73" selection-start-line="80" selection-start-column="51" selection-end-line="80" selection-end-column="73" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BehaviorTree.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -836,37 +905,64 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.form">
+      <provider selected="true" editor-type-id="ui-designer" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="563">
+          <caret line="380" column="13" lean-forward="true" selection-start-line="380" selection-start-column="13" selection-end-line="380" selection-end-column="13" />
+          <folding>
+            <element signature="e#6019#6601#0" expanded="true" />
+            <element signature="e#6600#6601#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
+        <state relative-caret-position="1095">
+          <caret line="209" column="40" selection-start-line="209" selection-start-column="40" selection-end-line="209" selection-end-column="40" />
           <folding>
             <element signature="e#5707#5708#0" expanded="true" />
             <element signature="e#5735#5736#0" expanded="true" />
+            <element signature="e#5833#5834#0" expanded="true" />
+            <element signature="e#5879#5880#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObjectCategory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="59" column="40" selection-start-line="59" selection-start-column="40" selection-end-line="59" selection-end-column="40" />
+          <folding>
+            <element signature="e#1391#1392#0" expanded="true" />
+            <element signature="e#1437#1438#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BTreeNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="19" column="10" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="10" />
+        <state relative-caret-position="602">
+          <caret line="68" selection-start-line="68" selection-end-line="68" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#725#726#0" expanded="true" />
-            <element signature="e#772#773#0" expanded="true" />
-            <element signature="e#820#821#0" expanded="true" />
-            <element signature="e#858#859#0" expanded="true" />
-            <element signature="e#907#908#0" expanded="true" />
-            <element signature="e#936#937#0" expanded="true" />
-            <element signature="e#992#993#0" expanded="true" />
-            <element signature="e#1037#1038#0" expanded="true" />
-            <element signature="e#1093#1094#0" expanded="true" />
-            <element signature="e#1120#1121#0" expanded="true" />
-            <element signature="e#1165#1166#0" expanded="true" />
-            <element signature="e#1208#1209#0" expanded="true" />
-            <element signature="e#1259#1260#0" expanded="true" />
-            <element signature="e#1315#1316#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="24" column="29" selection-start-line="24" selection-start-column="29" selection-end-line="24" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#550#551#0" expanded="true" />
+            <element signature="e#586#587#0" expanded="true" />
+            <element signature="e#679#680#0" expanded="true" />
+            <element signature="e#703#704#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -874,32 +970,66 @@
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form">
       <provider selected="true" editor-type-id="ui-designer" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObjectCategory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="54" column="36" selection-start-line="54" selection-start-column="36" selection-end-line="54" selection-end-column="36" />
-          <folding>
-            <element signature="e#522#523#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#338#339#0" expanded="true" />
-            <element signature="e#367#368#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="534">
-          <caret line="1022" column="26" selection-start-line="1022" selection-start-column="22" selection-end-line="1022" selection-end-column="26" />
+        <state relative-caret-position="376">
+          <caret line="1318" column="37" selection-start-line="1318" selection-start-column="37" selection-end-line="1318" selection-end-column="37" />
+          <folding>
+            <element signature="e#46135#46572#0" expanded="true" />
+            <element signature="e#46571#46572#0" expanded="true" />
+            <element signature="e#49485#49695#0" expanded="true" />
+            <element signature="e#49694#49695#0" expanded="true" />
+            <element signature="e#49997#50163#0" expanded="true" />
+            <element signature="e#50162#50163#0" expanded="true" />
+            <element signature="e#50475#50786#0" expanded="true" />
+            <element signature="e#50785#50786#0" expanded="true" />
+            <element signature="e#50835#51407#0" expanded="true" />
+            <element signature="e#51406#51407#0" expanded="true" />
+            <element signature="e#51449#51615#0" expanded="true" />
+            <element signature="e#51614#51615#0" expanded="true" />
+            <element signature="e#51948#52265#0" expanded="true" />
+            <element signature="e#52264#52265#0" expanded="true" />
+            <element signature="e#52317#52895#0" expanded="true" />
+            <element signature="e#52894#52895#0" expanded="true" />
+            <element signature="e#53407#53617#0" expanded="true" />
+            <element signature="e#53616#53617#0" expanded="true" />
+            <element signature="e#53662#53874#0" expanded="true" />
+            <element signature="e#53873#53874#0" expanded="true" />
+            <element signature="e#53921#54135#0" expanded="true" />
+            <element signature="e#54134#54135#0" expanded="true" />
+            <element signature="e#54183#54398#0" expanded="true" />
+            <element signature="e#54397#54398#0" expanded="true" />
+            <element signature="e#54441#54651#0" expanded="true" />
+            <element signature="e#54650#54651#0" expanded="true" />
+            <element signature="e#54696#54908#0" expanded="true" />
+            <element signature="e#54907#54908#0" expanded="true" />
+            <element signature="e#54963#55185#0" expanded="true" />
+            <element signature="e#55184#55185#0" expanded="true" />
+            <element signature="e#55236#55454#0" expanded="true" />
+            <element signature="e#55453#55454#0" expanded="true" />
+            <element signature="e#55505#55723#0" expanded="true" />
+            <element signature="e#55722#55723#0" expanded="true" />
+            <element signature="e#55768#55979#0" expanded="true" />
+            <element signature="e#55978#55979#0" expanded="true" />
+            <element signature="e#75209#75210#0" expanded="true" />
+            <element signature="e#75249#75250#0" expanded="true" />
+            <element signature="e#75301#75302#0" expanded="true" />
+            <element signature="e#75345#75346#0" expanded="true" />
+            <element signature="e#77014#77015#0" expanded="true" />
+            <element signature="e#77051#77052#0" expanded="true" />
+            <element signature="e#105124#105125#0" expanded="true" />
+            <element signature="e#105163#105164#0" expanded="true" />
+            <element signature="e#105799#105800#0" expanded="true" />
+            <element signature="e#105833#105834#0" expanded="true" />
+            <element signature="e#106983#106984#0" expanded="true" />
+            <element signature="e#107025#107026#0" expanded="true" />
+            <element signature="e#107840#107841#0" expanded="true" />
+            <element signature="e#107877#107878#0" expanded="true" />
+            <element signature="e#120454#120455#0" expanded="true" />
+            <element signature="e#120495#120496#0" expanded="true" />
+            <element signature="e#121828#121829#0" expanded="true" />
+            <element signature="e#121864#121865#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

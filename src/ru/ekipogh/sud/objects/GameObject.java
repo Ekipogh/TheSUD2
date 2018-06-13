@@ -205,4 +205,8 @@ public class GameObject implements Serializable {
     public String toString() {
         return this.name;
     }
+
+    public void restoreBTree() {
+        this.btree = new BehaviorTree();
+    }
 }
