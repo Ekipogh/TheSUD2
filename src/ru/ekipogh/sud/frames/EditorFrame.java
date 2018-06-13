@@ -8,10 +8,7 @@ import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import ru.ekipogh.sud.*;
-import ru.ekipogh.sud.behavior.BTreeNode;
-import ru.ekipogh.sud.behavior.Selector;
-import ru.ekipogh.sud.behavior.Sequence;
-import ru.ekipogh.sud.behavior.TaskNode;
+import ru.ekipogh.sud.behavior.*;
 import ru.ekipogh.sud.objects.*;
 
 import javax.swing.*;
@@ -32,9 +29,9 @@ import java.util.Map;
  * licensed under WTFPL
  */
 public class EditorFrame extends JFrame {
-    private static final int LOCATION = 0;
-    private static final int CHARACTER = 1;
-    private static final int PLAYER = 2;
+    private enum gameObjectTypes {
+        LOCATION, CHARACTER, PLAYER, ITEM, LOCATIONCATEGORY, CHARACTERCATEGORY, ITEMCATEGORY, PLAYERCATEGORY
+    }
 
     private final FindDialog findDialog;
 
@@ -272,7 +269,7 @@ public class EditorFrame extends JFrame {
     private JTabbedPane mainTabbedPain;
     private JTree playerBehaviorTree;
     private JTree characterCategoryBehaviorTree;
-    private RSyntaxTextArea characterBehaviorScript;
+    private RSyntaxTextArea characterBehaviorScriptArea;
     private JPanel characterBehaviorPanel;
     private final ReplaceDialog replaceDialog;
     private RSyntaxTextArea characterCategoryBehaviorScriptArea;
@@ -285,6 +282,7 @@ public class EditorFrame extends JFrame {
     private GameCharacter player;
     private String gamePath;
     private RSyntaxTextArea selectedRSyntaxArea; //для поиска
+
     public EditorFrame(String gamePath) {
         super("Редактор");
 
@@ -484,13 +482,13 @@ public class EditorFrame extends JFrame {
 
         AutoCompletion acCharBeh = new AutoCompletion(new DefaultCompletionProvider());
         LanguageSupport lsCharBeh = new JavaScriptLanguageSupport();
-        characterBehaviorScript.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
-        characterBehaviorScript.setCodeFoldingEnabled(true);
-        characterBehaviorScript.setMarkOccurrences(true);
-        characterBehaviorScript.setMarkOccurrences(true);
-        acCharBeh.install(characterBehaviorScript);
-        lsCharBeh.install(characterBehaviorScript);
-        characterBehaviorPanel.add(new ErrorStrip(characterBehaviorScript), BorderLayout.LINE_END);
+        characterBehaviorScriptArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+        characterBehaviorScriptArea.setCodeFoldingEnabled(true);
+        characterBehaviorScriptArea.setMarkOccurrences(true);
+        characterBehaviorScriptArea.setMarkOccurrences(true);
+        acCharBeh.install(characterBehaviorScriptArea);
+        lsCharBeh.install(characterBehaviorScriptArea);
+        characterBehaviorPanel.add(new ErrorStrip(characterBehaviorScriptArea), BorderLayout.LINE_END);
 
         AutoCompletion acPlayerBeh = new AutoCompletion(new DefaultCompletionProvider());
         LanguageSupport lsPlayerBeh = new JavaScriptLanguageSupport();
@@ -651,9 +649,8 @@ public class EditorFrame extends JFrame {
         playerBehaviorTree.setModel(null);
         //листенеры
         //листенеры конопок
-        //addCharacterBehaviorTreeButton.addActionListener(e -> addCharacterBehaviorTree());
 
-//        removeCharacterBehaviorTreeButton.addActionListener(e -> removeCharaterBehaviorTree());
+        removeCharacterBehaviorTreeButton.addActionListener(e -> removeBehaviorTreeNode(gameObjectTypes.CHARACTER));
 
         addItemValueButton.addActionListener(e -> addItemValue());
 
@@ -703,11 +700,11 @@ public class EditorFrame extends JFrame {
 
         addCharacterCategoriesFolderButton.addActionListener(e -> addCategoriesFolder(3));
 
-        locationContainerButton.addActionListener(e -> showContainerFrame(LOCATION));
+        locationContainerButton.addActionListener(e -> showContainerFrame(gameObjectTypes.LOCATION));
 
-        characterContainerButton.addActionListener(e -> showContainerFrame(CHARACTER));
+        characterContainerButton.addActionListener(e -> showContainerFrame(gameObjectTypes.CHARACTER));
 
-        playerContainerButton.addActionListener(e -> showContainerFrame(PLAYER));
+        playerContainerButton.addActionListener(e -> showContainerFrame(gameObjectTypes.PLAYER));
 
         addSomeItemsToPlayerButton.addActionListener(e -> addSomeItemsToPlayer());
 
@@ -1003,6 +1000,35 @@ public class EditorFrame extends JFrame {
         locationsCategoriesList.addListSelectionListener(e -> selectLocationCategory());
         locationCategoryScriptsList.addListSelectionListener(e -> selectLocationCategoryScript());
 
+        // trees listeners
+        characterBehaviorTree.addTreeSelectionListener(e -> {
+            BTreeNode node = (BTreeNode) characterBehaviorTree.getLastSelectedPathComponent();
+            if (node.getClass() == TaskNode.class) {
+                characterBehaviorScriptArea.setEnabled(true);
+                characterBehaviorScriptArea.setText(((TaskNode) node).getScript().getText());
+            } else {
+                characterBehaviorScriptArea.setEnabled(false);
+            }
+        });
+        playerBehaviorTree.addTreeSelectionListener(e -> {
+            BTreeNode node = (BTreeNode) playerBehaviorTree.getLastSelectedPathComponent();
+            if (node.getClass() == TaskNode.class) {
+                playerBehaviorScriptArea.setEnabled(true);
+                playerBehaviorScriptArea.setText(((TaskNode) node).getScript().getText());
+            } else {
+                playerBehaviorScriptArea.setEnabled(false);
+            }
+        });
+        characterCategoryBehaviorTree.addTreeSelectionListener(e -> {
+            BTreeNode node = (BTreeNode) characterBehaviorTree.getLastSelectedPathComponent();
+            if (node.getClass() == TaskNode.class) {
+                characterCategoryBehaviorScriptArea.setEnabled(true);
+                characterCategoryBehaviorScriptArea.setText(((TaskNode) node).getScript().getText());
+            } else {
+                characterCategoryBehaviorScriptArea.setEnabled(false);
+            }
+        });
+
         //листенеры комбобоксов
         itemTypeCombo.addActionListener(e -> showSlotField());
         northComboBox.addActionListener(e -> {
@@ -1216,6 +1242,42 @@ public class EditorFrame extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         clearInvenoryButton.addActionListener(e -> player.getInventory().clear());
+    }
+
+    private void removeBehaviorTreeNode(gameObjectTypes type) {
+        int index;
+        Object object = null;
+        JTree tree = null;
+        switch (type) {
+            case CHARACTER:
+                index = charactersList.getSelectedIndex();
+                if (index >= 0) {
+                    object = charactersListModel.getElementAt(index);
+                    tree = characterBehaviorTree;
+                }
+                break;
+            case PLAYER:
+                object = player;
+                tree = playerBehaviorTree;
+                break;
+            case CHARACTERCATEGORY:
+                index = characterCategoryList.getSelectedIndex();
+                if (index >= 0) {
+                    object = characterCategoryListModel.getElementAt(index);
+                    tree = characterCategoryBehaviorTree;
+                }
+        }
+        if (object != null) {
+            BTreeNode node = (BTreeNode) tree.getLastSelectedPathComponent();
+            if (node.getClass() != BehaviorTree.class) { //can't remove root
+                if (type == gameObjectTypes.CHARACTER || type == gameObjectTypes.PLAYER) {
+                    ((GameObject) object).getBtree().removeRecurcivly(node);
+                } else {
+                    ((CharacterCategory) object).getBtree().removeRecurcivly(node);
+                }
+            }
+        }
+        tree.updateUI();
     }
 
     private void addBehavior(BehaviorTypes bType) {
@@ -1687,10 +1749,10 @@ public class EditorFrame extends JFrame {
         }
     }
 
-    private void showContainerFrame(int gameObject) {
+    private void showContainerFrame(gameObjectTypes type) {
         Item item = null;
         int indexI;
-        switch (gameObject) {
+        switch (type) {
             case LOCATION:
                 indexI = locationItemsList.getSelectedIndex();
                 if (indexI >= 0) {

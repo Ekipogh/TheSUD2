@@ -1,6 +1,7 @@
 package ru.ekipogh.sud.objects;
 
 import ru.ekipogh.sud.Script;
+import ru.ekipogh.sud.behavior.BehaviorTree;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ public class GameObjectCategory implements Serializable {
     public static final long serialVersionUID = 1L;
     protected String name;
     Map<String, Script> scripts;
+    private BehaviorTree btree;
 
     GameObjectCategory(String name) {
         this.name = name;
@@ -48,5 +50,9 @@ public class GameObjectCategory implements Serializable {
         Script script = scripts.get(oldScriptName);
         scripts.remove(oldScriptName);
         scripts.put(newScriptName, script);
+    }
+
+    public BehaviorTree getBtree() {
+        return btree;
     }
 }

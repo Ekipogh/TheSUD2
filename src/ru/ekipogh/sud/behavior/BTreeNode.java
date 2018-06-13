@@ -15,9 +15,9 @@ public abstract class BTreeNode implements TreeNode, Serializable {
     private BTreeNode parent = null;
     String name;
 
-    int SUCCESS = 0;
-    int RUNNING = 2;
-    int FAIL = 1;
+    final static int SUCCESS = 0;
+    final static int RUNNING = 2;
+    final static int FAIL = 1;
 
     abstract int update();
 
@@ -60,5 +60,10 @@ public abstract class BTreeNode implements TreeNode, Serializable {
     @Override
     public Enumeration children() {
         return Collections.enumeration(children);
+    }
+
+    public void removeRecurcivly(BTreeNode node) {
+        children.remove(node);
+        children.forEach(child -> removeRecurcivly(node));
     }
 }

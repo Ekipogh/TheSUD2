@@ -8,7 +8,11 @@
   <component name="ChangeListManager">
     <list default="true" id="4dbcf5c9-0fad-4356-9780-f46e2e5818d0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BTreeNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BTreeNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObjectCategory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObjectCategory.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -20,49 +24,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="EditorFrame.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="EditorFrame.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="2771" selection-start-line="2771" selection-end-line="2771" />
-              <folding>
-                <element signature="e#69286#69287#0" expanded="true" />
-                <element signature="e#69326#69327#0" expanded="true" />
-                <element signature="e#69378#69379#0" expanded="true" />
-                <element signature="e#69422#69423#0" expanded="true" />
-                <element signature="e#71191#71192#0" expanded="true" />
-                <element signature="e#71228#71229#0" expanded="true" />
-                <element signature="e#99695#99696#0" expanded="true" />
-                <element signature="e#99734#99735#0" expanded="true" />
-                <element signature="e#100370#100371#0" expanded="true" />
-                <element signature="e#100404#100405#0" expanded="true" />
-                <element signature="e#101554#101555#0" expanded="true" />
-                <element signature="e#101596#101597#0" expanded="true" />
-                <element signature="e#102411#102412#0" expanded="true" />
-                <element signature="e#102448#102449#0" expanded="true" />
-                <element signature="e#114992#114993#0" expanded="true" />
-                <element signature="e#115033#115034#0" expanded="true" />
-                <element signature="e#116366#116367#0" expanded="true" />
-                <element signature="e#116402#116403#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PlayerFrame.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="687">
-              <caret line="646" selection-start-line="646" selection-end-line="646" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="functions.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/functions.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="663">
-              <caret line="39" column="46" selection-start-line="39" selection-start-column="46" selection-end-line="39" selection-end-column="46" />
+            <state relative-caret-position="534">
+              <caret line="1022" column="26" selection-start-line="1022" selection-start-column="22" selection-end-line="1022" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -70,11 +36,56 @@
       <file leaf-file-name="TaskNode.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="11" column="51" selection-start-line="11" selection-start-column="51" selection-end-line="11" selection-end-column="51" />
+            <state relative-caret-position="238">
+              <caret line="14" selection-start-line="14" selection-end-line="14" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#338#339#0" expanded="true" />
+                <element signature="e#367#368#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GameObject.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
+              <folding>
+                <element signature="e#5707#5708#0" expanded="true" />
+                <element signature="e#5735#5736#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GameObjectCategory.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObjectCategory.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="629">
+              <caret line="54" column="36" selection-start-line="54" selection-start-column="36" selection-end-line="54" selection-end-column="36" />
+              <folding>
+                <element signature="e#522#523#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CharacterCategory.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/CharacterCategory.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GameCharacter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameCharacter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="109">
+              <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -82,8 +93,8 @@
       <file leaf-file-name="BehaviorTree.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BehaviorTree.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="4" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="51" />
+            <state relative-caret-position="119">
+              <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
               <folding>
                 <element signature="e#274#275#0" expanded="true" />
                 <element signature="e#321#322#0" expanded="true" />
@@ -94,34 +105,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Selector.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/Selector.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" selection-start-line="1" selection-end-line="1" />
-              <folding>
-                <element signature="e#612#613#0" expanded="true" />
-                <element signature="e#645#646#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Sequence.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/Sequence.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="51" selection-start-line="8" selection-start-column="51" selection-end-line="8" selection-end-column="51" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="BTreeNode.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BTreeNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="24" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
+            <state relative-caret-position="296">
+              <caret line="19" column="10" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="10" />
               <folding>
+                <element signature="imports" expanded="true" />
                 <element signature="e#725#726#0" expanded="true" />
                 <element signature="e#772#773#0" expanded="true" />
                 <element signature="e#820#821#0" expanded="true" />
@@ -141,6 +131,20 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="EditorFrame.form" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form">
+          <provider selected="true" editor-type-id="ui-designer" />
+        </entry>
+      </file>
+      <file leaf-file-name="PlayerFrame.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1139">
+              <caret line="80" column="73" selection-start-line="80" selection-start-column="51" selection-end-line="80" selection-end-column="73" />
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -154,7 +158,6 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>itemsTree</find>
-      <find>tree</find>
       <find>MenuIte</find>
       <find>Selector</find>
       <find>setVis</find>
@@ -164,6 +167,17 @@
       <find>run</find>
       <find>menu</find>
       <find>this.gamePath</find>
+      <find>itemsTre</find>
+      <find>Tree</find>
+      <find>removeCharacterBehaviorTreeButton</find>
+      <find>tree</find>
+      <find>ScriptAre</find>
+      <find>characterCategoryScriptPa</find>
+      <find>removeChar</find>
+      <find>addCharacterBeh</find>
+      <find>enum</find>
+      <find>листенеры л</find>
+      <find>листенеры де</find>
     </findStrings>
     <replaceStrings>
       <replace>filePath</replace>
@@ -176,14 +190,15 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java" />
-        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form" />
-        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BTreeNode.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BehaviorTree.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/Sequence.java" />
-        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/Selector.java" />
         <option value="$PROJECT_DIR$/thesud2_Sun_May_27_19-49-23_MSK_2018.xml" />
+        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form" />
+        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObjectCategory.java" />
+        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BTreeNode.java" />
+        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" />
       </list>
     </option>
@@ -191,7 +206,7 @@
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-9" />
     <option name="y" value="-9" />
-    <option name="width" value="1937" />
+    <option name="width" value="1938" />
     <option name="height" value="1056" />
   </component>
   <component name="ProjectView">
@@ -199,8 +214,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
@@ -254,6 +267,13 @@
               <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="sud" type="462c0819:PsiDirectoryNode" />
+              <item name="behavior" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sud" type="462c0819:PsiDirectoryNode" />
               <item name="frames" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -262,12 +282,21 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="sud" type="462c0819:PsiDirectoryNode" />
               <item name="frames" type="462c0819:PsiDirectoryNode" />
-              <item name="EditorFrame" type="e9f4de52:FormNode" />
+              <item name="PlayerFrame" type="e9f4de52:FormNode" />
+            </path>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sud" type="462c0819:PsiDirectoryNode" />
+              <item name="objects" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -405,7 +434,14 @@
       <option name="project" value="LOCAL" />
       <updated>1527441137776</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Behavior smoll ui update">
+      <created>1528394633041</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1528394633041</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TodoView">
@@ -422,34 +458,37 @@
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="bottom" id="TODO" order="5" sideWeight="0.497878" weight="0.32968178" />
-      <window_info anchor="bottom" id="Messages" order="6" sideWeight="0.49893898" weight="0.32968178" />
+      <window_info anchor="bottom" id="TODO" order="5" sideWeight="0.4974155" weight="0.3291634" />
+      <window_info anchor="bottom" id="Messages" order="6" sideWeight="0.49860835" weight="0.3291634" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5029821" side_tool="true" visible="true" weight="0.39874902" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5025845" side_tool="true" weight="0.3291634" />
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info x="0" y="728" width="3840" height="644" id="Run" order="8" type="WINDOWED" weight="0.32991803" />
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49893898" weight="0.32968178" />
       <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.49893898" weight="0.32968178" />
       <window_info id="Capture Tool" order="3" />
       <window_info id="Designer" order="4" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4993498" visible="true" weight="0.1308151" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24970178" />
-      <window_info id="Structure" order="1" sideWeight="0.50065017" side_tool="true" visible="true" weight="0.1308151" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5426114" visible="true" weight="0.1308151" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info auto_hide="true" id="Structure" order="1" sideWeight="0.45738858" side_tool="true" weight="0.1308151" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.24986738" />
       <window_info id="UI Designer" order="5" />
       <window_info anchor="right" id="Theme Preview" order="3" />
-      <window_info active="true" anchor="bottom" x="5760" y="34" width="2880" height="1526" id="Debug" order="2" sideWeight="0.4970179" visible="true" weight="0.39874902" />
+      <window_info anchor="bottom" x="5760" y="34" width="2880" height="1526" id="Debug" order="2" sideWeight="0.49662027" visible="true" weight="0.39874902" />
       <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24970178" />
+      <window_info id="Nl-Palette" order="7" />
+      <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Properties" order="3" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="3" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info id="Nl-Palette" order="7" />
     </layout>
+  </component>
+  <component name="UpdateCopyrightCheckinHandler">
+    <option name="UPDATE_COPYRIGHT" value="true" />
   </component>
   <component name="Vcs.Log.History.Properties">
     <option name="COLUMN_ORDER">
@@ -465,17 +504,23 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="Bee Trees part 1" />
     <MESSAGE value="Teamcity Maybe?" />
-    <option name="LAST_COMMIT_MESSAGE" value="Teamcity Maybe?" />
+    <MESSAGE value="Behavior smoll ui update" />
+    <option name="LAST_COMMIT_MESSAGE" value="Behavior smoll ui update" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="10" />
+      <option name="time" value="13" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
-        <watch expression="res == 1" language="JAVA" />
+        <watch expression="node.getClass() != TaskNode.class" language="JAVA" />
       </configuration>
     </watches-manager>
   </component>
@@ -485,6 +530,11 @@
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
+      <expression>
+        <expression-string>node.getClass() != TaskNode.class</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>res == 1</expression-string>
         <language-id>JAVA</language-id>
@@ -508,16 +558,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.form">
-      <provider selected="true" editor-type-id="ui-designer" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1675">
-          <caret line="80" column="65" selection-start-line="80" selection-start-column="65" selection-end-line="80" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BehaviorTree.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="325">
@@ -554,6 +594,7 @@
         <state relative-caret-position="425">
           <caret line="21" column="28" selection-start-line="21" selection-start-column="28" selection-end-line="21" selection-end-column="28" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="e#725#726#0" expanded="true" />
             <element signature="e#772#773#0" expanded="true" />
             <element signature="e#820#821#0" expanded="true" />
@@ -576,26 +617,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="67725">
           <caret line="2709" lean-forward="true" selection-start-line="2709" selection-end-line="2709" />
-          <folding>
-            <element signature="e#69286#69287#0" expanded="true" />
-            <element signature="e#69326#69327#0" expanded="true" />
-            <element signature="e#69378#69379#0" expanded="true" />
-            <element signature="e#69422#69423#0" expanded="true" />
-            <element signature="e#71191#71192#0" expanded="true" />
-            <element signature="e#71228#71229#0" expanded="true" />
-            <element signature="e#99695#99696#0" expanded="true" />
-            <element signature="e#99734#99735#0" expanded="true" />
-            <element signature="e#100370#100371#0" expanded="true" />
-            <element signature="e#100404#100405#0" expanded="true" />
-            <element signature="e#101554#101555#0" expanded="true" />
-            <element signature="e#101596#101597#0" expanded="true" />
-            <element signature="e#102411#102412#0" expanded="true" />
-            <element signature="e#102448#102449#0" expanded="true" />
-            <element signature="e#114992#114993#0" expanded="true" />
-            <element signature="e#115033#115034#0" expanded="true" />
-            <element signature="e#116366#116367#0" expanded="true" />
-            <element signature="e#116402#116403#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -663,9 +684,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.form">
-      <provider selected="true" editor-type-id="ui-designer" />
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/javax/swing/tree/VariableHeightLayoutCache.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="889">
@@ -679,9 +697,6 @@
           <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form">
-      <provider selected="true" editor-type-id="ui-designer" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/LauncherFrame.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -746,33 +761,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameCharacter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="775">
-          <caret line="42" column="30" selection-start-line="42" selection-start-column="30" selection-end-line="42" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BehaviorTree.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="4" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="51" />
-          <folding>
-            <element signature="e#274#275#0" expanded="true" />
-            <element signature="e#321#322#0" expanded="true" />
-            <element signature="e#591#592#0" expanded="true" />
-            <element signature="e#629#630#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/Selector.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
@@ -780,16 +768,6 @@
           <folding>
             <element signature="e#612#613#0" expanded="true" />
             <element signature="e#645#646#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="11" column="51" selection-start-line="11" selection-start-column="51" selection-end-line="11" selection-end-column="51" />
-          <folding>
-            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -821,11 +799,60 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.form">
+      <provider selected="true" editor-type-id="ui-designer" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1139">
+          <caret line="80" column="73" selection-start-line="80" selection-start-column="51" selection-end-line="80" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BehaviorTree.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+          <folding>
+            <element signature="e#274#275#0" expanded="true" />
+            <element signature="e#321#322#0" expanded="true" />
+            <element signature="e#591#592#0" expanded="true" />
+            <element signature="e#629#630#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/CharacterCategory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameCharacter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="109">
+          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
+          <folding>
+            <element signature="e#5707#5708#0" expanded="true" />
+            <element signature="e#5735#5736#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BTreeNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="24" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
+        <state relative-caret-position="296">
+          <caret line="19" column="10" selection-start-line="19" selection-start-column="10" selection-end-line="19" selection-end-column="10" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="e#725#726#0" expanded="true" />
             <element signature="e#772#773#0" expanded="true" />
             <element signature="e#820#821#0" expanded="true" />
@@ -844,37 +871,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java">
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form">
+      <provider selected="true" editor-type-id="ui-designer" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObjectCategory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="2771" selection-start-line="2771" selection-end-line="2771" />
+        <state relative-caret-position="629">
+          <caret line="54" column="36" selection-start-line="54" selection-start-column="36" selection-end-line="54" selection-end-column="36" />
           <folding>
-            <element signature="e#69286#69287#0" expanded="true" />
-            <element signature="e#69326#69327#0" expanded="true" />
-            <element signature="e#69378#69379#0" expanded="true" />
-            <element signature="e#69422#69423#0" expanded="true" />
-            <element signature="e#71191#71192#0" expanded="true" />
-            <element signature="e#71228#71229#0" expanded="true" />
-            <element signature="e#99695#99696#0" expanded="true" />
-            <element signature="e#99734#99735#0" expanded="true" />
-            <element signature="e#100370#100371#0" expanded="true" />
-            <element signature="e#100404#100405#0" expanded="true" />
-            <element signature="e#101554#101555#0" expanded="true" />
-            <element signature="e#101596#101597#0" expanded="true" />
-            <element signature="e#102411#102412#0" expanded="true" />
-            <element signature="e#102448#102449#0" expanded="true" />
-            <element signature="e#114992#114993#0" expanded="true" />
-            <element signature="e#115033#115034#0" expanded="true" />
-            <element signature="e#116366#116367#0" expanded="true" />
-            <element signature="e#116402#116403#0" expanded="true" />
+            <element signature="e#522#523#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/PlayerFrame.java">
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="687">
-          <caret line="646" selection-start-line="646" selection-end-line="646" />
+        <state relative-caret-position="238">
+          <caret line="14" selection-start-line="14" selection-end-line="14" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#338#339#0" expanded="true" />
+            <element signature="e#367#368#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="534">
+          <caret line="1022" column="26" selection-start-line="1022" selection-start-column="22" selection-end-line="1022" selection-end-column="26" />
         </state>
       </provider>
     </entry>

@@ -1777,7 +1777,7 @@
                                 <properties/>
                                 <border type="none"/>
                                 <children>
-                                  <component id="4b4a" class="org.fife.ui.rsyntaxtextarea.RSyntaxTextArea" binding="characterBehaviorScript">
+                                  <component id="4b4a" class="org.fife.ui.rsyntaxtextarea.RSyntaxTextArea" binding="characterBehaviorScriptArea">
                                     <constraints/>
                                     <properties/>
                                   </component>

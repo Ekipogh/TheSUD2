@@ -10,8 +10,16 @@ import java.io.Serializable;
  */
 public class TaskNode extends BTreeNode implements Serializable {
     public static final long serialVersionUID = 1L;
-    Script script;
-    GameCharacter character;
+    private Script script;
+    private GameCharacter character;
+
+    public TaskNode() {
+        this.script = new Script("", true);
+    }
+
+    public Script getScript() {
+        return script;
+    }
 
     @Override
     int update() {
