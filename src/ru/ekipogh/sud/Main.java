@@ -6,7 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import ru.ekipogh.sud.controllers.ScreenController;
-import ru.ekipogh.sud.frames.EditorFrame;
 
 public class Main extends Application {
     @Override
@@ -15,7 +14,7 @@ public class Main extends Application {
         Pane editor = FXMLLoader.load(getClass().getResource("fxml/editor.fxml"));
         Pane player = FXMLLoader.load(getClass().getResource("fxml/player.fxml"));
 
-        Scene scene = new Scene(launcher);
+        Scene scene = new Scene(launcher, 1280,1024);
         ScreenController.setMain(scene);
         ScreenController.addScreen("launcher", launcher);
         ScreenController.addScreen("editor", editor);
@@ -28,8 +27,4 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
-    // TODO: remove this
-    public static EditorFrame editor;
-
 }
