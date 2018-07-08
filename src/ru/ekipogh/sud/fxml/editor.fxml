@@ -4,6 +4,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -17,100 +20,94 @@
 <BorderPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.ekipogh.sud.controllers.EditorController">
     <center>
         <TabPane prefHeight="1024.0" prefWidth="1280.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
-            <tabs>
-                <Tab text="Game">
-                    <content>
-                        <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
-                            <tabs>
-                                <Tab text="Common">
-                                    <content>
-                                        <GridPane hgap="10.0" vgap="10.0">
-                                            <children>
-                                                <Label text="Name of the game" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0" GridPane.valignment="TOP" />
-                                                <Label text="Description" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-                                                <TextField prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                                                <TextArea prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                            </children>
-                                            <columnConstraints>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                                                <ColumnConstraints percentWidth="80.0" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                                <RowConstraints />
-                                                <RowConstraints />
-                                            </rowConstraints>
-                                            <padding>
-                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                            </padding>
-                                        </GridPane>
-                                    </content>
-                                </Tab>
-                                <Tab text="Init Script">
-                                    <content>
-                                        <BorderPane prefHeight="200.0" prefWidth="200.0">
-                                            <center>
-                                                <SwingNode fx:id="commonScriptNode" />
-                                            </center>
-                                            <padding>
-                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                            </padding>
-                                        </BorderPane>
-                                    </content>
-                                </Tab>
-                                <Tab text="Game Scripts">
-                                    <content>
-                                        <SplitPane dividerPositions="0.2" prefHeight="160.0" prefWidth="200.0">
-                                            <items>
-                                                <ListView prefHeight="200.0" prefWidth="200.0" />
-                                                <SwingNode fx:id="gameScriptsNode" />
-                                            </items>
-                                            <padding>
-                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                            </padding>
-                                        </SplitPane>
-                                    </content>
-                                </Tab>
-                                <Tab text="Timers">
-                                    <content>
-                                        <SplitPane dividerPositions="0.2">
-                                            <items>
-                                                <ListView />
-                                                <BorderPane>
-                                                    <top>
-                                                        <GridPane hgap="10.0" vgap="10.0">
-                                                            <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                                            <TextField prefHeight="39.0" prefWidth="950.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                                                            <Label text="Step:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                                            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                            <BorderPane.margin>
-                                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                                            </BorderPane.margin>
-                                             <columnConstraints>
-                                                <ColumnConstraints />
-                                                <ColumnConstraints />
-                                             </columnConstraints>
-                                             <rowConstraints>
-                                                <RowConstraints />
-                                                <RowConstraints />
-                                             </rowConstraints>
-                                                        </GridPane>
-                                                    </top>
-                                                    <center>
-                                                        <SwingNode fx:id="timerScriptNode">
-                                             <BorderPane.margin>
-                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                             </BorderPane.margin></SwingNode>
-                                                    </center>
-                                                </BorderPane>
-                                            </items>
-                                        </SplitPane>
-                                    </content>
-                                </Tab>
-                            </tabs>
-                        </TabPane>
-                    </content>
-                </Tab>
-            </tabs>
+            <Tab text="Game">
+                <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                    <Tab text="Common">
+                        <GridPane hgap="10.0" vgap="10.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                <ColumnConstraints percentWidth="80.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints />
+                                <RowConstraints />
+                            </rowConstraints>
+                            <padding>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </padding>
+                            <Label text="Name of the game" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0" GridPane.valignment="TOP" />
+                            <Label text="Description" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                            <TextField fx:id="gameName" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                            <TextArea fx:id="gameDescription" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        </GridPane>
+                    </Tab>
+                    <Tab text="Init Script">
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                            <center>
+                                <SwingNode fx:id="initScriptNode" />
+                            </center>
+                            <padding>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </padding>
+                        </BorderPane>
+                    </Tab>
+                    <Tab text="Game Scripts">
+                        <SplitPane dividerPositions="0.2" prefHeight="160.0" prefWidth="200.0">
+                            <padding>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </padding>
+                            <ListView fx:id="gameScriptsList" prefHeight="200.0" prefWidth="200.0" />
+                            <SwingNode fx:id="gameScriptsNode" />
+                        </SplitPane>
+                    </Tab>
+                    <Tab text="Timers">
+                        <SplitPane dividerPositions="0.2">
+                            <ListView fx:id="timersList" />
+                            <BorderPane>
+                                <top>
+                                    <GridPane hgap="10.0" vgap="10.0">
+                                        <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                        <TextField fx:id="timerName" prefHeight="39.0" prefWidth="950.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                        <Label text="Step:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                        <TextField fx:id="timeStep" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                        <BorderPane.margin>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        </BorderPane.margin>
+                                        <columnConstraints>
+                                            <ColumnConstraints />
+                                            <ColumnConstraints />
+                                        </columnConstraints>
+                                        <rowConstraints>
+                                            <RowConstraints />
+                                            <RowConstraints />
+                                        </rowConstraints>
+                                    </GridPane>
+                                </top>
+                                <center>
+                                    <SwingNode fx:id="timerScriptNode">
+                                        <BorderPane.margin>
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        </BorderPane.margin>
+                                    </SwingNode>
+                                </center>
+                            </BorderPane>
+                        </SplitPane>
+                    </Tab>
+                </TabPane>
+            </Tab>
         </TabPane>
     </center>
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <Menu mnemonicParsing="false" text="File">
+                <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open" />
+            </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+                <MenuItem mnemonicParsing="false" text="Delete" />
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+                <MenuItem mnemonicParsing="false" text="About" />
+            </Menu>
+        </MenuBar>
+    </top>
 </BorderPane>

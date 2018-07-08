@@ -10,6 +10,11 @@ import java.util.HashMap;
  */
 public class ScreenController {
     private static HashMap<String, Pane> screenMap = new HashMap<>();
+
+    public static Scene getMain() {
+        return main;
+    }
+
     private static Scene main;
 
     public static void setMain(Scene scene) {
