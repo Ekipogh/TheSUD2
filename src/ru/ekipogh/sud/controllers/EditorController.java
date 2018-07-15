@@ -1,5 +1,7 @@
 package ru.ekipogh.sud.controllers;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -34,10 +36,16 @@ public class EditorController {
 
     @FXML
     public void initialize() {
-        System.out.println("foo");
         initScriptNode.setContent(new RSyntaxTextArea());
         gameScriptsNode.setContent(new RSyntaxTextArea());
         timerScriptNode.setContent(new RSyntaxTextArea());
+        gameScriptsList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            selectGameScript(newValue);
+        });
+    }
+
+    private void selectGameScript(String scriptName) {
+        ((RSyntaxTextArea) gameScriptsNode.getContent()).setText(gameFile.getCommonScripts().get(scriptName).getText());
     }
 
     private String chooseFile(Window window) {
