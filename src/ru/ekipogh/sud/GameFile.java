@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * Created by ekipogh on 27.04.2015.
- licensed under WTFPL
+ * licensed under WTFPL
  */
 public class GameFile implements Serializable {
     public static final long serialVersionUID = 1L;
@@ -25,12 +25,12 @@ public class GameFile implements Serializable {
     private String initScript;
     private String path;
     private HashMap<String, Script> commonScripts;
+    private ArrayList<SudTimer> timers;
+
 
     public ArrayList<SudTimer> getTimers() {
         return timers;
     }
-
-    private ArrayList<SudTimer> timers;
 
     public String getInitScript() {
         return initScript;
@@ -163,6 +163,10 @@ public class GameFile implements Serializable {
 
     public void setCommonScripts(HashMap<String, Script> commonScripts) {
         this.commonScripts = commonScripts;
+    }
+
+    public void setCommonScript(String scriptName, String scriptText) {
+        this.commonScripts.put(scriptName, new Script(scriptText, true));
     }
 
     public HashMap<String, Script> getCommonScripts() {

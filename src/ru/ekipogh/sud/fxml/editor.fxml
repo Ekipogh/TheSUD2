@@ -17,76 +17,94 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.ekipogh.sud.controllers.EditorController">
+<?import javafx.scene.control.ContextMenu?>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ru.ekipogh.sud.controllers.EditorController">
     <center>
-        <TabPane prefHeight="1024.0" prefWidth="1280.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+        <TabPane prefHeight="1024.0" prefWidth="1280.0" tabClosingPolicy="UNAVAILABLE"
+                 xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
             <Tab text="Game">
                 <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                     <Tab text="Common">
                         <GridPane hgap="10.0" vgap="10.0">
                             <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                                <ColumnConstraints percentWidth="80.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                                <ColumnConstraints percentWidth="80.0"/>
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints />
-                                <RowConstraints />
+                                <RowConstraints/>
+                                <RowConstraints/>
                             </rowConstraints>
                             <padding>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                             </padding>
-                            <Label text="Name of the game" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0" GridPane.valignment="TOP" />
-                            <Label text="Description" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-                            <TextField fx:id="gameName" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                            <TextArea fx:id="gameDescription" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                            <Label text="Name of the game" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+                                   GridPane.rowIndex="0" GridPane.valignment="TOP"/>
+                            <Label text="Description" GridPane.columnIndex="0" GridPane.halignment="RIGHT"
+                                   GridPane.rowIndex="1" GridPane.valignment="TOP"/>
+                            <TextField fx:id="gameName" onKeyReleased="#saveGameName" prefWidth="200.0"
+                                       GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                            <TextArea fx:id="gameDescription" onKeyReleased="#saveGameDescription" prefWidth="200.0"
+                                      wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                         </GridPane>
                     </Tab>
                     <Tab text="Init Script">
                         <BorderPane prefHeight="200.0" prefWidth="200.0">
                             <center>
-                                <SwingNode fx:id="initScriptNode" />
+                                <SwingNode fx:id="initScriptNode" onKeyReleased="#saveInitScript"/>
                             </center>
                             <padding>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                             </padding>
                         </BorderPane>
                     </Tab>
                     <Tab text="Game Scripts">
                         <SplitPane dividerPositions="0.2" prefHeight="160.0" prefWidth="200.0">
                             <padding>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                             </padding>
-                            <ListView fx:id="gameScriptsList" prefHeight="200.0" prefWidth="200.0" />
-                            <SwingNode fx:id="gameScriptsNode" />
+                            <ListView fx:id="gameScriptsList" prefHeight="200.0" prefWidth="200.0"/>
+                            <SwingNode fx:id="gameScriptsNode" onKeyReleased="#saveGameScript"/>
                         </SplitPane>
                     </Tab>
                     <Tab text="Timers">
                         <SplitPane dividerPositions="0.2">
-                            <ListView fx:id="timersList" />
+                            <ListView fx:id="timersList">
+                                <contextMenu>
+                                    <ContextMenu>
+                                        <items>
+                                            <MenuItem text="Add" onAction="#addTimer"/>
+                                            <MenuItem text="Remove" onAction="#removeTimer"/>
+                                        </items>
+                                    </ContextMenu>
+                                </contextMenu>
+                            </ListView>
                             <BorderPane>
                                 <top>
                                     <GridPane hgap="10.0" vgap="10.0">
-                                        <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                        <TextField fx:id="timerName" prefHeight="39.0" prefWidth="950.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                                        <Label text="Step:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                        <TextField fx:id="timeStep" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                        <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                        <TextField fx:id="timerName" onKeyReleased="#saveTimerName" prefHeight="39.0"
+                                                   prefWidth="950.0" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                        <Label text="Step:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                        <TextField fx:id="timerStep" onKeyReleased="#saveTimerStep"
+                                                   GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                                         <BorderPane.margin>
-                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                                         </BorderPane.margin>
                                         <columnConstraints>
-                                            <ColumnConstraints />
-                                            <ColumnConstraints />
+                                            <ColumnConstraints/>
+                                            <ColumnConstraints/>
                                         </columnConstraints>
                                         <rowConstraints>
-                                            <RowConstraints />
-                                            <RowConstraints />
+                                            <RowConstraints/>
+                                            <RowConstraints/>
                                         </rowConstraints>
                                     </GridPane>
                                 </top>
                                 <center>
-                                    <SwingNode fx:id="timerScriptNode">
+                                    <SwingNode fx:id="timerScriptNode" onKeyReleased="#saveTimerScript">
                                         <BorderPane.margin>
-                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                                         </BorderPane.margin>
                                     </SwingNode>
                                 </center>
@@ -100,13 +118,13 @@
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu mnemonicParsing="false" text="File">
-                <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open" />
+                <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open"/>
             </Menu>
             <Menu mnemonicParsing="false" text="Edit">
-                <MenuItem mnemonicParsing="false" text="Delete" />
+                <MenuItem mnemonicParsing="false" text="Delete"/>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
-                <MenuItem mnemonicParsing="false" text="About" />
+                <MenuItem mnemonicParsing="false" text="About"/>
             </Menu>
         </MenuBar>
     </top>
