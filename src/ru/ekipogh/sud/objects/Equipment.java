@@ -13,19 +13,21 @@ import java.util.Map;
 public class Equipment implements Serializable {
     public static final long serialVersionUID = 1L;
     private Map<String, Item> slots;
+    private static Map<String, String> slotNames;
+
+    static {
+        slotNames = new HashMap<>();
+    }
+
+    public Equipment() {
+        slots = new HashMap<>();
+        for (String slotsName : slotNames.keySet()) {
+            slots.put(slotsName, null);
+        }
+    }
 
     public static void setSlotNames(Map<String, String> slotNames) {
         Equipment.slotNames = slotNames;
-    }
-
-    public Map<String, Item> getSlots() {
-        return slots;
-    }
-
-    private static Map<String, String> slotNames = new HashMap<>();
-
-    static {
-        clearSlots();
     }
 
     public static Map<String, String> getSlotMap() {
@@ -40,11 +42,16 @@ public class Equipment implements Serializable {
         slotNames.put(slotName, imagePath);
     }
 
-    public Equipment() {
-        slots = new HashMap<>();
-        for (String slotsName : slotNames.keySet()) {
-            slots.put(slotsName, null);
-        }
+    public static String getImage(String slot) {
+        return slotNames.get(slot);
+    }
+
+    public static void clearSlots() {
+        slotNames.clear();
+    }
+
+    public Map<String, Item> getSlots() {
+        return slots;
     }
 
     public Item getItemAtSlot(String slot) {
@@ -61,21 +68,9 @@ public class Equipment implements Serializable {
         return true;
     }
 
-    public static String getImage(String slot) {
-        return slotNames.get(slot);
-    }
-
     public void uneqip(Item item) {
         String slot = item.getEquipmentSlot();
         slots.remove(slot);
-    }
-
-    public static void clearSlots() {
-        /*slotNames.put("голова", "data\\head.png");
-        slotNames.put("торс", "data\\torso.png");
-        slotNames.put("ноги", "data\\legs.png");
-        slotNames.put("рука", "data\\hand.png");*/
-        slotNames.clear();
     }
 
     public void clear() {

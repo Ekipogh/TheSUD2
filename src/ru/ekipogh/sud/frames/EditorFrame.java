@@ -2659,9 +2659,9 @@ public class EditorFrame extends JFrame {
             selected.getCategories().forEach(characterCategoryListModel::addElement);
             fillCharacterEquipmentTable();
             characterValuesTableModel.setRowCount(0);
-            for (Map.Entry<String, Object> entry : selected.getValues().entrySet()) {
+            /*for (Map.Entry<String, Object> entry : selected.getValues().entrySet()) {
                 characterValuesTableModel.addRow(new Object[]{entry.getKey(), entry.getValue()});
-            }
+            }*/
             DefaultTreeModel treeModel = new DefaultTreeModel(selected.getBtree());
             characterBehaviorTree.setModel(treeModel);
         }
@@ -2851,9 +2851,9 @@ public class EditorFrame extends JFrame {
             isLockedBox.setSelected(selected.isLocked());
             isContainerBox.setSelected(selected.isContainer());
             itemValuesTableModel.setRowCount(0);
-            for (Map.Entry<String, Object> entry : selected.getValues().entrySet()) {
+            /*for (Map.Entry<String, Object> entry : selected.getValues().entrySet()) {
                 itemValuesTableModel.addRow(new Object[]{entry.getKey(), entry.getValue()});
-            }
+            }*/
         }
     }
 
@@ -3140,9 +3140,9 @@ public class EditorFrame extends JFrame {
             locationCategoryListModel.removeAllElements();
             selected.getCategories().forEach(locationCategoryListModel::addElement);
             locationValuesTableModel.setRowCount(0);
-            for (Map.Entry<String, Object> entry : selected.getValues().entrySet()) {
+            /*for (Map.Entry<String, Object> entry : selected.getValues().entrySet()) {
                 locationValuesTableModel.addRow(new Object[]{entry.getKey(), entry.getValue()});
-            }
+            }*/
         }
     }
 

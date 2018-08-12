@@ -41,7 +41,7 @@ public class Item extends GameObject implements Serializable, Comparable, Clonea
         Item.itemCategories = new ArrayList<>();
     }
 
-    public static ItemCategory getLocationCategory(String categoryName) {
+    public static ItemCategory getItemCategory(String categoryName) {
         for (ItemCategory c : itemCategories) {
             if (c.getName().equals(categoryName)) {
                 return c;
