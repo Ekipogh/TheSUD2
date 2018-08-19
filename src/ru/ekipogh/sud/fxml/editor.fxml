@@ -231,11 +231,20 @@
                                 <TableView fx:id="itemParameters" editable="true">
                                     <columns>
                                         <TableColumn fx:id="keyColumn" minWidth="500" text="Parameter">
+
                                         </TableColumn>
                                         <TableColumn fx:id="valueColumn" minWidth="500" onEditCommit="#changeValue"
                                                      text="Value">
                                         </TableColumn>
                                     </columns>
+                                    <contextMenu>
+                                        <ContextMenu>
+                                            <items>
+                                                <MenuItem onAction="#addItemParameter" text="Add"/>
+                                                <MenuItem onAction="#removeItemParameter" text="Remove"/>
+                                            </items>
+                                        </ContextMenu>
+                                    </contextMenu>
                                 </TableView>
                             </ScrollPane>
                         </Tab>

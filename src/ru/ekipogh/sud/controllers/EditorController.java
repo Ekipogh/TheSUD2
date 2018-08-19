@@ -5,7 +5,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -410,13 +409,38 @@ public class EditorController {
         }
     }
 
-    public void removeItemScript(ActionEvent event) {
+    public void removeItemScript() {
         Item item = itemsList.getSelectionModel().getSelectedItem();
         String scriptName = itemScriptsList.getSelectionModel().getSelectedItem();
         if (item != null && scriptName != null) {
             item.getScripts().remove(scriptName);
             itemScriptsList.getItems().remove(scriptName);
             itemScriptsList.refresh();
+        }
+    }
+
+    public void addItemParameter() {
+        Item item = itemsList.getSelectionModel().getSelectedItem();
+        if (item != null) {
+            TextInputDialog inputDialog = new TextInputDialog("New Parameter");
+            inputDialog.setTitle("Enter parameter name");
+            Optional<String> result = inputDialog.showAndWait();
+            result.ifPresent(parameterName -> {
+                item.setValue(parameterName, "");
+                selectItem(item);
+            });
+        }
+    }
+
+    public void removeItemParameter() {
+        Item item = itemsList.getSelectionModel().getSelectedItem();
+        if (item != null) {
+            Map.Entry<String, String> entry = itemParameters.getSelectionModel().getSelectedItem();
+            if (entry != null) {
+                String key = entry.getKey();
+                item.removeValue(key);
+                selectItem(item);
+            }
         }
     }
 }
