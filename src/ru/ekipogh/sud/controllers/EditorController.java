@@ -12,10 +12,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import ru.ekipogh.sud.GameFile;
-import ru.ekipogh.sud.Script;
-import ru.ekipogh.sud.Sequencer;
-import ru.ekipogh.sud.SudTimer;
+import ru.ekipogh.sud.*;
 import ru.ekipogh.sud.objects.*;
 
 import java.io.File;
@@ -58,8 +55,34 @@ public class EditorController {
     public ListView<ItemCategory> itemCategories;
     //Parameters tab
     public TableView<Map.Entry<String, String>> itemParameters;
-    public TableColumn<Map.Entry<String, String>, String> keyColumn;
-    public TableColumn<Map.Entry<String, String>, String> valueColumn;
+    public TableColumn<Map.Entry<String, String>, String> itemKeyColumn;
+    public TableColumn<Map.Entry<String, String>, String> itemValueColumn;
+    //Locations tab
+    public ListView<Location> locationsList;
+    //Common tab
+    public Text locationId;
+    public TextField locationName;
+    public TextArea locationDescription;
+    //Exits tab
+    public ChoiceBox<Location> locationNorthExit;
+    public ChoiceBox<Location> locationSouthExit;
+    public ChoiceBox<Location> locationWestExit;
+    public ChoiceBox<Location> locationEastExit;
+    public ChoiceBox<Location> locationUpExit;
+    public ChoiceBox<Location> locationDownExit;
+    //Scripts tab
+    public ListView<String> locationScriptsList;
+    public SwingNode locationScriptNode;
+    //Items tab
+    public ListView<Item> locationAllItemsList;
+    public ListView<SudPair<Item, Integer>> locationItemsList;
+    //Categories tab
+    public ListView<LocationCategory> locationsCategories;
+    public ListView<GameObjectCategory> locationCategories;
+    //Parameters tab
+    public TableView<Map.Entry<String, String>>  locationParameters;
+    public TableColumn<Map.Entry<String, String>, String> locationKeyColumn;
+    public TableColumn<Map.Entry<String, String>, String> locationValueColumn;
 
     private GameFile gameFile;
 
@@ -90,13 +113,16 @@ public class EditorController {
         //Items tab
         itemsList.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) ->
                 selectItem(newValue)));
-        itemScriptsList.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> selectItemScript(newValue)));
-
+        itemScriptsList.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) ->
+                selectItemScript(newValue)));
+        //Location tab
+        locationsList.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) ->
+                selectLocation(newValue)));
         gameFile = new GameFile();
     }
 
-    //Selectors
 
+    //Selectors
     private void selectGameScript(String scriptName) {
         ((RSyntaxTextArea) gameScriptsNode.getContent()).setText(gameFile.getCommonScripts().get(scriptName).getText());
     }
@@ -145,7 +171,38 @@ public class EditorController {
 
             ObservableList<Map.Entry<String, String>> items = FXCollections.observableArrayList(values.entrySet());
             itemParameters.getItems().setAll(items);
-            itemParameters.getColumns().setAll(keyColumn, valueColumn);
+            itemParameters.getColumns().setAll(itemKeyColumn, itemValueColumn);
+        }
+    }
+
+    private void selectLocation(Location location) {
+        if (location != null) {
+            //Common tab
+            int id = location.getId();
+            String name = location.getName();
+            String description = location.getDescription();
+
+            locationId.setText(String.valueOf(id));
+            locationName.setText(name);
+            locationDescription.setText(description);
+            //Exist tab
+            locationNorthExit.getSelectionModel().select(location.getNorth());
+            locationSouthExit.getSelectionModel().select(location.getSouth());
+            locationWestExit.getSelectionModel().select(location.getWest());
+            locationEastExit.getSelectionModel().select(location.getEast());
+            locationUpExit.getSelectionModel().select(location.getUp());
+            locationDownExit.getSelectionModel().select(location.getDown());
+            //Scripts tab
+            locationScriptsList.getItems().setAll(location.getScripts().keySet());
+            //Items tab
+            locationItemsList.getItems().setAll(location.getInventory().getItems());
+            //Categories tab
+            locationCategories.getItems().setAll(location.getCategories());
+            //Parameters tab
+            HashMap<String, String> values = location.getValues();
+            ObservableList<Map.Entry<String, String>> items = FXCollections.observableArrayList(values.entrySet());
+            locationParameters.getItems().setAll(items);
+            locationParameters.getColumns().setAll(locationKeyColumn, locationValueColumn);
         }
     }
 
@@ -190,17 +247,33 @@ public class EditorController {
         itemsList.getItems().addAll(gameFile.getItems());
         initEquipment();
         initItemCategories();
-
         initItemParametersTable();
-
+        //Location tab
+        locationsList.getItems().addAll(gameFile.getLocations());
+        for (Location location : locationsList.getItems()) {
+            locationNorthExit.getItems().add(location);
+            locationSouthExit.getItems().add(location);
+            locationWestExit.getItems().add(location);
+            locationEastExit.getItems().add(location);
+            locationUpExit.getItems().add(location);
+            locationDownExit.getItems().add(location);
+        }
+        locationAllItemsList.getItems().addAll(gameFile.getItems());
+        locationsCategories.getItems().setAll(gameFile.getLocationCategories());
+        initLocationParametersTable();
         Sequencer.setID(gameFile.getSequencerID());
     }
 
-    private void initItemParametersTable() {
-        keyColumn.setCellValueFactory(EditorController::mapKey);
+    private void initLocationParametersTable() {
+        locationKeyColumn.setCellValueFactory(EditorController::mapKey);
+        locationValueColumn.setCellValueFactory(EditorController::mapKey);
+        locationValueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+    }
 
-        valueColumn.setCellValueFactory(EditorController::mapValue);
-        valueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+    private void initItemParametersTable() {
+        itemKeyColumn.setCellValueFactory(EditorController::mapKey);
+        itemValueColumn.setCellValueFactory(EditorController::mapValue);
+        itemValueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
     }
 
     private void initItemCategories() {
@@ -221,6 +294,12 @@ public class EditorController {
         itemScriptsList.getItems().clear();
         itemEquipmentSlot.getItems().clear();
         itemsCategories.getItems().clear();
+        locationNorthExit.setItems(FXCollections.observableArrayList(new Location[]{null}));
+        locationSouthExit.setItems(FXCollections.observableArrayList(new Location[]{null}));
+        locationWestExit.setItems(FXCollections.observableArrayList(new Location[]{null}));
+        locationEastExit.setItems(FXCollections.observableArrayList(new Location[]{null}));
+        locationUpExit.setItems(FXCollections.observableArrayList(new Location[]{null}));
+        locationDownExit.setItems(FXCollections.observableArrayList(new Location[]{null}));
         Equipment.clearSlots();
     }
 
@@ -382,6 +461,7 @@ public class EditorController {
         Item item = new Item("New Item");
         gameFile.getItems().add(item);
         itemsList.getItems().add(item);
+        locationAllItemsList.getItems().add(item);
         itemsList.refresh();
     }
 
@@ -442,5 +522,44 @@ public class EditorController {
                 selectItem(item);
             }
         }
+    }
+
+    public void saveLocationScript() {
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        String scriptName = locationScriptsList.getSelectionModel().getSelectedItem();
+        if (location != null && scriptName != null) {
+            String scriptText = ((RSyntaxTextArea) locationScriptNode.getContent()).getText();
+            location.setScript(scriptName, new Script(scriptText, true));
+        }
+    }
+
+    public void addSeveralItems() {
+    }
+
+    public void addItemToLocation() {
+    }
+
+    public void showItemInventory() {
+    }
+
+    public void removeItemFromLocation() {
+    }
+
+    public void removeSeveralItems() {
+    }
+
+    public void addCategoryToLocation() {
+    }
+
+    public void removeCategoryFromLocation() {
+    }
+
+    public void changeLocationValue() {
+    }
+
+    public void addLocationParameter() {
+    }
+
+    public void removeLocationParameter() {
     }
 }

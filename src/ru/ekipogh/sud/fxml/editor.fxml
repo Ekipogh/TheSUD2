@@ -24,6 +24,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import ru.ekipogh.sud.objects.ItemTypes?>
@@ -52,20 +53,20 @@
                                        GridPane.columnIndex="1" GridPane.rowIndex="0"/>
                             <ScrollPane fitToHeight="true" fitToWidth="true" GridPane.columnIndex="1"
                                         GridPane.rowIndex="1">
-                                <content>
-                                    <TextArea fx:id="gameDescription" onKeyReleased="#saveGameDescription"
-                                              prefWidth="200.0" wrapText="true"/>
-                                </content>
+                                <TextArea fx:id="gameDescription" onKeyReleased="#saveGameDescription" prefWidth="200.0"
+                                          wrapText="true"/>
                             </ScrollPane>
+                            <rowConstraints>
+                                <RowConstraints/>
+                                <RowConstraints/>
+                            </rowConstraints>
                         </GridPane>
                     </Tab>
                     <Tab text="Init Script">
                         <BorderPane prefHeight="200.0" prefWidth="200.0">
                             <center>
                                 <ScrollPane fitToHeight="true" fitToWidth="true">
-                                    <content>
-                                        <SwingNode fx:id="initScriptNode" onKeyReleased="#saveInitScript"/>
-                                    </content>
+                                    <SwingNode fx:id="initScriptNode" onKeyReleased="#saveInitScript"/>
                                 </ScrollPane>
                             </center>
                             <padding>
@@ -82,9 +83,7 @@
                                 <ListView fx:id="gameScriptsList" prefHeight="200.0" prefWidth="200.0"/>
                             </ScrollPane>
                             <ScrollPane fitToHeight="true" fitToWidth="true">
-                                <content>
-                                    <SwingNode fx:id="gameScriptsNode" onKeyReleased="#saveGameScript"/>
-                                </content>
+                                <SwingNode fx:id="gameScriptsNode" onKeyReleased="#saveGameScript"/>
                             </ScrollPane>
                         </SplitPane>
                     </Tab>
@@ -114,6 +113,14 @@
                                         <BorderPane.margin>
                                             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                                         </BorderPane.margin>
+                                        <columnConstraints>
+                                            <ColumnConstraints/>
+                                            <ColumnConstraints/>
+                                        </columnConstraints>
+                                        <rowConstraints>
+                                            <RowConstraints/>
+                                            <RowConstraints/>
+                                        </rowConstraints>
                                     </GridPane>
                                 </top>
                                 <center>
@@ -121,9 +128,7 @@
                                         <BorderPane.margin>
                                             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                                         </BorderPane.margin>
-                                        <content>
-                                            <SwingNode fx:id="timerScriptNode" onKeyReleased="#saveTimerScript"/>
-                                        </content>
+                                        <SwingNode fx:id="timerScriptNode" onKeyReleased="#saveTimerScript"/>
                                     </ScrollPane>
                                 </center>
                             </BorderPane>
@@ -177,6 +182,18 @@
                                 <Label text="Equipment slot" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
                                 <ChoiceBox fx:id="itemEquipmentSlot" onAction="#setItemEquipmentSlot"
                                            GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                                <columnConstraints>
+                                    <ColumnConstraints/>
+                                    <ColumnConstraints/>
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints/>
+                                    <RowConstraints/>
+                                    <RowConstraints/>
+                                    <RowConstraints/>
+                                    <RowConstraints/>
+                                    <RowConstraints/>
+                                </rowConstraints>
                             </GridPane>
                         </Tab>
                         <Tab closable="false" text="Scripts">
@@ -198,9 +215,7 @@
                                     </bottom>
                                     <center>
                                         <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
-                                            <content>
-                                                <SwingNode fx:id="itemScriptNode" onKeyReleased="#saveItemScript"/>
-                                            </content>
+                                            <SwingNode fx:id="itemScriptNode" onKeyReleased="#saveItemScript"/>
                                         </ScrollPane>
                                     </center>
                                 </BorderPane>
@@ -230,10 +245,10 @@
                             <ScrollPane fitToHeight="true" fitToWidth="true">
                                 <TableView fx:id="itemParameters" editable="true">
                                     <columns>
-                                        <TableColumn fx:id="keyColumn" minWidth="500" text="Parameter">
+                                        <TableColumn fx:id="itemKeyColumn" minWidth="500" text="Parameter">
 
                                         </TableColumn>
-                                        <TableColumn fx:id="valueColumn" minWidth="500" onEditCommit="#changeValue"
+                                        <TableColumn fx:id="itemValueColumn" minWidth="500" onEditCommit="#changeValue"
                                                      text="Value">
                                         </TableColumn>
                                     </columns>
@@ -242,6 +257,161 @@
                                             <items>
                                                 <MenuItem onAction="#addItemParameter" text="Add"/>
                                                 <MenuItem onAction="#removeItemParameter" text="Remove"/>
+                                            </items>
+                                        </ContextMenu>
+                                    </contextMenu>
+                                </TableView>
+                            </ScrollPane>
+                        </Tab>
+                    </TabPane>
+                </SplitPane>
+            </Tab>
+            <Tab text="Locations">
+                <SplitPane dividerPositions="0.2">
+                    <ScrollPane fitToHeight="true" fitToWidth="true">
+                        <ListView fx:id="locationsList"/>
+                    </ScrollPane>
+                    <TabPane>
+                        <Tab closable="false" text="Common">
+                            <GridPane>
+                                <Label text="ID:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <Text fx:id="locationId" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                <Label text="Name" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <TextField fx:id="locationName" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                <Label text="Description" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                <TextArea fx:id="locationDescription" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                <columnConstraints>
+                                    <ColumnConstraints/>
+                                    <ColumnConstraints/>
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints/>
+                                    <RowConstraints/>
+                                    <RowConstraints/>
+                                </rowConstraints>
+                            </GridPane>
+                        </Tab>
+                        <Tab text="Exits">
+                            <GridPane>
+                                <Label text="North" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <Label text="South" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <Label text="West" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                <Label text="East" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                <Label text="Up" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                                <Label text="Down" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                                <ChoiceBox fx:id="locationNorthExit" prefWidth="200" GridPane.columnIndex="1"
+                                           GridPane.rowIndex="0"/>
+                                <ChoiceBox fx:id="locationSouthExit" prefWidth="200" GridPane.columnIndex="1"
+                                           GridPane.rowIndex="1"/>
+                                <ChoiceBox fx:id="locationWestExit" prefWidth="200" GridPane.columnIndex="1"
+                                           GridPane.rowIndex="2"/>
+                                <ChoiceBox fx:id="locationEastExit" prefWidth="200" GridPane.columnIndex="1"
+                                           GridPane.rowIndex="3"/>
+                                <ChoiceBox fx:id="locationUpExit" prefWidth="200" GridPane.columnIndex="1"
+                                           GridPane.rowIndex="4"/>
+                                <ChoiceBox fx:id="locationDownExit" prefWidth="200" GridPane.columnIndex="1"
+                                           GridPane.rowIndex="5"/>
+                                <columnConstraints>
+                                    <ColumnConstraints/>
+                                    <ColumnConstraints/>
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints/>
+                                    <RowConstraints/>
+                                    <RowConstraints/>
+                                    <RowConstraints/>
+                                    <RowConstraints/>
+                                    <RowConstraints/>
+                                </rowConstraints>
+                            </GridPane>
+                        </Tab>
+                        <Tab text="Scripts">
+                            <SplitPane dividerPositions="0.2" prefHeight="160.0" prefWidth="200.0">
+                                <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                </padding>
+                                <ScrollPane fitToHeight="true" fitToWidth="true">
+                                    <ListView fx:id="locationScriptsList" prefHeight="200.0" prefWidth="200.0"/>
+                                </ScrollPane>
+                                <ScrollPane fitToHeight="true" fitToWidth="true">
+                                    <SwingNode fx:id="locationScriptNode" onKeyReleased="#saveLocationScript"/>
+                                </ScrollPane>
+                            </SplitPane>
+                        </Tab>
+                        <Tab text="Items">
+                            <BorderPane>
+                                <left>
+                                    <ScrollPane fitToHeight="true" fitToWidth="true">
+                                        <ListView fx:id="locationAllItemsList"/>
+                                    </ScrollPane>
+                                </left>
+                                <center>
+                                    <GridPane alignment="TOP_CENTER" vgap="10.0" BorderPane.alignment="CENTER">
+                                        <Button onAction="#addSeveralItems" text="&gt;&gt;..." GridPane.columnIndex="0"
+                                                GridPane.rowIndex="0"/>
+                                        <Button onAction="#addItemToLocation" text="&gt;&gt;" GridPane.columnIndex="0"
+                                                GridPane.rowIndex="1"/>
+                                        <Button onAction="#showItemInventory" text="Container" GridPane.columnIndex="0"
+                                                GridPane.rowIndex="2"/>
+                                        <Button onAction="#removeItemFromLocation" text="&lt;&lt;"
+                                                GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                        <Button onAction="#removeSeveralItems" text="&lt;&lt;..."
+                                                GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                                        <BorderPane.margin>
+                                            <Insets top="10.0"/>
+                                        </BorderPane.margin>
+                                        <columnConstraints>
+                                            <ColumnConstraints/>
+                                        </columnConstraints>
+                                        <rowConstraints>
+                                            <RowConstraints/>
+                                            <RowConstraints/>
+                                            <RowConstraints/>
+                                            <RowConstraints/>
+                                            <RowConstraints/>
+                                        </rowConstraints>
+                                    </GridPane>
+                                </center>
+                                <right>
+                                    <ScrollPane fitToHeight="true" fitToWidth="true">
+                                        <ListView fx:id="locationItemsList"/>
+                                    </ScrollPane>
+                                </right>
+                            </BorderPane>
+                        </Tab>
+                        <Tab closable="false" text="Categories">
+                            <BorderPane>
+                                <left>
+                                    <ScrollPane fitToHeight="true" fitToWidth="true">
+                                        <ListView fx:id="locationsCategories"/>
+                                    </ScrollPane>
+                                </left>
+                                <center>
+                                    <VBox alignment="CENTER">
+                                        <Button onAction="#addCategoryToLocation" text="&gt;&gt;"/>
+                                        <Button onAction="#removeCategoryFromLocation" text="&lt;&lt;"/>
+                                    </VBox>
+                                </center>
+                                <right>
+                                    <ScrollPane fitToHeight="true" fitToWidth="true">
+                                        <ListView fx:id="locationCategories"/>
+                                    </ScrollPane>
+                                </right>
+                            </BorderPane>
+                        </Tab>
+                        <Tab closable="false" text="Parameters">
+                            <ScrollPane fitToHeight="true" fitToWidth="true">
+                                <TableView fx:id="locationParameters" editable="true">
+                                    <columns>
+                                        <TableColumn fx:id="locationKeyColumn" minWidth="500" text="Parameter"/>
+                                        <TableColumn fx:id="locationValueColumn" minWidth="500"
+                                                     onEditCommit="#changeLocationValue" text="Value"/>
+                                    </columns>
+                                    <contextMenu>
+                                        <ContextMenu>
+                                            <items>
+                                                <MenuItem onAction="#addLocationParameter" text="Add"/>
+                                                <MenuItem onAction="#removeLocationParameter" text="Remove"/>
                                             </items>
                                         </ContextMenu>
                                     </contextMenu>

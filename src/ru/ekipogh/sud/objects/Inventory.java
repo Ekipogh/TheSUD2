@@ -129,6 +129,10 @@ public class Inventory implements Iterable, Serializable {
         return false;
     }
 
+    public List<SudPair<Item, Integer>> getItems() {
+        return items;
+    }
+
     public void clear() {
         items.clear();
     }
