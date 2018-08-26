@@ -9,7 +9,6 @@ import java.awt.event.FocusEvent;
 
 /**
  * Created by ekipogh on 07.02.2016.
- licensed under WTFPL
  */
 class ContainerFrame extends JFrame {
     private final DefaultListModel<SudPair<Item, Integer>> containerItemListModel;

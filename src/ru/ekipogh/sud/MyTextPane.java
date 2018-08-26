@@ -7,7 +7,6 @@ import javax.swing.event.HyperlinkEvent;
 
 /**
  * Created by ekipogh on 07.05.2015.
- * licensed under WTFPL
  */
 public class MyTextPane extends JTextPane {
     private boolean enabled = true;

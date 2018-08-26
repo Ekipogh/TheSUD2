@@ -26,7 +26,6 @@ import java.util.Map;
 
 /**
  * Created by ekipogh on 23.04.2015.
- * licensed under WTFPL
  */
 public class EditorFrame extends JFrame {
     private enum OBJECTYPES {

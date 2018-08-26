@@ -10,7 +10,6 @@ import java.util.Map;
 
 /**
  * Created by ekipogh on 27.04.2015.
- * licensed under WTFPL
  */
 public class GameFile implements Serializable {
     public static final long serialVersionUID = 1L;

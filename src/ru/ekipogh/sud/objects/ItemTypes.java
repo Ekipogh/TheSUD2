@@ -2,7 +2,6 @@ package ru.ekipogh.sud.objects;
 
 /**
  * Created by ekipogh on 04.05.2015.
- licensed under WTFPL
  */
 public enum ItemTypes {
     GENERIC("Общее"), EQUIPPABLE("Экипируемое"), CONSUMABLE("Употребляемое"), STORABLE("Хранимое");

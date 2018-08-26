@@ -8,7 +8,6 @@ import java.util.Map;
 
 /**
  * Created by ekipogh on 07.05.2015.
- * licensed under WTFPL
  */
 public class Equipment implements Serializable {
     public static final long serialVersionUID = 1L;

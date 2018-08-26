@@ -13,7 +13,6 @@ import java.util.Map;
 
 /**
  * Created by ekipogh on 09.05.2016.
- * licensed under WTFPL
  */
 public class GameObject implements Serializable {
     public static final long serialVersionUID = 1L;

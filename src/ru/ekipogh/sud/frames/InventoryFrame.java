@@ -18,7 +18,6 @@ import java.awt.event.WindowEvent;
 
 /**
  * Created by ekipogh on 06.05.2015.
- licensed under WTFPL
  */
 class InventoryFrame extends JFrame {
     private final DefaultTreeModel itemsTreeModel;

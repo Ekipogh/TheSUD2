@@ -5,7 +5,6 @@ import java.util.function.Consumer;
 
 /**
  * Created by ekipogh on 08.09.2015.
- licensed under WTFPL
  */
 public class SudTreeNode extends DefaultMutableTreeNode {
     private final Consumer lambda;

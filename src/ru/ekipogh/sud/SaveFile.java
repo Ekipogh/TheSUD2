@@ -15,7 +15,6 @@ import java.util.Map;
 
 /**
  * Created by ekipogh on 23.09.2015.
- licensed under WTFPL
  */
 public class SaveFile implements Serializable { //Version .1
     public static final long serialVersionUID = 1L;

@@ -17,7 +17,6 @@ import java.util.*;
 
 /**
  * Created by ekipogh on 27.04.2015.
- * licensed under WTFPL
  */
 public class PlayerFrame extends JFrame {
     private static final int UP = 4;

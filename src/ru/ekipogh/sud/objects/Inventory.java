@@ -11,7 +11,6 @@ import java.util.stream.Stream;
 
 /**
  * Created by ekipogh on 22.12.2015.
- * licensed under WTFPL
  */
 public class Inventory implements Iterable, Serializable {
     public static final long serialVersionUID = 1L;

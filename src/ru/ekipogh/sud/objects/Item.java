@@ -9,7 +9,6 @@ import java.util.List;
 
 /**
  * Created by ekipogh on 04.05.2015.
- licensed under WTFPL
  */
 public class Item extends GameObject implements Serializable, Comparable, Cloneable {
     public static final long serialVersionUID = 1L;
