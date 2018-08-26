@@ -31,7 +31,7 @@ public class Inventory implements Iterable, Serializable {
         }
         if (pair != null) {
             int newAmount = pair.getValue() - amount;
-            if (newAmount == 0) {
+            if (newAmount <= 0) {
                 items.remove(pair);
             } else {
                 pair.setValue(newAmount);

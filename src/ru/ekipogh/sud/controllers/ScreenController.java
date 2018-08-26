@@ -9,13 +9,13 @@ import java.util.HashMap;
  * Created by Ektril Pogh on 13.06.2018.
  */
 public class ScreenController {
+    private static Scene main;
     private static HashMap<String, Pane> screenMap = new HashMap<>();
+    private static HashMap<String, Object> controllers = new HashMap<>();
 
-    public static Scene getMain() {
+    static Scene getMain() {
         return main;
     }
-
-    private static Scene main;
 
     public static void setMain(Scene scene) {
         main = scene;
@@ -27,5 +27,13 @@ public class ScreenController {
 
     static void activate(String name) {
         main.setRoot(screenMap.get(name));
+    }
+
+    public static Object getController(String name) {
+        return controllers.get(name);
+    }
+
+    public static void setController(String name, Object controller) {
+        controllers.put(name, controller);
     }
 }

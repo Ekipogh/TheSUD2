@@ -69,12 +69,12 @@ public class GameObject implements Serializable {
         addItem(item, 1);
     }
 
-    public void addItem(Item item, int count) {
-        inventory.add(item, count);
+    public void addItem(Item item, int amount) {
+        inventory.add(item, amount);
     }
 
-    public void removeItem(Item item, int count) {
-        inventory.remove(item, count);
+    public void removeItem(Item item, int amount) {
+        inventory.remove(item, amount);
     }
 
     public void setValue(String valueName, String value) {

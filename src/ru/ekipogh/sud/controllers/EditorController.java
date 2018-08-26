@@ -73,6 +73,7 @@ public class EditorController {
     //Scripts tab
     public ListView<String> locationScriptsList;
     public SwingNode locationScriptNode;
+    public CheckBox locationScriptEnabled;
     //Items tab
     public ListView<Item> locationAllItemsList;
     public ListView<SudPair<Item, Integer>> locationItemsList;
@@ -80,7 +81,7 @@ public class EditorController {
     public ListView<LocationCategory> locationsCategories;
     public ListView<GameObjectCategory> locationCategories;
     //Parameters tab
-    public TableView<Map.Entry<String, String>>  locationParameters;
+    public TableView<Map.Entry<String, String>> locationParameters;
     public TableColumn<Map.Entry<String, String>, String> locationKeyColumn;
     public TableColumn<Map.Entry<String, String>, String> locationValueColumn;
 
@@ -103,6 +104,8 @@ public class EditorController {
         timerScriptNode.setContent(new RSyntaxTextArea());
         //Items tab
         itemScriptNode.setContent(new RSyntaxTextArea());
+        //Location tab
+        locationScriptNode.setContent(new RSyntaxTextArea());
 
         //Lists listeners
         //Common tab
@@ -118,11 +121,15 @@ public class EditorController {
         //Location tab
         locationsList.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) ->
                 selectLocation(newValue)));
+        locationScriptsList.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) ->
+                selectLocationScript(newValue)));
         gameFile = new GameFile();
+        ScreenController.setController("editor", this);
     }
 
 
     //Selectors
+
     private void selectGameScript(String scriptName) {
         ((RSyntaxTextArea) gameScriptsNode.getContent()).setText(gameFile.getCommonScripts().get(scriptName).getText());
     }
@@ -168,7 +175,6 @@ public class EditorController {
             categories.forEach(gameObjectCategory -> itemCategories.getItems().add(((ItemCategory) gameObjectCategory)));
             //Parameters tab
             HashMap<String, String> values = item.getValues();
-
             ObservableList<Map.Entry<String, String>> items = FXCollections.observableArrayList(values.entrySet());
             itemParameters.getItems().setAll(items);
             itemParameters.getColumns().setAll(itemKeyColumn, itemValueColumn);
@@ -194,10 +200,14 @@ public class EditorController {
             locationDownExit.getSelectionModel().select(location.getDown());
             //Scripts tab
             locationScriptsList.getItems().setAll(location.getScripts().keySet());
+            selectLocationScript(null);
+            locationScriptsList.refresh();
             //Items tab
             locationItemsList.getItems().setAll(location.getInventory().getItems());
+            locationItemsList.refresh();
             //Categories tab
             locationCategories.getItems().setAll(location.getCategories());
+            locationCategories.refresh();
             //Parameters tab
             HashMap<String, String> values = location.getValues();
             ObservableList<Map.Entry<String, String>> items = FXCollections.observableArrayList(values.entrySet());
@@ -212,6 +222,9 @@ public class EditorController {
             Script script = item.getScript(scriptName);
             ((RSyntaxTextArea) itemScriptNode.getContent()).setText(script.getText());
             itemScriptEnabled.setSelected(script.isEnabled());
+        } else {
+            ((RSyntaxTextArea) itemScriptNode.getContent()).setText("");
+            itemScriptEnabled.setSelected(false);
         }
     }
 
@@ -266,7 +279,7 @@ public class EditorController {
 
     private void initLocationParametersTable() {
         locationKeyColumn.setCellValueFactory(EditorController::mapKey);
-        locationValueColumn.setCellValueFactory(EditorController::mapKey);
+        locationValueColumn.setCellValueFactory(EditorController::mapValue);
         locationValueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
     }
 
@@ -367,10 +380,6 @@ public class EditorController {
         }
     }
 
-    public void changeValue(TableColumn.CellEditEvent<Map.Entry<String, String>, String> event) {
-        event.getRowValue().setValue(event.getNewValue());
-    }
-
     public void saveItemName() {
         Item item = itemsList.getSelectionModel().getSelectedItem();
         if (item != null) {
@@ -463,6 +472,7 @@ public class EditorController {
         itemsList.getItems().add(item);
         locationAllItemsList.getItems().add(item);
         itemsList.refresh();
+        itemsList.getSelectionModel().select(item);
     }
 
     public void removeItem() {
@@ -534,32 +544,207 @@ public class EditorController {
     }
 
     public void addSeveralItems() {
+        int amount = Utils.showSpinnerDialog();
+        Item item = locationAllItemsList.getSelectionModel().getSelectedItem();
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        if (item != null && location != null && amount != 0) {
+            addItemToLocation(location, item, amount);
+        }
     }
 
-    public void addItemToLocation() {
+    public void addOneItemToLocation() {
+        Item item = locationAllItemsList.getSelectionModel().getSelectedItem();
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        if (item != null && location != null) {
+            addItemToLocation(location, item, 1);
+        }
+    }
+
+    private void addItemToLocation(Location location, Item item, int amount) {
+        location.addItem(item, amount);
+        selectLocation(location);
     }
 
     public void showItemInventory() {
-    }
-
-    public void removeItemFromLocation() {
+        SudPair<Item, Integer> pair = locationItemsList.getSelectionModel().getSelectedItem();
+        if (pair != null) {
+            Item item = pair.getKey();
+            ((ItemContainerController) ScreenController.getController("itemContainer")).init(item, gameFile);
+            ScreenController.activate("itemContainer");
+        }
     }
 
     public void removeSeveralItems() {
+        int amount = Utils.showSpinnerDialog();
+        SudPair<Item, Integer> pair = locationItemsList.getSelectionModel().getSelectedItem();
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        if (pair != null && location != null && amount != 0) {
+            Item item = pair.getKey();
+            removeItemFromLocation(location, item, amount);
+            locationItemsList.getSelectionModel().select(pair);
+        }
+    }
+
+    public void removeOneItemFromLocation() {
+        SudPair<Item, Integer> pair = locationItemsList.getSelectionModel().getSelectedItem();
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        if (pair != null && location != null) {
+            Item item = pair.getKey();
+            removeItemFromLocation(location, item, 1);
+            locationItemsList.getSelectionModel().select(pair);
+        }
+    }
+
+    private void removeItemFromLocation(Location location, Item item, int amount) {
+        location.removeItem(item, amount);
+        selectLocation(location);
     }
 
     public void addCategoryToLocation() {
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        GameObjectCategory category = locationsCategories.getSelectionModel().getSelectedItem();
+        if (location != null && category != null) {
+            location.addCategory(category);
+        }
     }
 
     public void removeCategoryFromLocation() {
-    }
-
-    public void changeLocationValue() {
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        GameObjectCategory category = locationCategories.getSelectionModel().getSelectedItem();
+        if (location != null && category != null) {
+            location.removeCategory(category);
+        }
     }
 
     public void addLocationParameter() {
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        if (location != null) {
+            TextInputDialog inputDialog = new TextInputDialog("New Parameter");
+            inputDialog.setTitle("Enter parameter name");
+            Optional<String> result = inputDialog.showAndWait();
+            result.ifPresent(parameterName -> {
+                location.setValue(parameterName, "");
+                selectLocation(location);
+            });
+        }
     }
 
     public void removeLocationParameter() {
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        if (location != null) {
+            Map.Entry<String, String> entry = locationParameters.getSelectionModel().getSelectedItem();
+            if (entry != null) {
+                String key = entry.getKey();
+                location.removeValue(key);
+                selectLocation(location);
+            }
+        }
+    }
+
+    public void changeValue(TableColumn.CellEditEvent<Map.Entry<String, String>, String> event) {
+        event.getRowValue().setValue(event.getNewValue());
+    }
+
+    public void addLocation() {
+        Location location = new Location("New Location");
+        locationsList.getItems().add(location);
+        gameFile.getLocations().add(location);
+        locationsList.refresh();
+        locationsList.getSelectionModel().select(location);
+    }
+
+    public void removeLocation() {
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        if (location != null) {
+            locationsList.getItems().remove(location);
+            gameFile.getLocations().remove(location);
+            locationsList.refresh();
+        }
+    }
+
+    public void saveLocationName() {
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        if (location != null) {
+            String name = locationName.getText();
+            location.setName(name);
+            locationsList.refresh();
+        }
+    }
+
+    public void saveLocationDescription() {
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        if (location != null) {
+            String description = locationDescription.getText();
+            location.setDescription(description);
+        }
+    }
+
+    public void saveLocationNorth() {
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        if (location != null) {
+            Location north = locationNorthExit.getValue();
+            location.setNorth(north);
+        }
+    }
+
+    public void saveLocationSouth() {
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        if (location != null) {
+            Location south = locationSouthExit.getValue();
+            location.setSouth(south);
+        }
+    }
+
+    public void saveLocationWest() {
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        if (location != null) {
+            Location west = locationWestExit.getValue();
+            location.setWest(west);
+        }
+    }
+
+    public void saveLocationEast() {
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        if (location != null) {
+            Location east = locationEastExit.getValue();
+            location.setEast(east);
+        }
+    }
+
+    public void saveLocationDown() {
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        if (location != null) {
+            Location down = locationDownExit.getValue();
+            location.setDown(down);
+        }
+    }
+
+    public void saveLocationUp() {
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        if (location != null) {
+            Location up = locationUpExit.getValue();
+            location.setUp(up);
+        }
+    }
+
+    private void selectLocationScript(String scriptName) {
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        if (location != null && scriptName != null) {
+            Script script = location.getScript(scriptName);
+            String text = script.getText();
+            ((RSyntaxTextArea) locationScriptNode.getContent()).setText(text);
+            locationScriptEnabled.setSelected(script.isEnabled());
+        } else {
+            ((RSyntaxTextArea) locationScriptNode.getContent()).setText("");
+            locationScriptEnabled.setSelected(false);
+        }
+    }
+
+    public void setLocationScriptEnabled() {
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        String scriptName = locationScriptsList.getSelectionModel().getSelectedItem();
+        if (location != null && scriptName != null) {
+            locationScriptEnabled.setSelected(location.getScript(scriptName).isEnabled());
+        }
     }
 }
