@@ -84,6 +84,17 @@ public class EditorController {
     public TableView<Map.Entry<String, String>> locationParameters;
     public TableColumn<Map.Entry<String, String>, String> locationKeyColumn;
     public TableColumn<Map.Entry<String, String>, String> locationValueColumn;
+    //Characters tab
+    //Common tab
+    public ListView<GameCharacter> charactersList;
+    public Text characterId;
+    public TextField characterName;
+    public TextArea characterDescription;
+    public ChoiceBox<Location> characterLocation;
+    //Scripts tab
+    public ListView<String> characterScriptsList;
+    public SwingNode characterScriptNode;
+    public CheckBox characterScriptEnabled;
 
     private GameFile gameFile;
 
@@ -106,6 +117,8 @@ public class EditorController {
         itemScriptNode.setContent(new RSyntaxTextArea());
         //Location tab
         locationScriptNode.setContent(new RSyntaxTextArea());
+        //Character tab
+        characterScriptNode.setContent(new RSyntaxTextArea());
 
         //Lists listeners
         //Common tab
@@ -123,13 +136,17 @@ public class EditorController {
                 selectLocation(newValue)));
         locationScriptsList.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) ->
                 selectLocationScript(newValue)));
+        //Characters tab
+        charactersList.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) ->
+                selectCharacter(newValue)));
+        characterScriptsList.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) ->
+                selectCharacterScript(newValue)));
         gameFile = new GameFile();
         ScreenController.setController("editor", this);
     }
 
 
     //Selectors
-
     private void selectGameScript(String scriptName) {
         ((RSyntaxTextArea) gameScriptsNode.getContent()).setText(gameFile.getCommonScripts().get(scriptName).getText());
     }
@@ -167,8 +184,7 @@ public class EditorController {
             itemEquipmentSlot.getSelectionModel().select(slot);
             //Scripts tab
             Set<String> scriptNames = item.getScripts().keySet();
-            itemScriptsList.getItems().clear();
-            itemScriptsList.getItems().addAll(scriptNames);
+            itemScriptsList.getItems().setAll(scriptNames);
             //Categories tab
             itemCategories.getItems().clear();
             List<GameObjectCategory> categories = item.getCategories();
@@ -216,6 +232,38 @@ public class EditorController {
         }
     }
 
+    private void selectCharacter(GameCharacter character) {
+        if (character != null) {
+            int id = character.getId();
+            String name = character.getName();
+            String description = character.getDescription();
+            Location location = character.getLocation();
+
+            //Common tab
+            characterId.setText(String.valueOf(id));
+            characterName.setText(name);
+            characterDescription.setText(description);
+            characterLocation.getSelectionModel().select(location);
+            //Scripts tab
+            characterScriptsList.getItems().setAll(character.getScripts().keySet());
+            selectCharacterScript(null);
+            characterScriptsList.refresh();
+        }
+    }
+
+    private void selectCharacterScript(String scriptName) {
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        if (character != null && scriptName != null) {
+            Script script = character.getScript(scriptName);
+            String text = script.getText();
+            ((RSyntaxTextArea) characterScriptNode.getContent()).setText(text);
+            characterScriptEnabled.setSelected(script.isEnabled());
+        } else {
+            ((RSyntaxTextArea) characterScriptNode.getContent()).setText("");
+            characterScriptEnabled.setSelected(false);
+        }
+    }
+
     private void selectItemScript(String scriptName) {
         Item item = itemsList.getSelectionModel().getSelectedItem();
         if (item != null && scriptName != null) {
@@ -231,7 +279,7 @@ public class EditorController {
     private String chooseFile(Window window) {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Open a game file");
-        chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("SUD game", "*.sud"),
+        chooser.getExtensionFilters().setAll(new FileChooser.ExtensionFilter("SUD game", "*.sud"),
                 new FileChooser.ExtensionFilter("All files", "*.*"));
         File file = chooser.showOpenDialog(window);
         if (file != null) {
@@ -254,15 +302,15 @@ public class EditorController {
         gameName.setText(gameFile.getGameName());
         gameDescription.setText(gameFile.getGameStartMessage());
         ((RSyntaxTextArea) initScriptNode.getContent()).setText(gameFile.getInitScript());
-        gameScriptsList.getItems().addAll(gameFile.getCommonScripts().keySet());
-        timersList.getItems().addAll(gameFile.getTimers());
+        gameScriptsList.getItems().setAll(gameFile.getCommonScripts().keySet());
+        timersList.getItems().setAll(gameFile.getTimers());
         //Items tab
-        itemsList.getItems().addAll(gameFile.getItems());
+        itemsList.getItems().setAll(gameFile.getItems());
         initEquipment();
         initItemCategories();
         initItemParametersTable();
         //Location tab
-        locationsList.getItems().addAll(gameFile.getLocations());
+        locationsList.getItems().setAll(gameFile.getLocations());
         for (Location location : locationsList.getItems()) {
             locationNorthExit.getItems().add(location);
             locationSouthExit.getItems().add(location);
@@ -271,9 +319,13 @@ public class EditorController {
             locationUpExit.getItems().add(location);
             locationDownExit.getItems().add(location);
         }
-        locationAllItemsList.getItems().addAll(gameFile.getItems());
+        locationAllItemsList.getItems().setAll(gameFile.getItems());
         locationsCategories.getItems().setAll(gameFile.getLocationCategories());
         initLocationParametersTable();
+        //Characters tab
+        charactersList.getItems().setAll(gameFile.getCharacters());
+        characterLocation.getItems().setAll(gameFile.getLocations());
+        characterLocation.getItems().add(null);
         Sequencer.setID(gameFile.getSequencerID());
     }
 
@@ -442,7 +494,7 @@ public class EditorController {
     public void setItemScriptEnabled() {
         Item item = itemsList.getSelectionModel().getSelectedItem();
         String scriptName = itemScriptsList.getSelectionModel().getSelectedItem();
-        if (item != null && scriptName != null) {
+        if (item != null && scriptName != null && !scriptName.startsWith("_")) {
             boolean enabled = itemScriptEnabled.isSelected();
             item.getScript(scriptName).setEnabled(enabled);
         }
@@ -494,6 +546,7 @@ public class EditorController {
             result.ifPresent(scriptName -> {
                 item.getScripts().put(scriptName, new Script("", true));
                 itemScriptsList.getItems().add(scriptName);
+                itemScriptsList.getSelectionModel().select(scriptName);
             });
             itemScriptsList.refresh();
         }
@@ -502,7 +555,7 @@ public class EditorController {
     public void removeItemScript() {
         Item item = itemsList.getSelectionModel().getSelectedItem();
         String scriptName = itemScriptsList.getSelectionModel().getSelectedItem();
-        if (item != null && scriptName != null) {
+        if (item != null && scriptName != null && !scriptName.startsWith("_")) {
             item.getScripts().remove(scriptName);
             itemScriptsList.getItems().remove(scriptName);
             itemScriptsList.refresh();
@@ -743,8 +796,119 @@ public class EditorController {
     public void setLocationScriptEnabled() {
         Location location = locationsList.getSelectionModel().getSelectedItem();
         String scriptName = locationScriptsList.getSelectionModel().getSelectedItem();
-        if (location != null && scriptName != null) {
+        if (location != null && scriptName != null && !scriptName.startsWith("_")) {
             locationScriptEnabled.setSelected(location.getScript(scriptName).isEnabled());
+        }
+    }
+
+    public void addCharacter() {
+        GameCharacter character = new GameCharacter("Enter name");
+        charactersList.getItems().add(character);
+        gameFile.getCharacters().add(character);
+        charactersList.getSelectionModel().select(character);
+    }
+
+    public void removeCharacter() {
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        if (character != null) {
+            charactersList.getItems().remove(character);
+            gameFile.getCharacters().remove(character);
+            charactersList.refresh();
+        }
+    }
+
+    public void saveCharacterName() {
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        if (character != null) {
+            String name = characterName.getText();
+            character.setName(name);
+            charactersList.refresh();
+        }
+    }
+
+    public void saveCharacterDescription() {
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        if (character != null) {
+            String description = characterDescription.getText();
+            character.setDescription(description);
+            charactersList.refresh();
+        }
+    }
+
+    public void setCharacterLocation() {
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        if (character != null) {
+            Location location = characterLocation.getValue();
+            character.setLocation(location);
+        }
+    }
+
+    public void addCharacterScript() {
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        if (character != null) {
+            TextInputDialog inputDialog = new TextInputDialog("New Script");
+            inputDialog.setTitle("Enter script name");
+            Optional<String> result = inputDialog.showAndWait();
+            result.ifPresent(scriptName -> {
+                character.getScripts().put(scriptName, new Script("", true));
+                characterScriptsList.getItems().add(scriptName);
+                characterScriptsList.getSelectionModel().select(scriptName);
+            });
+            characterScriptsList.refresh();
+        }
+    }
+
+    public void removeCharacterScript() {
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        String scriptName = characterScriptsList.getSelectionModel().getSelectedItem();
+        if (character != null && scriptName != null && !scriptName.startsWith("_")) {
+            character.removeScript(scriptName);
+            characterScriptsList.getItems().remove(scriptName);
+            characterScriptsList.refresh();
+        }
+    }
+
+    public void addLocationScript() {
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        if (location != null) {
+            TextInputDialog inputDialog = new TextInputDialog("New Script");
+            inputDialog.setTitle("Enter script name");
+            Optional<String> result = inputDialog.showAndWait();
+            result.ifPresent(scriptName -> {
+                location.getScripts().put(scriptName, new Script("", true));
+                locationScriptsList.getItems().add(scriptName);
+                locationScriptsList.getSelectionModel().select(scriptName);
+            });
+            locationScriptsList.refresh();
+        }
+    }
+
+    public void removeLocationScript() {
+        Location location = locationsList.getSelectionModel().getSelectedItem();
+        String scriptName = locationScriptsList.getSelectionModel().getSelectedItem();
+        if (location != null && scriptName != null && !scriptName.startsWith("_")) {
+            location.removeScript(scriptName);
+            locationScriptsList.getItems().remove(scriptName);
+            locationScriptsList.refresh();
+        }
+    }
+
+    public void saveCharacterScript() {
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        String scriptName = characterScriptsList.getSelectionModel().getSelectedItem();
+        if (character != null && scriptName != null) {
+            String text = ((RSyntaxTextArea) characterScriptNode.getContent()).getText();
+            boolean enabled = characterScriptEnabled.isSelected();
+            character.setScript(scriptName, new Script(text, enabled));
+        }
+    }
+
+    public void setCharacterScriptEnabled() {
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        String scriptName = characterScriptsList.getSelectionModel().getSelectedItem();
+        if (character != null && scriptName != null && !scriptName.startsWith("_")) {
+            boolean enabled = characterScriptEnabled.isSelected();
+            character.setScriptEnabled(scriptName, enabled);
         }
     }
 }

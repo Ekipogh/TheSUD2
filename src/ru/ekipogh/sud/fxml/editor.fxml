@@ -286,11 +286,11 @@
                                 <Label text="ID:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                                 <Text fx:id="locationId" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
                                 <Label text="Name" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                                <TextField fx:id="locationName" GridPane.columnIndex="1" GridPane.rowIndex="1"
-                                           onKeyReleased="#saveLocationName"/>
+                                <TextField fx:id="locationName" onKeyReleased="#saveLocationName"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                                 <Label text="Description" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                                <TextArea fx:id="locationDescription" GridPane.columnIndex="1" GridPane.rowIndex="2"
-                                          onKeyReleased="#saveLocationDescription"/>
+                                <TextArea fx:id="locationDescription" onKeyReleased="#saveLocationDescription"
+                                          GridPane.columnIndex="1" GridPane.rowIndex="2"/>
                                 <columnConstraints>
                                     <ColumnConstraints/>
                                     <ColumnConstraints/>
@@ -310,18 +310,18 @@
                                 <Label text="East" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
                                 <Label text="Up" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
                                 <Label text="Down" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-                                <ChoiceBox fx:id="locationNorthExit" prefWidth="200" GridPane.columnIndex="1"
-                                           GridPane.rowIndex="0" onAction="#saveLocationNorth"/>
-                                <ChoiceBox fx:id="locationSouthExit" prefWidth="200" GridPane.columnIndex="1"
-                                           GridPane.rowIndex="1" onAction="#saveLocationSouth"/>
-                                <ChoiceBox fx:id="locationWestExit" prefWidth="200" GridPane.columnIndex="1"
-                                           GridPane.rowIndex="2" onAction="#saveLocationWest"/>
-                                <ChoiceBox fx:id="locationEastExit" prefWidth="200" GridPane.columnIndex="1"
-                                           GridPane.rowIndex="3" onAction="#saveLocationEast"/>
-                                <ChoiceBox fx:id="locationUpExit" prefWidth="200" GridPane.columnIndex="1"
-                                           GridPane.rowIndex="4" onAction="#saveLocationUp"/>
-                                <ChoiceBox fx:id="locationDownExit" prefWidth="200" GridPane.columnIndex="1"
-                                           GridPane.rowIndex="5" onAction="#saveLocationDown"/>
+                                <ChoiceBox fx:id="locationNorthExit" onAction="#saveLocationNorth" prefWidth="200"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                <ChoiceBox fx:id="locationSouthExit" onAction="#saveLocationSouth" prefWidth="200"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                <ChoiceBox fx:id="locationWestExit" onAction="#saveLocationWest" prefWidth="200"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                <ChoiceBox fx:id="locationEastExit" onAction="#saveLocationEast" prefWidth="200"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                <ChoiceBox fx:id="locationUpExit" onAction="#saveLocationUp" prefWidth="200"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                                <ChoiceBox fx:id="locationDownExit" onAction="#saveLocationDown" prefWidth="200"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="5"/>
                                 <columnConstraints>
                                     <ColumnConstraints/>
                                     <ColumnConstraints/>
@@ -344,7 +344,17 @@
                                             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                                         </padding>
                                         <ScrollPane fitToHeight="true" fitToWidth="true">
-                                            <ListView fx:id="locationScriptsList" prefHeight="200.0" prefWidth="200.0"/>
+                                            <ListView fx:id="locationScriptsList" prefHeight="200.0"
+                                                      prefWidth="200.0">
+                                                <contextMenu>
+                                                    <ContextMenu>
+                                                        <items>
+                                                            <MenuItem text="Add" onAction="#addLocationScript"/>
+                                                            <MenuItem text="Remove" onAction="#removeLocationScript"/>
+                                                        </items>
+                                                    </ContextMenu>
+                                                </contextMenu>
+                                            </ListView>
                                         </ScrollPane>
                                         <ScrollPane fitToHeight="true" fitToWidth="true">
                                             <SwingNode fx:id="locationScriptNode" onKeyReleased="#saveLocationScript"/>
@@ -352,9 +362,8 @@
                                     </SplitPane>
                                 </center>
                                 <bottom>
-                                    <CheckBox text="Enabled" BorderPane.alignment="CENTER_RIGHT"
-                                              fx:id="locationScriptEnabled"
-                                              onAction="#setLocationScriptEnabled"/>
+                                    <CheckBox fx:id="locationScriptEnabled" onAction="#setLocationScriptEnabled"
+                                              text="Enabled" BorderPane.alignment="CENTER_RIGHT"/>
                                 </bottom>
                             </BorderPane>
                         </Tab>
@@ -370,8 +379,7 @@
                                         <Button onAction="#addSeveralItems" text="&gt;&gt;..." GridPane.columnIndex="0"
                                                 GridPane.rowIndex="0"/>
                                         <Button onAction="#addOneItemToLocation" text="&gt;&gt;"
-                                                GridPane.columnIndex="0"
-                                                GridPane.rowIndex="1"/>
+                                                GridPane.columnIndex="0" GridPane.rowIndex="1"/>
                                         <Button onAction="#showItemInventory" text="Container" GridPane.columnIndex="0"
                                                 GridPane.rowIndex="2"/>
                                         <Button onAction="#removeOneItemFromLocation" text="&lt;&lt;"
@@ -381,6 +389,16 @@
                                         <BorderPane.margin>
                                             <Insets top="10.0"/>
                                         </BorderPane.margin>
+                                        <columnConstraints>
+                                            <ColumnConstraints/>
+                                        </columnConstraints>
+                                        <rowConstraints>
+                                            <RowConstraints/>
+                                            <RowConstraints/>
+                                            <RowConstraints/>
+                                            <RowConstraints/>
+                                            <RowConstraints/>
+                                        </rowConstraints>
                                     </GridPane>
                                 </center>
                                 <right>
@@ -428,6 +446,77 @@
                                     </contextMenu>
                                 </TableView>
                             </ScrollPane>
+                        </Tab>
+                    </TabPane>
+                </SplitPane>
+            </Tab>
+            <Tab closable="false" text="Characters">
+                <SplitPane dividerPositions="0.2">
+                    <ScrollPane fitToHeight="true" fitToWidth="true">
+                        <ListView fx:id="charactersList">
+                            <contextMenu>
+                                <ContextMenu>
+                                    <items>
+                                        <MenuItem onAction="#addCharacter" text="Add"/>
+                                        <MenuItem onAction="#removeCharacter" text="Remove"/>
+                                    </items>
+                                </ContextMenu>
+                            </contextMenu>
+                        </ListView>
+                    </ScrollPane>
+                    <TabPane>
+                        <Tab closable="false" text="Common">
+                            <GridPane>
+                                <Label text="ID" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <Text fx:id="characterId" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                <Label text="Name" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <TextField fx:id="characterName" onKeyReleased="#saveCharacterName"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                <Label text="Description" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                <TextArea fx:id="characterDescription" onKeyReleased="#saveCharacterDescription"
+                                          GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                <Label text="Starting location" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                <ChoiceBox fx:id="characterLocation" onAction="#setCharacterLocation"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                <columnConstraints>
+                                    <ColumnConstraints/>
+                                    <ColumnConstraints/>
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints/>
+                                    <RowConstraints/>
+                                    <RowConstraints/>
+                                    <RowConstraints/>
+                                </rowConstraints>
+                            </GridPane>
+                        </Tab>
+                        <Tab closable="false" text="Scripts">
+                            <SplitPane dividerPositions="0.2">
+                                <ScrollPane fitToHeight="true" fitToWidth="true">
+                                    <ListView fx:id="characterScriptsList">
+                                        <contextMenu>
+                                            <ContextMenu>
+                                                <items>
+                                                    <MenuItem onAction="#addCharacterScript" text="Add"/>
+                                                    <MenuItem onAction="#removeCharacterScript" text="Remove"/>
+                                                </items>
+                                            </ContextMenu>
+                                        </contextMenu>
+                                    </ListView>
+                                </ScrollPane>
+                                <BorderPane>
+                                    <center>
+                                        <ScrollPane fitToHeight="true" fitToWidth="true">
+                                            <SwingNode fx:id="characterScriptNode"
+                                                       onKeyReleased="#saveCharacterScript"/>
+                                        </ScrollPane>
+                                    </center>
+                                    <bottom>
+                                        <CheckBox fx:id="characterScriptEnabled" text="Enabled"
+                                                  BorderPane.alignment="CENTER_RIGHT" onAction="#setCharacterScriptEnabled"/>
+                                    </bottom>
+                                </BorderPane>
+                            </SplitPane>
                         </Tab>
                     </TabPane>
                 </SplitPane>
