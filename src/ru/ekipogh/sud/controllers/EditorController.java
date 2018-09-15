@@ -13,8 +13,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import ru.ekipogh.sud.*;
+import ru.ekipogh.sud.behavior.*;
 import ru.ekipogh.sud.objects.*;
 
+import javax.swing.tree.TreeNode;
 import java.io.File;
 import java.util.*;
 
@@ -95,6 +97,25 @@ public class EditorController {
     public ListView<String> characterScriptsList;
     public SwingNode characterScriptNode;
     public CheckBox characterScriptEnabled;
+    //Items tab
+    public ListView<Item> characterAllItemsList;
+    public ListView<SudPair<Item, Integer>> characterItemsList;
+    //Equipment tab
+    public TableView<Map.Entry<String, Item>> characterEquipmentTable;
+    public ListView<Item> equipmentAllList;
+    public TableColumn<Map.Entry<String, Item>, String> equipmentTableSlot;
+    public TableColumn<Map.Entry<String, Item>, String> equipmentTableItem;
+    //Parameters tab
+    public TableView<Map.Entry<String, String>> characterParameters;
+    public TableColumn<Map.Entry<String, String>, String> characterKeyColumn;
+    public TableColumn<Map.Entry<String, String>, String> characterValueColumn;
+    //Categories tab
+    public ListView<CharacterCategory> charactersCategories;
+    public ListView<GameObjectCategory> characterCategories;
+    //Behavior tab
+    public TreeView<BTreeNode> characterBehaviorTree;
+    public SwingNode characterBehaviorScriptNode;
+    public ContextMenu characterBehaviorTreeMenu;
 
     private GameFile gameFile;
 
@@ -105,6 +126,15 @@ public class EditorController {
     private static ObservableValue<String> mapValue(TableColumn.CellDataFeatures<Map.Entry<String, String>, String> p) {
         return new SimpleStringProperty(p.getValue().getValue());
     }
+
+    private static ObservableValue<String> mapItemKey(TableColumn.CellDataFeatures<Map.Entry<String, Item>, String> p) {
+        return new SimpleStringProperty(p.getValue().getKey());
+    }
+
+    private static ObservableValue<String> mapItemValue(TableColumn.CellDataFeatures<Map.Entry<String, Item>, String> p) {
+        return new SimpleStringProperty(p.getValue().getValue().toString());
+    }
+
 
     @FXML
     public void initialize() {
@@ -119,6 +149,7 @@ public class EditorController {
         locationScriptNode.setContent(new RSyntaxTextArea());
         //Character tab
         characterScriptNode.setContent(new RSyntaxTextArea());
+        characterBehaviorScriptNode.setContent(new RSyntaxTextArea());
 
         //Lists listeners
         //Common tab
@@ -143,6 +174,30 @@ public class EditorController {
                 selectCharacterScript(newValue)));
         gameFile = new GameFile();
         ScreenController.setController("editor", this);
+
+        for (BehaviorTree.TYPES type : BehaviorTree.TYPES.values()) {
+            MenuItem item = new MenuItem(type.toString());
+            item.setOnAction(event -> addBehaviorNode(type));
+            characterBehaviorTreeMenu.getItems().add(item);
+        }
+    }
+
+    private void addBehaviorNode(BehaviorTree.TYPES type) {
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        TreeItem<BTreeNode> node = characterBehaviorTree.getSelectionModel().getSelectedItem();
+        if (character != null && node != null && node.getValue().getClass() != TaskNode.class) {
+            switch (type) {
+                case SELECTOR:
+                    node.getChildren().add(new TreeItem<>(new Selector()));
+                    break;
+                case SEQUENCE:
+                    node.getChildren().add(new TreeItem<>(new Sequence()));
+                    break;
+                case TASK:
+                    node.getChildren().add(new TreeItem<>(new TaskNode(character)));
+                    break;
+            }
+        }
     }
 
 
@@ -248,6 +303,23 @@ public class EditorController {
             characterScriptsList.getItems().setAll(character.getScripts().keySet());
             selectCharacterScript(null);
             characterScriptsList.refresh();
+            //Items tab
+            characterItemsList.getItems().setAll(character.getInventory().getItems());
+            //Equipment tab
+            Map<String, Item> equipment = character.getEquipment().getSlots();
+            ObservableList<Map.Entry<String, Item>> equipmentItems = FXCollections.observableArrayList(equipment.entrySet());
+            characterEquipmentTable.getItems().setAll(equipmentItems);
+            characterEquipmentTable.getColumns().setAll(equipmentTableSlot, equipmentTableItem);
+            //Parameters tab
+            HashMap<String, String> values = character.getValues();
+            ObservableList<Map.Entry<String, String>> items = FXCollections.observableArrayList(values.entrySet());
+            characterParameters.getItems().setAll(items);
+            characterParameters.getColumns().setAll(characterKeyColumn, characterValueColumn);
+            //Categories tab
+            characterCategories.getItems().setAll(character.getCategories());
+            characterCategories.refresh();
+            //Behavior tab
+            characterBehaviorTree.setRoot(new TreeItem<>(character.getBtree()));
         }
     }
 
@@ -309,6 +381,8 @@ public class EditorController {
         initEquipment();
         initItemCategories();
         initItemParametersTable();
+        initEquipmentTable();
+        initCharacterParametersTable();
         //Location tab
         locationsList.getItems().setAll(gameFile.getLocations());
         for (Location location : locationsList.getItems()) {
@@ -326,7 +400,16 @@ public class EditorController {
         charactersList.getItems().setAll(gameFile.getCharacters());
         characterLocation.getItems().setAll(gameFile.getLocations());
         characterLocation.getItems().add(null);
+        characterAllItemsList.getItems().setAll(gameFile.getItems());
+        List<Item> equipable = new ArrayList<>();
+        for (Item item : gameFile.getItems()) {
+            if (item.getType() == ItemTypes.EQUIPPABLE) {
+                equipable.add(item);
+            }
+        }
+        equipmentAllList.getItems().setAll(equipable);
         Sequencer.setID(gameFile.getSequencerID());
+        charactersCategories.getItems().setAll(gameFile.getCharacterCategories());
     }
 
     private void initLocationParametersTable() {
@@ -339,6 +422,17 @@ public class EditorController {
         itemKeyColumn.setCellValueFactory(EditorController::mapKey);
         itemValueColumn.setCellValueFactory(EditorController::mapValue);
         itemValueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+    }
+
+    private void initEquipmentTable() {
+        equipmentTableSlot.setCellValueFactory(EditorController::mapItemKey);
+        equipmentTableItem.setCellValueFactory(EditorController::mapItemValue);
+    }
+
+    private void initCharacterParametersTable() {
+        characterKeyColumn.setCellValueFactory(EditorController::mapKey);
+        characterValueColumn.setCellValueFactory(EditorController::mapValue);
+        characterValueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
     }
 
     private void initItemCategories() {
@@ -470,6 +564,9 @@ public class EditorController {
             ItemTypes type = itemType.getSelectionModel().getSelectedItem();
             item.setType(type);
             itemEquipmentSlot.setDisable(type != ItemTypes.EQUIPPABLE);
+            if (type == ItemTypes.EQUIPPABLE) {
+                equipmentAllList.getItems().add(item);
+            }
         }
     }
 
@@ -523,6 +620,7 @@ public class EditorController {
         gameFile.getItems().add(item);
         itemsList.getItems().add(item);
         locationAllItemsList.getItems().add(item);
+        characterAllItemsList.getItems().add(item);
         itemsList.refresh();
         itemsList.getSelectionModel().select(item);
     }
@@ -531,6 +629,22 @@ public class EditorController {
         Item item = itemsList.getSelectionModel().getSelectedItem();
         if (item != null) {
             itemsList.getItems().remove(item);
+            locationAllItemsList.getItems().remove(item);
+            characterAllItemsList.getItems().remove(item);
+            equipmentAllList.getItems().remove(item);
+            //Remove from all locations
+            for (Location location : gameFile.getLocations()) {
+                location.removeItem(item, -1);
+            }
+            //Remove from all characters
+            for (GameCharacter character : gameFile.getCharacters()) {
+                character.removeItem(item, -1);
+                character.unequip(item);
+            }
+            //Remove from all containers
+            for (Item container : gameFile.getItems()) {
+                container.removeItem(item, -1);
+            }
             gameFile.getItems().remove(item);
             itemsList.refresh();
         }
@@ -596,7 +710,7 @@ public class EditorController {
         }
     }
 
-    public void addSeveralItems() {
+    public void addSeveralItemsToLocation() {
         int amount = Utils.showSpinnerDialog();
         Item item = locationAllItemsList.getSelectionModel().getSelectedItem();
         Location location = locationsList.getSelectionModel().getSelectedItem();
@@ -627,7 +741,7 @@ public class EditorController {
         }
     }
 
-    public void removeSeveralItems() {
+    public void removeSeveralItemsFromLocation() {
         int amount = Utils.showSpinnerDialog();
         SudPair<Item, Integer> pair = locationItemsList.getSelectionModel().getSelectedItem();
         Location location = locationsList.getSelectionModel().getSelectedItem();
@@ -909,6 +1023,119 @@ public class EditorController {
         if (character != null && scriptName != null && !scriptName.startsWith("_")) {
             boolean enabled = characterScriptEnabled.isSelected();
             character.setScriptEnabled(scriptName, enabled);
+        }
+    }
+
+
+    public void addSeveralItemsToCharacter() {
+        int amount = Utils.showSpinnerDialog();
+        Item item = characterAllItemsList.getSelectionModel().getSelectedItem();
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        if (item != null && character != null && amount != 0) {
+            addItemToCharacter(character, item, amount);
+        }
+    }
+
+    public void addOneItemToCharacter() {
+        Item item = characterAllItemsList.getSelectionModel().getSelectedItem();
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        if (item != null && character != null) {
+            addItemToCharacter(character, item, 1);
+        }
+    }
+
+    private void addItemToCharacter(GameCharacter character, Item item, int amount) {
+        character.addItem(item, amount);
+        selectCharacter(character);
+    }
+
+    public void removeSeveralItemsFromCharacter() {
+        int amount = Utils.showSpinnerDialog();
+        SudPair<Item, Integer> pair = characterItemsList.getSelectionModel().getSelectedItem();
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        if (pair != null && character != null && amount != 0) {
+            Item item = pair.getKey();
+            removeItemFromCharacter(character, item, amount);
+            characterItemsList.getSelectionModel().select(pair);
+        }
+    }
+
+    public void removeOneItemFromCharacter() {
+        SudPair<Item, Integer> pair = characterItemsList.getSelectionModel().getSelectedItem();
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        if (pair != null && character != null) {
+            Item item = pair.getKey();
+            removeItemFromCharacter(character, item, 1);
+            characterItemsList.getSelectionModel().select(pair);
+        }
+    }
+
+    private void removeItemFromCharacter(GameCharacter character, Item item, int amount) {
+        character.removeItem(item, amount);
+        selectCharacter(character);
+    }
+
+    public void equipItem() {
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        Item item = equipmentAllList.getSelectionModel().getSelectedItem();
+        if (character != null && item != null) {
+            character.equip(item);
+            selectCharacter(character);
+        }
+    }
+
+    public void unequipItem() {
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        if (character != null) {
+            Map.Entry<String, Item> entry = characterEquipmentTable.getSelectionModel().getSelectedItem();
+            if (entry != null) {
+                Item item = entry.getValue();
+                character.unequip(item);
+                selectCharacter(character);
+            }
+        }
+    }
+
+    public void addCharacterParameter() {
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        if (character != null) {
+            TextInputDialog inputDialog = new TextInputDialog("New Parameter");
+            inputDialog.setTitle("Enter parameter name");
+            Optional<String> result = inputDialog.showAndWait();
+            result.ifPresent(parameterName -> {
+                character.setValue(parameterName, "");
+                selectCharacter(character);
+            });
+        }
+    }
+
+    public void removeCharacterParameter() {
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        if (character != null) {
+            Map.Entry<String, String> entry = characterParameters.getSelectionModel().getSelectedItem();
+            if (entry != null) {
+                String key = entry.getKey();
+                character.removeValue(key);
+                selectCharacter(character);
+            }
+        }
+    }
+
+    public void addCategoryToCharacter() {
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        CharacterCategory category = charactersCategories.getSelectionModel().getSelectedItem();
+        if (character != null && category != null) {
+            character.addCategory(category);
+            selectCharacter(character);
+        }
+    }
+
+    public void removeCategoryFromCharacter() {
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        GameObjectCategory category = characterCategories.getSelectionModel().getSelectedItem();
+        if (character != null && category != null) {
+            character.removeCategory(category);
+            selectCharacter(character);
         }
     }
 }

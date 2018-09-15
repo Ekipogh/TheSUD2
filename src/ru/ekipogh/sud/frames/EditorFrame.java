@@ -2192,8 +2192,8 @@ public class EditorFrame extends JFrame {
             charCategoryNameField.setText(characterCategory.getName());
             charCategoryScriptsListModel.clear();
             characterCategory.getScripts().keySet().forEach(charCategoryScriptsListModel::addElement);
-            DefaultTreeModel treeModel = new DefaultTreeModel(characterCategory.getBtree());
-            characterCategoryBehaviorTree.setModel(treeModel);
+            //DefaultTreeModel treeModel = new DefaultTreeModel(characterCategory.getBtree());
+            //characterCategoryBehaviorTree.setModel(treeModel);
         }
     }
 
@@ -2661,8 +2661,8 @@ public class EditorFrame extends JFrame {
             /*for (Map.Entry<String, Object> entry : selected.getValues().entrySet()) {
                 characterValuesTableModel.addRow(new Object[]{entry.getKey(), entry.getValue()});
             }*/
-            DefaultTreeModel treeModel = new DefaultTreeModel(selected.getBtree());
-            characterBehaviorTree.setModel(treeModel);
+            //DefaultTreeModel treeModel = new DefaultTreeModel(selected.getBtree());
+            //characterBehaviorTree.setModel(treeModel);
         }
     }
 
@@ -2981,8 +2981,8 @@ public class EditorFrame extends JFrame {
         playerDescriptionArea.setText(player.getDescription());
         player.getScripts().keySet().stream().filter(scriptName -> !scriptName.startsWith("_on")).forEach(playerScriptListModel::addElement);
 
-        DefaultTreeModel treeModel = new DefaultTreeModel(player.getBtree());
-        playerBehaviorTree.setModel(treeModel);
+        //DefaultTreeModel treeModel = new DefaultTreeModel(player.getBtree());
+        //playerBehaviorTree.setModel(treeModel);
     }
 
 
