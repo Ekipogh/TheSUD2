@@ -16,7 +16,6 @@ import ru.ekipogh.sud.*;
 import ru.ekipogh.sud.behavior.*;
 import ru.ekipogh.sud.objects.*;
 
-import javax.swing.tree.TreeNode;
 import java.io.File;
 import java.util.*;
 
@@ -172,6 +171,8 @@ public class EditorController {
                 selectCharacter(newValue)));
         characterScriptsList.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) ->
                 selectCharacterScript(newValue)));
+        characterBehaviorTree.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) ->
+                selectCharacterBehaviorNode(newValue)));
         gameFile = new GameFile();
         ScreenController.setController("editor", this);
 
@@ -182,20 +183,44 @@ public class EditorController {
         }
     }
 
+    private void selectCharacterBehaviorNode(TreeItem<BTreeNode> treeItem) {
+        if (treeItem != null) {
+            BTreeNode node = treeItem.getValue();
+            if (node.getClass() == TaskNode.class) {
+                ((RSyntaxTextArea) characterBehaviorScriptNode.getContent()).setText(((TaskNode) node).getScript().getText());
+            } else {
+                ((RSyntaxTextArea) characterBehaviorScriptNode.getContent()).setText("");
+            }
+        }
+    }
+
     private void addBehaviorNode(BehaviorTree.TYPES type) {
         GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
         TreeItem<BTreeNode> node = characterBehaviorTree.getSelectionModel().getSelectedItem();
+        TreeItem root = characterBehaviorTree.getRoot();
         if (character != null && node != null && node.getValue().getClass() != TaskNode.class) {
-            switch (type) {
-                case SELECTOR:
-                    node.getChildren().add(new TreeItem<>(new Selector()));
-                    break;
-                case SEQUENCE:
-                    node.getChildren().add(new TreeItem<>(new Sequence()));
-                    break;
-                case TASK:
-                    node.getChildren().add(new TreeItem<>(new TaskNode(character)));
-                    break;
+            if (!node.equals(root) || (node.equals(root) && root.getChildren().size() == 0)) {
+                switch (type) {
+                    case SELECTOR:
+                        Selector selector = new Selector();
+                        node.getValue().addChild(selector);
+                        TreeItem<BTreeNode> treeItem = new TreeItem<>(selector);
+                        treeItem.setExpanded(true);
+                        node.getChildren().add(treeItem);
+                        break;
+                    case SEQUENCE:
+                        Sequence sequence = new Sequence();
+                        node.getValue().addChild(sequence);
+                        TreeItem<BTreeNode> treeItem1 = new TreeItem<>(sequence);
+                        treeItem1.setExpanded(true);
+                        node.getChildren().add(treeItem1);
+                        break;
+                    case TASK:
+                        TaskNode taskNode = new TaskNode(character);
+                        node.getValue().addChild(taskNode);
+                        node.getChildren().add(new TreeItem<>(taskNode));
+                        break;
+                }
             }
         }
     }
@@ -319,7 +344,21 @@ public class EditorController {
             characterCategories.getItems().setAll(character.getCategories());
             characterCategories.refresh();
             //Behavior tab
-            characterBehaviorTree.setRoot(new TreeItem<>(character.getBtree()));
+            BehaviorTree tree = character.getBtree();
+            TreeItem<BTreeNode> root = new TreeItem<>(tree);
+            root.setExpanded(true);
+            selectCharacterBehaviorNode(root);
+            characterBehaviorTree.setRoot(root);
+            populateBehaviorTree(tree, root);
+        }
+    }
+
+    private void populateBehaviorTree(BTreeNode node, TreeItem<BTreeNode> item) {
+        for (BTreeNode child : node.getChildren()) {
+            TreeItem<BTreeNode> treeItem = new TreeItem<>(child);
+            treeItem.setExpanded(true);
+            item.getChildren().add(treeItem);
+            populateBehaviorTree(child, treeItem);
         }
     }
 
@@ -1136,6 +1175,28 @@ public class EditorController {
         if (character != null && category != null) {
             character.removeCategory(category);
             selectCharacter(character);
+        }
+    }
+
+    public void removeCharacterBehaviorTreeItem() {
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        TreeItem<BTreeNode> item = characterBehaviorTree.getSelectionModel().getSelectedItem();
+        if (character != null && item != null && !item.equals(characterBehaviorTree.getRoot())) {
+            TreeItem parent = item.getParent();
+            BTreeNode node = item.getValue();
+            node.getParent().getChildren().remove(node);
+            parent.getChildren().remove(item);
+            selectCharacter(character);
+        }
+    }
+
+    public void saveCharacterBehaviorScript() {
+        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
+        TreeItem<BTreeNode> treeItem = characterBehaviorTree.getSelectionModel().getSelectedItem();
+        if (character != null && treeItem != null) {
+            TaskNode node = (TaskNode) treeItem.getValue();
+            String scriptText = ((RSyntaxTextArea) characterBehaviorScriptNode.getContent()).getText();
+            node.setScript(new Script(scriptText, true));
         }
     }
 }

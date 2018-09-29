@@ -15,7 +15,6 @@ import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -1306,9 +1305,9 @@ public class EditorFrame extends JFrame {
             BTreeNode node = (BTreeNode) tree.getLastSelectedPathComponent();
             if (node.getClass() != BehaviorTree.class) { //can't remove root
                 if (type == OBJECTYPES.CHARACTER || type == OBJECTYPES.PLAYER) {
-                    ((GameObject) object).getBtree().removeRecurcivly(node);
+                    //((GameObject) object).getBtree().removeRecursively(node);
                 } else {
-                    ((CharacterCategory) object).getBtree().removeRecurcivly(node);
+                    //((CharacterCategory) object).getBtree().removeRecursively(node);
                 }
             }
         }

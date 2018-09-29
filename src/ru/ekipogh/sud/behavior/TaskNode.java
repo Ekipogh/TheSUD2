@@ -18,6 +18,7 @@ public class TaskNode extends BTreeNode implements Serializable {
     public TaskNode(GameObject character) {
         super();
         this.character = character;
+        this.script = new Script("", true);
     }
 
     public Script getScript() {

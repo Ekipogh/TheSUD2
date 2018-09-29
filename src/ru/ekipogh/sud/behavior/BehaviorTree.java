@@ -26,7 +26,7 @@ public class BehaviorTree extends BTreeNode implements Serializable {
             System.err.println("Root node: to many children");
             return;
         }
-        children.add(child);
+        super.addChild(child);
 
     }
 
