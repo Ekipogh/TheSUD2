@@ -587,19 +587,184 @@
                                         <contextMenu>
                                             <ContextMenu fx:id="characterBehaviorTreeMenu">
                                                 <items>
-                                                    <MenuItem text="Remove" onAction="#removeCharacterBehaviorTreeItem"/>
+                                                    <MenuItem text="Remove"
+                                                              onAction="#removeCharacterBehaviorTreeItem"/>
                                                 </items>
                                             </ContextMenu>
                                         </contextMenu>
                                     </TreeView>
                                 </ScrollPane>
                                 <ScrollPane fitToHeight="true" fitToWidth="true">
-                                    <SwingNode fx:id="characterBehaviorScriptNode" onKeyReleased="#saveCharacterBehaviorScript"/>
+                                    <SwingNode fx:id="characterBehaviorScriptNode"
+                                               onKeyReleased="#saveCharacterBehaviorScript"/>
                                 </ScrollPane>
                             </SplitPane>
                         </Tab>
                     </TabPane>
                 </SplitPane>
+            </Tab>
+            <Tab text="Player" closable="false">
+                <TabPane>
+                    <Tab closable="false" text="Common">
+                        <GridPane>
+                            <Label text="Name" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <TextField fx:id="playerName" onKeyReleased="#savePlayerName"
+                                       GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                            <Label text="Description" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <TextArea fx:id="playerDescription" onKeyReleased="#savePlayerDescription"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                            <Label text="Starting location" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                            <ChoiceBox fx:id="playerLocation" onAction="#setPlayerLocation"
+                                       GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        </GridPane>
+                    </Tab>
+                    <Tab closable="false" text="Scripts">
+                        <SplitPane dividerPositions="0.2">
+                            <ScrollPane fitToHeight="true" fitToWidth="true">
+                                <ListView fx:id="playerScriptsList">
+                                    <contextMenu>
+                                        <ContextMenu>
+                                            <items>
+                                                <MenuItem onAction="#addPlayerScript" text="Add"/>
+                                                <MenuItem onAction="#removePlayerScript" text="Remove"/>
+                                            </items>
+                                        </ContextMenu>
+                                    </contextMenu>
+                                </ListView>
+                            </ScrollPane>
+                            <BorderPane>
+                                <center>
+                                    <ScrollPane fitToHeight="true" fitToWidth="true">
+                                        <SwingNode fx:id="playerScriptNode"
+                                                   onKeyReleased="#savePlayerScript"/>
+                                    </ScrollPane>
+                                </center>
+                                <bottom>
+                                    <CheckBox fx:id="playerScriptEnabled" text="Enabled"
+                                              BorderPane.alignment="CENTER_RIGHT"
+                                              onAction="#setPlayerScriptEnabled"/>
+                                </bottom>
+                            </BorderPane>
+                        </SplitPane>
+                    </Tab>
+                    <Tab closable="false" text="Items">
+                        <BorderPane>
+                            <left>
+                                <ScrollPane fitToHeight="true" fitToWidth="true">
+                                    <ListView fx:id="playerAllItemsList"/>
+                                </ScrollPane>
+                            </left>
+                            <center>
+                                <GridPane alignment="TOP_CENTER" vgap="10.0" BorderPane.alignment="CENTER">
+                                    <Button onAction="#addSeveralItemsToPlayer" text="&gt;&gt;..."
+                                            GridPane.columnIndex="0"
+                                            GridPane.rowIndex="0"/>
+                                    <Button onAction="#addOneItemToPlayer" text="&gt;&gt;"
+                                            GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                    <Button onAction="#removeOneItemFromPlayer" text="&lt;&lt;"
+                                            GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                    <Button onAction="#removeSeveralItemsFromPlayer" text="&lt;&lt;..."
+                                            GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                                    <BorderPane.margin>
+                                        <Insets top="10.0"/>
+                                    </BorderPane.margin>
+                                </GridPane>
+                            </center>
+                            <right>
+                                <ScrollPane fitToHeight="true" fitToWidth="true">
+                                    <ListView fx:id="playerItemsList"/>
+                                </ScrollPane>
+                            </right>
+                        </BorderPane>
+                    </Tab>
+                    <Tab text="Equipment" closable="false">
+                        <SplitPane>
+                            <ScrollPane fitToHeight="true" fitToWidth="true">
+                                <TableView fx:id="playerEquipmentTable">
+                                    <columns>
+                                        <TableColumn prefWidth="100" fx:id="playerEquipmentTableSlot" text="Slot"/>
+                                        <TableColumn prefWidth="100" fx:id="playerEquipmentTableItem" text="Item"/>
+                                    </columns>
+                                    <contextMenu>
+                                        <ContextMenu>
+                                            <items>
+                                                <MenuItem text="Unequip" onAction="#playerUnequipItem"/>
+                                            </items>
+                                        </ContextMenu>
+                                    </contextMenu>
+                                </TableView>
+                            </ScrollPane>
+                            <ScrollPane fitToHeight="true" fitToWidth="true">
+                                <ListView fx:id="playerEquipmentAllList">
+                                    <contextMenu>
+                                        <ContextMenu>
+                                            <items>
+                                                <MenuItem text="Equip" onAction="#playerEquipItem"/>
+                                            </items>
+                                        </ContextMenu>
+                                    </contextMenu>
+                                </ListView>
+                            </ScrollPane>
+                        </SplitPane>
+                    </Tab>
+                    <Tab closable="false" text="Categories">
+                        <BorderPane>
+                            <left>
+                                <ScrollPane fitToHeight="true" fitToWidth="true">
+                                    <ListView fx:id="playerAllCategories"/>
+                                </ScrollPane>
+                            </left>
+                            <center>
+                                <VBox alignment="CENTER">
+                                    <Button onAction="#addCategoryToPlayer" text="&gt;&gt;"/>
+                                    <Button onAction="#removeCategoryFromPlayer" text="&lt;&lt;"/>
+                                </VBox>
+                            </center>
+                            <right>
+                                <ScrollPane fitToHeight="true" fitToWidth="true">
+                                    <ListView fx:id="playerCategories"/>
+                                </ScrollPane>
+                            </right>
+                        </BorderPane>
+                    </Tab>
+                    <Tab closable="false" text="Parameters">
+                        <ScrollPane fitToHeight="true" fitToWidth="true">
+                            <TableView fx:id="playerParameters" editable="true">
+                                <columns>
+                                    <TableColumn fx:id="playerKeyColumn" minWidth="500" text="Parameter"/>
+                                    <TableColumn fx:id="playerValueColumn" minWidth="500"
+                                                 onEditCommit="#changeValue" text="Value"/>
+                                </columns>
+                                <contextMenu>
+                                    <ContextMenu>
+                                        <items>
+                                            <MenuItem onAction="#addPlayerParameter" text="Add"/>
+                                            <MenuItem onAction="#removePlayerParameter" text="Remove"/>
+                                        </items>
+                                    </ContextMenu>
+                                </contextMenu>
+                            </TableView>
+                        </ScrollPane>
+                    </Tab>
+                    <Tab text="Behavior" closable="false">
+                        <SplitPane>
+                            <ScrollPane fitToHeight="true" fitToWidth="true">
+                                <TreeView fx:id="playerBehaviorTree">
+                                    <contextMenu>
+                                        <ContextMenu fx:id="playerBehaviorTreeMenu">
+                                            <items>
+                                                <MenuItem text="Remove" onAction="#removePlayerBehaviorTreeItem"/>
+                                            </items>
+                                        </ContextMenu>
+                                    </contextMenu>
+                                </TreeView>
+                            </ScrollPane>
+                            <ScrollPane fitToHeight="true" fitToWidth="true">
+                                <SwingNode fx:id="playerBehaviorScriptNode" onKeyReleased="#savePlayerBehaviorScript"/>
+                            </ScrollPane>
+                        </SplitPane>
+                    </Tab>
+                </TabPane>
             </Tab>
         </TabPane>
     </center>

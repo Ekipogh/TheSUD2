@@ -11,11 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4dbcf5c9-0fad-4356-9780-f46e2e5818d0" name="Default" comment="Behavior smoll ui update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BTreeNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BTreeNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BehaviorTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BehaviorTree.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/EditorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/EditorController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/editor.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/editor.fxml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -29,31 +25,32 @@
     <session id="-1537019599">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="11" />
+          <entry key="project.closed" value="14" />
           <entry key="project.open.time.4" value="5" />
           <entry key="project.open.time.5" value="3" />
-          <entry key="project.open.time.6" value="3" />
-          <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="12" />
+          <entry key="project.open.time.6" value="4" />
+          <entry key="project.open.time.7" value="1" />
+          <entry key="project.open.time.8" value="2" />
+          <entry key="project.opened" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="fxml" value="5160" />
-          <entry key="java" value="17315" />
+          <entry key="fxml" value="5270" />
+          <entry key="java" value="19538" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="17315" />
-          <entry key="XML" value="5160" />
+          <entry key="JAVA" value="19538" />
+          <entry key="XML" value="5270" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CLASS" value="1" />
           <entry key="GUI_DESIGNER_FORM" value="2" />
-          <entry key="JAVA" value="47" />
+          <entry key="JAVA" value="50" />
           <entry key="XML" value="3" />
         </counts>
       </usages-collector>
@@ -62,7 +59,7 @@
           <entry key="class" value="1" />
           <entry key="form" value="2" />
           <entry key="fxml" value="3" />
-          <entry key="java" value="47" />
+          <entry key="java" value="50" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -76,8 +73,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/EditorController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="191" column="89" selection-start-line="191" selection-start-column="89" selection-end-line="191" selection-end-column="89" />
+            <state relative-caret-position="292">
+              <caret line="182" column="64" selection-start-line="182" selection-start-column="64" selection-end-line="182" selection-end-column="64" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -86,87 +83,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/Selector.java">
+        <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/javafx-src.zip!/javafx/fxml/FXMLLoader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/Sequence.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="30" selection-start-line="12" selection-start-column="30" selection-end-line="12" selection-end-column="30" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="339">
-              <caret line="20" column="43" selection-start-line="20" selection-start-column="43" selection-end-line="20" selection-end-column="43" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BehaviorTree.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="28" column="28" selection-start-line="28" selection-start-column="28" selection-end-line="28" selection-end-column="28" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BTreeNode.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" selection-start-line="2" selection-end-line="2" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#917#918#0" expanded="true" />
-                <element signature="e#944#945#0" expanded="true" />
-                <element signature="e#889#890#0" expanded="true" />
-                <element signature="e#916#917#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="1312" column="9" lean-forward="true" selection-start-line="1312" selection-start-column="9" selection-end-line="1312" selection-end-column="9" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/itemContainer.fxml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" column="38" selection-start-line="17" selection-start-column="38" selection-end-line="17" selection-end-column="38" />
-            </state>
-          </provider>
-          <provider editor-type-id="JavaFX-Scene-Builder" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/Equipment.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="714">
-              <caret line="62" selection-start-line="62" selection-end-line="62" />
+            <state relative-caret-position="241">
+              <caret line="1772" selection-start-line="1772" selection-end-line="1772" />
             </state>
           </provider>
         </entry>
@@ -174,8 +94,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/editor.fxml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="596" column="126" selection-start-line="596" selection-start-column="126" selection-end-line="596" selection-end-column="126" />
+            <state relative-caret-position="605">
+              <caret line="762" column="116" selection-start-line="762" selection-start-column="116" selection-end-line="762" selection-end-column="116" />
             </state>
           </provider>
           <provider editor-type-id="JavaFX-Scene-Builder" />
@@ -194,9 +114,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>showAndWait</find>
-      <find>TOD</find>
-      <find>setR</find>
       <find>locationsLi</find>
       <find>saveItem</find>
       <find>scr</find>
@@ -224,6 +141,9 @@
       <find>BTre</find>
       <find>SELECTOR</find>
       <find>sequnce</find>
+      <find>selectCh</find>
+      <find>character</find>
+      <find>Character</find>
     </findStrings>
     <replaceStrings>
       <replace>filePath</replace>
@@ -231,6 +151,8 @@
       <replace>Object</replace>
       <replace>&amp;lt;</replace>
       <replace>&amp;gt;&amp;gt;</replace>
+      <replace>player</replace>
+      <replace>Player</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -299,7 +221,72 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sud" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sud" type="462c0819:PsiDirectoryNode" />
+              <item name="behavior" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sud" type="462c0819:PsiDirectoryNode" />
+              <item name="controllers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sud" type="462c0819:PsiDirectoryNode" />
+              <item name="controllers" type="462c0819:PsiDirectoryNode" />
+              <item name="EditorController" type="1a9f42e2:ClassTreeNode" />
+            </path>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sud" type="462c0819:PsiDirectoryNode" />
+              <item name="frames" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sud" type="462c0819:PsiDirectoryNode" />
+              <item name="fxml" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sud" type="462c0819:PsiDirectoryNode" />
+              <item name="objects" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="PackagesPane">
         <subPane>
           <expand>
@@ -369,64 +356,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="sud" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="sud" type="462c0819:PsiDirectoryNode" />
-              <item name="behavior" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="sud" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="sud" type="462c0819:PsiDirectoryNode" />
-              <item name="frames" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="sud" type="462c0819:PsiDirectoryNode" />
-              <item name="fxml" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="sud" type="462c0819:PsiDirectoryNode" />
-              <item name="objects" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -438,7 +367,7 @@
     <property name="Repository.Attach.JavaDocs" value="true" />
     <property name="Repository.Attach.Sources" value="true" />
     <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH" value="231" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1537040998088" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1539544055279" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/build.xml" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15136719" />
@@ -574,7 +503,7 @@
     <frame x="-7" y="-7" width="2575" height="1415" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.54134166" visible="true" weight="0.1137177" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.54134166" visible="true" weight="0.11610338" />
       <window_info auto_hide="true" id="Structure" order="1" sideWeight="0.45865834" side_tool="true" weight="0.11212724" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Capture Tool" order="3" />
@@ -631,6 +560,18 @@
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/EditorController.java</url>
+          <line>560</line>
+          <properties />
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
@@ -801,13 +742,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/javafx-src.zip!/javafx/fxml/FXMLLoader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="3096" selection-start-line="3096" selection-end-line="3096" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/ScreenController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="459">
@@ -879,10 +813,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="509">
           <caret line="67" column="17" lean-forward="true" selection-start-line="67" selection-start-column="17" selection-end-line="67" selection-end-column="17" />
-          <folding>
-            <element signature="e#1906#1907#0" expanded="true" />
-            <element signature="e#1934#1935#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -918,10 +848,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="241">
           <caret line="477" column="22" selection-start-line="477" selection-start-column="22" selection-end-line="477" selection-end-column="22" />
-          <folding>
-            <element signature="e#20496#20497#0" expanded="true" />
-            <element signature="e#20551#20552#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -932,23 +858,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java">
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/Equipment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2720">
-          <caret line="211" column="27" selection-start-line="211" selection-start-column="23" selection-end-line="211" selection-end-column="27" />
-          <folding>
-            <element signature="e#1850#1851#0" expanded="true" />
-            <element signature="e#1896#1897#0" expanded="true" />
-            <element signature="e#5687#5688#0" expanded="true" />
-            <element signature="e#5715#5716#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/Inventory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="22" column="16" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="16" />
+        <state relative-caret-position="690">
+          <caret line="62" selection-start-line="62" selection-end-line="62" />
         </state>
       </provider>
     </entry>
@@ -960,24 +873,23 @@
       </provider>
       <provider editor-type-id="JavaFX-Scene-Builder" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/Equipment.java">
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="62" selection-start-line="62" selection-end-line="62" />
+        <state relative-caret-position="690">
+          <caret line="1312" column="9" selection-start-line="1312" selection-start-column="9" selection-end-line="1312" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/Selector.java">
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BTreeNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/Sequence.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="30" selection-start-line="12" selection-start-column="30" selection-end-line="12" selection-end-column="30" />
+        <state relative-caret-position="34">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -988,33 +900,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BTreeNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#917#918#0" expanded="true" />
-            <element signature="e#944#945#0" expanded="true" />
-            <element signature="e#889#890#0" expanded="true" />
-            <element signature="e#916#917#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="1312" column="9" lean-forward="true" selection-start-line="1312" selection-start-column="9" selection-end-line="1312" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="339">
+        <state relative-caret-position="299">
           <caret line="20" column="43" selection-start-line="20" selection-start-column="43" selection-end-line="20" selection-end-column="43" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1022,18 +910,57 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/Sequence.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="30" selection-start-line="12" selection-start-column="30" selection-end-line="12" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/Selector.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/Inventory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="22" column="16" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/objects/GameObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="577">
+          <caret line="75" column="23" selection-start-line="75" selection-start-column="23" selection-end-line="75" selection-end-column="23" />
+          <folding>
+            <element signature="e#1850#1851#0" expanded="true" />
+            <element signature="e#1896#1897#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/editor.fxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="596" column="126" selection-start-line="596" selection-start-column="126" selection-end-line="596" selection-end-column="126" />
+        <state relative-caret-position="605">
+          <caret line="762" column="116" selection-start-line="762" selection-start-column="116" selection-end-line="762" selection-end-column="116" />
         </state>
       </provider>
       <provider editor-type-id="JavaFX-Scene-Builder" />
     </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/javafx-src.zip!/javafx/fxml/FXMLLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="241">
+          <caret line="1772" selection-start-line="1772" selection-end-line="1772" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/EditorController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="191" column="89" selection-start-line="191" selection-start-column="89" selection-end-line="191" selection-end-column="89" />
+        <state relative-caret-position="292">
+          <caret line="182" column="64" selection-start-line="182" selection-start-column="64" selection-end-line="182" selection-end-column="64" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

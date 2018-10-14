@@ -115,6 +115,34 @@ public class EditorController {
     public TreeView<BTreeNode> characterBehaviorTree;
     public SwingNode characterBehaviorScriptNode;
     public ContextMenu characterBehaviorTreeMenu;
+    //Player
+    //Common tab
+    public TextField playerName;
+    public TextArea playerDescription;
+    public ChoiceBox<Location> playerLocation;
+    //Scripts tab
+    public ListView<String> playerScriptsList;
+    public SwingNode playerScriptNode;
+    public CheckBox playerScriptEnabled;
+    //Items
+    public ListView<Item> playerAllItemsList;
+    public ListView<SudPair<Item, Integer>> playerItemsList;
+    //Equipment
+    public TableView<Map.Entry<String, Item>> playerEquipmentTable;
+    public TableColumn<Map.Entry<String, Item>, String> playerEquipmentTableSlot;
+    public TableColumn<Map.Entry<String, Item>, String> playerEquipmentTableItem;
+    public ListView<Item> playerEquipmentAllList;
+    //Categories
+    public ListView<CharacterCategory> playerAllCategories;
+    public ListView<GameObjectCategory> playerCategories;
+    //Parameters
+    public TableView<Map.Entry<String, String>> playerParameters;
+    public TableColumn<Map.Entry<String, String>, String> playerKeyColumn;
+    public TableColumn<Map.Entry<String, String>, String> playerValueColumn;
+    //Behavior
+    public TreeView<BTreeNode> playerBehaviorTree;
+    public ContextMenu playerBehaviorTreeMenu;
+    public SwingNode playerBehaviorScriptNode;
 
     private GameFile gameFile;
 
@@ -137,6 +165,7 @@ public class EditorController {
 
     @FXML
     public void initialize() {
+        System.out.println("Editor initializing");
         //Syntax areas
         //Common tab
         initScriptNode.setContent(new RSyntaxTextArea());
@@ -149,6 +178,9 @@ public class EditorController {
         //Character tab
         characterScriptNode.setContent(new RSyntaxTextArea());
         characterBehaviorScriptNode.setContent(new RSyntaxTextArea());
+        //Player tab
+        playerScriptNode.setContent(new RSyntaxTextArea());
+        playerBehaviorScriptNode.setContent(new RSyntaxTextArea());
 
         //Lists listeners
         //Common tab
@@ -173,14 +205,44 @@ public class EditorController {
                 selectCharacterScript(newValue)));
         characterBehaviorTree.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) ->
                 selectCharacterBehaviorNode(newValue)));
+        //Player tab
+        playerScriptsList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
+                selectPlayerScript(newValue));
+        playerBehaviorTree.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) ->
+                selectPlayerBehaviorNode(newValue)));
+
         gameFile = new GameFile();
         ScreenController.setController("editor", this);
 
         for (BehaviorTree.TYPES type : BehaviorTree.TYPES.values()) {
-            MenuItem item = new MenuItem(type.toString());
-            item.setOnAction(event -> addBehaviorNode(type));
-            characterBehaviorTreeMenu.getItems().add(item);
+            MenuItem itemCharacter = new MenuItem(type.toString());
+            itemCharacter.setOnAction(event -> addBehaviorNode(type, false));
+            MenuItem itemPlayer = new MenuItem(type.toString());
+            itemPlayer.setOnAction(event -> addBehaviorNode(type, true));
+            characterBehaviorTreeMenu.getItems().add(itemCharacter);
+            playerBehaviorTreeMenu.getItems().add(itemPlayer);
         }
+
+        System.out.println("Editor initialized");
+    }
+
+    private void selectPlayerBehaviorNode(TreeItem<BTreeNode> treeItem) {
+        if (treeItem != null) {
+            BTreeNode node = treeItem.getValue();
+            if (node.getClass() == TaskNode.class) {
+                ((RSyntaxTextArea) playerBehaviorScriptNode.getContent()).setText(((TaskNode) node).getScript().getText());
+            } else {
+                ((RSyntaxTextArea) playerBehaviorScriptNode.getContent()).setText("");
+            }
+        }
+    }
+
+    private void selectPlayerScript(String scriptName) {
+        Script script = gameFile.getPlayer().getScript(scriptName);
+        String scriptText = script.getText();
+        boolean enabled = script.isEnabled();
+        ((RSyntaxTextArea) playerScriptNode.getContent()).setText(scriptText);
+        playerScriptEnabled.setSelected(enabled);
     }
 
     private void selectCharacterBehaviorNode(TreeItem<BTreeNode> treeItem) {
@@ -194,10 +256,20 @@ public class EditorController {
         }
     }
 
-    private void addBehaviorNode(BehaviorTree.TYPES type) {
-        GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
-        TreeItem<BTreeNode> node = characterBehaviorTree.getSelectionModel().getSelectedItem();
-        TreeItem root = characterBehaviorTree.getRoot();
+    private void addBehaviorNode(BehaviorTree.TYPES type, boolean isPlayer) {
+        GameCharacter character;
+        TreeItem<BTreeNode> node;
+        TreeItem root;
+
+        if (isPlayer && gameFile != null) {
+            character = gameFile.getPlayer();
+            node = playerBehaviorTree.getSelectionModel().getSelectedItem();
+            root = playerBehaviorTree.getRoot();
+        } else {
+            character = charactersList.getSelectionModel().getSelectedItem();
+            node = characterBehaviorTree.getSelectionModel().getSelectedItem();
+            root = characterBehaviorTree.getRoot();
+        }
         if (character != null && node != null && node.getValue().getClass() != TaskNode.class) {
             if (!node.equals(root) || (node.equals(root) && root.getChildren().size() == 0)) {
                 switch (type) {
@@ -408,6 +480,7 @@ public class EditorController {
     }
 
     private void editorInit() {
+        System.out.println("Editor init");
         cleanEditor();
         //Common tab
         gameName.setText(gameFile.getGameName());
@@ -420,8 +493,12 @@ public class EditorController {
         initEquipment();
         initItemCategories();
         initItemParametersTable();
+        //Characters
         initEquipmentTable();
         initCharacterParametersTable();
+        //Player
+        initPlayerEquipmentTable();
+        initPlayerParametersTable();
         //Location tab
         locationsList.getItems().setAll(gameFile.getLocations());
         for (Location location : locationsList.getItems()) {
@@ -449,6 +526,43 @@ public class EditorController {
         equipmentAllList.getItems().setAll(equipable);
         Sequencer.setID(gameFile.getSequencerID());
         charactersCategories.getItems().setAll(gameFile.getCharacterCategories());
+        //Player tab
+        initPlayer();
+        playerEquipmentAllList.getItems().setAll(gameFile.getItems());
+    }
+
+    private void initPlayerParametersTable() {
+        playerKeyColumn.setCellValueFactory(EditorController::mapKey);
+        playerValueColumn.setCellValueFactory(EditorController::mapValue);
+        playerValueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+    }
+
+    private void initPlayer() {
+        playerName.setText(gameFile.getPlayer().getName());
+        playerDescription.setText(gameFile.getPlayer().getDescription());
+        playerLocation.getItems().setAll(gameFile.getLocations());
+        playerLocation.getItems().add(null);
+        playerLocation.getSelectionModel().select(gameFile.getPlayer().getLocation());
+        playerScriptsList.getItems().setAll(gameFile.getPlayer().getScripts().keySet());
+        playerAllItemsList.getItems().setAll(gameFile.getItems());
+        playerItemsList.getItems().setAll(gameFile.getPlayer().getInventory().getItems());
+        Map<String, Item> equipment = gameFile.getPlayer().getEquipment().getSlots();
+        ObservableList<Map.Entry<String, Item>> equipmentItems = FXCollections.observableArrayList(equipment.entrySet());
+        playerEquipmentTable.getItems().setAll(equipmentItems);
+        playerEquipmentTable.getColumns().setAll(playerEquipmentTableSlot, playerEquipmentTableItem);
+        playerAllCategories.getItems().setAll(gameFile.getCharacterCategories());
+        playerCategories.getItems().setAll(gameFile.getPlayer().getCategories());
+        HashMap<String, String> values = gameFile.getPlayer().getValues();
+        ObservableList<Map.Entry<String, String>> items = FXCollections.observableArrayList(values.entrySet());
+        playerParameters.getItems().setAll(items);
+        playerParameters.getColumns().setAll(playerKeyColumn, playerValueColumn);
+
+        BehaviorTree tree = gameFile.getPlayer().getBtree();
+        TreeItem<BTreeNode> root = new TreeItem<>(tree);
+        root.setExpanded(true);
+        selectPlayerBehaviorNode(root);
+        playerBehaviorTree.setRoot(root);
+        populateBehaviorTree(tree, root);
     }
 
     private void initLocationParametersTable() {
@@ -466,6 +580,11 @@ public class EditorController {
     private void initEquipmentTable() {
         equipmentTableSlot.setCellValueFactory(EditorController::mapItemKey);
         equipmentTableItem.setCellValueFactory(EditorController::mapItemValue);
+    }
+
+    private void initPlayerEquipmentTable() {
+        playerEquipmentTableSlot.setCellValueFactory(EditorController::mapItemKey);
+        playerEquipmentTableItem.setCellValueFactory(EditorController::mapItemValue);
     }
 
     private void initCharacterParametersTable() {
@@ -605,6 +724,7 @@ public class EditorController {
             itemEquipmentSlot.setDisable(type != ItemTypes.EQUIPPABLE);
             if (type == ItemTypes.EQUIPPABLE) {
                 equipmentAllList.getItems().add(item);
+                playerEquipmentAllList.getItems().add(item);
             }
         }
     }
@@ -660,6 +780,7 @@ public class EditorController {
         itemsList.getItems().add(item);
         locationAllItemsList.getItems().add(item);
         characterAllItemsList.getItems().add(item);
+        playerAllItemsList.getItems().add(item);
         itemsList.refresh();
         itemsList.getSelectionModel().select(item);
     }
@@ -670,7 +791,9 @@ public class EditorController {
             itemsList.getItems().remove(item);
             locationAllItemsList.getItems().remove(item);
             characterAllItemsList.getItems().remove(item);
+            playerAllItemsList.getItems().remove(item);
             equipmentAllList.getItems().remove(item);
+            playerEquipmentAllList.getItems().remove(item);
             //Remove from all locations
             for (Location location : gameFile.getLocations()) {
                 location.removeItem(item, -1);
@@ -684,7 +807,11 @@ public class EditorController {
             for (Item container : gameFile.getItems()) {
                 container.removeItem(item, -1);
             }
+            //Remove from player
+            gameFile.getPlayer().removeItem(item, -1);
+            gameFile.getPlayer().unequip(item);
             gameFile.getItems().remove(item);
+            playerItemsList.getItems().setAll(gameFile.getPlayer().getInventory().getItems());
             itemsList.refresh();
         }
     }
@@ -857,6 +984,14 @@ public class EditorController {
         gameFile.getLocations().add(location);
         locationsList.refresh();
         locationsList.getSelectionModel().select(location);
+        characterLocation.getItems().add(location);
+        playerLocation.getItems().add(location);
+        locationNorthExit.getItems().add(location);
+        locationSouthExit.getItems().add(location);
+        locationEastExit.getItems().add(location);
+        locationWestExit.getItems().add(location);
+        locationUpExit.getItems().add(location);
+        locationDownExit.getItems().add(location);
     }
 
     public void removeLocation() {
@@ -1196,6 +1331,196 @@ public class EditorController {
         if (character != null && treeItem != null) {
             TaskNode node = (TaskNode) treeItem.getValue();
             String scriptText = ((RSyntaxTextArea) characterBehaviorScriptNode.getContent()).getText();
+            node.setScript(new Script(scriptText, true));
+        }
+    }
+
+    public void savePlayerName() {
+        if (gameFile != null) {
+            String name = playerName.getText();
+            gameFile.getPlayer().setName(name);
+        }
+
+    }
+
+    public void
+    setPlayerLocation() {
+        if (gameFile != null) {
+            Location location = playerLocation.getSelectionModel().getSelectedItem();
+            gameFile.getPlayer().setLocation(location);
+        }
+
+    }
+
+    public void savePlayerDescription() {
+        String description = playerDescription.getText();
+        gameFile.getPlayer().setDescription(description);
+    }
+
+    public void addPlayerScript() {
+        if (gameFile != null) {
+            TextInputDialog inputDialog = new TextInputDialog("New Script");
+            inputDialog.setTitle("Enter script name");
+            Optional<String> result = inputDialog.showAndWait();
+            result.ifPresent(scriptName -> {
+                gameFile.getPlayer().getScripts().put(scriptName, new Script("", true));
+                playerScriptsList.getItems().add(scriptName);
+                playerScriptsList.getSelectionModel().select(scriptName);
+            });
+            playerScriptsList.refresh();
+        }
+
+    }
+
+    public void removePlayerScript() {
+        String scriptName = playerScriptsList.getSelectionModel().getSelectedItem();
+        if (scriptName != null && gameFile != null) {
+            gameFile.getPlayer().getScripts().remove(scriptName);
+            playerScriptsList.getItems().remove(scriptName);
+            playerScriptsList.refresh();
+        }
+    }
+
+    public void savePlayerScript() {
+        String scriptText = ((RSyntaxTextArea) playerScriptNode.getContent()).getText();
+        String scriptName = playerScriptsList.getSelectionModel().getSelectedItem();
+        boolean enabled = playerScriptEnabled.isSelected();
+        if (scriptName != null && gameFile != null) {
+            gameFile.getPlayer().setScript(scriptName, new Script(scriptText, enabled));
+        }
+    }
+
+    public void setPlayerScriptEnabled() {
+        String scriptName = playerScriptsList.getSelectionModel().getSelectedItem();
+        boolean enabled = playerScriptEnabled.isSelected();
+        if (scriptName != null && gameFile != null) {
+            gameFile.getPlayer().setScriptEnabled(scriptName, enabled);
+        }
+    }
+
+    public void addSeveralItemsToPlayer() {
+        int amount = Utils.showSpinnerDialog();
+        Item item = playerAllItemsList.getSelectionModel().getSelectedItem();
+        if (item != null && amount != 0) {
+            addItemToPlayer(item, amount);
+        }
+    }
+
+    private void addItemToPlayer(Item item, int amount) {
+        if (gameFile != null) {
+            gameFile.getPlayer().addItem(item, amount);
+            playerItemsList.getItems().setAll(gameFile.getPlayer().getInventory().getItems());
+        }
+
+    }
+
+    public void addOneItemToPlayer() {
+        Item item = playerAllItemsList.getSelectionModel().getSelectedItem();
+        if (item != null) {
+            addItemToPlayer(item, 1);
+        }
+    }
+
+    public void removeOneItemFromPlayer() {
+        SudPair<Item, Integer> pair = playerItemsList.getSelectionModel().getSelectedItem();
+        if (pair != null) {
+            Item item = pair.getKey();
+            removeItemFromPlayer(item, 1);
+            playerItemsList.getSelectionModel().select(pair);
+        }
+    }
+
+    private void removeItemFromPlayer(Item item, int i) {
+        if (gameFile != null) {
+            gameFile.getPlayer().removeItem(item, i);
+            playerItemsList.getItems().setAll(gameFile.getPlayer().getInventory().getItems());
+        }
+
+    }
+
+    public void removeSeveralItemsFromPlayer() {
+        int amount = Utils.showSpinnerDialog();
+        SudPair<Item, Integer> pair = playerItemsList.getSelectionModel().getSelectedItem();
+        if (pair != null && amount != 0) {
+            Item item = pair.getKey();
+            removeItemFromPlayer(item, amount);
+            playerItemsList.getSelectionModel().select(pair);
+        }
+    }
+
+    public void playerUnequipItem() {
+        Map.Entry<String, Item> entry = playerEquipmentTable.getSelectionModel().getSelectedItem();
+        if (entry != null && gameFile != null) {
+            Item item = entry.getValue();
+            gameFile.getPlayer().unequip(item);
+            initPlayer();
+        }
+
+    }
+
+    public void playerEquipItem() {
+        Item item = playerEquipmentAllList.getSelectionModel().getSelectedItem();
+        if (item != null && gameFile != null) {
+            gameFile.getPlayer().equip(item);
+            initPlayer();
+        }
+    }
+
+    public void addCategoryToPlayer() {
+        CharacterCategory category = playerAllCategories.getSelectionModel().getSelectedItem();
+        if (category != null && gameFile != null) {
+            gameFile.getPlayer().addCategory(category);
+            initPlayer();
+        }
+    }
+
+    public void removeCategoryFromPlayer() {
+        GameObjectCategory category = playerCategories.getSelectionModel().getSelectedItem();
+        if (category != null && gameFile != null) {
+            gameFile.getPlayer().removeCategory(category);
+            initPlayer();
+        }
+    }
+
+    public void addPlayerParameter() {
+        if (gameFile != null) {
+            TextInputDialog inputDialog = new TextInputDialog("New Parameter");
+            inputDialog.setTitle("Enter parameter name");
+            Optional<String> result = inputDialog.showAndWait();
+            result.ifPresent(parameterName -> {
+                gameFile.getPlayer().setValue(parameterName, "");
+                initPlayer();
+            });
+        }
+    }
+
+    public void removePlayerParameter() {
+        if (gameFile != null) {
+            Map.Entry<String, String> entry = playerParameters.getSelectionModel().getSelectedItem();
+            if (entry != null) {
+                String key = entry.getKey();
+                gameFile.getPlayer().removeValue(key);
+                initPlayer();
+            }
+        }
+    }
+
+    public void removePlayerBehaviorTreeItem() {
+        TreeItem<BTreeNode> item = playerBehaviorTree.getSelectionModel().getSelectedItem();
+        if (gameFile != null && item != null && !item.equals(playerBehaviorTree.getRoot())) {
+            TreeItem parent = item.getParent();
+            BTreeNode node = item.getValue();
+            node.getParent().getChildren().remove(node);
+            parent.getChildren().remove(item);
+            initPlayer();
+        }
+    }
+
+    public void savePlayerBehaviorScript() {
+        TreeItem<BTreeNode> treeItem = playerBehaviorTree.getSelectionModel().getSelectedItem();
+        if (gameFile != null && treeItem != null) {
+            TaskNode node = (TaskNode) treeItem.getValue();
+            String scriptText = ((RSyntaxTextArea) playerBehaviorScriptNode.getContent()).getText();
             node.setScript(new Script(scriptText, true));
         }
     }
