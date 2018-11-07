@@ -5,6 +5,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -143,6 +144,13 @@ public class EditorController {
     public TreeView<BTreeNode> playerBehaviorTree;
     public ContextMenu playerBehaviorTreeMenu;
     public SwingNode playerBehaviorScriptNode;
+    //Categories
+    //Locations
+    public ListView<LocationCategory> locationCategoriesList;
+    public TextField locationCategoryName;
+    public ListView<String> locationCategoriesScriptsList;
+    public SwingNode locationCategoryScriptNode;
+    public CheckBox locationCategoryScriptAvailable;
 
     private GameFile gameFile;
 
@@ -210,8 +218,10 @@ public class EditorController {
                 selectPlayerScript(newValue));
         playerBehaviorTree.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) ->
                 selectPlayerBehaviorNode(newValue)));
+        //Categories tab
+        locationCategoriesList.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> selectLocationCategory(newValue)));
 
-        gameFile = new GameFile();
+        //gameFile = new GameFile();
         ScreenController.setController("editor", this);
 
         for (BehaviorTree.TYPES type : BehaviorTree.TYPES.values()) {
@@ -224,6 +234,14 @@ public class EditorController {
         }
 
         System.out.println("Editor initialized");
+    }
+
+    private void selectLocationCategory(LocationCategory category) {
+        if (category != null) {
+            String name = category.getName();
+            locationCategoryName.setText(name);
+            locationCategoriesScriptsList.getItems().setAll(category.getScripts().keySet());
+        }
     }
 
     private void selectPlayerBehaviorNode(TreeItem<BTreeNode> treeItem) {
@@ -529,6 +547,9 @@ public class EditorController {
         //Player tab
         initPlayer();
         playerEquipmentAllList.getItems().setAll(gameFile.getItems());
+        //Categories
+        //Locations
+        locationCategoriesList.getItems().setAll(gameFile.getLocationCategories());
     }
 
     private void initPlayerParametersTable() {
@@ -1522,6 +1543,34 @@ public class EditorController {
             TaskNode node = (TaskNode) treeItem.getValue();
             String scriptText = ((RSyntaxTextArea) playerBehaviorScriptNode.getContent()).getText();
             node.setScript(new Script(scriptText, true));
+        }
+    }
+
+    public void saveLocationCategoryName() {
+        LocationCategory category = locationCategoriesList.getSelectionModel().getSelectedItem();
+        String name = locationCategoryName.getText();
+        if (category != null) {
+            category.setName(name);
+            locationCategoriesList.refresh();
+        }
+    }
+
+    public void addLocationCategory() {
+        if (gameFile != null) {
+            LocationCategory category = new LocationCategory("LocationCategory:New");
+            gameFile.getLocationCategories().add(category);
+            locationCategoriesList.getItems().add(category);
+        }
+    }
+
+    public void removeLocationCategory() {
+        LocationCategory category = locationCategoriesList.getSelectionModel().getSelectedItem();
+        if (category != null) {
+            gameFile.getLocationCategories().remove(category);
+            locationCategoriesList.getItems().remove(category);
+            for (Location location : gameFile.getLocations()) {
+                location.removeCategory(category);
+            }
         }
     }
 }
