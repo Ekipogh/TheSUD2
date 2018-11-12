@@ -930,6 +930,56 @@
                             </BorderPane>
                         </SplitPane>
                     </Tab>
+                    <Tab closable="false" text="Character">
+                        <SplitPane dividerPositions="0.2">
+                            <ScrollPane fitToHeight="true" fitToWidth="true">
+                                <ListView fx:id="characterCategoriesList">
+                                    <contextMenu>
+                                        <ContextMenu>
+                                            <items>
+                                                <MenuItem text="Add" onAction="#addCharacterCategory"/>
+                                                <MenuItem text="Remove" onAction="#removeCharacterCategory"/>
+                                            </items>
+                                        </ContextMenu>
+                                    </contextMenu>
+                                </ListView>
+                            </ScrollPane>
+                            <BorderPane>
+                                <top>
+                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                        <Label text="Name"/>
+                                        <TextField fx:id="characterCategoryName" prefWidth="946.0"
+                                                   onKeyReleased="#saveCharacterCategoryName"/>
+                                    </HBox>
+                                </top>
+                                <center>
+                                    <SplitPane dividerPositions="0.2">
+                                        <ScrollPane fitToHeight="true" fitToWidth="true">
+                                            <ListView fx:id="characterCategoriesScriptsList">
+                                                <contextMenu>
+                                                    <ContextMenu>
+                                                        <items>
+                                                            <MenuItem text="Add" onAction="#addCharacterCategoryScript"/>
+                                                            <MenuItem text="Remove"
+                                                                      onAction="#removeCharacterCategoryScript"/>
+                                                        </items>
+                                                    </ContextMenu>
+                                                </contextMenu>
+                                            </ListView>
+                                        </ScrollPane>
+                                        <ScrollPane fitToHeight="true" fitToWidth="true">
+                                            <SwingNode fx:id="characterCategoryScriptNode"
+                                                       onKeyReleased="#saveCharacterCategoryScript"/>
+                                        </ScrollPane>
+                                    </SplitPane>
+                                </center>
+                                <bottom>
+                                    <CheckBox text="Available" fx:id="characterCategoryScriptEnabled"
+                                              onAction="#setCharacterCategoryScriptEnabled"/>
+                                </bottom>
+                            </BorderPane>
+                        </SplitPane>
+                    </Tab>
                 </TabPane>
             </Tab>
         </TabPane>
