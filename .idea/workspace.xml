@@ -10,10 +10,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4dbcf5c9-0fad-4356-9780-f46e2e5818d0" name="Default" comment="Behavior smoll ui update">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/GameFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/GameFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/Script.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/Script.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/Utils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/EditorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/EditorController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/editor.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/editor.fxml" afterDir="false" />
     </list>
@@ -40,14 +36,14 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="fxml" value="5981" />
-          <entry key="java" value="21025" />
+          <entry key="fxml" value="5994" />
+          <entry key="java" value="21387" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="21025" />
-          <entry key="XML" value="5981" />
+          <entry key="JAVA" value="21387" />
+          <entry key="XML" value="5994" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
@@ -77,8 +73,21 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/editor.fxml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="457">
-              <caret line="873" column="144" selection-start-line="873" selection-start-column="144" selection-end-line="873" selection-end-column="144" />
+            <state relative-caret-position="593">
+              <caret line="927" column="85" selection-start-line="927" selection-start-column="85" selection-end-line="927" selection-end-column="85" />
+              <folding>
+                <element signature="n#Tab#0;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+                <element signature="n#Tab#1;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+                <element signature="n#Tab#2;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+                <element signature="n#Tab#3;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+                <element signature="n#Tab#4;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+                <element signature="n#Tab#1;n#TabPane#0;n#Tab#4;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+                <element signature="n#Tab#2;n#TabPane#0;n#Tab#4;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+                <element signature="n#Tab#3;n#TabPane#0;n#Tab#4;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+                <element signature="n#Tab#4;n#TabPane#0;n#Tab#4;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+                <element signature="n#Tab#0;n#TabPane#0;n#Tab#5;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+                <element signature="n#top#0;n#BorderPane#0;n#!!top" />
+              </folding>
             </state>
           </provider>
           <provider editor-type-id="JavaFX-Scene-Builder" />
@@ -87,33 +96,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/EditorController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="673">
-              <caret line="1624" column="37" selection-start-line="1624" selection-start-column="37" selection-end-line="1624" selection-end-column="37" />
+            <state relative-caret-position="537">
+              <caret line="1721" column="55" selection-start-line="1721" selection-start-column="55" selection-end-line="1721" selection-end-column="55" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/Script.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="588">
-              <caret line="102" column="37" selection-start-line="102" selection-start-column="37" selection-end-line="102" selection-end-column="37" />
-              <folding>
-                <element signature="e#2905#2906#0" expanded="true" />
-                <element signature="e#2937#2938#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/Utils.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="639">
-              <caret line="61" column="33" selection-start-line="61" selection-start-column="33" selection-end-line="61" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -131,9 +118,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>addAll</find>
-      <find>removeCh</find>
-      <find>contex</find>
       <find>RS</find>
       <find>locationScriptsList</find>
       <find>GameScr</find>
@@ -161,6 +145,9 @@
       <find>RSyn</find>
       <find>Dialog</find>
       <find>listener</find>
+      <find>setEnabled</find>
+      <find>Location</find>
+      <find>saveLocationCate</find>
     </findStrings>
     <replaceStrings>
       <replace>filePath</replace>
@@ -170,6 +157,8 @@
       <replace>&amp;gt;&amp;gt;</replace>
       <replace>player</replace>
       <replace>Player</replace>
+      <replace>item</replace>
+      <replace>Item</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -377,7 +366,7 @@
     <property name="Repository.Attach.JavaDocs" value="true" />
     <property name="Repository.Attach.Sources" value="true" />
     <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH" value="231" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542033333743" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542035401305" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/build.xml" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15136719" />
@@ -513,7 +502,7 @@
     <frame x="-7" y="-7" width="2575" height="1415" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.54134166" visible="true" weight="0.118489064" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.54134166" visible="true" weight="0.118489064" />
       <window_info auto_hide="true" id="Structure" order="1" sideWeight="0.45865834" side_tool="true" weight="0.11212724" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Capture Tool" order="3" />
@@ -524,7 +513,7 @@
       <window_info x="0" y="728" width="3840" height="644" id="Run" order="8" type="WINDOWED" weight="0.32991803" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32994527" />
-      <window_info anchor="bottom" x="5760" y="34" width="2880" height="1526" id="Debug" order="2" sideWeight="0.4946322" visible="true" weight="0.3978159" />
+      <window_info active="true" anchor="bottom" x="5760" y="34" width="2880" height="1526" id="Debug" order="2" sideWeight="0.4946322" visible="true" weight="0.3978159" />
       <window_info anchor="bottom" id="Cvs" order="3" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="5" sideWeight="0.4974155" weight="0.32839313" />
@@ -940,16 +929,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/editor.fxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="457">
-          <caret line="873" column="144" selection-start-line="873" selection-start-column="144" selection-end-line="873" selection-end-column="144" />
+        <state relative-caret-position="593">
+          <caret line="927" column="85" selection-start-line="927" selection-start-column="85" selection-end-line="927" selection-end-column="85" />
+          <folding>
+            <element signature="n#Tab#0;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+            <element signature="n#Tab#1;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+            <element signature="n#Tab#2;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+            <element signature="n#Tab#3;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+            <element signature="n#Tab#4;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+            <element signature="n#Tab#1;n#TabPane#0;n#Tab#4;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+            <element signature="n#Tab#2;n#TabPane#0;n#Tab#4;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+            <element signature="n#Tab#3;n#TabPane#0;n#Tab#4;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+            <element signature="n#Tab#4;n#TabPane#0;n#Tab#4;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+            <element signature="n#Tab#0;n#TabPane#0;n#Tab#5;n#TabPane#0;n#center#0;n#BorderPane#0;n#!!top" />
+            <element signature="n#top#0;n#BorderPane#0;n#!!top" />
+          </folding>
         </state>
       </provider>
       <provider editor-type-id="JavaFX-Scene-Builder" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/EditorController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="673">
-          <caret line="1624" column="37" selection-start-line="1624" selection-start-column="37" selection-end-line="1624" selection-end-column="37" />
+        <state relative-caret-position="537">
+          <caret line="1721" column="55" selection-start-line="1721" selection-start-column="55" selection-end-line="1721" selection-end-column="55" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

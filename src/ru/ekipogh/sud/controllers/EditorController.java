@@ -5,9 +5,11 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
@@ -150,6 +152,13 @@ public class EditorController {
     public ListView<String> locationCategoriesScriptsList;
     public SwingNode locationCategoryScriptNode;
     public CheckBox locationCategoryScriptEnabled;
+    //Items
+    public ListView<ItemCategory> itemCategoriesList;
+    public TextField itemCategoryName;
+    public ListView<String> itemCategoriesScriptsList;
+    public SwingNode itemCategoryScriptNode;
+    public CheckBox itemCategoryScriptEnabled;
+
 
     private GameFile gameFile;
 
@@ -190,6 +199,7 @@ public class EditorController {
         playerBehaviorScriptNode.setContent(new RSyntaxTextArea());
         //Categories tab
         locationCategoryScriptNode.setContent(new RSyntaxTextArea());
+        itemCategoryScriptNode.setContent(new RSyntaxTextArea());
 
         //Lists listeners
         //Common tab
@@ -222,6 +232,8 @@ public class EditorController {
         //Categories tab
         locationCategoriesList.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> selectLocationCategory(newValue)));
         locationCategoriesScriptsList.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> selectLocationCategoryScript(newValue)));
+        itemCategoriesList.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> selectItemCategory(newValue)));
+        itemCategoriesScriptsList.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> selectItemCategoryScript(newValue)));
 
         gameFile = new GameFile();
         ScreenController.setController("editor", this);
@@ -236,6 +248,23 @@ public class EditorController {
         }
 
         System.out.println("Editor initialized");
+    }
+
+    private void selectItemCategoryScript(String scriptName) {
+        ItemCategory category = itemCategoriesList.getSelectionModel().getSelectedItem();
+        if (category != null && scriptName != null) {
+            Script script = category.getScript(scriptName);
+            ((RSyntaxTextArea) itemCategoryScriptNode.getContent()).setText(script.getText());
+            itemCategoryScriptEnabled.setSelected(script.isEnabled());
+        }
+    }
+
+    private void selectItemCategory(ItemCategory category) {
+        if (category != null) {
+            String name = category.getName();
+            itemCategoryName.setText(name);
+            itemCategoriesScriptsList.getItems().setAll(category.getScripts().keySet());
+        }
     }
 
     private void selectLocationCategoryScript(String scriptName) {
@@ -1606,7 +1635,7 @@ public class EditorController {
         }
     }
 
-    public void saveLOcationCategoryScript() {
+    public void saveLocationCategoryScript() {
         LocationCategory category = locationCategoriesList.getSelectionModel().getSelectedItem();
         String scriptName = locationCategoriesScriptsList.getSelectionModel().getSelectedItem();
         if (category != null && scriptName != null) {
@@ -1622,6 +1651,75 @@ public class EditorController {
         if (category != null && scriptName != null && !scriptName.startsWith("_")) {
             Script script = category.getScript(scriptName);
             boolean enabled = locationCategoryScriptEnabled.isSelected();
+            script.setEnabled(enabled);
+        }
+    }
+
+    public void addItemCategory() {
+        if (gameFile != null) {
+            ItemCategory category = new ItemCategory("ItemCategory:New");
+            gameFile.getItemCategories().add(category);
+            itemCategoriesList.getItems().add(category);
+        }
+    }
+
+    public void removeItemCategory() {
+        ItemCategory category = itemCategoriesList.getSelectionModel().getSelectedItem();
+        if (category != null) {
+            gameFile.getItemCategories().remove(category);
+            itemCategoriesList.getItems().remove(category);
+            for (Item item : gameFile.getItems()) {
+                item.removeCategory(category);
+            }
+        }
+    }
+
+    public void saveItemCategoryName() {
+        ItemCategory category = itemCategoriesList.getSelectionModel().getSelectedItem();
+        String name = itemCategoryName.getText();
+        if (category != null) {
+            category.setName(name);
+            itemCategoriesList.refresh();
+        }
+    }
+
+    public void addItemCategoryScript() {
+        ItemCategory category = itemCategoriesList.getSelectionModel().getSelectedItem();
+        if (category != null) {
+            String scriptName = Utils.showPromptDialog("Enter Script name");
+            if (scriptName != null) {
+                Script script = new Script("", true);
+                category.setScript(scriptName, script);
+                itemCategoriesScriptsList.getItems().add(scriptName);
+            }
+        }
+    }
+
+    public void removeItemCategoryScript() {
+        ItemCategory category = itemCategoriesList.getSelectionModel().getSelectedItem();
+        String scriptName = itemCategoriesScriptsList.getSelectionModel().getSelectedItem();
+        if (category != null && scriptName != null && !scriptName.startsWith("_")) {
+            category.removeScript(scriptName);
+            itemCategoriesScriptsList.getItems().remove(scriptName);
+        }
+    }
+
+    public void saveItemCategoryScript() {
+        ItemCategory category = itemCategoriesList.getSelectionModel().getSelectedItem();
+        String scriptName = itemCategoriesScriptsList.getSelectionModel().getSelectedItem();
+        if (category != null && scriptName != null) {
+            Script script = category.getScript(scriptName);
+            String scriptText = ((RSyntaxTextArea) itemCategoryScriptNode.getContent()).getText();
+            script.setText(scriptText);
+        }
+    }
+
+    public void setItemCategoryScriptEnabled() {
+        ItemCategory category = itemCategoriesList.getSelectionModel().getSelectedItem();
+        String scriptName = itemCategoriesScriptsList.getSelectionModel().getSelectedItem();
+        if (category != null && scriptName != null && !scriptName.startsWith("_")) {
+            Script script = category.getScript(scriptName);
+            boolean enabled = itemCategoryScriptEnabled.isSelected();
             script.setEnabled(enabled);
         }
     }

@@ -848,7 +848,8 @@
                                 <top>
                                     <HBox alignment="CENTER_LEFT" spacing="10.0">
                                         <Label text="Name"/>
-                                        <TextField fx:id="locationCategoryName" prefWidth="946.0" onKeyReleased="#saveLocationCategoryName"/>
+                                        <TextField fx:id="locationCategoryName" prefWidth="946.0"
+                                                   onKeyReleased="#saveLocationCategoryName"/>
                                     </HBox>
                                 </top>
                                 <center>
@@ -859,19 +860,72 @@
                                                     <ContextMenu>
                                                         <items>
                                                             <MenuItem text="Add" onAction="#addLocationCategoryScript"/>
-                                                            <MenuItem text="Remove" onAction="#removeLocationCategoryScript"/>
+                                                            <MenuItem text="Remove"
+                                                                      onAction="#removeLocationCategoryScript"/>
                                                         </items>
                                                     </ContextMenu>
                                                 </contextMenu>
                                             </ListView>
                                         </ScrollPane>
                                         <ScrollPane fitToHeight="true" fitToWidth="true">
-                                            <SwingNode fx:id="locationCategoryScriptNode" onKeyReleased="#saveLOcationCategoryScript"/>
+                                            <SwingNode fx:id="locationCategoryScriptNode"
+                                                       onKeyReleased="#saveLocationCategoryScript"/>
                                         </ScrollPane>
                                     </SplitPane>
                                 </center>
                                 <bottom>
-                                    <CheckBox text="Available" fx:id="locationCategoryScriptEnabled" onAction="#setLocationCategoryScriptEnabled"/>
+                                    <CheckBox text="Available" fx:id="locationCategoryScriptEnabled"
+                                              onAction="#setLocationCategoryScriptEnabled"/>
+                                </bottom>
+                            </BorderPane>
+                        </SplitPane>
+                    </Tab>
+                    <Tab closable="false" text="Item">
+                        <SplitPane dividerPositions="0.2">
+                            <ScrollPane fitToHeight="true" fitToWidth="true">
+                                <ListView fx:id="itemCategoriesList">
+                                    <contextMenu>
+                                        <ContextMenu>
+                                            <items>
+                                                <MenuItem text="Add" onAction="#addItemCategory"/>
+                                                <MenuItem text="Remove" onAction="#removeItemCategory"/>
+                                            </items>
+                                        </ContextMenu>
+                                    </contextMenu>
+                                </ListView>
+                            </ScrollPane>
+                            <BorderPane>
+                                <top>
+                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                        <Label text="Name"/>
+                                        <TextField fx:id="itemCategoryName" prefWidth="946.0"
+                                                   onKeyReleased="#saveItemCategoryName"/>
+                                    </HBox>
+                                </top>
+                                <center>
+                                    <SplitPane dividerPositions="0.2">
+                                        <ScrollPane fitToHeight="true" fitToWidth="true">
+                                            <ListView fx:id="itemCategoriesScriptsList">
+                                                <contextMenu>
+                                                    <ContextMenu>
+                                                        <items>
+                                                            <MenuItem text="Add" onAction="#addItemCategoryScript"/>
+                                                            <MenuItem text="Remove"
+                                                                      onAction="#removeItemCategoryScript"/>
+                                                        </items>
+                                                    </ContextMenu>
+                                                </contextMenu>
+                                            </ListView>
+                                        </ScrollPane>
+                                        <ScrollPane fitToHeight="true" fitToWidth="true">
+                                            <SwingNode fx:id="itemCategoryScriptNode"
+                                                       onKeyReleased="#saveItemCategoryScript"/>
+                                        </ScrollPane>
+                                    </SplitPane>
+                                </center>
+                                <bottom>
+                                    <CheckBox text="Available" fx:id="itemCategoryScriptEnabled"
+                                              onAction="#setItemCategoryScriptEnabled"/>
                                 </bottom>
                             </BorderPane>
                         </SplitPane>
