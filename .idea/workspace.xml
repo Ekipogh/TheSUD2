@@ -11,6 +11,9 @@
   <component name="ChangeListManager">
     <list default="true" id="4dbcf5c9-0fad-4356-9780-f46e2e5818d0" name="Default" comment="Behavior smoll ui update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/GameFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/GameFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/Script.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/Script.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/Utils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/EditorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/EditorController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/editor.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/editor.fxml" afterDir="false" />
     </list>
@@ -25,33 +28,33 @@
     <session id="-1537019599">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="16" />
+          <entry key="project.closed" value="17" />
           <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.4" value="6" />
-          <entry key="project.open.time.5" value="3" />
+          <entry key="project.open.time.5" value="4" />
           <entry key="project.open.time.6" value="4" />
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="2" />
-          <entry key="project.opened" value="17" />
+          <entry key="project.opened" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="fxml" value="5804" />
-          <entry key="java" value="20143" />
+          <entry key="fxml" value="5981" />
+          <entry key="java" value="21025" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="20143" />
-          <entry key="XML" value="5804" />
+          <entry key="JAVA" value="21025" />
+          <entry key="XML" value="5981" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CLASS" value="1" />
           <entry key="GUI_DESIGNER_FORM" value="2" />
-          <entry key="JAVA" value="52" />
+          <entry key="JAVA" value="55" />
           <entry key="XML" value="4" />
         </counts>
       </usages-collector>
@@ -60,7 +63,7 @@
           <entry key="class" value="1" />
           <entry key="form" value="2" />
           <entry key="fxml" value="4" />
-          <entry key="java" value="52" />
+          <entry key="java" value="55" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -74,8 +77,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/editor.fxml">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="822" column="16" selection-start-line="822" selection-start-column="16" selection-end-line="822" selection-end-column="16" />
+            <state relative-caret-position="457">
+              <caret line="873" column="144" selection-start-line="873" selection-start-column="144" selection-end-line="873" selection-end-column="144" />
             </state>
           </provider>
           <provider editor-type-id="JavaFX-Scene-Builder" />
@@ -84,11 +87,33 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/EditorController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="401">
-              <caret line="551" column="83" selection-start-line="551" selection-start-column="83" selection-end-line="551" selection-end-column="83" />
+            <state relative-caret-position="673">
+              <caret line="1624" column="37" selection-start-line="1624" selection-start-column="37" selection-end-line="1624" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/Script.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="588">
+              <caret line="102" column="37" selection-start-line="102" selection-start-column="37" selection-end-line="102" selection-end-column="37" />
+              <folding>
+                <element signature="e#2905#2906#0" expanded="true" />
+                <element signature="e#2937#2938#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/Utils.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="639">
+              <caret line="61" column="33" selection-start-line="61" selection-start-column="33" selection-end-line="61" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -106,9 +131,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>saveItem</find>
-      <find>scr</find>
-      <find>wtf</find>
       <find>addAll</find>
       <find>removeCh</find>
       <find>contex</find>
@@ -136,6 +158,9 @@
       <find>character</find>
       <find>Character</find>
       <find>rsynx</find>
+      <find>RSyn</find>
+      <find>Dialog</find>
+      <find>listener</find>
     </findStrings>
     <replaceStrings>
       <replace>filePath</replace>
@@ -167,8 +192,6 @@
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/RSyntaxFX.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/launcher.fxml" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/objects/Item.java" />
-        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/GameFile.java" />
-        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/Utils.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/itemContainer.fxml" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/Main.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/ScreenController.java" />
@@ -182,6 +205,9 @@
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/BTreeNode.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/behavior/TaskNode.java" />
+        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/GameFile.java" />
+        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/Utils.java" />
+        <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/Script.java" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/editor.fxml" />
         <option value="$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/EditorController.java" />
       </list>
@@ -213,71 +239,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="sud" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="sud" type="462c0819:PsiDirectoryNode" />
-              <item name="behavior" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="sud" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="sud" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-              <item name="EditorController" type="1a9f42e2:ClassTreeNode" />
-            </path>
-            <path>
-              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="sud" type="462c0819:PsiDirectoryNode" />
-              <item name="frames" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="sud" type="462c0819:PsiDirectoryNode" />
-              <item name="fxml" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="sud" type="462c0819:PsiDirectoryNode" />
-              <item name="objects" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="PackagesPane">
         <subPane>
           <expand>
@@ -348,6 +309,63 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sud" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sud" type="462c0819:PsiDirectoryNode" />
+              <item name="behavior" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sud" type="462c0819:PsiDirectoryNode" />
+              <item name="controllers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sud" type="462c0819:PsiDirectoryNode" />
+              <item name="frames" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sud" type="462c0819:PsiDirectoryNode" />
+              <item name="fxml" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TheSUD2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TheSUD2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sud" type="462c0819:PsiDirectoryNode" />
+              <item name="objects" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -359,7 +377,7 @@
     <property name="Repository.Attach.JavaDocs" value="true" />
     <property name="Repository.Attach.Sources" value="true" />
     <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH" value="231" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1539544058256" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542033333743" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/build.xml" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15136719" />
@@ -495,7 +513,7 @@
     <frame x="-7" y="-7" width="2575" height="1415" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.54134166" visible="true" weight="0.117693834" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.54134166" visible="true" weight="0.118489064" />
       <window_info auto_hide="true" id="Structure" order="1" sideWeight="0.45865834" side_tool="true" weight="0.11212724" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Capture Tool" order="3" />
@@ -506,12 +524,12 @@
       <window_info x="0" y="728" width="3840" height="644" id="Run" order="8" type="WINDOWED" weight="0.32991803" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32994527" />
-      <window_info anchor="bottom" x="5760" y="34" width="2880" height="1526" id="Debug" order="2" sideWeight="0.4950298" visible="true" weight="0.3978159" />
+      <window_info anchor="bottom" x="5760" y="34" width="2880" height="1526" id="Debug" order="2" sideWeight="0.4946322" visible="true" weight="0.3978159" />
       <window_info anchor="bottom" id="Cvs" order="3" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="5" sideWeight="0.4974155" weight="0.32839313" />
       <window_info anchor="bottom" id="Messages" order="6" sideWeight="0.49860835" weight="0.32839313" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5049702" side_tool="true" visible="true" weight="0.3978159" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5053678" side_tool="true" visible="true" weight="0.3978159" />
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49893898" weight="0.32968178" />
       <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.49893898" weight="0.32968178" />
       <window_info anchor="bottom" id="Inspection Results" order="10" weight="0.32994527" />
@@ -677,13 +695,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/Script.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="20" column="29" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/util/Map.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
@@ -707,13 +718,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/frames/EditorFrame.form">
       <provider selected="true" editor-type-id="ui-designer" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/Utils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="31" column="17" selection-start-line="31" selection-start-column="17" selection-end-line="31" selection-end-column="17" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/ScreenController.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -779,13 +783,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="249">
           <caret line="354" column="13" selection-start-line="354" selection-start-column="13" selection-end-line="354" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/GameFile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="509">
-          <caret line="67" column="17" lean-forward="true" selection-start-line="67" selection-start-column="17" selection-end-line="67" selection-end-column="17" />
         </state>
       </provider>
     </entry>
@@ -916,18 +913,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/GameFile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="42" column="48" selection-start-line="42" selection-start-column="48" selection-end-line="42" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/Utils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="639">
+          <caret line="61" column="33" selection-start-line="61" selection-start-column="33" selection-end-line="61" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/Script.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="588">
+          <caret line="102" column="37" selection-start-line="102" selection-start-column="37" selection-end-line="102" selection-end-column="37" />
+          <folding>
+            <element signature="e#2905#2906#0" expanded="true" />
+            <element signature="e#2937#2938#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/fxml/editor.fxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="822" column="16" selection-start-line="822" selection-start-column="16" selection-end-line="822" selection-end-column="16" />
+        <state relative-caret-position="457">
+          <caret line="873" column="144" selection-start-line="873" selection-start-column="144" selection-end-line="873" selection-end-column="144" />
         </state>
       </provider>
       <provider editor-type-id="JavaFX-Scene-Builder" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/ekipogh/sud/controllers/EditorController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="401">
-          <caret line="551" column="83" selection-start-line="551" selection-start-column="83" selection-end-line="551" selection-end-column="83" />
+        <state relative-caret-position="673">
+          <caret line="1624" column="37" selection-start-line="1624" selection-start-column="37" selection-end-line="1624" selection-end-column="37" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

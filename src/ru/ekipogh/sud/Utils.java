@@ -1,10 +1,8 @@
 package ru.ekipogh.sud;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
 import javafx.scene.layout.GridPane;
 
 import javax.swing.*;
@@ -55,5 +53,12 @@ public class Utils {
             return result.get();
         }
         return 0;
+    }
+
+    public static String showPromptDialog(String message) {
+        TextInputDialog inputDialog = new TextInputDialog("New Script");
+        inputDialog.setTitle("Enter script name");
+        Optional<String> result = inputDialog.showAndWait();
+        return result.orElse(null);
     }
 }

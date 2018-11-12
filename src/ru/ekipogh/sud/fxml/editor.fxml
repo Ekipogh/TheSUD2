@@ -854,15 +854,24 @@
                                 <center>
                                     <SplitPane dividerPositions="0.2">
                                         <ScrollPane fitToHeight="true" fitToWidth="true">
-                                            <ListView fx:id="locationCategoriesScriptsList"/>
+                                            <ListView fx:id="locationCategoriesScriptsList">
+                                                <contextMenu>
+                                                    <ContextMenu>
+                                                        <items>
+                                                            <MenuItem text="Add" onAction="#addLocationCategoryScript"/>
+                                                            <MenuItem text="Remove" onAction="#removeLocationCategoryScript"/>
+                                                        </items>
+                                                    </ContextMenu>
+                                                </contextMenu>
+                                            </ListView>
                                         </ScrollPane>
                                         <ScrollPane fitToHeight="true" fitToWidth="true">
-                                            <SwingNode fx:id="locationCategoryScriptNode"/>
+                                            <SwingNode fx:id="locationCategoryScriptNode" onKeyReleased="#saveLOcationCategoryScript"/>
                                         </ScrollPane>
                                     </SplitPane>
                                 </center>
                                 <bottom>
-                                    <CheckBox text="Available" fx:id="locationCategoryScriptAvailable"/>
+                                    <CheckBox text="Available" fx:id="locationCategoryScriptEnabled" onAction="#setLocationCategoryScriptEnabled"/>
                                 </bottom>
                             </BorderPane>
                         </SplitPane>

@@ -13,21 +13,35 @@ import java.util.Map;
  */
 public class GameFile implements Serializable {
     public static final long serialVersionUID = 1L;
-    private GameCharacter player;
-    private List<Location> locations;
     private String gameName;
     private String gameStartMessage;
-    private Map<String, String> slotNames;
-    private List<Item> items;
+    private GameCharacter player;
     private List<GameCharacter> characters;
+    private List<Location> locations;
+    private List<Item> items;
+    private Map<String, String> slotNames;
     private int sequencerID;
     private String initScript;
     private String path;
     private HashMap<String, Script> commonScripts;
     private ArrayList<SudTimer> timers;
-    private List<ItemCategory> itemCategories;
-    private List<LocationCategory> locationCategories;
     private List<CharacterCategory> characterCategories;
+    private List<LocationCategory> locationCategories;
+    private List<ItemCategory> itemCategories;
+
+    public GameFile() {
+        this.player = new GameCharacter("Player");
+        this.locations = new ArrayList<>();
+        this.items = new ArrayList<>();
+        this.characters = new ArrayList<>();
+        this.slotNames = new HashMap<>();
+        this.sequencerID = 0;
+        this.commonScripts = new HashMap<>();
+        this.timers = new ArrayList<>();
+        this.characterCategories = new ArrayList<>();
+        this.locationCategories = new ArrayList<>();
+        this.itemCategories = new ArrayList<>();
+    }
 
     public void setInitScript(String initScript) {
         this.initScript = initScript;

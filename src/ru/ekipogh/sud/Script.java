@@ -98,4 +98,8 @@ public class Script implements Serializable {
     public static void addScriptFile(String scriptName, String scriptText) {
         fileScipts.put(scriptName, scriptText);
     }
+
+    public void setText(String scriptText) {
+        this.scriptText = scriptText;
+    }
 }
