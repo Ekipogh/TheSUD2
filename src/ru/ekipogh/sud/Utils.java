@@ -56,9 +56,15 @@ public class Utils {
     }
 
     public static String showPromptDialog(String message) {
-        TextInputDialog inputDialog = new TextInputDialog("New Script");
-        inputDialog.setTitle("Enter script name");
+        TextInputDialog inputDialog = new TextInputDialog();
+        inputDialog.setTitle(message);
         Optional<String> result = inputDialog.showAndWait();
         return result.orElse(null);
+    }
+
+    public static void showMessage(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setContentText(message);
+        alert.show();
     }
 }

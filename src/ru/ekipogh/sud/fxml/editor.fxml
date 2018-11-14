@@ -246,12 +246,9 @@
                             <ScrollPane fitToHeight="true" fitToWidth="true">
                                 <TableView fx:id="itemParameters" editable="true">
                                     <columns>
-                                        <TableColumn fx:id="itemKeyColumn" minWidth="500" text="Parameter">
-
-                                        </TableColumn>
+                                        <TableColumn fx:id="itemKeyColumn" minWidth="500" text="Parameter"/>
                                         <TableColumn fx:id="itemValueColumn" minWidth="500" onEditCommit="#changeValue"
-                                                     text="Value">
-                                        </TableColumn>
+                                                     text="Value"/>
                                     </columns>
                                     <contextMenu>
                                         <ContextMenu>
@@ -959,7 +956,8 @@
                                                 <contextMenu>
                                                     <ContextMenu>
                                                         <items>
-                                                            <MenuItem text="Add" onAction="#addCharacterCategoryScript"/>
+                                                            <MenuItem text="Add"
+                                                                      onAction="#addCharacterCategoryScript"/>
                                                             <MenuItem text="Remove"
                                                                       onAction="#removeCharacterCategoryScript"/>
                                                         </items>
@@ -981,6 +979,27 @@
                         </SplitPane>
                     </Tab>
                 </TabPane>
+            </Tab>
+            <Tab text="Equipment Slots">
+                <ScrollPane fitToHeight="false" fitToWidth="true">
+                    <TableView fx:id="equipmentSlotsTable" editable="true">
+                        <columns>
+                            <TableColumn fx:id="equipmentSlotsTablePathColumn" text="Path to icon"
+                                         onEditCommit="#saveSlotIcon"/>
+                            <TableColumn fx:id="equipmentSlotsTableIconColumn" text="Icon"/>
+                            <TableColumn fx:id="equipmentSlotsTableNameColumn" text="Name"
+                                         onEditCommit="#saveSlotName"/>
+                        </columns>
+                        <contextMenu>
+                            <ContextMenu>
+                                <items>
+                                    <MenuItem text="Add" onAction="#addSlot"/>
+                                    <MenuItem text="Remove" onAction="#removeSlot"/>
+                                </items>
+                            </ContextMenu>
+                        </contextMenu>
+                    </TableView>
+                </ScrollPane>
             </Tab>
         </TabPane>
     </center>

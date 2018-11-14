@@ -1,13 +1,17 @@
 package ru.ekipogh.sud.controllers;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
@@ -17,6 +21,8 @@ import ru.ekipogh.sud.behavior.*;
 import ru.ekipogh.sud.objects.*;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
@@ -162,6 +168,11 @@ public class EditorController {
     public ListView<String> characterCategoriesScriptsList;
     public SwingNode characterCategoryScriptNode;
     public CheckBox characterCategoryScriptEnabled;
+    //Equipment Slots tab
+    public TableView<String[]> equipmentSlotsTable;
+    public TableColumn<String[], String> equipmentSlotsTablePathColumn;
+    public TableColumn<String[], ImageView> equipmentSlotsTableIconColumn;
+    public TableColumn<String[], String> equipmentSlotsTableNameColumn;
 
 
     private GameFile gameFile;
@@ -341,7 +352,7 @@ public class EditorController {
     private void addBehaviorNode(BehaviorTree.TYPES type, boolean isPlayer) {
         GameCharacter character;
         TreeItem<BTreeNode> node;
-        TreeItem root;
+        TreeItem<BTreeNode> root;
 
         if (isPlayer && gameFile != null) {
             character = gameFile.getPlayer();
@@ -616,6 +627,38 @@ public class EditorController {
         locationCategoriesList.getItems().setAll(gameFile.getLocationCategories());
         itemCategoriesList.getItems().setAll(gameFile.getItemCategories());
         characterCategoriesList.getItems().setAll(gameFile.getCharacterCategories());
+        //Slots tab
+        initSlotsTable();
+    }
+
+    private void initSlotsTable() {
+        equipmentSlotsTable.getItems().clear();
+        try {
+            equipmentSlotsTablePathColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
+            equipmentSlotsTablePathColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+            equipmentSlotsTableIconColumn.setCellValueFactory(param -> {
+                SimpleObjectProperty<ImageView> imageProperty = new SimpleObjectProperty<>();
+                try {
+                    String gameFileDir = new File(gameFile.getPath()).getParent();
+                    File imageFile = new File(gameFileDir, param.getValue()[1]);
+                    if (!imageFile.isFile()) {
+                        imageFile = new File("data/empty.png");
+                    }
+                    imageProperty.set(new ImageView(new Image(new FileInputStream(imageFile))));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    System.exit(1);
+                }
+                return imageProperty;
+            });
+            equipmentSlotsTableNameColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
+            equipmentSlotsTableNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+            for (Map.Entry<String, String> slot : gameFile.getSlotNames().entrySet()) {
+                equipmentSlotsTable.getItems().add(new String[]{slot.getKey(), slot.getValue()});
+            }
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initPlayerParametersTable() {
@@ -688,7 +731,7 @@ public class EditorController {
     private void initEquipment() {
         Map<String, String> slots = gameFile.getSlotNames();
         Equipment.setSlotNames(slots);
-        slots.keySet().forEach(itemEquipmentSlot.getItems()::add);
+        itemEquipmentSlot.getItems().setAll(slots.keySet());
     }
 
     private void cleanEditor() {
@@ -1404,7 +1447,7 @@ public class EditorController {
         GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
         TreeItem<BTreeNode> item = characterBehaviorTree.getSelectionModel().getSelectedItem();
         if (character != null && item != null && !item.equals(characterBehaviorTree.getRoot())) {
-            TreeItem parent = item.getParent();
+            TreeItem<BTreeNode> parent = item.getParent();
             BTreeNode node = item.getValue();
             node.getParent().getChildren().remove(node);
             parent.getChildren().remove(item);
@@ -1595,7 +1638,7 @@ public class EditorController {
     public void removePlayerBehaviorTreeItem() {
         TreeItem<BTreeNode> item = playerBehaviorTree.getSelectionModel().getSelectedItem();
         if (gameFile != null && item != null && !item.equals(playerBehaviorTree.getRoot())) {
-            TreeItem parent = item.getParent();
+            TreeItem<BTreeNode> parent = item.getParent();
             BTreeNode node = item.getValue();
             node.getParent().getChildren().remove(node);
             parent.getChildren().remove(item);
@@ -1817,5 +1860,65 @@ public class EditorController {
             boolean enabled = itemCategoryScriptEnabled.isSelected();
             script.setEnabled(enabled);
         }
+    }
+
+    public void saveSlotName(TableColumn.CellEditEvent<String[], String> stringCellEditEvent) {
+        String oldValue = stringCellEditEvent.getOldValue();
+        String newValue = stringCellEditEvent.getNewValue();
+        String path = gameFile.getSlotNames().get(oldValue);
+        gameFile.getSlotNames().remove(oldValue);
+        gameFile.getSlotNames().put(newValue, path);
+        Equipment.getSlotMap().remove(oldValue);
+        Equipment.getSlotMap().put(newValue, path);
+        //Change player equipment
+        Item playerItem = gameFile.getPlayer().getEquipment().getItemAtSlot(oldValue);
+        if (gameFile.getPlayer().getEquipment().getSlots().remove(oldValue) != null) {
+            gameFile.getPlayer().getEquipment().getSlots().put(newValue, playerItem);
+        }
+        //Change characters equipment
+        for (GameCharacter character : gameFile.getCharacters()) {
+            Item characterItem = character.getEquipment().getItemAtSlot(oldValue);
+            if (character.getEquipment().getSlots().remove(oldValue) != null) {
+                character.getEquipment().getSlots().put(newValue, characterItem);
+            }
+        }
+        //Change items slots
+        gameFile.getItems().stream().
+                filter(item -> item.getType() == ItemTypes.EQUIPPABLE).
+                filter(item -> item.getEquipmentSlot() == oldValue).forEach(item -> item.setEquipmentSlot(newValue));
+        initPlayer();
+    }
+
+    public void saveSlotIcon(TableColumn.CellEditEvent<String[], String> stringCellEditEvent) {
+        String newValue = stringCellEditEvent.getNewValue();
+        String[] row = stringCellEditEvent.getRowValue();
+        gameFile.getSlotNames().put(row[0], newValue);
+        Equipment.getSlotMap().put(row[0], newValue);
+        initSlotsTable();
+    }
+
+    public void addSlot() {
+        gameFile.getSlotNames().put("New Slot", "data/empty.png");
+        Equipment.getSlotMap().put("New Slot", "data/empty.png");
+        initSlotsTable();
+        initEquipment();
+    }
+
+    public void removeSlot() {
+        String[] row = equipmentSlotsTable.getSelectionModel().getSelectedItem();
+        String slot = row[0];
+        gameFile.getSlotNames().remove(slot);
+        Equipment.getSlotMap().remove(slot);
+        gameFile.getPlayer().getEquipment().getSlots().remove(slot);
+        for (GameCharacter character : gameFile.getCharacters()) {
+            character.getEquipment().getSlots().remove(slot);
+        }
+        initEquipment();
+        initSlotsTable();
+        initPlayer();
+        gameFile.getItems().stream().filter(item -> item.getEquipmentSlot().equals(slot)).forEach(item -> {
+            item.setType(ItemTypes.GENERIC);
+            item.setEquipmentSlot(null);
+        });
     }
 }
