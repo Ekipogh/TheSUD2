@@ -13,7 +13,7 @@ public class ScreenController {
     private static HashMap<String, Pane> screenMap = new HashMap<>();
     private static HashMap<String, Object> controllers = new HashMap<>();
 
-    static Scene getMain() {
+    public static Scene getMain() {
         return main;
     }
 

@@ -4,9 +4,13 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
+import ru.ekipogh.sud.controllers.ScreenController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.Optional;
 
 /**
@@ -66,5 +70,18 @@ public class Utils {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setContentText(message);
         alert.show();
+    }
+
+    public static String chooseFile() {
+        Window window = ScreenController.getMain().getWindow();
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Open a game file");
+        chooser.getExtensionFilters().setAll(new FileChooser.ExtensionFilter("SUD game", "*.sud"),
+                new FileChooser.ExtensionFilter("All files", "*.*"));
+        File file = chooser.showOpenDialog(window);
+        if (file != null) {
+            return file.getAbsolutePath();
+        }
+        return "";
     }
 }

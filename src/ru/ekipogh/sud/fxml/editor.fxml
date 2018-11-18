@@ -183,18 +183,6 @@
                                 <Label text="Equipment slot" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
                                 <ChoiceBox fx:id="itemEquipmentSlot" onAction="#setItemEquipmentSlot"
                                            GridPane.columnIndex="1" GridPane.rowIndex="5"/>
-                                <columnConstraints>
-                                    <ColumnConstraints/>
-                                    <ColumnConstraints/>
-                                </columnConstraints>
-                                <rowConstraints>
-                                    <RowConstraints/>
-                                    <RowConstraints/>
-                                    <RowConstraints/>
-                                    <RowConstraints/>
-                                    <RowConstraints/>
-                                    <RowConstraints/>
-                                </rowConstraints>
                             </GridPane>
                         </Tab>
                         <Tab closable="false" text="Scripts">
@@ -1007,6 +995,7 @@
         <MenuBar BorderPane.alignment="CENTER">
             <Menu mnemonicParsing="false" text="File">
                 <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open"/>
+                <MenuItem mnemonicParsing="false" onAction="#saveFile" text="Save"/>
             </Menu>
             <Menu mnemonicParsing="false" text="Edit">
                 <MenuItem mnemonicParsing="false" text="Delete"/>

@@ -41,6 +41,7 @@ public class GameFile implements Serializable {
         this.characterCategories = new ArrayList<>();
         this.locationCategories = new ArrayList<>();
         this.itemCategories = new ArrayList<>();
+        this.path = "";
     }
 
     public void setInitScript(String initScript) {
@@ -115,27 +116,40 @@ public class GameFile implements Serializable {
         return locations;
     }
 
-    public void save(String path) {
-        this.path = path;
+    public void save() {
+        if (path.isEmpty()) {
+            this.path = Utils.chooseFile();
+        }
         try {
-            FileOutputStream fos = new FileOutputStream(path);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(this);
-            oos.flush();
-            oos.close();
+            File file = new File(path);
+            if (file.canWrite()) {
+                System.out.println("Saving to " + path);
+                FileOutputStream fos = new FileOutputStream(path);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                oos.writeObject(this);
+                oos.flush();
+                oos.close();
+                System.out.println("Saved");
+            }
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
     }
 
-    public static GameFile open(String path) {
+    public static GameFile open() {
+        String path = Utils.chooseFile();
         try {
-            FileInputStream fis = new FileInputStream(path);
-            ObjectInputStream oin = new ObjectInputStream(fis);
-            GameFile gameFile = (GameFile) oin.readObject();
-            gameFile.setPath(path);
-            return gameFile;
+            File file = new File(path);
+            if (file.isFile()) {
+                FileInputStream fis = new FileInputStream(path);
+                ObjectInputStream oin = new ObjectInputStream(fis);
+                GameFile gameFile = (GameFile) oin.readObject();
+                gameFile.setPath(path);
+                return gameFile;
+            } else {
+                System.err.println("File not found \"" + path + "\"");
+            }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

@@ -592,7 +592,7 @@ public class PlayerFrame extends JFrame {
     //загрузка файла игры
     private void loadGameFile(String pathToGame) {
         //существование файла игры гарантируется лаунчером, пробуем загрухить из него данные
-        GameFile gameFile = GameFile.open(pathToGame);
+        GameFile gameFile = GameFile.open();
 
         //инициализация переменных игры из файла
         initialize(gameFile);

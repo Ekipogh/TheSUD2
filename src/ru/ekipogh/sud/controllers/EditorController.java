@@ -13,8 +13,6 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-import javafx.stage.Window;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import ru.ekipogh.sud.*;
 import ru.ekipogh.sud.behavior.*;
@@ -552,29 +550,16 @@ public class EditorController {
         }
     }
 
-    private String chooseFile(Window window) {
-        FileChooser chooser = new FileChooser();
-        chooser.setTitle("Open a game file");
-        chooser.getExtensionFilters().setAll(new FileChooser.ExtensionFilter("SUD game", "*.sud"),
-                new FileChooser.ExtensionFilter("All files", "*.*"));
-        File file = chooser.showOpenDialog(window);
-        if (file != null) {
-            return file.getAbsolutePath();
-        }
-        return null;
-    }
-
     public void openFile() {
-        String gameFilePath = chooseFile(ScreenController.getMain().getWindow());
-        if (gameFilePath != null) {
-            gameFile = GameFile.open(gameFilePath);
+        GameFile newGameFile = GameFile.open();
+        if (newGameFile != null) {
+            gameFile = newGameFile;
             editorInit();
         }
     }
 
     private void editorInit() {
         System.out.println("Editor init");
-        cleanEditor();
         //Common tab
         gameName.setText(gameFile.getGameName());
         gameDescription.setText(gameFile.getGameStartMessage());
@@ -594,14 +579,18 @@ public class EditorController {
         initPlayerParametersTable();
         //Location tab
         locationsList.getItems().setAll(gameFile.getLocations());
-        for (Location location : locationsList.getItems()) {
-            locationNorthExit.getItems().add(location);
-            locationSouthExit.getItems().add(location);
-            locationWestExit.getItems().add(location);
-            locationEastExit.getItems().add(location);
-            locationUpExit.getItems().add(location);
-            locationDownExit.getItems().add(location);
-        }
+        locationNorthExit.getItems().setAll(gameFile.getLocations());
+        locationNorthExit.getItems().add(null);
+        locationSouthExit.getItems().setAll(gameFile.getLocations());
+        locationSouthExit.getItems().add(null);
+        locationWestExit.getItems().setAll(gameFile.getLocations());
+        locationWestExit.getItems().add(null);
+        locationEastExit.getItems().setAll(gameFile.getLocations());
+        locationEastExit.getItems().add(null);
+        locationUpExit.getItems().setAll(gameFile.getLocations());
+        locationUpExit.getItems().add(null);
+        locationDownExit.getItems().setAll(gameFile.getLocations());
+        locationDownExit.getItems().add(null);
         locationAllItemsList.getItems().setAll(gameFile.getItems());
         locationsCategories.getItems().setAll(gameFile.getLocationCategories());
         initLocationParametersTable();
@@ -734,22 +723,6 @@ public class EditorController {
         itemEquipmentSlot.getItems().setAll(slots.keySet());
     }
 
-    private void cleanEditor() {
-        gameScriptsList.getItems().clear();
-        timersList.getItems().clear();
-        itemsList.getItems().clear();
-        itemScriptsList.getItems().clear();
-        itemEquipmentSlot.getItems().clear();
-        itemsCategories.getItems().clear();
-        locationNorthExit.setItems(FXCollections.observableArrayList(new Location[]{null}));
-        locationSouthExit.setItems(FXCollections.observableArrayList(new Location[]{null}));
-        locationWestExit.setItems(FXCollections.observableArrayList(new Location[]{null}));
-        locationEastExit.setItems(FXCollections.observableArrayList(new Location[]{null}));
-        locationUpExit.setItems(FXCollections.observableArrayList(new Location[]{null}));
-        locationDownExit.setItems(FXCollections.observableArrayList(new Location[]{null}));
-        Equipment.clearSlots();
-    }
-
     public void saveGameName() {
         String name = gameName.getText();
         gameFile.setGameName(name);
@@ -849,7 +822,14 @@ public class EditorController {
     public void setItemType() {
         Item item = itemsList.getSelectionModel().getSelectedItem();
         if (item != null) {
+            ItemTypes oldType = item.getType();
             ItemTypes type = itemType.getSelectionModel().getSelectedItem();
+            if (oldType == ItemTypes.EQUIPPABLE && oldType != type) {
+                for (GameCharacter character : gameFile.getCharacters()) {
+                    character.unequip(item);
+                }
+            }
+            gameFile.getPlayer().unequip(item);
             item.setType(type);
             itemEquipmentSlot.setDisable(type != ItemTypes.EQUIPPABLE);
             if (type == ItemTypes.EQUIPPABLE) {
@@ -864,6 +844,10 @@ public class EditorController {
         if (item != null) {
             String slot = itemEquipmentSlot.getValue();
             item.setEquipmentSlot(slot);
+            gameFile.getPlayer().unequip(item);
+            for (GameCharacter character : gameFile.getCharacters()) {
+                character.unequip(item);
+            }
         }
     }
 
@@ -872,8 +856,8 @@ public class EditorController {
         String scriptName = itemScriptsList.getSelectionModel().getSelectedItem();
         if (item != null && scriptName != null) {
             String scriptText = ((RSyntaxTextArea) itemScriptNode.getContent()).getText();
-            boolean enabled = itemScriptEnabled.isSelected();
-            item.setScript(scriptName, new Script(scriptText, enabled));
+            Script script = item.getScript(scriptName);
+            script.setText(scriptText);
         }
     }
 
@@ -900,7 +884,6 @@ public class EditorController {
         ItemCategory category = itemCategories.getSelectionModel().getSelectedItem();
         if (item != null && category != null) {
             item.removeCategory(category);
-            itemCategories.refresh();
         }
     }
 
@@ -942,7 +925,6 @@ public class EditorController {
             gameFile.getPlayer().unequip(item);
             gameFile.getItems().remove(item);
             playerItemsList.getItems().setAll(gameFile.getPlayer().getInventory().getItems());
-            itemsList.refresh();
         }
     }
 
@@ -968,7 +950,6 @@ public class EditorController {
         if (item != null && scriptName != null && !scriptName.startsWith("_")) {
             item.getScripts().remove(scriptName);
             itemScriptsList.getItems().remove(scriptName);
-            itemScriptsList.refresh();
         }
     }
 
@@ -1002,7 +983,8 @@ public class EditorController {
         String scriptName = locationScriptsList.getSelectionModel().getSelectedItem();
         if (location != null && scriptName != null) {
             String scriptText = ((RSyntaxTextArea) locationScriptNode.getContent()).getText();
-            location.setScript(scriptName, new Script(scriptText, true));
+            Script script = location.getScript(scriptName);
+            script.setText(scriptText);
         }
     }
 
@@ -1129,7 +1111,13 @@ public class EditorController {
         if (location != null) {
             locationsList.getItems().remove(location);
             gameFile.getLocations().remove(location);
-            locationsList.refresh();
+            locationNorthExit.getItems().remove(location);
+            locationSouthExit.getItems().remove(location);
+            locationWestExit.getItems().remove(location);
+            locationEastExit.getItems().remove(location);
+            locationUpExit.getItems().remove(location);
+            locationDownExit.getItems().remove(location);
+            playerLocation.getItems().remove(location);
         }
     }
 
@@ -1231,7 +1219,6 @@ public class EditorController {
         if (character != null) {
             charactersList.getItems().remove(character);
             gameFile.getCharacters().remove(character);
-            charactersList.refresh();
         }
     }
 
@@ -1282,7 +1269,6 @@ public class EditorController {
         if (character != null && scriptName != null && !scriptName.startsWith("_")) {
             character.removeScript(scriptName);
             characterScriptsList.getItems().remove(scriptName);
-            characterScriptsList.refresh();
         }
     }
 
@@ -1307,7 +1293,6 @@ public class EditorController {
         if (location != null && scriptName != null && !scriptName.startsWith("_")) {
             location.removeScript(scriptName);
             locationScriptsList.getItems().remove(scriptName);
-            locationScriptsList.refresh();
         }
     }
 
@@ -1316,8 +1301,8 @@ public class EditorController {
         String scriptName = characterScriptsList.getSelectionModel().getSelectedItem();
         if (character != null && scriptName != null) {
             String text = ((RSyntaxTextArea) characterScriptNode.getContent()).getText();
-            boolean enabled = characterScriptEnabled.isSelected();
-            character.setScript(scriptName, new Script(text, enabled));
+            Script script = character.getScript(scriptName);
+            script.setText(text);
         }
     }
 
@@ -1461,7 +1446,8 @@ public class EditorController {
         if (character != null && treeItem != null) {
             TaskNode node = (TaskNode) treeItem.getValue();
             String scriptText = ((RSyntaxTextArea) characterBehaviorScriptNode.getContent()).getText();
-            node.setScript(new Script(scriptText, true));
+            Script script = node.getScript();
+            script.setText(scriptText);
         }
     }
 
@@ -1507,16 +1493,15 @@ public class EditorController {
         if (scriptName != null && gameFile != null) {
             gameFile.getPlayer().getScripts().remove(scriptName);
             playerScriptsList.getItems().remove(scriptName);
-            playerScriptsList.refresh();
         }
     }
 
     public void savePlayerScript() {
         String scriptText = ((RSyntaxTextArea) playerScriptNode.getContent()).getText();
         String scriptName = playerScriptsList.getSelectionModel().getSelectedItem();
-        boolean enabled = playerScriptEnabled.isSelected();
         if (scriptName != null && gameFile != null) {
-            gameFile.getPlayer().setScript(scriptName, new Script(scriptText, enabled));
+            Script script = gameFile.getPlayer().getScript(scriptName);
+            script.setText(scriptText);
         }
     }
 
@@ -1651,7 +1636,8 @@ public class EditorController {
         if (gameFile != null && treeItem != null) {
             TaskNode node = (TaskNode) treeItem.getValue();
             String scriptText = ((RSyntaxTextArea) playerBehaviorScriptNode.getContent()).getText();
-            node.setScript(new Script(scriptText, true));
+            Script script = node.getScript();
+            script.setText(scriptText);
         }
     }
 
@@ -1920,5 +1906,9 @@ public class EditorController {
             item.setType(ItemTypes.GENERIC);
             item.setEquipmentSlot(null);
         });
+    }
+
+    public void saveFile() {
+        gameFile.save();
     }
 }
