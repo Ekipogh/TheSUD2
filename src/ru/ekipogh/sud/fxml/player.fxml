@@ -1,9 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="ru.ekipogh.sud.controllers.PlayerController"
-            prefHeight="400.0" prefWidth="600.0">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.web.WebView?>
 
-</AnchorPane>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.ekipogh.sud.controllers.PlayerController">
+    <center>
+        <SplitPane dividerPositions="0.8">
+            <SplitPane dividerPositions="0.5" orientation="VERTICAL">
+                <ScrollPane fitToHeight="true" fitToWidth="true">
+                    <WebView fx:id="output" />
+                </ScrollPane>
+                <SplitPane dividerPositions="0.5">
+                    <ScrollPane fitToHeight="true" fitToWidth="true">
+                        <TreeView fx:id="items" />
+                    </ScrollPane>
+                    <ScrollPane fitToHeight="true" fitToWidth="true">
+                        <TreeView fx:id="characters" />
+                    </ScrollPane>
+                </SplitPane>
+            </SplitPane>
+            <GridPane>
+                <VBox GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="0">
+                    <Label fx:id="playerName" text="FranK" />
+                    <Button text="Inventory" />
+               <ScrollPane fitToHeight="true" fitToWidth="true">
+                  <content>
+                          <TextArea fx:id="playerDescription" editable="false" prefRowCount="30" wrapText="true" />
+                  </content>
+               </ScrollPane>
+                </VBox>
+                <Button text="North" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Button text="West" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <Button text="East" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                <Button text="Up" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                <Button text="South" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <Button text="Down" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <columnConstraints>
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
+            
+            </GridPane>
+        </SplitPane>
+    </center>
+    <top>
+        <MenuBar>
+            <Menu text="File">
+                <MenuItem onAction="#openGame" text="Open" />
+            </Menu>
+        </MenuBar>
+    </top>
+</BorderPane>

@@ -59,9 +59,9 @@ public class EditorController {
     public ListView<ItemCategory> itemsCategories;
     public ListView<ItemCategory> itemCategories;
     //Parameters tab
-    public TableView<Map.Entry<String, String>> itemParameters;
-    public TableColumn<Map.Entry<String, String>, String> itemKeyColumn;
-    public TableColumn<Map.Entry<String, String>, String> itemValueColumn;
+    public TableView<Map.Entry<String, Object>> itemParameters;
+    public TableColumn<Map.Entry<String, Object>, String> itemKeyColumn;
+    public TableColumn<Map.Entry<String, Object>, String> itemValueColumn;
     //Locations tab
     public ListView<Location> locationsList;
     //Common tab
@@ -86,9 +86,9 @@ public class EditorController {
     public ListView<LocationCategory> locationsCategories;
     public ListView<GameObjectCategory> locationCategories;
     //Parameters tab
-    public TableView<Map.Entry<String, String>> locationParameters;
-    public TableColumn<Map.Entry<String, String>, String> locationKeyColumn;
-    public TableColumn<Map.Entry<String, String>, String> locationValueColumn;
+    public TableView<Map.Entry<String, Object>> locationParameters;
+    public TableColumn<Map.Entry<String, Object>, String> locationKeyColumn;
+    public TableColumn<Map.Entry<String, Object>, String> locationValueColumn;
     //Characters tab
     //Common tab
     public ListView<GameCharacter> charactersList;
@@ -109,9 +109,9 @@ public class EditorController {
     public TableColumn<Map.Entry<String, Item>, String> equipmentTableSlot;
     public TableColumn<Map.Entry<String, Item>, String> equipmentTableItem;
     //Parameters tab
-    public TableView<Map.Entry<String, String>> characterParameters;
-    public TableColumn<Map.Entry<String, String>, String> characterKeyColumn;
-    public TableColumn<Map.Entry<String, String>, String> characterValueColumn;
+    public TableView<Map.Entry<String, Object>> characterParameters;
+    public TableColumn<Map.Entry<String, Object>, String> characterKeyColumn;
+    public TableColumn<Map.Entry<String, Object>, String> characterValueColumn;
     //Categories tab
     public ListView<CharacterCategory> charactersCategories;
     public ListView<GameObjectCategory> characterCategories;
@@ -140,9 +140,9 @@ public class EditorController {
     public ListView<CharacterCategory> playerAllCategories;
     public ListView<GameObjectCategory> playerCategories;
     //Parameters
-    public TableView<Map.Entry<String, String>> playerParameters;
-    public TableColumn<Map.Entry<String, String>, String> playerKeyColumn;
-    public TableColumn<Map.Entry<String, String>, String> playerValueColumn;
+    public TableView<Map.Entry<String, Object>> playerParameters;
+    public TableColumn<Map.Entry<String, Object>, String> playerKeyColumn;
+    public TableColumn<Map.Entry<String, Object>, String> playerValueColumn;
     //Behavior
     public TreeView<BTreeNode> playerBehaviorTree;
     public ContextMenu playerBehaviorTreeMenu;
@@ -175,12 +175,12 @@ public class EditorController {
 
     private GameFile gameFile;
 
-    private static ObservableValue<String> mapKey(TableColumn.CellDataFeatures<Map.Entry<String, String>, String> p) {
+    private static ObservableValue<String> mapKey(TableColumn.CellDataFeatures<Map.Entry<String, Object>, String> p) {
         return new SimpleStringProperty(p.getValue().getKey());
     }
 
-    private static ObservableValue<String> mapValue(TableColumn.CellDataFeatures<Map.Entry<String, String>, String> p) {
-        return new SimpleStringProperty(p.getValue().getValue());
+    private static ObservableValue<String> mapValue(TableColumn.CellDataFeatures<Map.Entry<String, Object>, String> p) {
+        return new SimpleObjectProperty<>(p.getValue().getValue().toString());
     }
 
     private static ObservableValue<String> mapItemKey(TableColumn.CellDataFeatures<Map.Entry<String, Item>, String> p) {
@@ -433,8 +433,8 @@ public class EditorController {
             List<GameObjectCategory> categories = item.getCategories();
             categories.forEach(gameObjectCategory -> itemCategories.getItems().add(((ItemCategory) gameObjectCategory)));
             //Parameters tab
-            HashMap<String, String> values = item.getValues();
-            ObservableList<Map.Entry<String, String>> items = FXCollections.observableArrayList(values.entrySet());
+            HashMap<String, Object> values = item.getValues();
+            ObservableList<Map.Entry<String, Object>> items = FXCollections.observableArrayList(values.entrySet());
             itemParameters.getItems().setAll(items);
             itemParameters.getColumns().setAll(itemKeyColumn, itemValueColumn);
         }
@@ -468,8 +468,8 @@ public class EditorController {
             locationCategories.getItems().setAll(location.getCategories());
             locationCategories.refresh();
             //Parameters tab
-            HashMap<String, String> values = location.getValues();
-            ObservableList<Map.Entry<String, String>> items = FXCollections.observableArrayList(values.entrySet());
+            HashMap<String, Object> values = location.getValues();
+            ObservableList<Map.Entry<String, Object>> items = FXCollections.observableArrayList(values.entrySet());
             locationParameters.getItems().setAll(items);
             locationParameters.getColumns().setAll(locationKeyColumn, locationValueColumn);
         }
@@ -499,8 +499,8 @@ public class EditorController {
             characterEquipmentTable.getItems().setAll(equipmentItems);
             characterEquipmentTable.getColumns().setAll(equipmentTableSlot, equipmentTableItem);
             //Parameters tab
-            HashMap<String, String> values = character.getValues();
-            ObservableList<Map.Entry<String, String>> items = FXCollections.observableArrayList(values.entrySet());
+            HashMap<String, Object> values = character.getValues();
+            ObservableList<Map.Entry<String, Object>> items = FXCollections.observableArrayList(values.entrySet());
             characterParameters.getItems().setAll(items);
             characterParameters.getColumns().setAll(characterKeyColumn, characterValueColumn);
             //Categories tab
@@ -671,8 +671,8 @@ public class EditorController {
         playerEquipmentTable.getColumns().setAll(playerEquipmentTableSlot, playerEquipmentTableItem);
         playerAllCategories.getItems().setAll(gameFile.getCharacterCategories());
         playerCategories.getItems().setAll(gameFile.getPlayer().getCategories());
-        HashMap<String, String> values = gameFile.getPlayer().getValues();
-        ObservableList<Map.Entry<String, String>> items = FXCollections.observableArrayList(values.entrySet());
+        HashMap<String, Object> values = gameFile.getPlayer().getValues();
+        ObservableList<Map.Entry<String, Object>> items = FXCollections.observableArrayList(values.entrySet());
         playerParameters.getItems().setAll(items);
         playerParameters.getColumns().setAll(playerKeyColumn, playerValueColumn);
 
@@ -969,7 +969,7 @@ public class EditorController {
     public void removeItemParameter() {
         Item item = itemsList.getSelectionModel().getSelectedItem();
         if (item != null) {
-            Map.Entry<String, String> entry = itemParameters.getSelectionModel().getSelectedItem();
+            Map.Entry<String, Object> entry = itemParameters.getSelectionModel().getSelectedItem();
             if (entry != null) {
                 String key = entry.getKey();
                 item.removeValue(key);
@@ -1077,7 +1077,7 @@ public class EditorController {
     public void removeLocationParameter() {
         Location location = locationsList.getSelectionModel().getSelectedItem();
         if (location != null) {
-            Map.Entry<String, String> entry = locationParameters.getSelectionModel().getSelectedItem();
+            Map.Entry<String, Object> entry = locationParameters.getSelectionModel().getSelectedItem();
             if (entry != null) {
                 String key = entry.getKey();
                 location.removeValue(key);
@@ -1401,7 +1401,7 @@ public class EditorController {
     public void removeCharacterParameter() {
         GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
         if (character != null) {
-            Map.Entry<String, String> entry = characterParameters.getSelectionModel().getSelectedItem();
+            Map.Entry<String, Object> entry = characterParameters.getSelectionModel().getSelectedItem();
             if (entry != null) {
                 String key = entry.getKey();
                 character.removeValue(key);
@@ -1611,7 +1611,7 @@ public class EditorController {
 
     public void removePlayerParameter() {
         if (gameFile != null) {
-            Map.Entry<String, String> entry = playerParameters.getSelectionModel().getSelectedItem();
+            Map.Entry<String, Object> entry = playerParameters.getSelectionModel().getSelectedItem();
             if (entry != null) {
                 String key = entry.getKey();
                 gameFile.getPlayer().removeValue(key);

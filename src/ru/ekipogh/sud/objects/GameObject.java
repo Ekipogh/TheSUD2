@@ -18,7 +18,7 @@ public class GameObject implements Serializable {
     public static final long serialVersionUID = 1L;
     protected String name;
     Inventory inventory;
-    private HashMap<String, String> values;
+    private HashMap<String, Object> values;
     protected int id;
     Map<String, Script> scripts;
     private String description;
@@ -80,11 +80,11 @@ public class GameObject implements Serializable {
         this.values.put(valueName, value);
     }
 
-    public String getValue(String valueName) {
+    public Object getValue(String valueName) {
         return values.get(valueName);
     }
 
-    public HashMap<String, String> getValues() {
+    public HashMap<String, Object> getValues() {
         return values;
     }
 
