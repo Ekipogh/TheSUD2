@@ -6,7 +6,6 @@ import java.awt.*;
 
 /**
  * Created by ekipogh on 12.05.2015.
- licensed under WTFPL
  */
 public class ImageRenderer extends DefaultTableCellRenderer {
     private JLabel lbl = new JLabel();

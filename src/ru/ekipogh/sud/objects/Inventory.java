@@ -11,7 +11,6 @@ import java.util.stream.Stream;
 
 /**
  * Created by ekipogh on 22.12.2015.
- * licensed under WTFPL
  */
 public class Inventory implements Iterable, Serializable {
     public static final long serialVersionUID = 1L;
@@ -31,7 +30,7 @@ public class Inventory implements Iterable, Serializable {
         }
         if (pair != null) {
             int newAmount = pair.getValue() - amount;
-            if (newAmount == 0) {
+            if (newAmount <= 0 || amount < 0) {
                 items.remove(pair);
             } else {
                 pair.setValue(newAmount);
@@ -127,6 +126,10 @@ public class Inventory implements Iterable, Serializable {
             }
         }
         return false;
+    }
+
+    public List<SudPair<Item, Integer>> getItems() {
+        return items;
     }
 
     public void clear() {

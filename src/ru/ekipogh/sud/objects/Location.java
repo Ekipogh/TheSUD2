@@ -8,7 +8,6 @@ import java.util.List;
 
 /**
  * Created by ekipogh on 23.04.2015.
- * licensed under WTFPL
  */
 public class Location extends GameObject implements Serializable {
     private static final long serialVersionUID = 1L;

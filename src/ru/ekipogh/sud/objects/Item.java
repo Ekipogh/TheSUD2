@@ -9,7 +9,6 @@ import java.util.List;
 
 /**
  * Created by ekipogh on 04.05.2015.
- licensed under WTFPL
  */
 public class Item extends GameObject implements Serializable, Comparable, Cloneable {
     public static final long serialVersionUID = 1L;
@@ -41,7 +40,7 @@ public class Item extends GameObject implements Serializable, Comparable, Clonea
         Item.itemCategories = new ArrayList<>();
     }
 
-    public static ItemCategory getLocationCategory(String categoryName) {
+    public static ItemCategory getItemCategory(String categoryName) {
         for (ItemCategory c : itemCategories) {
             if (c.getName().equals(categoryName)) {
                 return c;

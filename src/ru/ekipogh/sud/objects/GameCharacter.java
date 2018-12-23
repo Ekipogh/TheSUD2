@@ -8,7 +8,6 @@ import java.util.List;
 
 /**
  * Created by ekipogh on 03.07.2015.
- * licensed under WTFPL
  */
 public class GameCharacter extends GameObject implements Serializable {
     public static final long serialVersionUID = 1L;

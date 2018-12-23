@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 /**
  * Created by ekipogh on 22.12.2015.
- licensed under WTFPL
  */
 public class SudPair<L, R> implements Serializable {
     private L key;

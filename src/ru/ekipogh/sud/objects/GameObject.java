@@ -13,13 +13,12 @@ import java.util.Map;
 
 /**
  * Created by ekipogh on 09.05.2016.
- * licensed under WTFPL
  */
 public class GameObject implements Serializable {
     public static final long serialVersionUID = 1L;
     protected String name;
     Inventory inventory;
-    private HashMap<String, Object> values;
+    private HashMap<String, String> values;
     protected int id;
     Map<String, Script> scripts;
     private String description;
@@ -69,23 +68,23 @@ public class GameObject implements Serializable {
         addItem(item, 1);
     }
 
-    public void addItem(Item item, int count) {
-        inventory.add(item, count);
+    public void addItem(Item item, int amount) {
+        inventory.add(item, amount);
     }
 
-    public void removeItem(Item item, int count) {
-        inventory.remove(item, count);
+    public void removeItem(Item item, int amount) {
+        inventory.remove(item, amount);
     }
 
-    public void setValue(String valueName, Object value) {
+    public void setValue(String valueName, String value) {
         this.values.put(valueName, value);
     }
 
-    public Object getValue(String valueName) {
+    public String getValue(String valueName) {
         return values.get(valueName);
     }
 
-    public HashMap<String, Object> getValues() {
+    public HashMap<String, String> getValues() {
         return values;
     }
 

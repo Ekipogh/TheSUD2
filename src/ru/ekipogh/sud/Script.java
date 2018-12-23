@@ -13,7 +13,6 @@ import java.util.Scanner;
 
 /**
  * Created by ekipogh on 22.05.2015.
- * licensed under WTFPL
  */
 public class Script implements Serializable {
     //private static Context context;
@@ -98,5 +97,9 @@ public class Script implements Serializable {
 
     public static void addScriptFile(String scriptName, String scriptText) {
         fileScipts.put(scriptName, scriptText);
+    }
+
+    public void setText(String scriptText) {
+        this.scriptText = scriptText;
     }
 }

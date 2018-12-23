@@ -6,7 +6,6 @@ import java.io.Serializable;
 
 /**
  * Created by ekipogh on 03.08.2015.
- * licensed under WTFPL
  */
 public class ItemCategory extends GameObjectCategory implements Serializable {
     public static final long serialVersionUID = 1L;

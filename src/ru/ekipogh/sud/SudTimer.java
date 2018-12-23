@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 /**
  * Created by dedov on 16.01.2017.
- * licensed under WTFPL
  */
 public class SudTimer extends Thread implements Serializable {
     public static final long serialVersionUID = 1L;

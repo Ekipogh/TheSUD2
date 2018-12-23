@@ -17,7 +17,6 @@ import java.util.*;
 
 /**
  * Created by ekipogh on 27.04.2015.
- * licensed under WTFPL
  */
 public class PlayerFrame extends JFrame {
     private static final int UP = 4;
@@ -230,8 +229,6 @@ public class PlayerFrame extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if (Main.editor == null || !Main.editor.isVisible())
-                    Main.launcher.setVisible(true);
                 stopTimers();
                 super.windowClosing(e);
             }
@@ -595,7 +592,7 @@ public class PlayerFrame extends JFrame {
     //загрузка файла игры
     private void loadGameFile(String pathToGame) {
         //существование файла игры гарантируется лаунчером, пробуем загрухить из него данные
-        GameFile gameFile = GameFile.open(pathToGame);
+        GameFile gameFile = GameFile.open();
 
         //инициализация переменных игры из файла
         initialize(gameFile);
