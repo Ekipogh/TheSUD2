@@ -6,7 +6,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -272,6 +271,7 @@ public class EditorController {
             Script script = category.getScript(scriptName);
             ((RSyntaxTextArea) characterCategoryScriptNode.getContent()).setText(script.getText());
             characterCategoryScriptEnabled.setSelected(script.isEnabled());
+            characterCategoriesScriptsList.getSelectionModel().select(scriptName);
         }
     }
 
@@ -289,6 +289,7 @@ public class EditorController {
             Script script = category.getScript(scriptName);
             ((RSyntaxTextArea) itemCategoryScriptNode.getContent()).setText(script.getText());
             itemCategoryScriptEnabled.setSelected(script.isEnabled());
+            itemCategoriesScriptsList.getSelectionModel().select(scriptName);
         }
     }
 
@@ -306,6 +307,7 @@ public class EditorController {
             Script script = category.getScript(scriptName);
             ((RSyntaxTextArea) locationCategoryScriptNode.getContent()).setText(script.getText());
             locationCategoryScriptEnabled.setSelected(script.isEnabled());
+            locationCategoriesScriptsList.getSelectionModel().select(scriptName);
         }
     }
 
@@ -334,6 +336,7 @@ public class EditorController {
         boolean enabled = script.isEnabled();
         ((RSyntaxTextArea) playerScriptNode.getContent()).setText(scriptText);
         playerScriptEnabled.setSelected(enabled);
+        playerScriptsList.getSelectionModel().select(scriptName);
     }
 
     private void selectCharacterBehaviorNode(TreeItem<BTreeNode> treeItem) {
@@ -532,6 +535,7 @@ public class EditorController {
             String text = script.getText();
             ((RSyntaxTextArea) characterScriptNode.getContent()).setText(text);
             characterScriptEnabled.setSelected(script.isEnabled());
+            characterScriptsList.getSelectionModel().select(scriptName);
         } else {
             ((RSyntaxTextArea) characterScriptNode.getContent()).setText("");
             characterScriptEnabled.setSelected(false);
@@ -544,6 +548,7 @@ public class EditorController {
             Script script = item.getScript(scriptName);
             ((RSyntaxTextArea) itemScriptNode.getContent()).setText(script.getText());
             itemScriptEnabled.setSelected(script.isEnabled());
+            itemScriptsList.getSelectionModel().select(scriptName);
         } else {
             ((RSyntaxTextArea) itemScriptNode.getContent()).setText("");
             itemScriptEnabled.setSelected(false);
@@ -931,16 +936,15 @@ public class EditorController {
     public void addItemScript() {
         Item item = itemsList.getSelectionModel().getSelectedItem();
         if (item != null) {
-            //Show input dialog
-            TextInputDialog inputDialog = new TextInputDialog("New Script");
-            inputDialog.setTitle("Enter script name");
-            Optional<String> result = inputDialog.showAndWait();
-            result.ifPresent(scriptName -> {
-                item.getScripts().put(scriptName, new Script("", true));
-                itemScriptsList.getItems().add(scriptName);
-                itemScriptsList.getSelectionModel().select(scriptName);
-            });
-            itemScriptsList.refresh();
+            String scriptName = Utils.showPromptDialog("Enter Script name");
+            if (scriptName != null) {
+                if (!item.getScripts().containsKey(scriptName)) {
+                    Script script = new Script("", true);
+                    item.setScript(scriptName, script);
+                    itemScriptsList.getItems().add(scriptName);
+                }
+                selectItemScript(scriptName);
+            }
         }
     }
 
@@ -1193,6 +1197,7 @@ public class EditorController {
             String text = script.getText();
             ((RSyntaxTextArea) locationScriptNode.getContent()).setText(text);
             locationScriptEnabled.setSelected(script.isEnabled());
+            locationScriptsList.getSelectionModel().select(scriptName);
         } else {
             ((RSyntaxTextArea) locationScriptNode.getContent()).setText("");
             locationScriptEnabled.setSelected(false);
@@ -1251,15 +1256,15 @@ public class EditorController {
     public void addCharacterScript() {
         GameCharacter character = charactersList.getSelectionModel().getSelectedItem();
         if (character != null) {
-            TextInputDialog inputDialog = new TextInputDialog("New Script");
-            inputDialog.setTitle("Enter script name");
-            Optional<String> result = inputDialog.showAndWait();
-            result.ifPresent(scriptName -> {
-                character.getScripts().put(scriptName, new Script("", true));
-                characterScriptsList.getItems().add(scriptName);
-                characterScriptsList.getSelectionModel().select(scriptName);
-            });
-            characterScriptsList.refresh();
+            String scriptName = Utils.showPromptDialog("Enter Script name");
+            if (scriptName != null) {
+                if (!character.getScripts().containsKey(scriptName)) {
+                    Script script = new Script("", true);
+                    character.setScript(scriptName, script);
+                    characterScriptsList.getItems().add(scriptName);
+                }
+            }
+            selectCharacterScript(scriptName);
         }
     }
 
@@ -1275,15 +1280,15 @@ public class EditorController {
     public void addLocationScript() {
         Location location = locationsList.getSelectionModel().getSelectedItem();
         if (location != null) {
-            TextInputDialog inputDialog = new TextInputDialog("New Script");
-            inputDialog.setTitle("Enter script name");
-            Optional<String> result = inputDialog.showAndWait();
-            result.ifPresent(scriptName -> {
-                location.getScripts().put(scriptName, new Script("", true));
-                locationScriptsList.getItems().add(scriptName);
-                locationScriptsList.getSelectionModel().select(scriptName);
-            });
-            locationScriptsList.refresh();
+            String scriptName = Utils.showPromptDialog("Enter Script name");
+            if (scriptName != null) {
+                if (!location.getScripts().containsKey(scriptName)) {
+                    Script script = new Script("", true);
+                    location.setScript(scriptName, script);
+                    locationScriptsList.getItems().add(scriptName);
+                }
+                selectLocationScript(scriptName);
+            }
         }
     }
 
@@ -1475,15 +1480,16 @@ public class EditorController {
 
     public void addPlayerScript() {
         if (gameFile != null) {
-            TextInputDialog inputDialog = new TextInputDialog("New Script");
-            inputDialog.setTitle("Enter script name");
-            Optional<String> result = inputDialog.showAndWait();
-            result.ifPresent(scriptName -> {
-                gameFile.getPlayer().getScripts().put(scriptName, new Script("", true));
-                playerScriptsList.getItems().add(scriptName);
-                playerScriptsList.getSelectionModel().select(scriptName);
-            });
-            playerScriptsList.refresh();
+            GameCharacter player = gameFile.getPlayer();
+            String scriptName = Utils.showPromptDialog("Enter Script name");
+            if (scriptName != null) {
+                if (!player.getScripts().containsKey(scriptName)) {
+                    Script script = new Script("", true);
+                    player.setScript(scriptName, script);
+                    playerScriptsList.getItems().add(scriptName);
+                }
+                selectPlayerScript(scriptName);
+            }
         }
 
     }
@@ -1674,9 +1680,12 @@ public class EditorController {
         if (category != null) {
             String scriptName = Utils.showPromptDialog("Enter Script name");
             if (scriptName != null) {
-                Script script = new Script("", true);
-                category.setScript(scriptName, script);
-                locationCategoriesScriptsList.getItems().add(scriptName);
+                if (!category.getScripts().containsKey(scriptName)) {
+                    Script script = new Script("", true);
+                    category.setScript(scriptName, script);
+                    locationCategoriesScriptsList.getItems().add(scriptName);
+                }
+                selectLocationCategoryScript(scriptName);
             }
         }
     }
@@ -1743,10 +1752,13 @@ public class EditorController {
         if (category != null) {
             String scriptName = Utils.showPromptDialog("Enter Script name");
             if (scriptName != null) {
-                Script script = new Script("", true);
-                category.setScript(scriptName, script);
-                characterCategoriesScriptsList.getItems().add(scriptName);
+                if (!category.getScripts().containsKey(scriptName)) {
+                    Script script = new Script("", true);
+                    category.setScript(scriptName, script);
+                    characterCategoriesScriptsList.getItems().add(scriptName);
+                }
             }
+            selectCharacterCategoryScript(scriptName);
         }
     }
 
@@ -1812,9 +1824,12 @@ public class EditorController {
         if (category != null) {
             String scriptName = Utils.showPromptDialog("Enter Script name");
             if (scriptName != null) {
-                Script script = new Script("", true);
-                category.setScript(scriptName, script);
-                itemCategoriesScriptsList.getItems().add(scriptName);
+                if (!category.getScripts().containsKey(scriptName)) {
+                    Script script = new Script("", true);
+                    category.setScript(scriptName, script);
+                    itemCategoriesScriptsList.getItems().add(scriptName);
+                }
+                selectItemCategoryScript(scriptName);
             }
         }
     }
